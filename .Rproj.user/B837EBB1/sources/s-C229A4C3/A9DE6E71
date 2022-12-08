@@ -1,0 +1,26 @@
+{
+    "id": "A9DE6E71",
+    "path": "~/Dropbox/R_package_testing/suwo/R/query_xc.R",
+    "project_path": "R/query_xc.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1670531216032.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "26,123",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1651076464,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651076464,
+    "read_only": false,
+    "read_only_alternatives": []
+}
