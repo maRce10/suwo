@@ -1,6 +1,6 @@
 #' Download media files from repositories
 #'
-#' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
+#' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto} or \href{https://www.wikiaves.com/}{wikiaves}.
 #' @usage download_media(metadata)
 
 #' @param metadata Data frame with a 'record.id' column and any other column listed in the file.name argument. Only the recordings listed in the data frame
