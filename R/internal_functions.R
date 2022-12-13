@@ -87,3 +87,4 @@ warning2 <- function (...)
 {
   warning(..., call. = FALSE)
 }
+
