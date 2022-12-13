@@ -1,69 +1,33 @@
-#' Access 'Xeno-Canto' recordings and metadata
+#' Access 'wikiaves' recordings and metadata
 #'
-#' \code{query_wikiaves} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
+#' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @usage query_wikiaves(term, X = NULL, file.name = c("Genus", "Specific_epithet"),
 #' cores = 1, path = NULL, pb = TRUE)
 #' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
-#'  More complex queries can be done by using search terms that follow the
-#'  xeno-canto advance query syntax. This syntax uses tags to search within a particular aspect of the recordings
-#'  (e.g. country, location, sound type). Tags are of the form tag:searchterm'. For instance, 'type:song'
-#'  will search for all recordings in which the sound type description contains the word 'song'.
-#'  Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
-#'  results for birds in the genus \emph{Phaethornis} that were recorded in  Belize.
-#'  See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
-#'  for queries using terms with more than one word.
+#'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param path Character string containing the directory path where the sound files will be saved.
 #' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @return If X is not provided the function returns a data frame with the following recording information: recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 format are downloaded into the working directory if download = \code{TRUE} or if X is provided; a column indicating the  names of the downloaded files is included in the output data frame.
+#' @return If X is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
 #' @export
 #' @name query_wikiaves
 #' @details This function queries for avian vocalization recordings in the open-access
-#' online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
-#' or download the associated sound files. Complex queries can be done by using search terms that follow the
-#'  xeno-canto advance query syntax (check "term" argument description).
-#'  Files are double-checked after downloading and "empty" files are re-downloaded.
-#'  File downloading process can be interrupted and resume later as long as the working directory is the same.
-#'  Maps of recording coordinates can be produced using
-#' \code{\link{map_xc}}.
-#' @seealso \code{\link{map_xc}},
-#' \href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
+#' online repository \href{https://www.wikiaves.com/}{wikiaves}. It can return recordings metadata.
 #' @examples
 #' \dontrun{
 #' # search without downloading
 #' df1 <- query_wikiaves(term = 'Phaethornis anthophilus', download = FALSE)
 #' View(df1)
 #'
-#' # downloading files
-#'query_wikiaves(term = 'Phaethornis anthophilus', download = TRUE, path = tempdir())
-#'
-#' # check this folder
-#' tempdir()
-#'
-#' ## search using xeno-canto advance query ###
-#' orth.pap <- query_wikiaves(term = 'gen:orthonyx cnt:papua loc:tari', download = FALSE)
-#'
-#' # download file using the output data frame as input
-#' query_wikiaves(X = orth.pap, path = tempdir())
-#'
-#' # use quotes for queries with more than 1 word (e.g. Costa Rica),note that the
-#' # single quotes are used for the whole 'term' and double quotes for the 2-word term inside
-#' #Phaeochroa genus in Costa Rica
-#' phae.cr <- query_wikiaves(term = 'gen:phaeochroa cnt:"costa rica"', download = FALSE)
-#'
-#' # several terms can be searched for in the same field
-#' # search for all female songs in sound type
-#' femsong <- query_wikiaves(term = 'type:song type:female', download = FALSE)
 #' }
 #'
 #' @references {
-#' Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
+#'
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#last modification on nov-16-2016 (MAS)
+#last modification on
 
 query_wikiaves <-
   function(term,
