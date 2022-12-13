@@ -181,7 +181,8 @@ query_xenocanto <- function(term, X = NULL, file.name = c("Genus", "Specific_epi
     names(results) <- gsub("also", "other.species", names(results))
     # rename
     names(results) <- gsub("sono.", "spectrogram.", names(results))
-
+    #Add repository ID
+    results$repository <- "XC"
     #remove duplicates
     results <- results[!duplicated(results$record.id), ]
 

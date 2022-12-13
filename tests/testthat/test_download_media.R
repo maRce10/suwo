@@ -1,6 +1,6 @@
 test_that("search Phaethornis check rows", {
 
-  df1 <- query_xenocanto(term = 'Phaethornis anthophilus', download = FALSE)
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
 
   download_media(metadata = df1, path = tempdir())
   download_media(metadata = df1, path = tempdir(), file.name = c("genus", "specific.epithet"))

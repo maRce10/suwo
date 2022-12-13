@@ -164,7 +164,7 @@ query_wikiaves <-
     #fix media type
     query_output_df$tipo <- type
 
-    names(query_output_df) <- c("id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "url", "duration", "repostory")
+    names(query_output_df) <- c("record.id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "url", "duration", "repository")
 
     return(query_output_df)
     }

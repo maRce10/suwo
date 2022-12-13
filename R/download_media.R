@@ -22,7 +22,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
-download_media <- function(metadata, path = "./", file.name = NULL){
+download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, verbose = TRUE){
 
 
   #stop if metadata is not a data frame
@@ -36,9 +36,9 @@ download_media <- function(metadata, path = "./", file.name = NULL){
         stop("record.id column not found in data frame")
 
 
-  # add repository label
-  metadata$repository <- NA
-  metadata$repository[grepl(pattern = "xeno", x = metadata$url)] <-  "XC"
+  # # add repository label
+  # metadata$repository <- NA
+  # metadata$repository[grepl(pattern = "xeno", x = metadata$url)] <-  "XC"
 
   #download recordings
 
@@ -52,13 +52,25 @@ download_media <- function(metadata, path = "./", file.name = NULL){
       metadata$sound.files <- paste0(metadata$repository, metadata$record.id, ".mp3")
 
     xcFUN <-  function(metadata, x){
-      if (!file.exists(metadata$sound.files[x]))
-        download.file(
+      if (!file.exists(metadata$sound.files[x])){
+        if (metadata$repository[x] == "XC"){
+          download.file(
           url = paste("https://xeno-canto.org/", metadata$record.id[x], "/download", sep = ""),
           destfile = file.path(path, metadata$sound.files[x]),
           quiet = TRUE,  mode = "wb", cacheOK = TRUE,
           extra = getOption("download.file.extra"))
-      return (NULL)
+          return (NULL)
+        } else if (metadata$repository[x] == "wikiaves"){
+          download.file(
+          url = as.character(metadata$url[x]),
+          destfile = file.path(path, metadata$sound.files[x]),
+          quiet = TRUE,  mode = "wb", cacheOK = TRUE,
+          extra = getOption("download.file.extra"))
+          return (NULL)
+
+        }
+
+      }
     }
 
     # set clusters for windows OS
