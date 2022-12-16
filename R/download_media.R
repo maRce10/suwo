@@ -35,11 +35,6 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
       if (!"record.id" %in% colnames(metadata))
         stop("record.id column not found in data frame")
 
-
-  # # add repository label
-  # metadata$repository <- NA
-  # metadata$repository[grepl(pattern = "xeno", x = metadata$url)] <-  "XC"
-
   #download recordings
 
     if (any(file.name == "record.id")) file.name <- file.name[-which(file.name == "record.id")]
@@ -50,6 +45,8 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
       metadata$sound.files <- paste(paste(fn, paste0(metadata$repository, metadata$record.id), sep = "-"), ".mp3", sep = "")
     } else
       metadata$sound.files <- paste0(metadata$repository, metadata$record.id, ".mp3")
+
+  #Function to download file according to repository
 
     xcFUN <-  function(metadata, x){
       if (!file.exists(metadata$sound.files[x])){
