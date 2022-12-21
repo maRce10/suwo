@@ -1,46 +1,68 @@
-test_that("search Phaethornis check rows", {
-
-  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
+test_that("search XC Phaethornis anthophilus default file names", {
+a
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')[1:2, ]
 
   download_media(metadata = df1, path = tempdir())
-  download_media(metadata = df1, path = tempdir(), file.name = c("genus", "specific.epithet"))
 
-  expect_true(nrow(df1) > 10)
+  fls <- list.files(path = tempdir(), pattern = "mp3$")
 
+  # remove files
+  unlink(file.path(tempdir(), fls))
+
+  expect_equal(fls, c("XC532163.mp3", "XC568491.mp3"))
   })
 
-#
-# test_that("search Phaethornis check cols", {
-#
-#   df1 <- query_xenocanto(term = 'Phaethornis anthophilus', download = FALSE)
-#
-#   expect_true(ncol(df1) >  20)
-#
-# })
-#
-#
-# test_that("no recs found", {
-#
-#   df1 <- query_xenocanto(term = '000', download = FALSE)
-#
-#   expect_true(is.null(df1))
-#
-# })
-#
-#
-# test_that("check messages", {
-#
-#   msg <- capture_output(query_xenocanto(term = '000', download = FALSE, verbose = TRUE))
-#
-#   expect_true(msg == "No recordings were found")
-#
-#   msg <- capture_output(query_xenocanto(term = '000', download = FALSE, verbose = FALSE))
-#
-#   expect_true(msg == "")
-#
-#   msg <- capture_output(query_xenocanto(term = 'Phaethornis anthophilus', download = FALSE, verbose = TRUE, pb = FALSE))
-#
-#   expect_true(msg == "")
-#
-#
-#   })
+
+###############
+
+test_that("search XC Phaethornis anthophilus sp names", {
+
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')[1:2, ]
+
+    download_media(metadata = df1, path = tempdir(), file.name = c("genus", "specific.epithet"))
+
+  fls <- list.files(path = tempdir(), pattern = "mp3$")
+
+  # remove files
+  unlink(file.path(tempdir(), fls))
+
+
+  expect_equal(fls, c("Phaethornis-anthophilus-XC532163.mp3",
+                      "Phaethornis-anthophilus-XC568491.mp3"))
+})
+
+#######
+
+test_that("search WA Phaethornis anthophilus default file names", {
+
+  df1 <- query_wikiaves(term = 'Phaethornis pretei', type = "audio")
+  # [1:2, ]
+
+  download_media(metadata = df1, path = tempdir())
+
+  fls <- list.files(path = tempdir(), pattern = "mp3$")
+
+  # remove files
+  unlink(file.path(tempdir(), fls))
+
+  expect_equal(fls, c("XC532163.mp3", "XC568491.mp3"))
+})
+
+
+###############
+
+test_that("search Phaethornis anthophilus sp names", {
+
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')[1:2, ]
+
+  download_media(metadata = df1, path = tempdir(), file.name = c("genus", "specific.epithet"))
+
+  fls <- list.files(path = tempdir(), pattern = "mp3$")
+
+  # remove files
+  unlink(file.path(tempdir(), fls))
+
+
+  expect_equal(fls, c("Phaethornis-anthophilus-XC532163.mp3",
+                      "Phaethornis-anthophilus-XC568491.mp3"))
+})

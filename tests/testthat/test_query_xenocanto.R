@@ -1,6 +1,6 @@
 test_that("search Phaethornis check rows", {
 
-  df1 <- query_xenocanto(term = 'Phaethornis anthophilus', download = FALSE)
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
 
   expect_true(nrow(df1) > 10)
 

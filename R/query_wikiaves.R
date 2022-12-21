@@ -1,14 +1,12 @@
 #' Access 'wikiaves' recordings and metadata
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
-#' @usage query_wikiaves(term, X = NULL, file.name = c("Genus", "Specific_epithet"),
-#' cores = 1, path = NULL, pb = TRUE)
+#' @usage query_wikiaves(term, type, cores = 1, pb = TRUE)
 #' @param term Character vector of length one indicating the genus, or genus and
 #'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
+#'  @param type Character vector with media type to query for. Options are 'photo' or 'audio'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param path Character string containing the directory path where the sound files will be saved.
-#' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @return If X is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
 #' @export
@@ -24,25 +22,24 @@
 #' }
 #'
 #' @references {
-#'
+#' Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo Guaraldo. 2019. Revealing the potential of a huge citizen-science platform to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#last modification on
-
+#'
 query_wikiaves <-
-  function(term,
-           type = "photo",
+  function(term = NULL,
+           type = NULL,
            cores = 1,
-           path = NULL,
            pb = TRUE,
            verbose = TRUE) {
 
-    #check path to working directory
-    if (is.null(path))
-      path <- getwd() else
-      if (!dir.exists(path))
-        stop("'path' provided does not exist") else
-      path <- normalizePath(path)
+    # type must be supplied
+    if (is.null(type))
+     stop("'type' must be supplied")
+
+    # type must be supplied
+    if (is.null(term))
+      stop("'term' must be supplied")
 
     #check internet connection
     a <- try(RCurl::getURL("www.wikiaves.com"), silent = TRUE)
@@ -68,8 +65,10 @@ query_wikiaves <-
         term
       ))
 
-    if (length(get_ids) == 0)
-      warning2("Search term not found") else {
+    if (length(get_ids) == 0){
+      if (verbose)
+      cat(paste(colortext("Search term not found", "failure"), add_emoji("sad")))
+      } else {
 
     # make it a data frame
     get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
@@ -87,11 +86,16 @@ query_wikiaves <-
         )
       )$registros$total))
 
-    if (sum(get_ids$total_registers) == 0)
-      warning2("No registers found") else{
+    if (sum(get_ids$total_registers) == 0 & verbose)
+      cat(paste(colortext(paste0("No ", type, "s were found"), "failure"), add_emoji("sad"))) else {
 
     # get number of pages (20 is the default number of registers per page)
     get_ids$pages <- ceiling(get_ids$total_registers / 20)
+
+
+    # remove those rows with no pages (only needed when many species are returned)
+    get_ids <- get_ids[get_ids$pages > 0, ]
+
 
     id_by_page_list <- lapply(1:nrow(get_ids), function(x){
 
@@ -103,15 +107,15 @@ query_wikiaves <-
     id_by_page_df <- do.call(rbind, id_by_page_list)
 
     #search recs in wikiaves (results are returned in pages with 500 recordings each)
-    if (pb &  verbose)
-      write(file = "", x = paste0("Obtaining metadata (", sum(get_ids$total_registers) , " registers found):"))
+    if (pb & verbose)
+      cat(paste(colortext(paste0("Obtaining metadata (", sum(get_ids$total_registers), " ", type, "(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1)
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
 
 # loop over pages
-    query_output_list <- pblapply_sw_int(1:nrow(id_by_page_df), cl = cl,  function(i)
+    query_output_list <- pblapply_sw_int(1:nrow(id_by_page_df), cl = cl, pbar = pb, function(i)
     {
          query_output <-
           jsonlite::fromJSON(
@@ -164,7 +168,11 @@ query_wikiaves <-
     #fix media type
     query_output_df$tipo <- type
 
-    names(query_output_df) <- c("record.id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "url", "duration", "repository")
+    # rename output columns
+    names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("record.id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "url", "duration", "repository"))
+
+    for(i in 1:nrow(names_df))
+      names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
 
     return(query_output_df)
     }

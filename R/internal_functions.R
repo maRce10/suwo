@@ -1,4 +1,4 @@
-#internal suwo functions
+#internal helper suwo functions
 
 # internal suwo function, not to be called by users. It is a modified version of pbapply::pblapply
 # that allows to define internally if progress bar would be used (pbapply::pblapply uses pboptions to do this)
@@ -88,3 +88,62 @@ warning2 <- function (...)
   warning(..., call. = FALSE)
 }
 
+# add emojis to messages. based on praise_emoji from testthat
+
+add_emoji <- function(mood) {
+  if (!cli::is_utf8_output()) {
+    return("")
+  }
+
+  happy_emoji <- c(
+    "\U0001f600", # smile
+    "\U0001f973", # party face
+    "\U0001f638", # cat grin
+    "\U0001f308", # rainbow
+    "\U0001f947", # gold medal
+    "\U0001f389", # party popper
+    "\U0001f38a" # confetti ball
+  )
+
+  sad_emoji <- c(
+    "\U0001f62C", # grimacing face
+    "\U0001f635", # face with spiral eyes
+    "\U0001f62D", # loudly crying face
+    "\U0001f613", #  	weary face
+    "\U0001f480", # skull
+    "\U0001F4A9", # pile of poop
+    "\U0001f624", # face with steam from nose
+    "\U0001f648" # see-no-evil monkey
+  )
+
+  if (mood == "happy")
+  sample(happy_emoji, 1) else
+    sample(sad_emoji, 1)
+}
+
+#####
+
+
+colortext <- function(text, as = c("success", "skip", "warning", "failure", "error")) {
+  if (has_color()) {
+    unclass(cli::make_ansi_style(suwo_style(as))(text))
+  } else {
+    text
+  }
+}
+
+has_color <- function() {
+    cli::num_ansi_colors() > 1
+}
+
+suwo_style <- function(type = c("success", "skip", "warning", "failure", "error")) {
+  type <- match.arg(type)
+
+  c(
+    success = "green",
+    skip = "blue",
+    warning = "magenta",
+    failure = "orange",
+    error = "orange"
+  )[[type]]
+}
