@@ -78,8 +78,10 @@ query_xenocanto <-
     if (pb &  verbose)
       print("Obtaining metadata:")
 
-    #format JSON
-    term <- gsub(" ", "%20", term)
+    # format JSON
+    if (grepl("\\:", term)) # if using advanced search replace spaces with "&"
+      term <- gsub(" ", "&", term) else
+        term <- gsub(" ", "%20", term)
 
     #initialize search
     q <-
