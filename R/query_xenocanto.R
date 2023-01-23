@@ -10,9 +10,8 @@
 #'  (e.g. country, location, sound type). Tags are of the form tag:searchterm'. For instance, 'type:song'
 #'  will search for all recordings in which the sound type description contains the word 'song'.
 #'  Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
-#'  results for birds in the genus \emph{Phaethornis} that were recorded in  Belize. Make sure taxonomy related tags are found first in multi-tag queries.
-#'  See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
-#'  for complex queries using terms with more than one word.
+#'  results for birds in the genus \emph{Phaethornis} that were recorded in Belize. Queries are case insensitive. Make sure taxonomy related tags (Genus or scientific name) are found first in multi-tag queries. See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
+#'  for queries using terms with more than one word.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
@@ -78,10 +77,21 @@ query_xenocanto <-
     if (pb &  verbose)
       print("Obtaining metadata:")
 
-    # format JSON
-    if (grepl("\\:", term)) # if using advanced search replace spaces with "&"
-      term <- gsub(" ", "&", term) else
-        term <- gsub(" ", "%20", term)
+    # format query term
+    if (grepl("\\:", term)){ # if using advanced search
+
+      # replace first space with %20 when using full species name
+      first_colon_pos <- gregexpr(":", term)[[1]][1]
+      spaces_pos <- gregexpr(" ", term)[[1]]
+
+      if (length(spaces_pos) > 1)
+        if (all(spaces_pos[1:2] < first_colon_pos))
+          term <- paste0(substr(term, start = 0, stop = spaces_pos - 1), "%20", substr(term, start = spaces_pos + 1, stop = nchar(term)))
+
+      # replace remaining spaces with "&"
+      term <- gsub(" ", "&", term)
+    } else
+      term <- gsub(" ", "%20", term)
 
     #initialize search
     q <-
