@@ -1,0 +1,533 @@
+---
+title: "testing-checking suwo functions"
+author: "Marcelo Araya-Salas"
+date: "aug 21, 2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# uninstall  
+```{r reinstall from github, eval=F}
+
+remove.packages("suwo")
+# 
+# #restart R
+.rs.restartR()
+
+```
+
+# install/load packages
+```{r packages, eval=T}
+
+# devtools::install()
+
+pkgs <- c("remotes", "devtools", "pbapply", "RCurl", "rjson", "kableExtra", "knitr", "formatR", "rprojroot", "xaringanExtra" ,"microbenchmark", "pkgdown", "maRce10/suwo", "covr", "pkgcheck", "visNetwork", "codemetar", "ropensci-review-tools/pkgstats", "ropensci/tic", "test_that")
+
+# install/ load packages
+out <- lapply(pkgs, function(y) {
+  
+  # get pakage name
+  pkg <- strsplit(y, "/")[[1]]
+  pkg <- pkg[length(pkg)]
+  
+  # check if installed, if not then install 
+  if (!pkg %in% installed.packages()[,"Package"])  {
+
+      if (grepl("/", y))  remotes::install_github(y, force = TRUE) else
+    install.packages(y) 
+    }
+
+  # load package
+  a <- try(require(pkg, character.only = T), silent = T)
+
+  if (!a) remove.packages(pkg)
+  })
+
+
+
+rm(list = ls())
+
+# install ctags
+# first run in terminal: sudo apt install lsb-core
+
+# then run this with sudo privilege
+ctags_install(bin_dir = NULL, sudo = TRUE)
+
+
+
+load_all()
+
+```
+
+# functions
+```{r functions}
+
+# run internals
+run_suwo_int <- function(){ 
+out <- lapply(list.files(pattern = "suwo_int", path = "./R", full.names = T), source)}
+
+# open working directory
+open.wd <- function() system(paste("nautilus", getwd()), show.output.on.console = F)
+
+#open function in rstudio
+open.fun <- function(fun) system(paste("rstudio", file.path("./R", paste0(fun, ".R"))))
+
+# run default arguments in a warbleR function
+run.def.args <- function(fun = NULL){
+
+  #list functions in package
+rfiles <- list.files(pattern = ".R", path = "./R", full.names = T)
+
+# select target function file
+funfile <- rfiles[gsub(".R", "", basename(rfiles)) == fun]
+
+  x <- readLines(funfile, warn = F)
+  st <- grep('@usage', x, fixed = T)
+  en <- grep('@param', x, fixed = T)[1]
+  x <- paste(x[st:(en-1)], collapse = " ")  
+  x <- gsub("usage|\\@|\\#\\'", "", x)
+
+  b <- gregexpr(pattern ='\\(|\\)',x)[1][[1]]
+  x <- substr(x, start = b[1] + 1, stop = b[length(b)] - 1)
+  spltx <- strsplit(x, "\\,")[[1]]
+
+sl <- vector()
+  y = 1
+ 
+      while(y <= length(spltx))
+        {
+        w <- spltx[y]
+        z <- 1
+        if(grepl('\\(', spltx[y])) 
+          {z  <- 0
+          while(!grepl('\\)', w))
+          {
+              z <- z+ 1
+              w <- paste(w, ",", spltx[y + z], collapse = "")
+          }
+        z <- z + 1
+          }
+        
+       y = y + z
+       sl[length(sl) + 1] <- w
+            }
+
+  sl <- sl[sl != "X"]
+  return(sl)
+  }
+
+# run it like this: 
+# for(i in run.def.args("dfts")) try(eval(parse(text = i)), silent = T)
+
+# remove sound files and or image files
+rm.sf <- function() unlink(list.files(path = tempdir(), pattern = "\\.wav$|\\.flac$|\\.mp3$|\\.wac$", ignore.case = T, full.names = TRUE))
+
+rm.sf.img <- function(mp3 = TRUE) {if(mp3)
+  unlink(list.files(path = tempdir(), pattern = "\\.wav$|\\.flac$|\\.mp3$|\\.wac$|\\.tiff$|\\.jpeg$|\\.png$", ignore.case = T, full.names = TRUE)) else
+      unlink(list.files(path = tempdir(), pattern = "\\.wav$|\\.flac$|\\.wac$|\\.tiff$|\\.jpeg$|\\.png$", ignore.case = T, full.names = TRUE))}
+
+rm.img <- function() unlink(list.files(path = tempdir(), pattern = "\\.tiff$|\\.jpeg$|\\.png$|\\.pdf$", ignore.case = T, full.names = TRUE))
+
+#open latest image
+last.img <- function() system(paste("eog", list.files(path = tempdir(), pattern = "\\.tiff$|\\.jpeg$", ignore.case = T, full.names = TRUE)[which.max(file.mtime(list.files(path = tempdir(), pattern = "\\.tiff$|\\.jpeg$", ignore.case = T, full.names = TRUE)))]
+))
+
+#open pdf
+last.pdf <- function() system(paste("xdg-open", list.files(path = tempdir(), pattern = "\\.pdf$", ignore.case = T, full.names = TRUE)[which.max(file.mtime(list.files(path = tempdir(), pattern = "\\.pdf", ignore.case = T, full.names = TRUE)))]
+))
+
+#find text in functions
+find.text <- function(pattern, fun.only = FALSE, path = "./R", ignore.case = TRUE, file.ext = "\\.R$|\\.Rmd$", recursive = TRUE)
+  {
+rfiles <- list.files(pattern = file.ext, path = path, full.names = T, all.files = T, ignore.case = ignore.case, recursive = recursive)
+  
+#check where a word is found in each function an return the name of function where it was found and the time
+res <- NULL
+w <- 1
+for(f in rfiles){
+  x <- readLines(f)
+  y <- grep(pattern, x, fixed = T, value = T, ignore.case = ignore.case)
+  if(length(y)>0 & !fun.only) {
+    print(gsub(pattern = "\\.R", "", (basename(f)))) 
+    for(i in y) print(i)
+  }
+  if(length(y)>0 & fun.only) res[w] <- gsub(pattern = "\\.R", "", (basename(f))) 
+# options(nwarnings = 0)
+  w = w + 1
+}
+if(fun.only)
+{res <- res[!is.na(res)]
+return(res)}
+}
+
+
+#replace text
+repl.text <- function(pattern, repl, path = "./R", ignore.case = T, file.ext = "\\.R$|\\.Rmd$", recursive = TRUE){
+  rfiles <- list.files(pattern =file.ext, path = path, full.names = T, all.files = T, ignore.case = ignore.case, recursive = recursive)
+
+    for(f in rfiles){
+  
+    #find and replace
+      x <- readLines(f)
+      y <- gsub(pattern, repl, x, fixed = T, ignore.case = ignore.case)
+      cat(y, file=f, sep="\n")
+  
+  #reread
+      x <- readLines(f)
+      w <- grep(repl, x, fixed = T, value = T, ignore.case = T)
+      if(length(w)>0) {
+          print(f) 
+        for(i in w) print(i)
+          }
+    }
+}
+
+#find functions with specific arguments
+find.arg <- function(arg1, arg2 = NULL){
+  
+  rfiles <- list.files(pattern = "\\.R$", path = "./R", full.names = T, all.files = T)
+  
+  funs <- gsub(pattern = "\\.R", "", (basename(rfiles)))
+  funs <-grep("zzz|data|package", funs, invert = T, value = T)
+  
+l1 <- unlist(lapply(funs, function(x)
+{  a <-  try(run.def.args(x), silent = T)
+  if(any(grep(arg1, a))) return(x)
+}      ))
+
+if(!is.null(arg2))
+{l2 <- unlist(lapply(funs, function(x)
+{  a <-  try(run.def.args(x), silent = T)
+  if(any(grep(arg2, a))) return(x)
+}      ))
+
+res <- intersect(l1, l2)
+
+} else res <- l1
+
+return(res)
+
+}
+
+# run default arguments
+run.def.args2 <-function(FUN)
+{
+  fm <- formals(FUN)
+
+  
+fm <- fm[sapply(fm, length) > 0 | sapply(fm, is.null)]
+
+fm <- lapply(1:length(fm), function(x) paste(names(fm)[x], "=", fm[x]))
+
+for(i in fm) try(eval(parse(text = i)), silent = T)
+
+}
+
+
+#find functions with specific arguments and text
+find.arg.text <- function(arg1, arg2 = NULL, pattern) {
+  
+  f1 <- find.text(pattern = pattern, fun.only = T)
+f2 <- find.arg(arg1 = arg1, arg2 = arg2)
+
+return(intersect(f1, f2))
+}
+  
+#bid data set
+big.seltab <- function(X, nrow = 100){
+Y <- X[rep(1:nrow(X), ceiling(nrow/nrow(X)))[1:nrow],]
+  Y$selec <- 1:nrow(Y)
+if(is_selection_table(Y) | is_extended_selection_table(Y))
+  
+  attr(Y, "check.results") <- attr(X, "check.results")[rep(1:nrow(attr(X, "check.results")), ceiling(nrow/nrow(attr(X, "check.results"))))[1:nrow],]
+  
+  attr(Y, "check.results")$selec <- 1:nrow(Y)
+  return(Y)
+}
+
+#write all wav files in lbh_selec_table
+write.sound.files <- function(path = tempdir(), extensible = T, other.formats = FALSE, simulated = FALSE){
+  # setwd(path)
+data(lbh1, package = "suwo")
+data(lbh2, package = "suwo")
+tuneR::writeWave(lbh1, file.path(tempdir(),  "lbh1.wav"), extensible = extensible) #save sound files 
+tuneR::writeWave(lbh2, file.path(tempdir(),  "lbh2.wav"), extensible = extensible) #save sound files 
+
+if (simulated){
+  
+  # Creating vector for duration
+durs <- rep(c(0.3, 1), 5)
+
+# Creating simulated song
+set.seed(12)
+
+simulated_1 <- warbleR::simulate_songs(n = 10, durs = durs, freqs = 5, sig2 = 0.01, gaps = 0.5, harms = 1, bgn = 0.1, path = tempdir(), file.name = "simulated_1", selec.table = TRUE, shape = "cos", fin = 0.3, fout = 0.35, samp.rate = 18)
+
+sim_2 <- sim_songs(n = 10, durs = durs, freqs = 5, sig2 = 0.01, gaps = 0.5, harms = 1, bgn = 0.1, path = tempdir(), file.name = "simulated_2", selec.table = TRUE, shape = "cos", fin = 0.3, fout = 0.35, samp.rate = 18, am.amps = c(1, 2, 3, 2, 0.1, 2, 3, 3, 2, 1))
+
+sel_tab2 <- sel_tab1 <- simulated_1$selec.table
+sel_tab2$sound.files <- gsub("_1", "_2", sel_tab2$sound.files)
+
+sel_tab <- rbind(sel_tab1, sel_tab2)
+return(sel_tab)
+}
+# if (other.formats){
+#   file.copy(from = system.file("extdata", "recording_20170716_230503.wac", package = "bioacoustics"), to = file.path(tempdir(), "recording_20170716_230503.wac"))
+# 
+# file.copy(from = "../Phae.long4.mp3", to = file.path(tempdir(),  "Phae.long4.mp3"))
+# 
+#   file.copy(from = file.path(tempdir(), "Phae.long1.wav"), to = file.path(tempdir(), "Phae.long5.wav"))
+# 
+# wav2flac(file.path(tempdir(), "Phae.long5.wav"))
+# 
+# if (selection.table){
+#   
+#   lbh_selec_table$sound.files <- as.character(lbh_selec_table$sound.files)
+# 
+#   sub_tab <- lbh_selec_table[lbh_selec_table$sound.files %in% c("Phae.long1.wav", "Phae.long4.wav"), 1:7]
+#   
+#   sub_tab$sound.files[sub_tab$sound.files == "Phae.long1.wav"] <- "Phae.long5.flac"
+#   
+#     sub_tab$sound.files[sub_tab$sound.files == "Phae.long4.wav"] <- "Phae.long4.mp3"
+# 
+#     # fix times
+#      sub_tab$start[sub_tab$sound.files == "Phae.long4.mp3"] <- c(0.2085945, 1.5950019, 2.3057996)
+#      
+#      sub_tab$end[sub_tab$sound.files == "Phae.long4.mp3"] <- c(0.3528653, 1.7287163, 2.4289576)
+#     
+#     
+#     sub_tab <- rbind(sub_tab, data.frame(sound.files = "recording_20170716_230503.wac", channel = 1, selec = 1, start = 0.1, end = 0.3, bottom.freq = 2, top.freq = 10))
+#   
+#     sub_tab <- rbind(sub_tab, lbh_selec_table[, 1:7])
+#     
+#     sub_tab$format <-ifelse(grepl("flac$", sub_tab$sound.files), "flac", ifelse(grepl("mp3$", sub_tab$sound.files), "mp3", "wav"))
+# 
+#     
+#     return(sub_tab)  
+# } else return(NULL)
+
+
+  # }
+}
+
+# run all warbleR fuctions
+run.all <- function() invisible(lapply(list.files(pattern = "\\.R", path = "./R", full.names = T, all.files = T), function(x) try(source(x), silent = T)))
+
+# run.all()
+
+list.selection.table <- function(lbh_selec_table, path = tempdir())
+{
+  crr.dr <- getwd()
+    on.exit(setwd(crr.dr))
+    
+  if(!is.null(path)) setwd(path) 
+  
+  Xlist <- list()
+Xlist$Xdf <- lbh_selec_table
+Xlist$Xst <- selection_table(lbh_selec_table)
+Xlist$Xest <- selection_table(lbh_selec_table, extended = T, confirm.extended = F)  
+
+lbh_selec_table$song <- as.numeric(lbh_selec_table$sound.files)
+
+Xlist$Xestbs <- selection_table(X = lbh_selec_table, extended = T, by.song = "song", confirm.extended = F)  
+
+names(Xlist) <- c("DATA.FRAME", "SELECTION_TABLE", "EXTENDED_SELECTION_TABLE", "by.song.EXTENDED_SELECTION_TABLE")
+
+return(Xlist)
+}
+
+
+bi_mats <- function(X, labels) {
+  
+  # create empty matrix to store memebership matrix
+  mat <- matrix(nrow = ncol(X), ncol = ncol(X))
+ 
+  # add labels to row and col names
+  rownames(mat) <- colnames(mat) <- labels
+  
+  # add 0 if same lek and 1 if else 
+  out <- lapply(1:(length(labels) - 1), function(i){
+  sapply((i + 1):length(labels), function(j) 
+    if (labels[i] == labels[j]) 0 else 1)  
+    })
+
+  # add to mat
+  mat[lower.tri(mat)] <- unlist(out)
+
+  # retunr as distance matrix
+  return(as.dist(mat))
+  }
+```
+
+# check
+```{r check}
+
+# system("autoconf  ")
+
+# usethis::use_rcpp()
+# setwd("./warbleR/")
+#delete NAMESPACE file
+
+# Rcpp::compileAttributes()
+
+#run document twice
+# devtools::document(".")
+
+# devtools::load_all()
+
+# usethis::use_coverage()
+# pkgcheck::use_github_action_pkgcheck()
+
+#check with devtools
+devtools::check(".", document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
+
+# devtools::run_examples( start = "rm_sil")
+
+# devtools::build_manual()
+
+# devtools::install()
+
+# check in R version 3.X.X
+
+## run in terminal:
+  # /opt/R/3.6.3/bin/R
+
+# devtools::check("~/Dropbox/R_package_testing/warbleR/warbleR", document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
+
+
+```
+
+# check and build package
+```{r check and build package}
+
+# check spelling
+schk <- devtools::spell_check(".")
+
+schk
+
+# check by function
+schk$word[grep("optimize", schk$found)]
+
+# check as in cran
+system("R CMD check . --as-cran --resave-data=best")
+system("R CMD check . --run-donttest")
+
+# build tar.gz package file
+system("R CMD build ./ --resave-data=best")
+
+devtools::check(run_dont_test = TRUE)
+
+unlink(list.files(pattern = "suwo\\.pdf", path = "."))
+
+# only build manual 
+#  sudo apt-get -f install texinfo
+# sudo apt-get -f install texlive-fonts-extra
+
+system("R CMD Rd2pdf .")
+
+#built site
+pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
+pkgdown::build_articles()
+
+# to set a new computer
+## 1. install git
+# 2. generate ssh key https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent
+# 3. add key to github account https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account  
+
+#sent to github
+setwd(".")
+system("git add .")
+system('git commit -m  "suffix argument added to lspec()"')
+system("git push origin master")
+
+
+# installation of packages fo rOpenSci
+
+# remotes::install_github ("ropensci-review-tools/pkgstats")
+
+
+
+#codecov
+usethis::use_coverage(type = c("codecov"))
+
+covr::codecov(token = "8df6a17e-aff7-4a6d-bdf7-ecc38aea7e71")
+
+# usethis::use_github_action("test-coverage")
+
+# generate codemeta.json (only run once)
+# codemetar::write_codemeta()
+
+
+## pckgcheck
+summary(pkgcheck::pkgcheck("."))
+
+summary(x)
+
+mydir <- file.path (tempdir (), "suwo")
+gert::git_clone ("https://github.com/maRce10/suwo.git", path = mydir)
+x <- pkgcheck::pkgcheck(mydir)
+summary(x)
+
+
+```
+
+# find and replace text
+```{r}
+# list.files
+
+path <- "."
+
+pattern <- "ffts"
+
+find.text(pattern = pattern, fun.only = F, ignore.case = T, path = path, recursive = TRUE)
+
+repl <- "freq_ts"
+
+repl.text(pattern = pattern, repl = repl, path = path)
+
+find.arg(arg1 = "dest.path")
+
+# find NON-ASCII
+
+out <- sapply(list.files("./man", full.names = TRUE), function(x) tools::showNonASCIIfile(file = x))
+
+
+```
+
+## troubleshoot warbleR functions ####
+```{r query_xenocanto}
+
+FUN <- "query_xenocanto"
+
+#run function
+source(file.path("./R", paste0(FUN,".R")))
+# setwd(tempdir())
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
+
+
+
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
+
+
+  df1 <- query_xenocanto(term = '000', download = FALSE)
+
+
+
+    msg <- capture_output(query_xenocanto(term = 'Phaethornis anthophilus', download = FALSE, verbose = TRUE, pb = FALSE))
+
+
+```
+

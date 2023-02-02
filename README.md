@@ -15,8 +15,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
 
-[suwo](https://github.com/maRce10/suwo) is intended streamline
-searching/downloading of nature media files (e.g. audios, photos) from
+[suwo](https://github.com/maRce10/suwo) is intended to streamline the
+searching and downloading of nature media files (e.g. audios, photos) from
 online repositories.
 
 The package offers functions for:
