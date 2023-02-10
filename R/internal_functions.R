@@ -3,6 +3,8 @@
 # internal suwo function, not to be called by users. It is a modified version of pbapply::pblapply
 # that allows to define internally if progress bar would be used (pbapply::pblapply uses pboptions to do this)
 
+#Create internal funciton to update datasets from gbif, launch once before every session
+
 pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 
   # conver parallel 1 to null

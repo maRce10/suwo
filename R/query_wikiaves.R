@@ -16,7 +16,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-#' df1 <- query_wikiaves(term = 'Phaethornis anthophilus', download = FALSE)
+#' df1 <- query_wikiaves(term = 'Phaethornis anthophilus')
 #' View(df1)
 #'
 #' }
@@ -92,10 +92,8 @@ query_wikiaves <-
     # get number of pages (20 is the default number of registers per page)
     get_ids$pages <- ceiling(get_ids$total_registers / 20)
 
-
     # remove those rows with no pages (only needed when many species are returned)
     get_ids <- get_ids[get_ids$pages > 0, ]
-
 
     id_by_page_list <- lapply(1:nrow(get_ids), function(x){
 
