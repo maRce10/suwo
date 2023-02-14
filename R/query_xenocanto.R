@@ -314,6 +314,8 @@ query_xenocanto <-
       results$repository <- "XC"
       #remove duplicates
       results <- results[!duplicated(results$record.id),]
+      #Rename record.id
+      colnames(results)[colnames(results) == "record.id"] ="file_url"
 
       if (pb  & verbose)
         cat(colortext(paste(nrow(results), "audio(s) found"), "success"), add_emoji("happy"))

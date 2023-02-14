@@ -3,7 +3,7 @@
 #' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto} or \href{https://www.wikiaves.com/}{wikiaves}.
 #' @usage download_media(metadata)
 
-#' @param metadata Data frame with a 'record.id' column and any other column listed in the file.name argument. Only the recordings listed in the data frame
+#' @param metadata Data frame with a 'file_url' column and any other column listed in the file.name argument. Only the recordings listed in the data frame
 #' will be download (\code{download} argument is automatically set to \code{TRUE}). This can be used to select
 #' the recordings to be downloaded based on their attributes.
 
@@ -30,40 +30,47 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
 
   #stop if the basic columns are not found
   if (!is.null(file.name))
-  {if (any(!c(file.name, "record.id") %in% colnames(metadata)))
-    stop(paste(paste(c(file.name, "record.id")[!c(file.name, "record.id") %in% colnames(metadata)], collapse=", "), "column(s) not found in data frame"))} else
-      if (!"record.id" %in% colnames(metadata))
-        stop("record.id column not found in data frame")
+  {if (any(!c(file.name, "file_url") %in% colnames(metadata)))
+    stop(paste(paste(c(file.name, "file_url")[!c(file.name, "file_url") %in% colnames(metadata)], collapse=", "), "column(s) not found in data frame"))} else
+      if (!"file_url" %in% colnames(metadata))
+        stop("file_url column not found in data frame")
 
   #download recordings
 
-    if (any(file.name == "record.id")) file.name <- file.name[-which(file.name == "record.id")]
+    if (any(file.name == "file_url")) file.name <- file.name[-which(file.name == "file_url")]
 
     if (!is.null(file.name))  {  if (length(which(tolower(names(metadata)) %in% file.name)) > 1)
       fn <- apply(metadata[,which(tolower(names(metadata)) %in% file.name)], 1 , paste , collapse = "-" ) else
         fn <- metadata[,which(tolower(names(metadata)) %in% file.name)]
-      metadata$sound.files <- paste(paste(fn, paste0(metadata$repository, metadata$record.id), sep = "-"), ".mp3", sep = "")
+      metadata$media.files <- paste(paste(fn, paste0(metadata$repository, metadata$file_url), sep = "-"), ".mp3", sep = "")
     } else
-      metadata$sound.files <- paste0(metadata$repository, metadata$record.id, ".mp3")
+      metadata$media.files <- paste0(metadata$repository, metadata$file_url, ".mp3")
 
   #Function to download file according to repository
 
     xcFUN <-  function(metadata, x){
-      if (!file.exists(metadata$sound.files[x])){
+      if (!file.exists(metadata$media.files[x])){
         if (metadata$repository[x] == "XC"){
           download.file(
-          url = paste("https://xeno-canto.org/", metadata$record.id[x], "/download", sep = ""),
-          destfile = file.path(path, metadata$sound.files[x]),
+          url = paste("https://xeno-canto.org/", metadata$file_url[x], "/download", sep = ""),
+          destfile = file.path(path, metadata$media.files[x]),
           quiet = TRUE,  mode = "wb", cacheOK = TRUE,
           extra = getOption("download.file.extra"))
           return (NULL)
         } else if (metadata$repository[x] == "wikiaves"){
           download.file(
-          url = as.character(metadata$url[x]),
-          destfile = file.path(path, metadata$sound.files[x]),
+          url = as.character(metadata$file_url[x]),
+          destfile = file.path(path, metadata$record.id[x]),
           quiet = TRUE,  mode = "wb", cacheOK = TRUE,
           extra = getOption("download.file.extra"))
           return (NULL)
+        } else if (metadata$repository[x] == "GBIF"){
+            download.file(
+              url = as.character(metadata$file_url[x]),
+              destfile = file.path(path, metadata$species[x]),
+              quiet = TRUE,  mode = "wb", cacheOK = TRUE,
+              extra = getOption("download.file.extra"))
+            return (NULL)
 
         }
 
@@ -89,7 +96,7 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
 
     #if so redo those files
     if (length(size0) > 0)
-    {  Y <- metadata[metadata$sound.files %in% size0, ]
+    {  Y <- metadata[metadata$media.files %in% size0, ]
     unlink(size0)
 
     # set clusters for windows OS
@@ -110,3 +117,4 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
 
 
 }
+

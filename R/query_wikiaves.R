@@ -16,7 +16,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-#' df1 <- query_wikiaves(term = 'Phaethornis anthophilus', download = FALSE)
+#' df1 <- query_wikiaves(term = 'Phaethornis anthophilus')
 #' View(df1)
 #'
 #' }
@@ -92,10 +92,8 @@ query_wikiaves <-
     # get number of pages (20 is the default number of registers per page)
     get_ids$pages <- ceiling(get_ids$total_registers / 20)
 
-
     # remove those rows with no pages (only needed when many species are returned)
     get_ids <- get_ids[get_ids$pages > 0, ]
-
 
     id_by_page_list <- lapply(1:nrow(get_ids), function(x){
 
@@ -169,10 +167,12 @@ query_wikiaves <-
     query_output_df$tipo <- type
 
     # rename output columns
-    names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("record.id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "url", "duration", "repository"))
+    names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("record.id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "file_url", "duration", "repository"))
 
     for(i in 1:nrow(names_df))
       names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
+
+
 
     return(query_output_df)
     }
