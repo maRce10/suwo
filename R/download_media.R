@@ -108,13 +108,6 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
     {
       try(xcFUN(Y, x), silent = TRUE)
     })
-
-    }
-
-
-
-
-
-
+  }
 }
 
