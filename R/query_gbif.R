@@ -1,7 +1,7 @@
 #' Access 'gbif' recordings and metadata
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
-#' @usage query_gbif(term, type, cores = 1, pb = TRUE)
+#' @usage query_gbif(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
 #' @param term Character vector of length one indicating the genus, or genus and
 #'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
 #'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
@@ -42,7 +42,7 @@ query_gbif <-
 
       org_type <- match.arg(type)
 
-      type <- switch(org_type,
+      type <- switch(type,
              sound = "Sound",
              `still image` = "StillImage",
              `moving image` = "MovingImage",
@@ -180,6 +180,7 @@ query_gbif <-
 
   #Add repository ID
   query_output_df$repository <- "GBIF"
+
 
   return(query_output_df)
   }
