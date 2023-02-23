@@ -9,11 +9,11 @@
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}
-#' @return If X is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
+#' @return If X is not provided the function returns a data frame with the following media information: ############### A, B, C
 #' @export
 #' @name query_gbif
-#' @details This function queries for avian vocalization recordings in the open-access
-#' online repository \href{https://www.gbif.org/}{gbif}. It can return recordings metadata.
+#' @details This function queries for species observation info in the open-access
+#' online repository \href{https://www.gbif.org/}{gbif}. It can return media metadata.
 #' @examples
 #' \dontrun{
 #' # search without downloading
@@ -23,7 +23,7 @@
 #' }
 #'
 #' @references {
-#' Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo Guaraldo. 2019. Revealing the potential of a huge citizen-science platform to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
+#'
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'

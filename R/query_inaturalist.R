@@ -1,4 +1,33 @@
-query_Macaulay <-
+#' Access 'gbif' recordings and metadata
+#'
+#' \code{query_gbif} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
+#' @usage query_inat(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
+#' @param term Character vector of length one indicating the genus, or genus and
+#'  species, to query 'inaturalist' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
+#'  @param type Character vector with media type to query for. Options are #######. Required.
+#' @param cores Numeric. Controls whether parallel computing is applied.
+#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
+#' @param dataset see \url{https://api.inaturalist.org/v1/Search?q=}
+#' @return If X is not provided the function returns a data frame with the following media information: ############### A, B, C
+#' @export
+#' @name query_gbif
+#' @details This function queries for species observation info in the open-access
+#' online repository \href{https://www.inaturalist.org/}{inaturalist}. It can return media metadata.
+#' @examples
+#' \dontrun{
+#' # search without downloading
+# df1 <- query_gbif(term = 'Turdus iliacus', type = "Sound", cores = 4)
+#' View(df1)
+#'
+#' }
+#'
+#' @references {
+#'
+#' }
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
+#'
+query_inat <-
   function(term = NULL,
            file.name = "sciName",
            type = "a",
@@ -99,7 +128,7 @@ query_Macaulay <-
           }
           )
 
-
-
+}
+      }
 
   }
