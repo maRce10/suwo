@@ -44,9 +44,26 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
         fn <- metadata[,which(tolower(names(metadata)) %in% file.name)]
       metadata$media.files <- paste(paste(fn, paste0(metadata$repository, metadata$file_url), sep = "-"), ".mp3", sep = "")
     } else
-      metadata$media.files <- paste0(metadata$repository, metadata$file_url, ".mp3")
+      metadata$media.files <- paste0(metadata$file_url)
 
   #Function to download file according to repository
+
+metadata$extension  <- vapply(X = metadata$file_url, FUN = function(x){
+
+      x2 <- strsplit(x, "\\?")[[1]][1]
+
+      max_x2 <- max(gregexpr("\\.", x2)[[1]])
+
+      extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
+
+      if (extension == ".mpga")
+        extension <- ".mp3"
+
+      return(extension)
+
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+
+
 
     xcFUN <-  function(metadata, x){
       if (!file.exists(metadata$media.files[x])){
@@ -65,11 +82,12 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
           extra = getOption("download.file.extra"))
           return (NULL)
         } else if (metadata$repository[x] == "GBIF"){
-            download.file(
+          tryCatch(download.file(
               url = as.character(metadata$file_url[x]),
-              destfile = file.path(path, metadata$species[x]),
+              destfile = file.path(path, paste0(metadata$species[x],"-",metadata$key[x],metadata$extension[x])),
               quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-              extra = getOption("download.file.extra"))
+              extra = getOption("download.file.extra")),error = function(e) print(paste(metadata$file_url[x], 'was not downloadable')))
+
             return (NULL)
 
         }
