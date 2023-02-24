@@ -95,7 +95,7 @@ query_xenocanto <-
 
     #initialize search
     q <-
-      rjson::fromJSON(file = paste0(
+      jsonlite::fromJSON(paste0(
         "https://www.xeno-canto.org/api/2/recordings?query=",
         term
       ))

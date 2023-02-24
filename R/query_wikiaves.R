@@ -60,7 +60,7 @@ query_wikiaves <-
 
     #initialize search
     get_ids <-
-      rjson::fromJSON(file = paste0(
+      jsonlite::fromJSON(paste0(
         "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
         term
       ))

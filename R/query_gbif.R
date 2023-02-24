@@ -48,7 +48,7 @@ query_gbif <-
              `moving image` = "MovingImage",
              `interactive resource` = "InteractiveResource")
 
-      # type must be supplied
+      # term must be supplied
       if (is.null(term))
         stop("'term' must be supplied")
 
@@ -76,7 +76,7 @@ query_gbif <-
        type
          )
 
-      base.srch.pth <- rjson::fromJSON(file = srch_trm)
+      base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
       # message if nothing found
       if (base.srch.pth$count == 0 & verbose)

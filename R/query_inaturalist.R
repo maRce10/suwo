@@ -1,6 +1,6 @@
 #' Access 'gbif' recordings and metadata
 #'
-#' \code{query_gbif} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
+#' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
 #' @usage query_inat(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
 #' @param term Character vector of length one indicating the genus, or genus and
 #'  species, to query 'inaturalist' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
@@ -11,13 +11,13 @@
 #' @param dataset see \url{https://api.inaturalist.org/v1/Search?q=}
 #' @return If X is not provided the function returns a data frame with the following media information: ############### A, B, C
 #' @export
-#' @name query_gbif
+#' @name query_inaturalist
 #' @details This function queries for species observation info in the open-access
 #' online repository \href{https://www.inaturalist.org/}{inaturalist}. It can return media metadata.
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_gbif(term = 'Turdus iliacus', type = "Sound", cores = 4)
+# df1 <- query_inaturalist(term = 'Turdus iliacus', type = "Sound", cores = 4)
 #' View(df1)
 #'
 #' }
@@ -27,19 +27,18 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-query_inat <-
+query_inaturalist <-
   function(term = NULL,
-           file.name = "sciName",
-           type = "a",
            cores = 1,
            pb = TRUE,
-           verbose = TRUE) {
+           verbose = TRUE
+  ) {
 
-    # type must be supplied
-    if (is.null(type))
-      stop("'type' must be supplied")
+    # # type must be supplied
+    # if (is.null(type))
+    #   stop("'type' must be supplied")
 
-    # type must be supplied
+    # term must be supplied
     if (is.null(term))
       stop("'term' must be supplied")
 
@@ -61,74 +60,121 @@ query_inat <-
     term <- gsub(" ", "%20", term)
 
 
-    #Check file.name
-    file.name <- gsub(" ", "", file.name)
+    srch_trm <- paste0("https://api.inaturalist.org/v1/Search?per_page=200&", "q=", term)
 
-    if (is.null(X) & !is.null(file.name))
-    {
+    base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
-      if (any(!(file.name %in%
-                c("catalogId", "age", "behaviors", "sex", "locationLine2", "location", "licenseType", "thumbnailUrl", "previewUrl", "largeUrl", "mediaUrl", "userId", "mediaType", "rating", "userDisplayName", "assetId", "sciName", "width", "height","speciesCode", "eBirdChecklistId", "valid","comments", "obsComments", "specimenUrl", "userProfileUrl", "locationLine1", "obsDttm", "collected", "eBirdChecklistUrl", "ratingCount", "recorder", "microphone", "accessories", "specimenIds", "homeArchive", "stimulus", "source","commonName" )))) stop("File name tags don't match column names in the output of this function (see documentation)")
-    }
+    ####org_type in tolower
 
-    if (is.null(X))
-    {
+    # message if nothing found
+    if (base.srch.pth$total_results == 0 & verbose)
+      cat(paste(colortext(paste0("No ", tolower("photos"), "s were found"), "failure"), add_emoji("sad"))) else {
 
-      if (media.type == "a") {
-        fls <- "recording(s)"
-        fl.xtn <- ".mp3"} else
-          if (media.type == "p") {
-            fls <- "photo(s)"
-            fl.xtn <- ".jpg"} else
-              if (media.type == "v") {
-                fls <- "video(s)"
-                fl.xtn <- ".mp4"}
+        # message number of results
+        if (pb & verbose)
+          cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
 
 
-      term = "Hirundo rustica"
-      #format JSON
-      term <- gsub(" ", "%20", term)
 
-      base.srch.pth <- paste0("https://api.inaturalist.org/v1/Search?", "q=", term)
 
-      #initialize search
-      q <- rjson::fromJSON(file = paste0(base.srch.pth, term))
-
-      count <- q$results$count
-
-      if (q$results$count == 0) {cat(paste("No", fls, "were found"))
-        download <- FALSE
-      }else {
-
-        # no more than 100 at the time currently
-        if (q$results$count > 100) q$results$count <- 100
-
-        if (q$results$count > 30)   q <- rjson::fromJSON(file = paste0(base.srch.pth, qword, "&count=", q$results$count))
-
-        # no more than 100 at the time currently
-        if (q$results$count > 100) q$results$count <- 100
-
-        ### loop over pages
         # set clusters for windows OS
-        if (Sys.info()[1] == "Windows" & parallel > 1)
-          cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
+        if (Sys.info()[1] == "Windows" & cores > 1)
+          cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
 
-          f <- pbapply::pblapply(X = 1:q$results$count, cl = cl, FUN = function(y)
+
+          query_output_list <- pblapply_sw_int(cl = 1, pbar = pb, function(i)
           {
-            itm <- q$results$content[[y]]
-            itm <- itm[which(names(itm) != "subjectData")]
+            query_output <- jsonlite::fromJSON(paste0(srch_trm, "&page=", i))
 
-            itm <- lapply(itm, function(x) if(!is.atomic(x) | is.null(x)) return(NA) else
-              return(x))
+            # format as list of data frame
+            query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
 
-            itm <- as.data.frame(itm)
+              x <- query_output$results[u, ]
 
-            return(itm)
-          }
-          )
+              # media_df <- do.call(rbind, media_list)
+              media_df <- do.call(rbind, x$record$taxon_photos)
 
-}
+              # fix identifier column name
+              # names(media_df)[names(media_df) == "photo$original_url"] <- "URL"
+              # names(media_df) <- paste0("media-", names(media_df))
+
+              # media data frame with image details
+              media_df <- data.frame(media_df$photo)
+
+              # remove lists
+              x <- x$record
+              media_df <- media_df[!sapply(media_df, is.list)]
+
+              # make it data frame
+              X_df <- data.frame(t(unlist(x)))
+
+              # add media details
+              X_df <- cbind(X_df, media_df)
+
+
+
+              return(X_df)
+            })
+
+            # get common names to all data frames in X
+            common_names <- unique(unlist(lapply(query_output$results, names)))
+
+            # add missing columns to all data frames in X
+            query_output$results <- lapply(query_output$results, function(e){
+
+              nms <- names(e)
+              if (length(nms) != length(common_names))
+                for (o in common_names[!common_names %in% nms]) {
+                  e <-
+                    data.frame(e,
+                               NA,
+                               stringsAsFactors = FALSE,
+                               check.names = FALSE)
+                  names(e)[ncol(e)] <- o
+                }
+              return(e)
+            })
+
+            # all results in a single data frame
+            output_df <- do.call(rbind, query_output$results)
+
+            output_df$page <- i
+
+            return(output_df)
+          })
+
+          # get common names to all data frames in X
+          common_names <- unique(unlist(lapply(query_output_list, names)))
+
+          # add missing columns to all data frames in X
+          query_output_list<- lapply(query_output_list, function(e){
+
+            nms <- names(e)
+            if (length(nms) != length(common_names))
+              for (o in common_names[!common_names %in% nms]) {
+                e <-
+                  data.frame(e,
+                             NA,
+                             stringsAsFactors = FALSE,
+                             check.names = FALSE)
+                names(e)[ncol(e)] <- o
+              }
+            return(e)
+          })
+
+          # all results in a single data frame
+          query_output_df <- do.call(rbind, query_output_list)
+
+          #Change column name for media download function
+          colnames(query_output_df)[colnames(query_output_df) == "media-URL"] ="file_url"
+
+          #Add repository ID
+          query_output_df$repository <- "INAT"
+
+
+          return(query_output_df)
       }
+}
 
-  }
+
