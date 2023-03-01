@@ -27,6 +27,11 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
+
+#install.packages("rinat")
+#library(rinat)
+#get_inat_obs(taxon_name = "hirundo rustica")
+
 query_inaturalist <-
   function(term = NULL,
            cores = 1,
