@@ -68,7 +68,7 @@ query_observation <-
 
     # message if nothing found
     if (base.srch.pth$count == 0 & verbose)
-      cat(paste(colortext(paste0("No ", tolower("photos"), "s were found"), "failure"), add_emoji("sad"))) else {
+      cat(paste(colortext(paste0("No ", tolower("photo"), "s were found"), "failure"), add_emoji("sad"))) else {
 
         # message number of results
         if (pb & verbose)
