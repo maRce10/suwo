@@ -46,9 +46,6 @@ query_inaturalist <-
                    `moving image` = "MovingImage",
                    `interactive resource` = "InteractiveResource")
 
-    if (type != )
-      stop2("Stillimage is the only available 'type' currently")
-
     # term must be supplied
     if (is.null(term))
       stop2("'term' must be supplied")

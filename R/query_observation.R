@@ -42,6 +42,17 @@ query_observation <-
     if (is.null(term))
       stop2("'term' must be supplied")
 
+    org_type <- match.arg(type)
+
+    type <- switch(type,
+                   sound = "Sound",
+                   `still image` = "StillImage",
+                   `moving image` = "MovingImage",
+                   `interactive resource` = "InteractiveResource")
+
+    if (type != "StillImage")
+      stop2("Stillimage is the only available 'type' currently")
+
     #check internet connection
     # a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
     # if (is(a, "try-error"))
@@ -64,11 +75,10 @@ query_observation <-
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
-    ####org_type in tolower
 
     # message if nothing found
     if (base.srch.pth$count == 0 & verbose)
-      cat(paste(colortext(paste0("No ", tolower("photo"), "s were found"), "failure"), add_emoji("sad"))) else {
+      cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad"))) else {
 
         # message number of results
         if (pb & verbose)
