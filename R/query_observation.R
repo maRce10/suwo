@@ -9,7 +9,7 @@
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param dataset see \url{https://observation.org/api/v1/species/search/?q=}
-#' @return If X is not provided the function returns a data frame with the following media information: ############### A, B, C
+#' @return If X is not provided the function returns a data frame with the following media information: id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, page, repository
 #' @export
 #' @name query_observation
 #' @details This function queries for species observation info in the open-access

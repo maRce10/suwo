@@ -1,4 +1,4 @@
-#' Access 'gbif' recordings and metadata
+#' Access 'inaturalist' recordings and metadata
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
 #' @usage query_inat(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
@@ -48,8 +48,6 @@ query_inaturalist <-
       stop("No connection to INaturalist (check your internet connection!)")
 
     if (a == "Could not connect to the database")
-      stop("INaturalist website website is apparently down")
-
     # If cores is not numeric
     if (!is.numeric(cores))
       stop("'cores' must be a numeric vector of length 1")
