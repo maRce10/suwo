@@ -62,16 +62,16 @@ query_xenocanto <-
     #check internet connection
     a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
     if (is(a, "try-error"))
-      stop("No connection to xeno-canto.org (check your internet connection!)")
+      stop2("No connection to xeno-canto.org (check your internet connection!)")
 
     if (a == "Could not connect to the database")
-      stop("xeno-canto.org website is apparently down")
+      stop2("xeno-canto.org website is apparently down")
 
     # If cores is not numeric
     if (!is.numeric(cores))
-      stop("'cores' must be a numeric vector of length 1")
+      stop2("'cores' must be a numeric vector of length 1")
     if (any(!(cores %% 1 == 0), cores < 1))
-      stop("'cores' should be a positive integer")
+      stop2("'cores' should be a positive integer")
 
     #search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb &  verbose)

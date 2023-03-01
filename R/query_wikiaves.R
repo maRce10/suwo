@@ -35,25 +35,25 @@ query_wikiaves <-
 
     # type must be supplied
     if (is.null(type))
-     stop("'type' must be supplied")
+     stop2("'type' must be supplied")
 
     # type must be supplied
     if (is.null(term))
-      stop("'term' must be supplied")
+      stop2("'term' must be supplied")
 
     #check internet connection
     a <- try(RCurl::getURL("www.wikiaves.com"), silent = TRUE)
     if (is(a, "try-error"))
-      stop("No connection to wikiaves (check your internet connection!)")
+      stop2("No connection to wikiaves (check your internet connection!)")
 
     if (a == "Could not connect to the database")
-      stop("wikiaves.com website is apparently down")
+      stop2("wikiaves.com website is apparently down")
 
     # If cores is not numeric
     if (!is.numeric(cores))
-      stop("'cores' must be a numeric vector of length 1")
+      stop2("'cores' must be a numeric vector of length 1")
     if (any(!(cores %% 1 == 0), cores < 1))
-      stop("'cores' should be a positive integer")
+      stop2("'cores' should be a positive integer")
 
     #format JSON
     term <- gsub(" ", "%20", term)

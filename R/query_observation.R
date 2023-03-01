@@ -4,7 +4,7 @@
 #' @usage query_observation(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
 #' @param term Character vector of length one indicating the genus, or genus and
 #'  species, to query 'observation' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Options are #######. Required.
+#'  @param type Character vector with media type to query for. Currently only  'stillimage' are available. Other types will be available in future versions.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
@@ -36,25 +36,25 @@ query_observation <-
 
     # # type must be supplied
     # if (is.null(type))
-    #   stop("'type' must be supplied")
+    #   stop2("'type' must be supplied")
 
     # term must be supplied
     if (is.null(term))
-      stop("'term' must be supplied")
+      stop2("'term' must be supplied")
 
     #check internet connection
     # a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
     # if (is(a, "try-error"))
-    #   stop("No connection to observation (check your internet connection!)")
+    #   stop2("No connection to observation (check your internet connection!)")
     #
     # if (a == "Could not connect to the database")
-    #   stop("observation website is apparently down")
+    #   stop2("observation website is apparently down")
 
     # If cores is not numeric
     if (!is.numeric(cores))
-      stop("'cores' must be a numeric vector of length 1")
+      stop2("'cores' must be a numeric vector of length 1")
     if (any(!(cores %% 1 == 0), cores < 1))
-      stop("'cores' should be a positive integer")
+      stop2("'cores' should be a positive integer")
 
     #format JSON
     term <- gsub(" ", "%20", term)
@@ -72,7 +72,7 @@ query_observation <-
 
         # message number of results
         if (pb & verbose)
-          cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+          cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, "matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
         # get total number of pages
         offsets <- (seq_len(ceiling(base.srch.pth$count / 100)) - 1) * 100

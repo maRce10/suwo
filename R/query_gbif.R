@@ -38,7 +38,7 @@ query_gbif <-
 
       # type must be supplied
       if (is.null(type))
-        stop("'type' must be supplied")
+        stop2("'type' must be supplied")
 
       org_type <- match.arg(type)
 
@@ -50,21 +50,21 @@ query_gbif <-
 
       # term must be supplied
       if (is.null(term))
-        stop("'term' must be supplied")
+        stop2("'term' must be supplied")
 
       #check internet connection
       a <- try(RCurl::getURL("https://api.gbif.org/v1/occurrence/search?"), silent = TRUE)
       if (is(a, "try-error"))
-        stop("No connection to GBIF API (check your internet connection!)")
+        stop2("No connection to GBIF API (check your internet connection!)")
 
       if (a == "Could not connect to the database")
-        stop("GBIF website is apparently down")
+        stop2("GBIF website is apparently down")
 
       # If cores is not numeric
       if (!is.numeric(cores))
-        stop("'cores' must be a numeric vector of length 1")
+        stop2("'cores' must be a numeric vector of length 1")
       if (any(!(cores %% 1 == 0), cores < 1))
-        stop("'cores' should be a positive integer")
+        stop2("'cores' should be a positive integer")
 
       # fix term for html
       term <- gsub(" ", "%20", term)
@@ -84,7 +84,7 @@ query_gbif <-
 
       # message number of results
       if (pb & verbose)
-        cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$count, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+        cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$count, "matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
 
       # get total number of pages

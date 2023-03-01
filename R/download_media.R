@@ -25,7 +25,7 @@
 download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, verbose = TRUE){
 
   #stop if metadata is not a data frame
-  if (!is(metadata, "data.frame")) stop("metadata is not a data frame")
+  if (!is(metadata, "data.frame")) stop2("metadata is not a data frame")
 
   # Add file extension
   metadata$extension  <- vapply(X = metadata$file_url, FUN = function(x){
