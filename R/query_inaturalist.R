@@ -32,7 +32,10 @@ query_inaturalist <-
   function(term = NULL,
            cores = 1,
            pb = TRUE,
-           verbose = TRUE
+           verbose = TRUE,
+           type = c("sound", "still image"),
+           identified = FALSE,
+           verifiable = FALSE
   ) {
 
     # # type must be supplied
@@ -43,7 +46,7 @@ query_inaturalist <-
 
     type <- switch(type,
                    sound = "sounds",
-                   `still image` = "photos")
+                   'still image' = "photos")
 
     # term must be supplied
     if (is.null(term))
@@ -70,8 +73,9 @@ query_inaturalist <-
     srch_trm <- paste0(
       "https://api.inaturalist.org/v1/observations?per_page=200&",
       "taxon_name==", term, "&",
-      type, "=true"
-    )
+      type, "=true", "&" , "identified=",
+      identified, "&", "verifiable=", verifiable
+      )
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
@@ -83,15 +87,18 @@ query_inaturalist <-
 
         # message number of results
         if (pb & verbose)
-          cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, "matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+          cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
+
+        # get total number of pages
+        pages <- (seq_len(ceiling(base.srch.pth$total_results / base.srch.pth$per_page)))
 
         # set clusters for windows OS
         if (Sys.info()[1] == "Windows" & cores > 1)
           cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
 
 
-          query_output_list <- pblapply_sw_int(cl = 1, pbar = pb, function(i)
+          query_output_list <- pblapply_sw_int(pages ,cl = cl, pbar = pb, function(i)
           {
             query_output <- jsonlite::fromJSON(paste0(srch_trm, "&page=", i))
 
@@ -101,26 +108,25 @@ query_inaturalist <-
               x <- query_output$results[u, ]
 
               # media_df <- do.call(rbind, media_list)
-              media_df <- do.call(rbind, x$record$taxon_photos)
-
+              media_df <- do.call(rbind, x$photos)
+              media_URL <-media_df$url
               # fix identifier column name
               # names(media_df)[names(media_df) == "photo$original_url"] <- "URL"
               # names(media_df) <- paste0("media-", names(media_df))
 
               # media data frame with image details
-              media_df <- data.frame(media_df$photo)
+              media_df <- media_df[!sapply(media_df, is.list)]
+              media_df <- data.frame(media_df)
+              names(media_df)[names(media_df) == "url"] <- "media-URL"
 
               # remove lists
-              x <- x$record
-              media_df <- media_df[!sapply(media_df, is.list)]
+              x <- x[!sapply(x, is.list)]
 
               # make it data frame
               X_df <- data.frame(t(unlist(x)))
 
               # add media details
               X_df <- cbind(X_df, media_df)
-
-
 
               return(X_df)
             })
