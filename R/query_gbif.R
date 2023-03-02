@@ -84,7 +84,7 @@ query_gbif <-
 
       # message number of results
       if (pb & verbose)
-        cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$count, "matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+        cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$count, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
 
       # get total number of pages

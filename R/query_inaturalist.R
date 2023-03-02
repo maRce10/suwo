@@ -67,12 +67,9 @@ query_inaturalist <-
     #format JSON
     term <- gsub(" ", "%20", term)
 
-
-    # srch_trm <- paste0("https://api.inaturalist.org/v1/observations?per_page=200&", "taxon_name=", term)
-
     srch_trm <- paste0(
       "https://api.inaturalist.org/v1/observations?per_page=200&",
-      "taxon_name==", term, "&",
+      "taxon_name=", term, "&",
       type, "=true", "&" , "identified=",
       identified, "&", "verifiable=", verifiable
       )
@@ -107,12 +104,7 @@ query_inaturalist <-
 
               x <- query_output$results[u, ]
 
-              # media_df <- do.call(rbind, media_list)
               media_df <- do.call(rbind, x$photos)
-              media_URL <-media_df$url
-              # fix identifier column name
-              # names(media_df)[names(media_df) == "photo$original_url"] <- "URL"
-              # names(media_df) <- paste0("media-", names(media_df))
 
               # media data frame with image details
               media_df <- media_df[!sapply(media_df, is.list)]
