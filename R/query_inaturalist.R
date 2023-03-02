@@ -28,10 +28,6 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-#install.packages("rinat")
-#library(rinat)
-#get_inat_obs(taxon_name = "hirundo rustica")
-
 query_inaturalist <-
   function(term = NULL,
            cores = 1,
@@ -46,10 +42,8 @@ query_inaturalist <-
     org_type <- match.arg(type)
 
     type <- switch(type,
-                   sound = "Sound",
-                   `still image` = "StillImage",
-                   `moving image` = "MovingImage",
-                   `interactive resource` = "InteractiveResource")
+                   sound = "sounds",
+                   `still image` = "photos")
 
     # term must be supplied
     if (is.null(term))
@@ -71,7 +65,13 @@ query_inaturalist <-
     term <- gsub(" ", "%20", term)
 
 
-    srch_trm <- paste0("https://api.inaturalist.org/v1/Search?per_page=200&", "q=", term)
+    # srch_trm <- paste0("https://api.inaturalist.org/v1/observations?per_page=200&", "taxon_name=", term)
+
+    srch_trm <- paste0(
+      "https://api.inaturalist.org/v1/observations?per_page=200&",
+      "taxon_name==", term, "&",
+      type, "=true"
+    )
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
@@ -84,9 +84,6 @@ query_inaturalist <-
         # message number of results
         if (pb & verbose)
           cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, "matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
-
-
-
 
 
         # set clusters for windows OS
