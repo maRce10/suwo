@@ -35,7 +35,8 @@ query_inaturalist <-
            verbose = TRUE,
            type = c("sound", "still image"),
            identified = FALSE,
-           verifiable = FALSE
+           verifiable = FALSE,
+           all_data=FALSE
   ) {
 
     # # type must be supplied
@@ -177,6 +178,14 @@ query_inaturalist <-
 
           #Add repository ID
           query_output_df$repository <- "INAT"
+
+          if (all_data)
+            query_output_df$country <- NA
+          query_output_df$latitude <- NA
+          query_output_df$longitude <- NA
+          query_output_df$scientific.name <- query_output_df$community_taxon_id
+          query_output_df$date <- query_output_df$time_observed_at
+          query_output_df <- query_output_df[,c("id","scientific.name","date","country","location","latitude","longitude","file_url","repository")]
 
 
           return(query_output_df)

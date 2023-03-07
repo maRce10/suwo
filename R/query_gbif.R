@@ -33,7 +33,8 @@ query_gbif <-
              cores = 1,
              pb = TRUE,
              verbose = TRUE,
-             dataset = NULL
+             dataset = NULL,
+             all_data=FALSE
              ) {
 
       # type must be supplied
@@ -181,6 +182,14 @@ query_gbif <-
   #Add repository ID
   query_output_df$repository <- "GBIF"
 
+
+  if (all_data)
+    query_output_df$latitude <- query_output_df$decimalLatitude
+    query_output_df$longitude <- query_output_df$decimalLongitude
+    query_output_df$species <- query_output_df$scientificName
+    query_output_df$id <- query_output_df$key
+    query_output_df$date <- query_output_df$eventDate
+    query_output_df <- query_output_df[,c("id","species","date","country","location","latitude","longitude","file_url","repository")]
 
   return(query_output_df)
   }

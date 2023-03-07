@@ -58,7 +58,8 @@ query_xenocanto <-
            X = NULL,
            cores = 1,
            pb = TRUE,
-           verbose = TRUE) {
+           verbose = TRUE,
+           all_data=FALSE) {
     #check internet connection
     a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
     if (is(a, "try-error"))
@@ -317,6 +318,7 @@ query_xenocanto <-
       #Rename record.id
       colnames(results)[colnames(results) == "record.id"] ="file_url"
 
+
       if (pb  & verbose)
         cat(colortext(paste(nrow(results), "audio(s) found"), "success"), add_emoji("happy"))
     }
@@ -326,6 +328,11 @@ query_xenocanto <-
       results$latitude <- as.numeric(results$latitude)
       results$longitude <- as.numeric(results$longitude)
 
+      if (all_data){
+        results$location <- results$locality
+        results$species <- paste(results$genus, results$specific.epithet, sep = "_")
+      results <- results[,c("id","species","date","country","location","latitude","longitude","file_url","repository")]
+}
       return(droplevels(results))
     }
 
