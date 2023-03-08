@@ -34,7 +34,7 @@ query_gbif <-
              pb = TRUE,
              verbose = TRUE,
              dataset = NULL,
-             all_data=FALSE
+             all_data=TRUE
              ) {
 
       # type must be supplied
@@ -177,20 +177,28 @@ query_gbif <-
   query_output_df <- do.call(rbind, query_output_list)
 
   #Change column name for media download function
-  colnames(query_output_df)[colnames(query_output_df) == "media-URL"] ="file_url"
+  names(query_output_df)[names(query_output_df) == "media-URL"] ="file_url"
 
   #Add repository ID
   query_output_df$repository <- "GBIF"
 
+  if (!all_data){
 
-  if (all_data)
-    query_output_df$latitude <- query_output_df$decimalLatitude
-    query_output_df$longitude <- query_output_df$decimalLongitude
-    query_output_df$species <- query_output_df$scientificName
-    query_output_df$id <- query_output_df$key
-    query_output_df$date <- query_output_df$eventDate
+    names(query_output_df)[names(query_output_df) == "decimalLatitude"] ="latitude"
+
+    names(query_output_df)[names(query_output_df) == "decimalLongitude"] ="longitude"
+
+    names(query_output_df)[names(query_output_df) == "scientificName"] ="species"
+
+    names(query_output_df)[names(query_output_df) == "key"] ="id"
+
+    names(query_output_df)[names(query_output_df) == "eventDate"] ="date"
+
+    names(query_output_df)[names(query_output_df) == "locality"] ="location"
+
     query_output_df <- query_output_df[,c("id","species","date","country","location","latitude","longitude","file_url","repository")]
 
+}
   return(query_output_df)
   }
 }

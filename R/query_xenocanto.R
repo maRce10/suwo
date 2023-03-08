@@ -59,7 +59,7 @@ query_xenocanto <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           all_data=FALSE) {
+           all_data=TRUE) {
     #check internet connection
     a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
     if (is(a, "try-error"))
@@ -256,21 +256,21 @@ query_xenocanto <-
         names(results)
       )] <-
         c(
-          "record.id",
+          "id",
           "genus",
           "specific.epithet",
           "subspecies",
           "english.name",
           "recordist",
           "country",
-          "locality",
+          "location",
           "latitude",
           "longitude",
           "altitude",
           "vocalization.type",
           "audio_file",
           "license",
-          "url",
+          "file_url",
           "quality",
           "length",
           "time",
@@ -314,9 +314,7 @@ query_xenocanto <-
       #Add repository ID
       results$repository <- "XC"
       #remove duplicates
-      results <- results[!duplicated(results$record.id),]
-      #Rename record.id
-      colnames(results)[colnames(results) == "record.id"] ="file_url"
+      results <- results[!duplicated(results$id),]
 
 
       if (pb  & verbose)
@@ -328,11 +326,12 @@ query_xenocanto <-
       results$latitude <- as.numeric(results$latitude)
       results$longitude <- as.numeric(results$longitude)
 
-      if (all_data){
-        results$location <- results$locality
-        results$species <- paste(results$genus, results$specific.epithet, sep = "_")
-      results <- results[,c("id","species","date","country","location","latitude","longitude","file_url","repository")]
-}
+      # create species name column
+      results$species <- paste(results$genus, results$specific.epithet, sep = "_")
+
+      if (!all_data)
+        results <- results[,c("location","latitude","longitude","file_url","repository","id","species","date","country")]
+
       return(droplevels(results))
     }
 

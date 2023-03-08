@@ -32,7 +32,7 @@ query_wikiaves <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           all_data = FALSE) {
+           all_data = TRUE) {
 
     # type must be supplied
     if (is.null(type))
@@ -173,14 +173,14 @@ query_wikiaves <-
     for(i in 1:nrow(names_df))
       names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
 
-    if (all_data)
+    if (!all_data){
     query_output_df$country <- "Brazil"
-    query_output_df$species <- query_output_df$scientific.name
-    query_output_df$id <- query_output_df$record.id
+    names(query_output_df)[names(query_output_df) == "scientific.name"] ="species"
+    names(query_output_df)[names(query_output_df) == "record.id"] ="id"
     query_output_df$latitude <- NA
     query_output_df$longitude <- NA
     query_output_df <- query_output_df[,c("id","species","date","country","location","latitude","longitude","file_url","repository")]
-
+}
     return(query_output_df)
     }
   }
