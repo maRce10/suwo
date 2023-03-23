@@ -75,12 +75,17 @@ query_observation <-
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
+
     require(httr)
+
+    species = "witkeel"
+
+   hep = curl::curl(url = paste0("https://observation.org/api/v1/species/search/?q=",species))
 
     url_query = paste0("https://observation.org/api/v1/species/", species_id, "/observations/")
 
     headers = c(
-      `Authorization` = 'Bearer xR8kiaB4FafdjdxNV4xL9lLQGTlIZW'
+      `Authorization` = 'Bearer '
     )
 
     res <- httr::GET(url = url_query, httr::add_headers(.headers=headers))
