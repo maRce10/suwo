@@ -76,19 +76,22 @@ query_observation <-
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
 
-    require(httr)
 
-    species = "witkeel"
+    library(RCurl)
 
-   hep = curl::curl(url = paste0("https://observation.org/api/v1/species/search/?q=",species))
+    # Set the species ID and API endpoint URL
+    species_id <- "Number"
+    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/")
 
-    url_query = paste0("https://observation.org/api/v1/species/", species_id, "/observations/")
+    # Set the authorization header with your bearer token
+    bearer_token <- "Insert Token"
+    headers <- c("Authorization" = paste("Bearer", bearer_token))
 
-    headers = c(
-      `Authorization` = 'Bearer '
-    )
+    # Make the GET request and retrieve the response
+    response <- getURL(url_inquiry, httpheader = headers)
 
-    res <- httr::GET(url = url_query, httr::add_headers(.headers=headers))
+    # Print the response text
+    cat(response)
 
 
     # message if nothing found
