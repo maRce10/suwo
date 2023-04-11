@@ -81,21 +81,24 @@ query_observation <-
 
     # Set the species ID and API endpoint URL
     species_id <- "Number"
-    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/")
+    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=1000")
 
     # Set the authorization header with your bearer token
     bearer_token <- "Insert Token"
     headers <- c("Authorization" = paste("Bearer", bearer_token))
 
     # Make the GET request and retrieve the response
-    response <- getURL(url_inquiry, httpheader = headers)
+    dataURL <- getURL(url_inquiry, httpheader = headers)
 
-    # Print the response text
-    cat(response)
+    #JSON format
+    data <- fromJSON(dataURL)
+
+    # Print the result
+    print(data)
 
 
     # message if nothing found
-    if (base.srch.pth$count == 0 & verbose)
+    if (data$count == 0 & verbose)
       cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad"))) else {
 
         # message number of results
@@ -103,7 +106,7 @@ query_observation <-
           cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, "matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
 
         # get total number of pages
-        offsets <- (seq_len(ceiling(base.srch.pth$count / 100)) - 1) * 100
+        offsets <- (seq_len(ceiling(data$count / 100)) - 1) * 100
 
 
 
@@ -112,62 +115,42 @@ query_observation <-
           cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
 
 
-          query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i)
-          {
-            query_output <- jsonlite::fromJSON(paste0(srch_trm, "&offset=", i))
+        query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i)
+        {
 
-            # format as list of data frame
-            query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
+          srch_trm <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
 
-              x <- query_output$results[u, ]
+          dataURL <- getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
 
-              # media_df <- do.call(rbind, media_list)
-              media_URL <- x$photo
+          #JSON format
+          data <- fromJSON(dataURL)
 
-              # remove lists
-              x <- x[!sapply(x, is.list)]
+          # format as list of data frame
+          data$results <- lapply(seq_len(nrow(data$results)), function(u) {
 
-              # make it data frame
-              X_df <- data.frame(t(unlist(x)))
+            x <- data$results[u, ]
 
-              # add media details
-              X_df <- cbind(X_df, media_URL)
+            # media_df <- do.call(rbind, media_list)
+            media_URL_photos <- x$photos
+            #media_URL_sounds <- x$sounds
 
-              return(X_df)
-            })
+            # remove lists
+            x <- x[!sapply(x, is.list)]
 
-            # get common names to all data frames in X
-            common_names <- unique(unlist(lapply(query_output$results, names)))
+            # make it data frame
+            X_df <- data.frame(t(unlist(x)))
 
-            # add missing columns to all data frames in X
-            query_output$results <- lapply(query_output$results, function(e){
+            # add media details
+            X_df <- cbind(X_df,media_URL_photos)
 
-              nms <- names(e)
-              if (length(nms) != length(common_names))
-                for (o in common_names[!common_names %in% nms]) {
-                  e <-
-                    data.frame(e,
-                               NA,
-                               stringsAsFactors = FALSE,
-                               check.names = FALSE)
-                  names(e)[ncol(e)] <- o
-                }
-              return(e)
-            })
-
-            # all results in a single data frame
-            output_df <- do.call(rbind, query_output$results)
-
-            output_df$page <- i/100
-
-            return(output_df)
+            return(X_df)
           })
 
           # get common names to all data frames in X
-          common_names <- unique(unlist(lapply(query_output_list, names)))
+          common_names <- unique(unlist(lapply(data$results, names)))
 
           # add missing columns to all data frames in X
-          query_output_list<- lapply(query_output_list, function(e){
+          data$results <- lapply(data$results, function(e){
 
             nms <- names(e)
             if (length(nms) != length(common_names))
@@ -183,15 +166,42 @@ query_observation <-
           })
 
           # all results in a single data frame
-          query_output_df <- do.call(rbind, query_output_list)
+          output_df <- do.call(rbind, data$results)
 
-          #Change column name for media download function
-          colnames(query_output_df)[colnames(query_output_df) == "media_URL"] ="file_url"
+          output_df$page <- i/100
 
-          #Add repository ID
-          query_output_df$repository <- "Observation"
+          return(output_df)
+        })
+
+        # get common names to all data frames in X
+        common_names <- unique(unlist(lapply(query_output_list, names)))
+
+        # add missing columns to all data frames in X
+        query_output_list<- lapply(query_output_list, function(e){
+
+          nms <- names(e)
+          if (length(nms) != length(common_names))
+            for (o in common_names[!common_names %in% nms]) {
+              e <-
+                data.frame(e,
+                           NA,
+                           stringsAsFactors = FALSE,
+                           check.names = FALSE)
+              names(e)[ncol(e)] <- o
+            }
+          return(e)
+        })
+
+        # all results in a single data frame
+        query_output_df <- do.call(rbind, query_output_list)
+
+        #Change column name for media download function
+        colnames(query_output_df)[colnames(query_output_df) == "media_URL"] ="file_url"
+
+        #Add repository ID
+        query_output_df$repository <- "Observation"
 
 
-          return(query_output_df)
+        return(query_output_df)
       }
   }
