@@ -81,7 +81,7 @@ query_observation <-
 
     # Set the species ID and API endpoint URL
     species_id <- "Number"
-    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=1000")
+    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
 
     # Set the authorization header with your bearer token
     bearer_token <- "Insert Token"
