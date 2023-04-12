@@ -131,8 +131,8 @@ query_observation <-
             x <- data$results[u, ]
 
             # media_df <- do.call(rbind, media_list)
-            media_URL_photos <- x$photos
-            #media_URL_sounds <- x$sounds
+            media_URL <- x$photos
+
 
             # remove lists
             x <- x[!sapply(x, is.list)]
