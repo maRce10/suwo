@@ -22,7 +22,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
-download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, verbose = TRUE){
+download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, verbose = TRUE, cores = 1){
 
   #stop if metadata is not a data frame
   if (!is(metadata, "data.frame")) stop2("metadata is not a data frame")
