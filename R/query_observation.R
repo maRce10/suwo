@@ -2,8 +2,8 @@
 #'
 #' \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
 #' @usage query_observation(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
-#' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'observation' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
+#' @param term Character vector of length one indicating the
+#'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
 #'  @param type Character vector with media type to query for. Currently only  'stillimage' are available. Other types will be available in future versions.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -32,7 +32,8 @@ query_observation <-
            type = c("sound", "still image"),
            cores = 1,
            pb = TRUE,
-           verbose = TRUE
+           verbose = TRUE,
+           token = NULL
   ) {
 
     # # type must be supplied
@@ -202,6 +203,6 @@ query_observation <-
         #Add repository ID
         query_output_df$repository <- "Observation"
 
-
+        query_output_df <- subset(query_output_df, select = -c(page))
         return(query_output_df)
       }
