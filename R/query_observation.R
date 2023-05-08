@@ -125,13 +125,17 @@ query_observation <-
 
             x <- data$results[u, ]
 
-            # media_df <- do.call(rbind, media_list)
-            # photos_list <- as.list(x$photos)
-
-            media_URL <- if (length(x$photos[[1]]) > 0)
+            if(type == "StillImage"){
+              media_URL <- if (length(x$photos[[1]]) > 0)
               unlist(x$photos) else
                 NA
-            #media_URL_sounds <- x$sounds
+            }
+
+            if(type == "Sound"){
+              media_URL <- if (length(x$sounds[[1]]) > 0)
+                unlist(x$sounds) else
+                  NA
+            }
 
             # remove lists
             x <- x[!sapply(x, is.list)]
