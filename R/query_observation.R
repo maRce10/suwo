@@ -4,7 +4,7 @@
 #' @usage query_observation(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
 #' @param term Character vector of length one indicating the
 #'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Currently only  'stillimage' are available. Other types will be available in future versions.
+#'  @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
@@ -36,14 +36,14 @@ query_observation <-
            token = NULL
   ) {
 
-    # # type must be supplied
-    # if (is.null(type))
-    #   stop2("'type' must be supplied")
 
     # term must be supplied
     if (is.null(term))
       stop2("'term' must be supplied")
 
+    # type must be supplied
+    if (is.null(type))
+      stop2("'type' must be supplied")
     org_type <- match.arg(type)
 
     type <- switch(type,
@@ -51,9 +51,6 @@ query_observation <-
                    `still image` = "StillImage",
                    `moving image` = "MovingImage",
                    `interactive resource` = "InteractiveResource")
-
-    if (type != "StillImage")
-      stop2("Stillimage is the only available 'type' currently")
 
     #check internet connection
     # a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)

@@ -56,6 +56,13 @@ query_wikiaves <-
     if (any(!(cores %% 1 == 0), cores < 1))
       stop2("'cores' should be a positive integer")
 
+    org_type <- match.arg(type)
+
+    type <- switch(type,
+                   sound = "Sound",
+                   `still image` = "photo")
+
+
     #format JSON
     term <- gsub(" ", "%20", term)
 
