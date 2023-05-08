@@ -90,6 +90,8 @@ query_observation <-
     #JSON format
     data <- fromJSON(dataURL)
 
+    data_org <- data
+
     if (data$count == 0 & verbose)
       cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad"))) else {
 
@@ -109,7 +111,8 @@ query_observation <-
 
         query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i)
         {
-
+          # print()
+#
           srch_trm <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
 
           dataURL <- getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
@@ -145,6 +148,9 @@ query_observation <-
 
             # remove NAs
             X_df <- X_df[!is.na(X_df$media_URL), ]
+
+
+              X_df$species_name <- if (nrow(X_df) > 0) data_org$results$species_detail$scientific_name[u] else vector(mode= "character")
 
             return(X_df)
           })
@@ -201,8 +207,11 @@ query_observation <-
         #Change column name for media download function
         colnames(query_output_df)[colnames(query_output_df) == "media_URL"] <- "file_url"
         colnames(query_output_df)[colnames(query_output_df) == "id"] <- "key"
+        colnames(query_output_df)[colnames(query_output_df) == "species"] <- "species_code"
+        colnames(query_output_df)[colnames(query_output_df) == "species_name"] <- "species"
         #Add repository ID
         query_output_df$repository <- "Observation"
+
 
         query_output_df <- subset(query_output_df, select = -c(page))
         return(query_output_df)

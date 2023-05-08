@@ -58,7 +58,7 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
   ))
 
    # create file name
-    metadata$file.name <- tolower(paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$non_dup_key, metadata$extension))
+    metadata$file.name <- tolower(paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$non_dup_key, "-", metadata$repository, metadata$extension))
 
 
   #Function to download file according to repository
