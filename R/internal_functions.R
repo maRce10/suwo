@@ -81,7 +81,7 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 # stop function that doesn't print call
 stop2 <- function (...)
 {
-  stop2(..., call. = FALSE)
+  stop(..., call. = FALSE)
 }
 
 # warning function that doesn't print call
