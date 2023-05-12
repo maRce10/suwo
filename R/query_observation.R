@@ -73,6 +73,10 @@ query_observation <-
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
+    # If species not found in repository
+    if (base.srch.pth$count==0)
+      stop2(stop("Species was not found in database"))
+
     library(RCurl)
     library(jsonlite)
 

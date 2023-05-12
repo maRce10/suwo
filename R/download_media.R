@@ -43,8 +43,18 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
 
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 
+  #Abbreviate repository name
+  repo <- metadata$repository[1]
 
-  # rename if any duplicated names
+  metadata$repository <- switch(repo,
+                 XC = "XC",
+                 Observation = "OBS",
+                 GBIF = "GBIF",
+                 wikiaves = "WA",
+                 INAT = "INAT",
+                 Macaulay = "ML")
+
+    # rename if any duplicated names
   metadata$non_dup_key <- unlist(lapply(
     unique(metadata$key),
     function(x) {
@@ -58,7 +68,7 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
   ))
 
    # create file name
-    metadata$file.name <- tolower(paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$non_dup_key, "-", metadata$repository, metadata$extension))
+    metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, metadata$extension)
 
 
   #Function to download file according to repository

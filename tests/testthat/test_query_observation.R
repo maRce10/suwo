@@ -1,7 +1,7 @@
 library(testthat)
 test_that("search Glaucis dohrnii audio", {
 
-  df1 <- query_observation(term = 'Glaucis dohrnii')
+  df1 <- query_observation(term = 'Glaucis dohrnii', type = "still image", token = token)
 
 
   # system(paste("firefox", df1$link[1]))
@@ -12,7 +12,7 @@ test_that("search Glaucis dohrnii audio", {
 
 test_that("search Aristolochia baetica images", {
 
-  df1 <- query_observation(term = 'Aristolochia baetica')
+  df1 <- query_observation(term = 'Aristolochia baetica', type = "still image", token = token)
 
   expect_true(nrow(df1) >= 1)
 
@@ -21,7 +21,7 @@ test_that("search Aristolochia baetica images", {
 
 test_that("search Floractus heimi (no observations)", {
 
-  df1 <- query_observation(term = 'Floractus heimi')
+  df1 <- query_observation(term = 'Floractus heimi', type = "still image", token = token)
 
 
   # system(paste("firefox", df1$link[1]))
@@ -56,6 +56,17 @@ test_that("search Glaucis photos (3 species)", {
 
 test_that("search candida photos in parallel", {
 
+  df1 <- query_observation(term = 'candida', type = "still image", token = token, cores = 0)
+
+
+  #system(paste("firefox", df1$`media-URL`[1]))
+
+  expect_true(nrow(df1) >= 177)
+
+})
+
+test_that("search candida photos in parallel", {
+
   df1 <- query_observation(term = 'candida', cores = 3)
 
 
@@ -76,3 +87,5 @@ test_that("test verbose FALSE", {
   expect_true(df1 == "")
 
 })
+
+
