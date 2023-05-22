@@ -12,6 +12,14 @@ test_that("search Glaucis dohrnii audio", {
 
 test_that("search Aristolochia baetica images", {
 
+  df1 <- query_observation(type = "still image", token = token)
+
+  expect_true(nrow(df1) >= 1)
+
+})
+
+test_that("search Aristolochia baetica images", {
+
   df1 <- query_observation(term = 'Aristolochia baetica', type = "still image", token = token)
 
   expect_true(nrow(df1) >= 1)
