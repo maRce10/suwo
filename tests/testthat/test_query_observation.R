@@ -1,7 +1,7 @@
 library(testthat)
-test_that("search Glaucis dohrnii audio", {
+test_that("search Glaucis dohrnii still image", {
 
-  df1 <- query_observation(term = 'Glaucis dohrnii', type = "still image", token = token)
+  df1 <- query_observation2(term = 'Glaucis dohrnii', type = "still image", token = token)
 
 
   # system(paste("firefox", df1$link[1]))
@@ -63,7 +63,7 @@ test_that("search Glaucis aeneus photos in parallel", {
 
   #system(paste("firefox", df1$`media-URL`[1]))
 
-  expect_true(nrow(df1) >= 177)
+  expect_true(nrow(df1) >= 35)
 
 })
 

@@ -27,7 +27,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-query_observation <-
+query_observation2 <-
   function(term = NULL,
            type = c("sound", "still image"),
            cores = 1,
@@ -181,8 +181,9 @@ query_observation <-
 
           # all results in a single data frame
           output_df <- do.call(rbind, data$results)
-
+          if (nrow(output_df) > 1)
           output_df$page <- i/100
+          else vector(length = 0L)
 
           return(output_df)
         })
