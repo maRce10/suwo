@@ -115,7 +115,7 @@ query_observation <-
 
         query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i)
         {
-          # print()
+          print(i)
 #
           srch_trm <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
 
@@ -128,6 +128,7 @@ query_observation <-
           data$results <- lapply(seq_len(nrow(data$results)), function(u) {
 
             x <- data$results[u, ]
+            print(u)
 
             if(type == "StillImage"){
               media_URL <- if (length(x$photos[[1]]) > 0)

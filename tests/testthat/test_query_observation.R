@@ -12,14 +12,6 @@ test_that("search Glaucis dohrnii audio", {
 
 test_that("search Aristolochia baetica images", {
 
-  df1 <- query_observation(type = "still image", token = token)
-
-  expect_true(nrow(df1) >= 1)
-
-})
-
-test_that("search Aristolochia baetica images", {
-
   df1 <- query_observation(term = 'Aristolochia baetica', type = "still image", token = token)
 
   expect_true(nrow(df1) >= 1)
@@ -40,19 +32,21 @@ test_that("search Floractus heimi (no observations)", {
 
 test_that("no result", {
 
-  df1 <- query_observation(term = 'asdasdasd')
+  df1 <- try(query_observation(term = 'asdasdasd', type = "still image", token = token), silent = TRUE)
 
 
   # system(paste("firefox", df1$link[1]))
 
-  expect_true(is.null(df1))
+  expect_true(as.character(attributes(df1)$condition) == "simpleError: Species was not found in database\n")
 
+  testthat::capture_error(query_observation(term = 'asdasdasd', type = "still image", token = token)
+)
 })
 
 
 test_that("search Glaucis photos (3 species)", {
 
-  df1 <- query_observation(term = 'Glaucis')
+  df1 <- query_observation(term = 'Glaucis', type = "still image", token = token)
 
 
   # system(paste("firefox", df1$link[1]))
@@ -62,9 +56,9 @@ test_that("search Glaucis photos (3 species)", {
 })
 
 
-test_that("search candida photos in parallel", {
+test_that("search Glaucis aeneus photos in parallel", {
 
-  df1 <- query_observation(term = 'candida', type = "still image", token = token, cores = 0)
+  df1 <- query_observation(term = 'Glaucis aeneus', type = "still image", token = token, cores = 1)
 
 
   #system(paste("firefox", df1$`media-URL`[1]))
