@@ -45,7 +45,7 @@ test_that("no result", {
 
 test_that("search Turdus grayi photos in parallel", {
 
-  df1 <- query_observation(term = 'Turdus grayi', type = "still image", token = token, cores = 2)
+  df1 <- query_observation(term = 'Serinus serinus', type = "sound", token = token, cores = 2)
 
 
   #system(paste("firefox", df1$`media-URL`[1]))
