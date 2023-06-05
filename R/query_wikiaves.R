@@ -28,7 +28,7 @@
 #'
 query_wikiaves <-
   function(term = NULL,
-           type = NULL,
+           type = c("sound", "still image"),
            cores = 1,
            pb = TRUE,
            verbose = TRUE,

@@ -27,7 +27,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-query_observation2 <-
+query_observation <-
   function(term = NULL,
            type = c("sound", "still image"),
            cores = 1,
@@ -115,7 +115,7 @@ query_observation2 <-
 
         query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i)
         {
-          print(i)
+          # print()
 #
           srch_trm <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
 
@@ -128,7 +128,6 @@ query_observation2 <-
           data$results <- lapply(seq_len(nrow(data$results)), function(u) {
 
             x <- data$results[u, ]
-            print(u)
 
             if(type == "StillImage"){
               media_URL <- if (length(x$photos[[1]]) > 0)
@@ -181,9 +180,8 @@ query_observation2 <-
 
           # all results in a single data frame
           output_df <- do.call(rbind, data$results)
-          if (nrow(output_df) > 1)
+
           output_df$page <- i/100
-          else vector(length = 0L)
 
           return(output_df)
         })
