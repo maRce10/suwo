@@ -101,12 +101,10 @@ query_observation <-
 
         # message number of results
         if (pb & verbose)
-          cat(paste(colortext(paste0("Obtaining metadata (matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+          cat(paste(colortext(paste0("Obtaining metadata (", data$count," candidate observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
       }
     # get total number of pages
     offsets <- (seq_len(ceiling(data$count / 100)) - 1) * 100
-
-
 
         # set clusters for windows OS
         if (Sys.info()[1] == "Windows" & cores > 1)
@@ -181,8 +179,6 @@ query_observation <-
           # all results in a single data frame
           output_df <- do.call(rbind, data$results)
 
-          output_df$page <- i/100
-
           return(output_df)
         })
 
@@ -216,7 +212,5 @@ query_observation <-
         #Add repository ID
         query_output_df$repository <- "Observation"
 
-
-        query_output_df <- subset(query_output_df, select = -c(page))
         return(query_output_df)
       }
