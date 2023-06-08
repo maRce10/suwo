@@ -2,14 +2,14 @@
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
 #' @usage query_gbif(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
-#' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
+#' @param term Character vector of length one indicating genus and
+#'  species, to query 'gbif' database. For example, \emph{Phaethornis longirostris}.
 #'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}
-#' @return If X is not provided the function returns a data frame with the following media information: ############### A, B, C
+#' @return If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
 #' @export
 #' @name query_gbif
 #' @details This function queries for species observation info in the open-access

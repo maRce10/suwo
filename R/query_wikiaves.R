@@ -2,13 +2,12 @@
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @usage query_wikiaves(term, type, cores = 1, pb = TRUE)
-#' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Options are 'photo' or 'audio'. Required.
+#' @param term Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.
+#'  @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @return If X is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
+#' @return If all_data is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
 #' @export
 #' @name query_wikiaves
 #' @details This function queries for avian vocalization recordings in the open-access

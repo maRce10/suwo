@@ -1,15 +1,14 @@
 #' Access 'inaturalist' recordings and metadata
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
-#' @usage query_inat(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
-#' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'inaturalist' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
+#' @usage query_inat(term, type = c("sound", "still image"), cores = 1, pb = TRUE)
+#' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
+#'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param dataset see \url{https://api.inaturalist.org/v1/Search?q=}
-#' @return If X is not provided the function returns a data frame with the following media information: ############### A, B, C
+#' @return If all_data is not provided the function returns a data frame with the following media information: ############### A, B, C
 #' @export
 #' @name query_inaturalist
 #' @details This function queries for species observation info in the open-access
