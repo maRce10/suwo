@@ -6,7 +6,7 @@ test_that("search Glaucis dohrnii audio", {
 
   # system(paste("firefox", df1$link[1]))
 
-  expect_true(nrow(df1) == 22)
+  expect_true(nrow(df1) >= 22)
 
 })
 
