@@ -33,6 +33,19 @@ query_wikiaves <-
            verbose = TRUE,
            all_data = TRUE) {
 
+    # check arguments
+    arguments <- as.list(base::match.call())[-1]
+
+    # add objects to argument names
+    for(i in names(arguments))
+      arguments[[i]] <- get(i)
+
+    # check each arguments
+    check_results <- check_arguments(args = arguments)
+
+    # report errors
+    checkmate::reportAssertions(check_results)
+
     # type must be supplied
     if (is.null(type))
      stop2("'type' must be supplied")

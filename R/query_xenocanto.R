@@ -60,6 +60,20 @@ query_xenocanto <-
            pb = TRUE,
            verbose = TRUE,
            all_data=TRUE) {
+
+    # check arguments
+    arguments <- as.list(base::match.call())[-1]
+
+    # add objects to argument names
+    for(i in names(arguments))
+      arguments[[i]] <- get(i)
+
+    # check each arguments
+    check_results <- check_arguments(args = arguments)
+
+    # report errors
+    checkmate::reportAssertions(check_results)
+
     #check internet connection
     a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
     if (is(a, "try-error"))

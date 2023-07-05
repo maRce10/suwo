@@ -24,8 +24,18 @@
 
 download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, verbose = TRUE, cores = 1){
 
-  #stop if metadata is not a data frame
-  if (!is(metadata, "data.frame")) stop2("metadata is not a data frame")
+  # check arguments
+  arguments <- as.list(base::match.call())[-1]
+
+  # add objects to argument names
+  for(i in names(arguments))
+    arguments[[i]] <- get(i)
+
+  # check each arguments
+  check_results <- check_arguments(args = arguments)
+
+  # report errors
+  checkmate::reportAssertions(check_results)
 
   # Add file extension
   metadata$extension  <- vapply(X = metadata$file_url, FUN = function(x){
