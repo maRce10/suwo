@@ -3,8 +3,8 @@
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @usage query_wikiaves(term, type, cores = 1, pb = TRUE)
 #' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Options are 'photo' or 'audio'. Required.
+#'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis nattereri}.
+#'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
@@ -15,8 +15,8 @@
 #' online repository \href{https://www.wikiaves.com/}{wikiaves}. It can return recordings metadata.
 #' @examples
 #' \dontrun{
-#' # search without downloading
-#' df1 <- query_wikiaves(term = 'Phaethornis anthophilus')
+#' # search
+#' df1 <- query_wikiaves(term = 'Phaethornis nattereri', type = "still image")
 #' View(df1)
 #'
 #' }
