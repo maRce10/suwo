@@ -2,13 +2,18 @@
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @usage query_wikiaves(term, type, cores = 1, pb = TRUE)
+
 #' @param term Character vector of length one indicating the genus, or genus and
 #'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis nattereri}.
 #'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
+
+#' @param term Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.
+#'  @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
+
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @return If X is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
+#' @return If all_data is not provided the function returns a data frame with the following recording information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository
 #' @export
 #' @name query_wikiaves
 #' @details This function queries for avian vocalization recordings in the open-access
@@ -33,6 +38,19 @@ query_wikiaves <-
            pb = TRUE,
            verbose = TRUE,
            all_data = TRUE) {
+
+    # check arguments
+    arguments <- as.list(base::match.call())[-1]
+
+    # add objects to argument names
+    for(i in names(arguments))
+      arguments[[i]] <- get(i)
+
+    # check each arguments
+    check_results <- check_arguments(args = arguments)
+
+    # report errors
+    checkmate::reportAssertions(check_results)
 
     # type must be supplied
     if (is.null(type))

@@ -149,3 +149,48 @@ suwo_style <- function(type = c("success", "skip", "warning", "failure", "error"
     error = "orange"
   )[[type]]
 }
+
+## function to check arguments
+check_arguments <- function(args){
+
+  # create object to store check results
+  check_collection <- checkmate::makeAssertCollection()
+
+  ### check arguments
+  if (!is.null(args$term))
+    checkmate::assert_multi_class(x = args$term, classes = c("character"), add = check_collection, .var.name = "term")
+
+  if (!is.null(args$type))
+    checkmate::assert_multi_class(x = args$type, classes = c("character"), add = check_collection, .var.name = "type")
+
+  if (!is.null(args$cores))
+    checkmate::assert_integerish(args$cores, add = check_collection, lower = 1, upper = parallel::detectCores(), .var.name = "cores")
+
+  if (!is.null(args$pb))
+    checkmate::assert_logical(x = args$pb, len = 1, add = check_collection, .var.name = "pb")
+
+  if (!is.null(args$identified))
+    checkmate::assert_logical(x = args$identified, len = 1, add = check_collection, .var.name = "identified")
+
+  if (!is.null(args$verifiable))
+    checkmate::assert_logical(x = args$verifiable, len = 1, add = check_collection, .var.name = "verifiable")
+
+  if (!is.null(args$dataset))
+    if (!is.null(args$dataset))
+      checkmate::assert_multi_class(x = args$dataset, classes = c("integer"), add = check_collection, .var.name = "dataset")
+
+  if (!is.null(args$all_data))
+    checkmate::assert_logical(x = args$all_data, len = 1, add = check_collection, .var.name = "all_data")
+
+  if (!is.null(args$token))
+    checkmate::assert_multi_class(x = args$token, classes = c("character"), add = check_collection, .var.name = "token")
+
+  if (!is.null(args$path))
+    if (!is.null(args$path))
+      checkmate::assert_directory(x = args$path, access = "r", add = check_collection, .var.name = "path")
+
+  if (!is.null(args$metadata))
+    checkmate::assert_multi_class(x = args$metadata, classes = c("data.frame"), add = check_collection, .var.name = "metadata")
+
+  return(check_collection)
+}
