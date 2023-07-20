@@ -1,2 +1,15 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^docs$
+^pkgdown$
+^doc$
+^Meta$
+^testing$
+^README\.Rmd$
+^LICENSE\.md$
+LICENSE.md
+^codecov\.yml$
+^codemeta\.json$
+^\.github$
+^CONTRIBUTING\.md$
+^tic\.R$

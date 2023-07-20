@@ -1,8 +1,7 @@
 #' Access 'Xeno-Canto' recordings and metadata
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
-#' @usage query_xenocanto(term, X = NULL,
-#' cores = 1, pb = TRUE)
+#' @usage query_xenocanto(term, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
 #' @param term Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
 #'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
 #'  More complex queries can be done by using search terms that follow the
@@ -15,7 +14,9 @@
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @return If X is not provided the function returns a data frame with the following recording information: recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 format are downloaded into the working directory if download = \code{TRUE} or if X is provided; a column indicating the  names of the downloaded files is included in the output data frame.
+#' @param verbose
+#' @param all_data All
+#' @return The function returns a data frame with the following recording information: recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 format are downloaded into the working directory if download = \code{TRUE}.
 #' @export
 #' @name query_xenocanto
 #' @details This function queries for avian vocalization recordings in the open-access
@@ -55,11 +56,10 @@
 
 query_xenocanto <-
   function(term,
-           X = NULL,
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           all_data=TRUE) {
+           all_data = TRUE) {
 
     # check arguments
     arguments <- as.list(base::match.call())[-1]
@@ -342,6 +342,9 @@ query_xenocanto <-
 
       # create species name column
       results$species <- paste(results$genus, results$specific.epithet, sep = "_")
+
+      # fix url
+      results$file_url <- paste0("https:", results$file_url, "/download")
 
       if (!all_data)
         results <- results[,c("location","latitude","longitude","file_url","repository","id","species","date","country")]

@@ -9,9 +9,9 @@ test_that("search Phaethornis check rows", {
 
 test_that("search Phaethornis check cols", {
 
-  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
 
-  expect_true(ncol(df1) >  20)
+  expect_true(ncol(df1) ==  9)
 
 })
 

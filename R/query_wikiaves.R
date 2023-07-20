@@ -176,9 +176,9 @@ query_wikiaves <-
     rownames(query_output_df) <- 1:nrow(query_output_df)
 
     # change jpg to mp3 in links
-    if (type == "audio")
+    if (type == "Sound")
       query_output_df$link <-
-      gsub("\\.jpg$", ".mp3",  query_output_df$link)
+      gsub(".jpg$", ".mp3",  query_output_df$link)
 
     # add repository
     query_output_df$repository <- "wikiaves"

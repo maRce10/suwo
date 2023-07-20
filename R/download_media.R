@@ -99,7 +99,7 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
       #     extra = getOption("download.file.extra"))
       #     return (NULL)
       #   } else if (metadata$repository[x] == "GBIF"){
-          dl_result <- try(download.file(
+          dl_result <- try(utils::download.file(
               url = as.character(metadata$file_url[x]),
               destfile = file.path(path, metadata$file.name[x]),
               quiet = TRUE,  mode = "wb", cacheOK = TRUE,

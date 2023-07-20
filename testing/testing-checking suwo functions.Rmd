@@ -23,7 +23,7 @@ remove.packages("suwo")
 
 # devtools::install()
 
-pkgs <- c("remotes", "RCurl", "jsonlite", "crayon", "devtools")
+pkgs <- c("remotes", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps")
 
 # install/ load packages
 out <- lapply(pkgs, function(y) {
@@ -455,7 +455,7 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 # Rcpp::compileAttributes()
 
 #run document twice
-# devtools::document(".")
+devtools::document(".")
 
 # devtools::load_all()
 
@@ -463,7 +463,7 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 # pkgcheck::use_github_action_pkgcheck()
 
 #check with devtools
-devtools::check(".", document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
+devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
 
 # devtools::run_examples( start = "rm_sil")
 

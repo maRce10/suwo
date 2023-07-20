@@ -9,7 +9,20 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+    checkmate,
+    cli,
+    methods,
+    pbapply,
+    rjson,
+    utils,
+    methods
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    leaflet,
+    maps
+Depends:
+     RCurl,
+     jsonlite
 Config/testthat/edition: 3
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3

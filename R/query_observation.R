@@ -89,8 +89,6 @@ query_observation <-
     if (base.srch.pth$count==0)
       stop2("Species was not found in database")
 
-    library(RCurl)
-    library(jsonlite)
 
     # Set the species ID and API endpoint URL
     species_id <- base.srch.pth$results$id
@@ -101,10 +99,10 @@ query_observation <-
     headers <- c("Authorization" = paste("Bearer", bearer_token))
 
     # Make the GET request and retrieve the response
-    dataURL <- getURL(url_inquiry, httpheader = headers)
+    dataURL <- RCurl::getURL(url_inquiry, httpheader = headers)
 
     #JSON format
-    data <- fromJSON(dataURL)
+    data <- jsonlite::fromJSON(dataURL)
 
     data_org <- data
 

@@ -17,9 +17,9 @@ test_that("search XC Phaethornis anthophilus default file names", {
 
 test_that("search wikiaves Glaucis dohrnii sp names", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type = "audio")[1:2, ]
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type = "sound")[1:2, ]
 
-    download_media(metadata = df1, path = tempdir())
+  download_media(metadata = df1, path = tempdir())
 
   fls <- list.files(path = tempdir(), pattern = "mp3$")
 
@@ -37,7 +37,7 @@ test_that("search wikiaves Glaucis dohrnii sp names", {
 
 test_that("search GBIF sp names", {
 
-  df1 <- query_gbif(term = 'Glaucis dohrnii')[1:2, ]
+  df1 <- query_gbif(term = 'Glaucis dohrnii', type = "sound")[1:2, ]
 
   download_media(metadata = df1, path = tempdir())
 
