@@ -22,6 +22,8 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 
 \item{pb}{Logical argument to control progress bar. Default is \code{TRUE}.}
 
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
+
 \item{all_data}{All}
 }
 \value{

@@ -1,7 +1,7 @@
 #' Access 'Xeno-Canto' recordings and metadata
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
-#' @usage query_xenocanto(term, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
+#' @usage query_xenocanto(term = NULL, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
 #' @param term Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
 #'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
 #'  More complex queries can be done by using search terms that follow the
@@ -14,7 +14,7 @@
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @param verbose
+#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param all_data All
 #' @return The function returns a data frame with the following recording information: recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 format are downloaded into the working directory if download = \code{TRUE}.
 #' @export
@@ -55,7 +55,7 @@
 #last modification on nov-16-2016 (MAS)
 
 query_xenocanto <-
-  function(term,
+  function(term = NULL,
            cores = 1,
            pb = TRUE,
            verbose = TRUE,

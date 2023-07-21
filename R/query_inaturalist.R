@@ -1,7 +1,7 @@
 #' Access 'inaturalist' recordings and metadata
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
-#' @usage query_inat(term, type = c("sound", "still image"), cores = 1, pb = TRUE)
+#' @usage query_inat(term = NULL, type = c("sound", "still image"), cores = 1, pb = TRUE, dataset)
 #' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
 #'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.

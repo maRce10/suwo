@@ -1,10 +1,10 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
-#' @usage query_observation(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
+#' @usage query_observation(term = NULL, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE, dataset)
 #' @param term Character vector of length one indicating the
 #'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
+#' @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.

@@ -15,8 +15,7 @@ Imports:
     methods,
     pbapply,
     rjson,
-    utils,
-    methods
+    utils
 Suggests: 
     testthat (>= 3.0.0),
     leaflet,

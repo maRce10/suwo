@@ -1,7 +1,7 @@
 #' Access 'gbif' recordings and metadata
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
-#' @usage query_gbif(term, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE)
+#' @usage query_gbif(term = NULL, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE, dataset)
 #' @param term Character vector of length one indicating genus and
 #'  species, to query 'gbif' database. For example, \emph{Phaethornis longirostris}.
 #'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
