@@ -1,15 +1,11 @@
 #' Access 'wikiaves' recordings and metadata
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
-#' @usage query_wikiaves(term, type, cores = 1, pb = TRUE)
-
-#' @param term Character vector of length one indicating the genus, or genus and
-#'  species, to query 'wikiaves' database. For example, \emph{Phaethornis} or \emph{Phaethornis nattereri}.
-#'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
-
+#' @usage query_wikiaves(term, type, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
 #' @param term Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.
 #'  @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
-
+#'  @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
+#'  @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.

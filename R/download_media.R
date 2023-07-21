@@ -1,12 +1,15 @@
 #' Download media files from repositories
 #'
 #' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.
-#' @usage download_media(metadata)
-
+#' @usage download_media(metadata, path = "./", pb = TRUE, verbose = TRUE, cores = 1)
 #' @param metadata Data frame with a 'file_url' column and any other column listed in the file.name argument. Only the media listed in the data frame
 #' will be downloaded (\code{download} argument is automatically set to \code{TRUE}). This can be used to select
 #' the recordings to be downloaded based on their attributes.
-
+#' @param path Character that defines the location for the downloaded files.
+#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
+#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
+#' @param cores Numeric. Controls whether parallel computing is applied.
+#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @return media files
 #' @export
 #' @name download_media
@@ -22,7 +25,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
-download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, verbose = TRUE, cores = 1){
+download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, cores = 1){
 
   # check arguments
   arguments <- as.list(base::match.call())[-1]
@@ -79,37 +82,6 @@ download_media <- function(metadata, path = "./", file.name = NULL, pb= TRUE, ve
 
    # create file name
     metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, metadata$extension)
-
-
-  #Function to download file according to repository
-    downloadFUN <-  function(metadata, x){
-      # if (!file.exists(metadata$file.name[x])){
-      #   if (metadata$repository[x] == "XC"){
-      #     download.file(
-      #     url = paste("https://xeno-canto.org/", metadata$file_url[x], "/download", sep = ""),
-      #     destfile = file.path(path, metadata$file.name[x]),
-      #     quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-      #     extra = getOption("download.file.extra"))
-      #     return (NULL)
-      #   } else if (metadata$repository[x] == "wikiaves"){
-      #     download.file(
-      #     url = as.character(metadata$file_url[x]),
-      #     destfile = file.path(path, metadata$record.id[x]),
-      #     quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-      #     extra = getOption("download.file.extra"))
-      #     return (NULL)
-      #   } else if (metadata$repository[x] == "GBIF"){
-          dl_result <- try(utils::download.file(
-              url = as.character(metadata$file_url[x]),
-              destfile = file.path(path, metadata$file.name[x]),
-              quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-              extra = getOption("download.file.extra")), silent = TRUE)
-
-
-          if (is(dl_result, "try-error"))
-            return (FALSE) else
-              return (TRUE)
-        }
 
 
     # set clusters for windows OS

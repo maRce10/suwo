@@ -4,12 +4,21 @@
 \alias{download_media}
 \title{Download media files from repositories}
 \usage{
-download_media(metadata)
+download_media(metadata, path = "./", pb = TRUE, verbose = TRUE, cores = 1)
 }
 \arguments{
 \item{metadata}{Data frame with a 'file_url' column and any other column listed in the file.name argument. Only the media listed in the data frame
 will be downloaded (\code{download} argument is automatically set to \code{TRUE}). This can be used to select
 the recordings to be downloaded based on their attributes.}
+
+\item{path}{Character that defines the location for the downloaded files.}
+
+\item{pb}{Logical argument to control progress bar. Default is \code{TRUE}.}
+
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
+
+\item{cores}{Numeric. Controls whether parallel computing is applied.
+It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 }
 \value{
 media files

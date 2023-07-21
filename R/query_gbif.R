@@ -1,14 +1,15 @@
 #' Access 'gbif' recordings and metadata
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
-#' @usage query_gbif(term = NULL, type = c("sound", "still image", "moving image", "interactive resource"), cores = 1, pb = TRUE, dataset)
+#' @usage query_gbif(term = NULL, type = c("sound", "still image", "moving image", "interactive resource"),
+#' cores = 1, pb = TRUE, verbose = TRUE, dataset = NULL, all_data = TRUE)
 #' @param term Character vector of length one indicating genus and
 #'  species, to query 'gbif' database. For example, \emph{Phaethornis longirostris}.
-#'  @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
+#' @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @param dataset see \url{https://www.gbif.org/dataset/search?q=}
+#' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
 #' @return If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
 #' @export
 #' @name query_gbif

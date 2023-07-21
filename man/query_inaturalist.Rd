@@ -4,11 +4,12 @@
 \alias{query_inaturalist}
 \title{Access 'inaturalist' recordings and metadata}
 \usage{
-query_inat(term, type = c("sound", "still image"), cores = 1, pb = TRUE)
+query_inaturalistterm = NULL, cores = 1, pb = TRUE, verbose = TRUE, type = c("sound", "still image"), identified = FALSE, verifiable = FALSE, all_data = TRUE)
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
-@param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.}
+@param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
+#'  @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
 
 \item{cores}{Numeric. Controls whether parallel computing is applied.
 It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).}
@@ -18,7 +19,7 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 \item{dataset}{see \url{https://api.inaturalist.org/v1/Search?q=}}
 }
 \value{
-If all_data is not provided the function returns a data frame with the following media information: ############### A, B, C
+If all_data is not provided the function returns a data frame with the following media information:
 }
 \description{
 \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
