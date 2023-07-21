@@ -463,7 +463,7 @@ devtools::document(".")
 # pkgcheck::use_github_action_pkgcheck()
 
 #check with devtools
-devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
+devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE, )
 
 # devtools::run_examples( start = "rm_sil")
 

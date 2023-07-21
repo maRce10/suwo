@@ -9,10 +9,11 @@
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @param dataset see \url{https://observation.org/api/v1/species/search/?q=}.
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param token Character refering to the token assigned by Observation.org as authorization for searches.
-#' @return If all_data is not provided the function returns a data frame with the following media information: id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, repository
+#' @return If all_data is not provided the function returns a data frame with the following media
+#' information: id, scientific_name, name, group, group_name, status, rarity, photo,
+#' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_observation
 #' @details This function queries for species observation info in the open-access

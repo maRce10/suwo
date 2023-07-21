@@ -16,7 +16,10 @@
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param all_data All
-#' @return The function returns a data frame with the following recording information: recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 format are downloaded into the working directory if download = \code{TRUE}.
+#' @return The function returns a data frame with the following recording information: recording ID,
+#' Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
+#' Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3
+#' format are downloaded into the working directory if download = \code{TRUE}.
 #' @export
 #' @name query_xenocanto
 #' @details This function queries for avian vocalization recordings in the open-access

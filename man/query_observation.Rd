@@ -4,7 +4,8 @@
 \alias{query_observation}
 \title{Access 'observation' recordings and metadata}
 \usage{
-query_observation(term = NULL, type = c("sound", "still image"), cores = 1, pb = TRUE, verbose = TRUE, token = NULL)
+query_observation(term = NULL, type = c("sound", "still image"),
+cores = 1, pb = TRUE, verbose = TRUE, token = NULL)
 }
 \arguments{
 \item{term}{Character vector of length one indicating the
@@ -20,11 +21,11 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
 
 \item{token}{Character refering to the token assigned by Observation.org as authorization for searches.}
-
-\item{dataset}{see \url{https://observation.org/api/v1/species/search/?q=}.}
 }
 \value{
-If all_data is not provided the function returns a data frame with the following media information: id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, repository
+If all_data is not provided the function returns a data frame with the following media
+information: id, scientific_name, name, group, group_name, status, rarity, photo,
+info_text, permalink, determination_requirements, file_url, repository
 }
 \description{
 \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.

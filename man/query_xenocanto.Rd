@@ -27,7 +27,10 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 \item{all_data}{All}
 }
 \value{
-The function returns a data frame with the following recording information: recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 format are downloaded into the working directory if download = \code{TRUE}.
+The function returns a data frame with the following recording information: recording ID,
+Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
+Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3
+format are downloaded into the working directory if download = \code{TRUE}.
 }
 \description{
 \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.

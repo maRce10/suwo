@@ -4,22 +4,37 @@
 \alias{query_inaturalist}
 \title{Access 'inaturalist' recordings and metadata}
 \usage{
-query_inaturalistterm = NULL, cores = 1, pb = TRUE, verbose = TRUE, type = c("sound", "still image"), identified = FALSE, verifiable = FALSE, all_data = TRUE)
+query_inaturalist(term = NULL, cores = 1, pb = TRUE, verbose = TRUE,
+type = c("sound", "still image"), identified = FALSE, verifiable = FALSE, all_data = TRUE)
 }
 \arguments{
-\item{term}{Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
-@param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
-#'  @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
+\item{term}{Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.}
 
 \item{cores}{Numeric. Controls whether parallel computing is applied.
 It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control progress bar. Default is \code{TRUE}.}
 
-\item{dataset}{see \url{https://api.inaturalist.org/v1/Search?q=}}
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
+
+\item{type}{Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.}
+
+\item{identified}{Logical argument to define if search results are categorized as identified by inaturalist.}
+
+\item{verifiable}{Logical argument to define if search results are categorized as verifiable by inaturalist.}
+
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.}
 }
 \value{
-If all_data is not provided the function returns a data frame with the following media information:
+If all_data is not provided the function returns a data frame with the following media
+information: quality_grade, time_observed_at, taxon_geoprivacy, uuid, id, cached_votes_total,
+identifications_most_agree, species_guess, identifications_most_disagree, positional_accuracy,
+comments_count, site_id, created_time_zone, license_code, observed_time_zone,
+public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset,
+observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements,
+map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count,
+obscured, num_identification_disagreements, geoprivacy, location, spam, mappable,
+identifications_some_agree, place_guess, id, license_code, file_url, attribution, page, repository
 }
 \description{
 \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
