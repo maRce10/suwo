@@ -83,7 +83,35 @@ download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, core
    # create file name
     metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, metadata$extension)
 
+  #Function to download file according to repository
+  downloadFUN <-  function(metadata, x){
+      # if (!file.exists(metadata$file.name[x])){
+      #   if (metadata$repository[x] == "XC"){
+      #     download.file(
+      #     url = paste("https://xeno-canto.org/", metadata$file_url[x], "/download", sep = ""),
+      #     destfile = file.path(path, metadata$file.name[x]),
+      #     quiet = TRUE,  mode = "wb", cacheOK = TRUE,
+      #     extra = getOption("download.file.extra"))
+      #     return (NULL)
+      #   } else if (metadata$repository[x] == "wikiaves"){
+      #     download.file(
+      #     url = as.character(metadata$file_url[x]),
+      #     destfile = file.path(path, metadata$record.id[x]),
+      #     quiet = TRUE,  mode = "wb", cacheOK = TRUE,
+      #     extra = getOption("download.file.extra"))
+      #     return (NULL)
+      #   } else if (metadata$repository[x] == "GBIF"){
+      dl_result <- try(download.file(
+        url = as.character(metadata$file_url[x]),
+        destfile = file.path(path, metadata$file.name[x]),
+        quiet = TRUE,  mode = "wb", cacheOK = TRUE,
+        extra = getOption("download.file.extra")), silent = TRUE)
 
+
+      if (is(dl_result, "try-error"))
+        return (FALSE) else
+          return (TRUE)
+    }
     # set clusters for windows OS
     if (pb  & verbose)
       write(file = "", x = "Downloading files...")

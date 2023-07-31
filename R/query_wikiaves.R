@@ -192,7 +192,7 @@ query_wikiaves <-
     query_output_df$tipo <- type
 
     # rename output columns
-    names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("record.id", "media.type", "user.id", "sp.id", "scientific.name", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "file_url", "duration", "repository"))
+    names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("key", "media.type", "user.id", "sp.id", "species", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "file_url", "duration", "repository"))
 
     for(i in 1:nrow(names_df))
       names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]

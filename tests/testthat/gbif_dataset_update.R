@@ -31,12 +31,12 @@ update_gbif_datasets <- function(gbif_datasets) {
   if (a == "Could not connect to the database")
 
   # Download the CSV file
-  response <- GET("https://api.gbif.org/v1/dataset/search/export?format=CSV&")
+  response <- httr::GET("https://api.gbif.org/v1/dataset/search/export?format=CSV&")
 
   # Check if the download was successful
-  if (http_type(response) == "text/csv") {
+  if (httr::http_type(response) == "text/csv") {
     # Read the CSV data
-    csv_data <- read_csv(text = content(response, "text"))
+    csv_data <- readr::read_csv(text = content(response, "text"))
 
     # Update the dataset object with the new data
     gbif_datasets <- csv_data
