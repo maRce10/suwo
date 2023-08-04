@@ -19,20 +19,21 @@
 #' @seealso \code{\link{map_results}},
 #' @examples
 #' \dontrun{
+#'
 #' }
 #'
 #' @references {
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
-download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, cores = 1){
-
+download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cores = 1) {
   # check arguments
   arguments <- as.list(base::match.call())[-1]
 
   # add objects to argument names
-  for(i in names(arguments))
+  for (i in names(arguments)) {
     arguments[[i]] <- get(i)
+  }
 
   # check each arguments
   check_results <- check_arguments(args = arguments)
@@ -41,49 +42,48 @@ download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, core
   checkmate::reportAssertions(check_results)
 
   # Add file extension
-  if(metadata$repository[1] == "XC"){
-    metadata$extension  <- vapply(X = metadata$file.name, FUN = function(x){
+  if (metadata$repository[1] == "XC") {
+    metadata$extension <- vapply(X = metadata$file.name, FUN = function(x) {
       x2 <- strsplit(x, "\\?")[[1]][1]
 
       max_x2 <- max(gregexpr("\\.", x2)[[1]])
 
       extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
 
-      if (extension == ".mpga")
+      if (extension == ".mpga") {
         extension <- ".mp3"
+      }
 
       return(extension)
-
     }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+  } else {
+    metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {
+      x2 <- strsplit(x, "\\?")[[1]][1]
 
+      max_x2 <- max(gregexpr("\\.", x2)[[1]])
 
-  }else{
-  metadata$extension  <- vapply(X = metadata$file_url, FUN = function(x){
-    x2 <- strsplit(x, "\\?")[[1]][1]
+      extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
 
-    max_x2 <- max(gregexpr("\\.", x2)[[1]])
+      if (extension == ".mpga") {
+        extension <- ".mp3"
+      }
 
-    extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
-
-    if (extension == ".mpga")
-      extension <- ".mp3"
-
-    return(extension)
-
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-}
-  #Abbreviate repository name
+      return(extension)
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+  }
+  # Abbreviate repository name
   repo <- metadata$repository[1]
 
   metadata$repository <- switch(repo,
-                 XC = "XC",
-                 Observation = "OBS",
-                 GBIF = "GBIF",
-                 wikiaves = "WA",
-                 INAT = "INAT",
-                 Macaulay = "ML")
+    XC = "XC",
+    Observation = "OBS",
+    GBIF = "GBIF",
+    wikiaves = "WA",
+    INAT = "INAT",
+    Macaulay = "ML"
+  )
 
-    # rename if any duplicated names
+  # rename if any duplicated names
   metadata$non_dup_key <- unlist(lapply(
     unique(metadata$key),
     function(x) {
@@ -96,76 +96,42 @@ download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, core
     }
   ))
 
-   # create file name
-    metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, metadata$extension)
+  # create file name
+  metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, metadata$extension)
 
-  #Function to download file according to repository
-  downloadFUN <-  function(metadata, x){
-      # if (!file.exists(metadata$file.name[x])){
-      #   if (metadata$repository[x] == "XC"){
-      #     download.file(
-      #     url = paste("https://xeno-canto.org/", metadata$file_url[x], "/download", sep = ""),
-      #     destfile = file.path(path, metadata$file.name[x]),
-      #     quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-      #     extra = getOption("download.file.extra"))
-      #     return (NULL)
-      #   } else if (metadata$repository[x] == "wikiaves"){
-      #     download.file(
-      #     url = as.character(metadata$file_url[x]),
-      #     destfile = file.path(path, metadata$record.id[x]),
-      #     quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-      #     extra = getOption("download.file.extra"))
-      #     return (NULL)
-      #   } else if (metadata$repository[x] == "GBIF"){
-      dl_result <- try(download.file(
-        url = as.character(metadata$file_url[x]),
-        destfile = file.path(path, metadata$file.name[x]),
-        quiet = TRUE,  mode = "wb", cacheOK = TRUE,
-        extra = getOption("download.file.extra")), silent = TRUE)
+  # Function to download file according to repository
+  downloadFUN <- function(metadata, x) {
+    dl_result <- try(download.file(
+      url = as.character(metadata$file_url[x]),
+      destfile = file.path(path, metadata$file.name[x]),
+      quiet = TRUE, mode = "wb", cacheOK = TRUE,
+      extra = getOption("download.file.extra")
+    ), silent = TRUE)
 
 
-      if (is(dl_result, "try-error"))
-        return (FALSE) else
-          return (TRUE)
+    if (is(dl_result, "try-error")) {
+      return(FALSE)
+    } else {
+      return(TRUE)
     }
-    # set clusters for windows OS
-    if (pb  & verbose)
-      write(file = "", x = "Downloading files...")
-    if (Sys.info()[1] == "Windows" & cores > 1)
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
+  }
+  # set clusters for windows OS
+  if (pb & verbose) {
+    write(file = "", x = "Downloading files...")
+  }
+  if (Sys.info()[1] == "Windows" & cores > 1) {
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+  } else {
+    cl <- cores
+  }
 
-    success_dwnld <- unlist(pblapply_sw_int(pbar = pb, X = 1:nrow(metadata), cl = cl, FUN = function(x)
-    {
-      downloadFUN(metadata, x)
-    }))
+  success_dwnld <- unlist(pblapply_sw_int(pbar = pb, X = 1:nrow(metadata), cl = cl, FUN = function(x) {
+    downloadFUN(metadata, x)
+  }))
 
-  #   if (pb & verbose) write(file = "", x ="double-checking downloaded files")
-  #
-  #   #check if some files have no data
-  #   fl <- list.files(path = path, pattern = ".mp3$")
-  #   size0 <- fl[file.size(file.path(path, fl)) == 0]
-  #
-  #   #if so redo those files
-  #   if (length(size0) > 0)
-  #   {  Y <- metadata[metadata$file.name %in% size0, ]
-  #   unlink(size0)
-  #
-  #   # set clusters for windows OS
-  #   if (Sys.info()[1] == "Windows" & cores > 1)
-  #     cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
-  #
-  #
-  #   a1 <- pblapply_sw_int(pbar = pb, X = 1:nrow(Y), cl = cl, FUN = function(x)
-  #   {
-  #     try(downloadFUN(Y, x), silent = TRUE)
-  #   })
-  # }
+  if (any(!success_dwnld)) {
+    options(suwo = c(.Options$suwo, list(failed_downloads = metadata$file.name[!success_dwnld])))
 
-    if (any(!success_dwnld)){
-      .Options$suwo$failed_downloads  <- c(metadata$file.name[!success_dwnld])
-
-      message("Some files couldn't be downloaded, check `.Options$suwo$failed_downloads`")
-
-      }
+    message("Some files couldn't be downloaded, check `.Options$suwo$failed_downloads`")
+  }
 }
-

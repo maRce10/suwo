@@ -35,7 +35,8 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-#' df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
+#' df1 <- query_xenocanto(term = "Phaethornis anthophilus")
+#' }
 
 #' ## search using xeno-canto advance query ###
 #' orth.pap <- query_xenocanto(term = 'gen:orthonyx cnt:papua loc:tari')
@@ -55,7 +56,7 @@
 #' Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#last modification on nov-16-2016 (MAS)
+# last modification on nov-16-2016 (MAS)
 
 query_xenocanto <-
   function(term = NULL,
@@ -63,13 +64,13 @@ query_xenocanto <-
            pb = TRUE,
            verbose = TRUE,
            all_data = TRUE) {
-
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
     # add objects to argument names
-    for(i in names(arguments))
+    for (i in names(arguments)) {
       arguments[[i]] <- get(i)
+    }
 
     # check each arguments
     check_results <- check_arguments(args = arguments)
@@ -77,41 +78,49 @@ query_xenocanto <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    #check internet connection
+    # check internet connection
     a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
-    if (is(a, "try-error"))
+    if (is(a, "try-error")) {
       stop2("No connection to xeno-canto.org (check your internet connection!)")
+    }
 
-    if (a == "Could not connect to the database")
+    if (a == "Could not connect to the database") {
       stop2("xeno-canto.org website is apparently down")
+    }
 
     # If cores is not numeric
-    if (!is.numeric(cores))
+    if (!is.numeric(cores)) {
       stop2("'cores' must be a numeric vector of length 1")
-    if (any(!(cores %% 1 == 0), cores < 1))
+    }
+    if (any(!(cores %% 1 == 0), cores < 1)) {
       stop2("'cores' should be a positive integer")
+    }
 
-    #search recs in xeno-canto (results are returned in pages with 500 recordings each)
-    if (pb &  verbose)
+    # search recs in xeno-canto (results are returned in pages with 500 recordings each)
+    if (pb & verbose) {
       print("Obtaining metadata:")
+    }
 
     # format query term
-    if (grepl("\\:", term)){ # if using advanced search
+    if (grepl("\\:", term)) { # if using advanced search
 
       # replace first space with %20 when using full species name
       first_colon_pos <- gregexpr(":", term)[[1]][1]
       spaces_pos <- gregexpr(" ", term)[[1]]
 
-      if (length(spaces_pos) > 1)
-        if (all(spaces_pos[1:2] < first_colon_pos))
+      if (length(spaces_pos) > 1) {
+        if (all(spaces_pos[1:2] < first_colon_pos)) {
           term <- paste0(substr(term, start = 0, stop = spaces_pos - 1), "%20", substr(term, start = spaces_pos + 1, stop = nchar(term)))
+        }
+      }
 
       # replace remaining spaces with "&"
       term <- gsub(" ", "&", term)
-    } else
+    } else {
       term <- gsub(" ", "%20", term)
+    }
 
-    #initialize search
+    # initialize search
     q <-
       jsonlite::fromJSON(paste0(
         "https://www.xeno-canto.org/api/2/recordings?query=",
@@ -119,11 +128,12 @@ query_xenocanto <-
       ))
 
     if (as.numeric(q$numRecordings) == 0) {
-      if (verbose)
+      if (verbose) {
         cat(paste(
           colortext("No audios were found", "failure"),
           add_emoji("sad")
         ))
+      }
     } else {
       nms <-
         c(
@@ -148,20 +158,20 @@ query_xenocanto <-
 
       ### loop over pages
       # set clusters for windows OS
-      if (Sys.info()[1] == "Windows" & cores > 1)
+      if (Sys.info()[1] == "Windows" & cores > 1) {
         cl <-
           parallel::makePSOCKcluster(getOption("cl.cores", cores))
-      else
+      } else {
         cl <- cores
+      }
 
       records_list <-
         pblapply_sw_int(
           pbar = pb,
           X = 1:q$numPages,
           cl = cl,
-          FUN = function(y)
-          {
-            #search for each page
+          FUN = function(y) {
+            # search for each page
             a <-
               rjson::fromJSON(
                 file = paste0(
@@ -172,15 +182,15 @@ query_xenocanto <-
                 )
               )
 
-            #put together as data frame
+            # put together as data frame
             d <-
-              lapply(1:length(a$recordings), function(z)
+              lapply(1:length(a$recordings), function(z) {
                 data.frame(t(unlist(
                   a$recordings[[z]]
-                ))))
+                )))
+              })
 
-            d2 <- lapply(d,  function(x)
-            {
+            d2 <- lapply(d, function(x) {
               if (!all(nms %in% names(x))) {
                 dif <- setdiff(nms, names(x))
                 mis <- rep(NA, length(dif))
@@ -194,18 +204,19 @@ query_xenocanto <-
             cnms <- unique(unlist(lapply(d2, names)))
 
             # add columns that are missing to each selection table
-            d3 <- lapply(d2, function(X)
-            {
+            d3 <- lapply(d2, function(X) {
               nms <- names(X)
-              if (length(nms) != length(cnms))
+              if (length(nms) != length(cnms)) {
                 for (i in cnms[!cnms %in% nms]) {
                   X <-
                     data.frame(X,
-                               NA,
-                               stringsAsFactors = FALSE,
-                               check.names = FALSE)
+                      NA,
+                      stringsAsFactors = FALSE,
+                      check.names = FALSE
+                    )
                   names(X)[ncol(X)] <- i
                 }
+              }
               return(X)
             })
 
@@ -219,18 +230,19 @@ query_xenocanto <-
       cnms <- unique(unlist(lapply(records_list, names)))
 
       # add columns that are missing to each selection table
-      records_list2 <- lapply(records_list, function(X)
-      {
+      records_list2 <- lapply(records_list, function(X) {
         nms <- names(X)
-        if (length(nms) != length(cnms))
+        if (length(nms) != length(cnms)) {
           for (i in cnms[!cnms %in% nms]) {
             X <-
               data.frame(X,
-                         NA,
-                         stringsAsFactors = FALSE,
-                         check.names = FALSE)
+                NA,
+                stringsAsFactors = FALSE,
+                check.names = FALSE
+              )
             names(X)[ncol(X)] <- i
           }
+        }
         return(X)
       })
 
@@ -241,7 +253,7 @@ query_xenocanto <-
       indx <- sapply(results, is.factor)
       results[indx] <- lapply(results[indx], as.character)
 
-      #order columns
+      # order columns
       results <- results[, order(match(names(results), nms))]
 
       names(results)[match(
@@ -328,14 +340,15 @@ query_xenocanto <-
       names(results) <- gsub("also", "other.species", names(results))
       # rename
       names(results) <- gsub("sono.", "spectrogram.", names(results))
-      #Add repository ID
+      # Add repository ID
       results$repository <- "XC"
-      #remove duplicates
-      results <- results[!duplicated(results$id),]
+      # remove duplicates
+      results <- results[!duplicated(results$id), ]
 
 
-      if (pb  & verbose)
+      if (pb & verbose) {
         cat(colortext(paste(nrow(results), "audio(s) found"), "success"), add_emoji("happy"))
+      }
     }
 
     if (as.numeric(q$numRecordings) > 0) {
@@ -346,14 +359,14 @@ query_xenocanto <-
       # create species name column
       results$species <- paste(results$genus, results$specific.epithet, sep = "_")
       # rename id
-      names(results)[names(results) == "id"] ="key"
+      names(results)[names(results) == "id"] <- "key"
       # fix url
       results$file_url <- paste0("https:", results$file_url, "/download")
 
-      if (!all_data)
-        results <- results[,c("location","latitude","longitude","file_url","repository","key","species","date","country")]
+      if (!all_data) {
+        results <- results[, c("location", "latitude", "longitude", "file_url", "repository", "key", "species", "date", "country")]
+      }
 
       return(droplevels(results))
     }
-
   }

@@ -20,9 +20,8 @@
 #' @examples
 #' \dontrun{
 #' # search
-#' df1 <- query_wikiaves(term = 'Phaethornis nattereri', type = "still image")
+#' df1 <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
 #' View(df1)
-#'
 #' }
 #'
 #' @references {
@@ -37,13 +36,13 @@ query_wikiaves <-
            pb = TRUE,
            verbose = TRUE,
            all_data = TRUE) {
-
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
     # add objects to argument names
-    for(i in names(arguments))
+    for (i in names(arguments)) {
       arguments[[i]] <- get(i)
+    }
 
     # check each arguments
     check_results <- check_arguments(args = arguments)
@@ -52,160 +51,175 @@ query_wikiaves <-
     checkmate::reportAssertions(check_results)
 
     # type must be supplied
-    if (is.null(type))
-     stop2("'type' must be supplied")
+    if (is.null(type)) {
+      stop2("'type' must be supplied")
+    }
 
     # type must be supplied
-    if (is.null(term))
+    if (is.null(term)) {
       stop2("'term' must be supplied")
+    }
 
-    #check internet connection
+    # check internet connection
     a <- try(RCurl::getURL("www.wikiaves.com"), silent = TRUE)
-    if (is(a, "try-error"))
+    if (is(a, "try-error")) {
       stop2("No connection to wikiaves (check your internet connection!)")
+    }
 
-    if (a == "Could not connect to the database")
+    if (a == "Could not connect to the database") {
       stop2("wikiaves.com website is apparently down")
+    }
 
     # If cores is not numeric
-    if (!is.numeric(cores))
+    if (!is.numeric(cores)) {
       stop2("'cores' must be a numeric vector of length 1")
-    if (any(!(cores %% 1 == 0), cores < 1))
+    }
+    if (any(!(cores %% 1 == 0), cores < 1)) {
       stop2("'cores' should be a positive integer")
+    }
 
     org_type <- match.arg(type)
 
     type <- switch(type,
-                   sound = "Sound",
-                   `still image` = "photo")
+      sound = "Sound",
+      `still image` = "photo"
+    )
 
 
-    #format JSON
+    # format JSON
     term <- gsub(" ", "%20", term)
 
-    #initialize search
+    # initialize search
     get_ids <-
       jsonlite::fromJSON(paste0(
         "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
         term
       ))
 
-    if (length(get_ids) == 0){
-      if (verbose)
-      cat(paste(colortext("Search term not found", "failure"), add_emoji("sad")))
-      } else {
+    if (length(get_ids) == 0) {
+      if (verbose) {
+        cat(paste(colortext("Search term not found", "failure"), add_emoji("sad")))
+      }
+    } else {
+      # make it a data frame
+      get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
 
-    # make it a data frame
-    get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
-
-    get_ids$total_registers <-sapply(1:nrow(get_ids), function(u)
-      as.numeric(jsonlite::fromJSON(
-        paste0(
-          "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-          if (type == "photo")
-            "f" else
-            "s",
-          "&t=s&s=",
-          get_ids$id[u],
-          "&o=mp&p=1"
-        )
-      )$registros$total))
-
-    if (sum(get_ids$total_registers) == 0 & verbose)
-      cat(paste(colortext(paste0("No ", type, "s were found"), "failure"), add_emoji("sad"))) else {
-
-    # get number of pages (20 is the default number of registers per page)
-    get_ids$pages <- ceiling(get_ids$total_registers / 20)
-
-    # remove those rows with no pages (only needed when many species are returned)
-    get_ids <- get_ids[get_ids$pages > 0, ]
-
-    id_by_page_list <- lapply(1:nrow(get_ids), function(x){
-
-      X <- get_ids[x, ]
-      out_df <- data.frame(id = X$id, page = 1:X$pages)
-
-    })
-
-    id_by_page_df <- do.call(rbind, id_by_page_list)
-
-    #search recs in wikiaves (results are returned in pages with 500 recordings each)
-    if (pb & verbose)
-      cat(paste(colortext(paste0("Obtaining metadata (", sum(get_ids$total_registers), " ", type, "(s) found)"), "success"), add_emoji("happy"), ":\n"))
-
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & cores > 1)
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
-
-# loop over pages
-    query_output_list <- pblapply_sw_int(1:nrow(id_by_page_df), cl = cl, pbar = pb, function(i)
-    {
-         query_output <-
-          jsonlite::fromJSON(
-            paste0(
-              "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-              if (type == "photo")
-                "f" else
-                "s",
-              "&t=",
-              "s",
-              "&s=",
-              id_by_page_df$id[i],
-              "&o=mp&p=",
-              id_by_page_df$page[i]
-            )
+      get_ids$total_registers <- sapply(1:nrow(get_ids), function(u) {
+        as.numeric(jsonlite::fromJSON(
+          paste0(
+            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+            if (type == "photo") {
+              "f"
+            } else {
+              "s"
+            },
+            "&t=s&s=",
+            get_ids$id[u],
+            "&o=mp&p=1"
           )
+        )$registros$total)
+      })
 
-        # make it a data frame
-        output_df <-
-          as.data.frame(t(sapply(
-            query_output$registros$itens, unlist
-          )))
+      if (sum(get_ids$total_registers) == 0 & verbose) {
+        cat(paste(colortext(paste0("No ", type, "s were found"), "failure"), add_emoji("sad")))
+      } else {
+        # get number of pages (20 is the default number of registers per page)
+        get_ids$pages <- ceiling(get_ids$total_registers / 20)
 
-        # fix link
-        output_df$link <- gsub("#", "", as.character(output_df$link))
+        # remove those rows with no pages (only needed when many species are returned)
+        get_ids <- get_ids[get_ids$pages > 0, ]
 
-        return(output_df)
-    })
+        id_by_page_list <- lapply(1:nrow(get_ids), function(x) {
+          X <- get_ids[x, ]
+          out_df <- data.frame(id = X$id, page = 1:X$pages)
+        })
 
-    # put in a data frame
-    query_output_df <- do.call(rbind, query_output_list)
+        id_by_page_df <- do.call(rbind, id_by_page_list)
 
-    # rename rows
-    rownames(query_output_df) <- 1:nrow(query_output_df)
+        # search recs in wikiaves (results are returned in pages with 500 recordings each)
+        if (pb & verbose) {
+          cat(paste(colortext(paste0("Obtaining metadata (", sum(get_ids$total_registers), " ", type, "(s) found)"), "success"), add_emoji("happy"), ":\n"))
+        }
 
-    # change jpg to mp3 in links
-    if (type == "Sound")
-      query_output_df$link <-
-      gsub(".jpg$", ".mp3",  query_output_df$link)
+        # set clusters for windows OS
+        if (Sys.info()[1] == "Windows" & cores > 1) {
+          cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+        } else {
+          cl <- cores
+        }
 
-    # add repository
-    query_output_df$repository <- "wikiaves"
+        # loop over pages
+        query_output_list <- pblapply_sw_int(1:nrow(id_by_page_df), cl = cl, pbar = pb, function(i) {
+          query_output <-
+            jsonlite::fromJSON(
+              paste0(
+                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+                if (type == "photo") {
+                  "f"
+                } else {
+                  "s"
+                },
+                "&t=",
+                "s",
+                "&s=",
+                id_by_page_df$id[i],
+                "&o=mp&p=",
+                id_by_page_df$page[i]
+              )
+            )
 
-    # remove weird columns
-    query_output_df$por <- query_output_df$grande <- query_output_df$enviado <- NULL
+          # make it a data frame
+          output_df <-
+            as.data.frame(t(sapply(
+              query_output$registros$itens, unlist
+            )))
 
-    # flip verified
-    query_output_df$is_questionada <- !as.logical(query_output_df$is_questionada)
+          # fix link
+          output_df$link <- gsub("#", "", as.character(output_df$link))
 
-    #fix media type
-    query_output_df$tipo <- type
+          return(output_df)
+        })
 
-    # rename output columns
-    names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("key", "media.type", "user.id", "sp.id", "species", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "file_url", "duration", "repository"))
+        # put in a data frame
+        query_output_df <- do.call(rbind, query_output_list)
 
-    for(i in 1:nrow(names_df))
-      names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
+        # rename rows
+        rownames(query_output_df) <- 1:nrow(query_output_df)
 
-    if (!all_data){
-    query_output_df$country <- "Brazil"
-    names(query_output_df)[names(query_output_df) == "scientific.name"] ="species"
-    names(query_output_df)[names(query_output_df) == "record.id"] ="key"
-    query_output_df$latitude <- NA
-    query_output_df$longitude <- NA
-    query_output_df <- query_output_df[,c("key","species","date","country","location","latitude","longitude","file_url","repository")]
-}
-    return(query_output_df)
+        # change jpg to mp3 in links
+        if (type == "Sound") {
+          query_output_df$link <-
+            gsub(".jpg$", ".mp3", query_output_df$link)
+        }
+
+        # add repository
+        query_output_df$repository <- "wikiaves"
+
+        # remove weird columns
+        query_output_df$por <- query_output_df$grande <- query_output_df$enviado <- NULL
+
+        # flip verified
+        query_output_df$is_questionada <- !as.logical(query_output_df$is_questionada)
+
+        # fix media type
+        query_output_df$tipo <- type
+
+        # rename output columns
+        names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("key", "media.type", "user.id", "sp.id", "species", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "file_url", "duration", "repository"))
+
+        for (i in 1:nrow(names_df)) {
+          names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
+        }
+
+        if (!all_data) {
+          query_output_df$country <- "Brazil"
+          names(query_output_df)[names(query_output_df) == "scientific.name"] <- "species"
+          names(query_output_df)[names(query_output_df) == "record.id"] <- "key"
+          query_output_df$latitude <- NA
+          query_output_df$longitude <- NA
+          query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
+        }
+        return(query_output_df)
+      }
     }
   }
-}

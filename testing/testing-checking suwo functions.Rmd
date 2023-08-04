@@ -446,6 +446,8 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 # check
 ```{r check, eval = FALSE}
 
+
+styler::style_dir("./R")
 # system("autoconf  ")
 
 # usethis::use_rcpp()
@@ -536,7 +538,7 @@ usethis::use_github_action("pkgdown")
 #codecov
 usethis::use_coverage(type = c("codecov"))
 
-covr::codecov(token = "8df6a17e-aff7-4a6d-bdf7-ecc38aea7e71")
+covr::codecov(token = "94049bb4-baf6-4851-a830-405d9ae77a41")
 
 # usethis::use_github_action("test-coverage")
 
@@ -545,8 +547,7 @@ covr::codecov(token = "8df6a17e-aff7-4a6d-bdf7-ecc38aea7e71")
 
 
 ## pckgcheck
-summary(pkgcheck::pkgcheck("."))
-
+x <- pkgcheck::pkgcheck(".")
 summary(x)
 
 mydir <- file.path (tempdir (), "ohun")

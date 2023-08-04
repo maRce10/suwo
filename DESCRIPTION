@@ -21,7 +21,8 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0),
     leaflet,
-    maps
+    maps,
+    covr
 Depends:
      RCurl,
      jsonlite
