@@ -200,10 +200,10 @@ query_wikiaves <-
     if (!all_data){
     query_output_df$country <- "Brazil"
     names(query_output_df)[names(query_output_df) == "scientific.name"] ="species"
-    names(query_output_df)[names(query_output_df) == "record.id"] ="id"
+    names(query_output_df)[names(query_output_df) == "record.id"] ="key"
     query_output_df$latitude <- NA
     query_output_df$longitude <- NA
-    query_output_df <- query_output_df[,c("id","species","date","country","location","latitude","longitude","file_url","repository")]
+    query_output_df <- query_output_df[,c("key","species","date","country","location","latitude","longitude","file_url","repository")]
 }
     return(query_output_df)
     }

@@ -41,8 +41,24 @@ download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, core
   checkmate::reportAssertions(check_results)
 
   # Add file extension
-  metadata$extension  <- vapply(X = metadata$file_url, FUN = function(x){
+  if(metadata$repository[1] == "XC"){
+    metadata$extension  <- vapply(X = metadata$file.name, FUN = function(x){
+      x2 <- strsplit(x, "\\?")[[1]][1]
 
+      max_x2 <- max(gregexpr("\\.", x2)[[1]])
+
+      extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
+
+      if (extension == ".mpga")
+        extension <- ".mp3"
+
+      return(extension)
+
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+
+
+  }else{
+  metadata$extension  <- vapply(X = metadata$file_url, FUN = function(x){
     x2 <- strsplit(x, "\\?")[[1]][1]
 
     max_x2 <- max(gregexpr("\\.", x2)[[1]])
@@ -55,7 +71,7 @@ download_media <- function(metadata, path = "./", pb= TRUE, verbose = TRUE, core
     return(extension)
 
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-
+}
   #Abbreviate repository name
   repo <- metadata$repository[1]
 

@@ -345,12 +345,13 @@ query_xenocanto <-
 
       # create species name column
       results$species <- paste(results$genus, results$specific.epithet, sep = "_")
-
+      # rename id
+      names(results)[names(results) == "id"] ="key"
       # fix url
       results$file_url <- paste0("https:", results$file_url, "/download")
 
       if (!all_data)
-        results <- results[,c("location","latitude","longitude","file_url","repository","id","species","date","country")]
+        results <- results[,c("location","latitude","longitude","file_url","repository","key","species","date","country")]
 
       return(droplevels(results))
     }
