@@ -60,7 +60,6 @@ online repository \href{https://www.gbif.org/}{gbif}. It can return media metada
 \dontrun{
 # search without downloading
 View(df1)
-
 }
 
 }

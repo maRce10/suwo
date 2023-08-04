@@ -36,7 +36,6 @@
 #' \dontrun{
 #' # search without downloading
 #' df1 <- query_xenocanto(term = "Phaethornis anthophilus")
-#' }
 
 #' ## search using xeno-canto advance query ###
 #' orth.pap <- query_xenocanto(term = 'gen:orthonyx cnt:papua loc:tari')

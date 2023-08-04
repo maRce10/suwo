@@ -36,9 +36,8 @@ online repository \href{https://www.wikiaves.com/}{wikiaves}. It can return reco
 \examples{
 \dontrun{
 # search
-df1 <- query_wikiaves(term = 'Phaethornis nattereri', type = "still image")
+df1 <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
 View(df1)
-
 }
 
 }

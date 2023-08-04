@@ -38,7 +38,6 @@ online repository \href{https://www.observation.org/}{observation}. It can retur
 \dontrun{
 # search without downloading
 View(df1)
-
 }
 
 }

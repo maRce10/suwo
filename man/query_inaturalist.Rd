@@ -47,7 +47,6 @@ online repository \href{https://www.inaturalist.org/}{inaturalist}. It can retur
 \dontrun{
 # search without downloading
 View(df1)
-
 }
 
 }

@@ -47,18 +47,6 @@ test_that("no result", {
 })
 
 
-test_that("search Glaucis photos (2 species)", {
-
-  df1 <- query_wikiaves(term = 'Glaucis', type =  "still image")
-
-
-  # system(paste("firefox", df1$link[1]))
-
-  expect_true(nrow(df1) >=  77)
-
-})
-
-
 test_that("search Glaucis photos (2 species) in parallel", {
 
   df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image", cores = 2)

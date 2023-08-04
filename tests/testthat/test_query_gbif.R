@@ -69,7 +69,9 @@ test_that("search Glaucis photos (3 species)", {
 
 test_that("search Aristolochia baetica photos in parallel", {
 
-  df1 <- query_gbif(term = 'Aristolochia baetica', type =  "still image", cores = 3)
+  cores <- parallel::detectCores()
+  cores <- if(cores > 2) 2
+  df1 <- query_gbif(term = 'Aristolochia baetica', type =  "still image", cores = cores)
 
 
   system(paste("firefox", df1$`media-URL`[1]))

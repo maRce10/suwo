@@ -92,7 +92,7 @@ query_gbif <-
     }
 
     # check internet connection
-    a <- try(RCurl::getURL("https://api.gbif.org/v1/occurrence/search?"), silent = TRUE)
+    a <- try(RCurl::getURL("https://api.gbif.org/v1/"), silent = TRUE)
     if (is(a, "try-error")) {
       stop2("No connection to GBIF API (check your internet connection!)")
     }
