@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>/404.html</loc>
+  </url>
+  <url>
+    <loc>/authors.html</loc>
+  </url>
+  <url>
+    <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/download_media.html</loc>
+  </url>
+  <url>
+    <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/query_gbif.html</loc>
+  </url>
+  <url>
+    <loc>/reference/query_inaturalist.html</loc>
+  </url>
+  <url>
+    <loc>/reference/query_observation.html</loc>
+  </url>
+  <url>
+    <loc>/reference/query_wikiaves.html</loc>
+  </url>
+  <url>
+    <loc>/reference/query_xenocanto.html</loc>
+  </url>
+  <url>
+    <loc>/reference/suwo.html</loc>
+  </url>
+</urlset>
