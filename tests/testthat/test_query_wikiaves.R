@@ -61,7 +61,7 @@ test_that("search Glaucis photos (2 species)", {
 
 test_that("search Glaucis photos (2 species) in parallel", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image", cores = 3)
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image", cores = 2)
 
 
   # system(paste("firefox", df1$link[1]))

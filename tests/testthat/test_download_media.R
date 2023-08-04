@@ -8,8 +8,7 @@ test_that("search XC Phaethornis anthophilus default file names", {
 
   # remove files
   unlink(file.path(tempdir(), fls))
-
-  expect_equal(fls, c("XC532163.mp3", "XC568491.mp3"))
+  expect_equal(fls, c("Phaethornis_anthophilus-XC532163.mp3", "Phaethornis_anthophilus-XC568491.mp3"))
   })
 
 
@@ -27,8 +26,8 @@ test_that("search wikiaves Glaucis dohrnii sp names", {
   unlink(file.path(tempdir(), fls))
 
 
-  expect_equal(fls, c("Glaucis-dohrnii-XC427418.mp3",
-                      "Glaucis-dohrnii-XC618872.mp3"))
+  expect_equal(fls, c("Glaucis-dohrnii-WA427418.mp3",
+                      "Glaucis-dohrnii-WA618872.mp3"))
 })
 
 
@@ -47,6 +46,6 @@ test_that("search GBIF sp names", {
   unlink(file.path(tempdir(), fls))
 
 
-  expect_equal(fls, c("Glaucis-dohrnii-XC427418.mp3",
-                      "Glaucis-dohrnii-XC618872.mp3"))
+  expect_equal(fls, c("Glaucis-dohrnii-GBIF427418.mp3",
+                      "Glaucis-dohrnii-GBIF618872.mp3"))
 })
