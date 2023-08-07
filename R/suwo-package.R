@@ -26,9 +26,9 @@
 #' @import parallel
 #' @import RCurl
 #' @import jsonlite
-#' @importFrom utils download.file
+#' @importFrom utils download.file read.csv write.csv
 #' @importFrom methods is
-#' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors
+#' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors cli_text
 #' @author Marcelo Araya-Salas & Jorge Elizondo-Calvo
 #'
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

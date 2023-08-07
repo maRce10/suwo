@@ -1,7 +1,7 @@
 #' Access 'gbif' dataset information
 #'
 #' \code{check_gbif_datasets} searches for dataset information from \href{https://www.gbif.org}{gbif}.
-#' @usage check_gbif_datasets()
+#' @usage check_gbif_datasets(path = tempdir())
 #' @param path Character that defines the location for the downloaded file. By default is downloaded to a temporary directory (\code{tempdir()}).
 #' @return returns dataset csv from gbif
 #' @export
@@ -34,14 +34,14 @@ check_gbif_datasets <- function(path = tempdir()) {
 
   # Read the CSV data
   message("Downloading csv file ...")
-  csv_data <- try(read.csv("https://api.gbif.org/v1/dataset/search/export?format=CSV&"), silent = TRUE)
+  csv_data <- try(utils::read.csv("https://api.gbif.org/v1/dataset/search/export?format=CSV&"), silent = TRUE)
 
   on.exit(rm(csv_data))
 
   if (is(csv_data, "try-error")) {
     stop2("Failed to download CSV.")
   } else {
-    write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
+    utils::write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
   }
 
   # tell users were is the file and allow them to open it

@@ -458,7 +458,7 @@ styler::style_dir("./R")
 
 #run document twice
 devtools::document(".")
-
+devtools::document(".")
 # devtools::load_all()
 
 # usethis::use_coverage()
@@ -513,13 +513,13 @@ unlink(list.files(pattern = "ohun\\.pdf", path = "."))
 system("R CMD Rd2pdf .")
 
 #built site
-pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
-pkgdown::build_articles()
+# pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
+# pkgdown::build_articles()
+# 
 
-# to set a new computer
-## 1. install git
-# 2. generate ssh key https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent
-# 3. add key to github account https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account  
+usethis::use_pkgdown()
+# usethis::use_github_pages()
+
 
 #sent to github
 setwd(".")
@@ -531,7 +531,6 @@ system("git push origin master")
 # installation of packages fo rOpenSci
 
 # remotes::install_github ("ropensci-review-tools/pkgstats")
-
 
 usethis::use_github_action("pkgdown") 
 

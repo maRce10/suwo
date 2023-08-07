@@ -4,7 +4,7 @@
 \alias{check_gbif_datasets}
 \title{Access 'gbif' dataset information}
 \usage{
-check_gbif_datasets()
+check_gbif_datasets(path = tempdir())
 }
 \arguments{
 \item{path}{Character that defines the location for the downloaded file. By default is downloaded to a temporary directory (\code{tempdir()}).}
