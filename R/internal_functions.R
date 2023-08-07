@@ -218,3 +218,10 @@ check_arguments <- function(args) {
 
   return(check_collection)
 }
+
+
+.onAttach <-
+  function(libname, pkgname) {
+    packageStartupMessage("\nPlease cite 'suwo' as: \n")
+    packageStartupMessage("Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media repositories through R. R package version 0.1.0.")
+  }

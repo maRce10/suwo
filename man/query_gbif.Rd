@@ -28,7 +28,7 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 \value{
 If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
 
-If all_data is not provided the function returns a data frame with the following media
+If all_data is \code{TRUE} the function returns a data frame with the following media
 information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
 publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
 taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,
@@ -67,6 +67,9 @@ View(df1)
 {
 
 }
+}
+\seealso{
+\code{\link{query_gbif}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

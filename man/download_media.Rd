@@ -28,8 +28,6 @@ media files
 }
 \details{
 File downloading process can be interrupted and resume later as long as the working directory is the same.
- Maps of recording coordinates can be produced using
-\code{\link{map_results}}.
 }
 \examples{
 \dontrun{
@@ -42,7 +40,7 @@ File downloading process can be interrupted and resume later as long as the work
 }
 }
 \seealso{
-\code{\link{map_results}},
+\code{\link{query_gbif}},
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

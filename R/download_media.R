@@ -14,9 +14,7 @@
 #' @export
 #' @name download_media
 #' @details File downloading process can be interrupted and resume later as long as the working directory is the same.
-#'  Maps of recording coordinates can be produced using
-#' \code{\link{map_results}}.
-#' @seealso \code{\link{map_results}},
+#' @seealso \code{\link{query_gbif}},
 #' @examples
 #' \dontrun{
 #'

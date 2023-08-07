@@ -14,7 +14,7 @@
 #' @return If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
-#' @return If all_data is not provided the function returns a data frame with the following media
+#' @return If all_data is \code{TRUE} the function returns a data frame with the following media
 #' information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
 #' publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
 #' taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,
@@ -38,6 +38,7 @@
 #' @name query_gbif
 #' @details This function queries for species observation info in the open-access
 #' online repository \href{https://www.gbif.org/}{gbif}. It can return media metadata.
+#' @seealso \code{\link{query_gbif}}
 #' @examples
 #' \dontrun{
 #' # search without downloading
@@ -92,7 +93,7 @@ query_gbif <-
     }
 
     # check internet connection
-      a <- try(RCurl::getURL("https://api.gbif.org"), silent = TRUE)
+    a <- try(RCurl::getURL("https://api.gbif.org"), silent = TRUE)
     if (is(a, "try-error")) {
       stop2("No connection to GBIF API (check your internet connection!)")
     }
