@@ -27,15 +27,15 @@ test_that("no recs found", {
 
 test_that("check messages", {
 
-  msg <- capture_output(query_xenocanto(term = '000', verbose = TRUE))
+  msg <- capture.output(query_xenocanto(term = '000', verbose = TRUE))
 
-  expect_true(grepl("not found", msg))
+  expect_true(grepl("No audios were found", msg))
 
-  msg <- capture_output(query_xenocanto(term = '000', verbose = FALSE))
+  msg <- capture.output(query_xenocanto(term = '000', verbose = FALSE))
 
   expect_true(msg == "")
 
-  msg <- capture_output(query_xenocanto(term = 'Phaethornis anthophilus', verbose = TRUE, pb = FALSE))
+  msg <- capture.output(query_xenocanto(term = 'Phaethornis anthophilus', verbose = TRUE, pb = FALSE))
 
   expect_true(msg == "")
 

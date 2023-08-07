@@ -57,7 +57,7 @@ test_that("search Aristolochia baetica photos in parallel", {
 
 test_that("test verbose FALSE", {
 
-  msg <- capture_output(query_gbif(term = '000', verbose = FALSE))
+  msg <- capture.output(query_gbif(term = 'Glaucis dohrnii', type =  "still image", verbose = FALSE, pb = FALSE))
 
   expect_true(msg == "")
 
