@@ -542,7 +542,7 @@ covr::codecov(token = "94049bb4-baf6-4851-a830-405d9ae77a41")
 usethis::use_github_action("test-coverage")
 
 #generate codemeta.json (only run once)
-#codemetar::write_codemeta()
+# codemetar::write_codemeta()
 
 
 ## pckgcheck
