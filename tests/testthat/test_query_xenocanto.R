@@ -29,15 +29,18 @@ test_that("check messages", {
 
   msg <- capture.output(query_xenocanto(term = '000', verbose = TRUE))
 
-  expect_true(grepl("No audios were found", msg))
+  expect_true(any(grepl("No audios were found", msg)))
 
-  msg <- capture.output(query_xenocanto(term = '000', verbose = FALSE))
+  msg <- capture.output(a <- query_xenocanto(term = '000', verbose = FALSE))
 
-  expect_true(msg == "")
 
-  msg <- capture.output(query_xenocanto(term = 'Phaethornis anthophilus', verbose = TRUE, pb = FALSE))
+  expect_true(length(msg) == 0)
 
-  expect_true(msg == "")
+
+  msg <- capture.output(a <- query_xenocanto(term = 'Phaethornis anthophilus', verbose = TRUE, pb = FALSE))
+
+  expect_true(length(msg) == 0)
+
 
 
   })

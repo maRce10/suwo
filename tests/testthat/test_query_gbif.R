@@ -47,8 +47,8 @@ test_that("search Aristolochia baetica photos in parallel", {
 
   cores <- parallel::detectCores()
   cores <- if(cores > 2) 2
-  cores <- if(!is.numeric(cores)) 1
-  df1 <- query_gbif(term = 'Aristolochia baetica', type =  "still image", cores = cores)
+  if(!is.numeric(cores)) cores <- 1
+  df1 <- query_gbif(term = 'Aristolochia baetica', type = "still image", cores = cores)
 
   expect_true(nrow(df1) >= 2003)
 
@@ -57,8 +57,8 @@ test_that("search Aristolochia baetica photos in parallel", {
 
 test_that("test verbose FALSE", {
 
-  msg <- capture.output(query_gbif(term = 'Glaucis dohrnii', type =  "still image", verbose = FALSE, pb = FALSE))
+  msg <- capture.output(a <- query_gbif(term = 'Glaucis dohrnii', type =  "still image", verbose = FALSE, pb = FALSE))
 
-  expect_true(msg == "")
+  expect_true(length(msg) == 0)
 
 })
