@@ -27,6 +27,10 @@ test_that("no recs found", {
 
 test_that("check messages", {
 
+  msg <- capture_output(query_xenocanto(term = '000', verbose = TRUE))
+
+  expect_true(grepl("not found", msg))
+
   msg <- capture_output(query_xenocanto(term = '000', verbose = FALSE))
 
   expect_true(msg == "")

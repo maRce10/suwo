@@ -23,7 +23,7 @@ remove.packages("suwo")
 
 # devtools::install()
 
-pkgs <- c("remotes", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps")
+pkgs <- c("remotes", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler")
 
 # install/ load packages
 out <- lapply(pkgs, function(y) {

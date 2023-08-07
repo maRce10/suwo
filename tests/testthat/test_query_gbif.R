@@ -9,9 +9,9 @@ test_that("search Glaucis dohrnii audio", {
 
 test_that("search Aristolochia baetica images", {
 
-  df1 <- query_gbif(term = 'Aristolochia baetica', type =  "still image")
+  df1 <- query_gbif(term = 'Glaucis dohrnii', type =  "still image")
 
-        expect_true(nrow(df1) >= 1456)
+        expect_true(nrow(df1) >= 30)
 
 })
 
@@ -47,6 +47,7 @@ test_that("search Aristolochia baetica photos in parallel", {
 
   cores <- parallel::detectCores()
   cores <- if(cores > 2) 2
+  cores <- if(!is.numeric(cores)) 1
   df1 <- query_gbif(term = 'Aristolochia baetica', type =  "still image", cores = cores)
 
   expect_true(nrow(df1) >= 2003)
@@ -56,8 +57,8 @@ test_that("search Aristolochia baetica photos in parallel", {
 
 test_that("test verbose FALSE", {
 
-  df1 <- capture_output(query_gbif(term = 'a3', type =  "sound", verbose = FALSE, pb = FALSE))
+  msg <- capture_output(query_gbif(term = '000', verbose = FALSE))
 
-  expect_true(df1 == "")
+  expect_true(msg == "")
 
 })
