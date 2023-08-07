@@ -517,7 +517,7 @@ system("R CMD Rd2pdf .")
 # pkgdown::build_articles()
 # 
 
-usethis::use_pkgdown()
+# usethis::use_pkgdown()
 # usethis::use_github_pages()
 
 
@@ -532,14 +532,14 @@ system("git push origin master")
 
 # remotes::install_github ("ropensci-review-tools/pkgstats")
 
-usethis::use_github_action("pkgdown") 
-
-#codecov
-usethis::use_coverage(type = c("codecov"))
-
-covr::codecov(token = "94049bb4-baf6-4851-a830-405d9ae77a41")
-
-usethis::use_github_action("test-coverage")
+# usethis::use_github_action("pkgdown") 
+# 
+# #codecov
+# usethis::use_coverage(type = c("codecov"))
+# 
+# covr::codecov(token = "94049bb4-baf6-4851-a830-405d9ae77a41")
+# 
+# usethis::use_github_action("test-coverage")
 
 #generate codemeta.json (only run once)
 # codemetar::write_codemeta()
@@ -547,11 +547,6 @@ usethis::use_github_action("test-coverage")
 
 ## pckgcheck
 x <- pkgcheck::pkgcheck(".")
-summary(x)
-
-mydir <- file.path (tempdir (), "ohun")
-gert::git_clone ("https://github.com/maRce10/ohun.git", path = mydir)
-x <- pkgcheck::pkgcheck(mydir)
 summary(x)
 
 
