@@ -246,6 +246,14 @@ query_inaturalist <-
         query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
       }
 
+      #Replace square image size to original in file_url
+      replace_image_size <- function(file_url) {
+        gsub("square", "original", file_url)
+      }
+      for (i in 1:nrow(query_output_df)) {
+        query_output_df$file_url[i] <- replace_image_size(query_output_df$file_url[i])
+      }
+
       #Remove files that have no download link
       query_output_df <- subset(query_output_df, !is.na(file_url))
 

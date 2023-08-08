@@ -69,18 +69,18 @@ test_that("search inaturalist sp download", {
 
   df1 <- query_inaturalist(term = 'Agalychnis lemur', type = "still image")
 
-  test_keys <- c("141443042", "123134827")
+  test_keys <- c("149945235", "170947000")
 
   df1 <- subset(df1, key %in% test_keys)
 
   download_media(metadata = df1, path = tempdir())
 
-  fls <- list.files(path = tempdir(), pattern = "jpg$")
+  fls <- list.files(path = tempdir(), pattern = "\\.jpeg$", ignore.case = TRUE, full.names = TRUE)
 
   # remove files
   unlink(file.path(tempdir(), fls))
 
 
-  expect_equal(fls, c("Agalychnis_lemur-INAT141443042.jpg",
-                      "Agalychnis_lemur-INAT123134827.jpg"))
+  expect_equal(fls, c("Agalychnis_lemur-INAT149945235",
+                      "Agalychnis_lemur-INAT170947000"))
 })
