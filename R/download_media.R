@@ -56,14 +56,26 @@ download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cor
     }, FUN.VALUE = character(1), USE.NAMES = FALSE)
   } else if (metadata$repository[1] == "INAT"){
     metadata$extension <- vapply(X = metadata$media_extension, FUN = function(x) {
-      extension <- strsplit(x, "/")[[1]][1]
+      extension <- strsplit(x, "/")[[1]][2]
 
-      if (extension == ".mpeg") {
+      if (extension == "mpeg") {
         extension <- ".mp3"
       }
 
+      if (extension == "x-wav") {
+        extension <- ".wav"
+      }
+
+      if (extension == "x-m4a") {
+        extension <- ".m4a"
+      }
+
+      if (extension == "mp4") {
+        extension <- ".mp4"
+      }
+
       return(extension)
-    }, FUN.VALUE = character(2), USE.NAMES = FALSE)
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 
   }else {
     metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {

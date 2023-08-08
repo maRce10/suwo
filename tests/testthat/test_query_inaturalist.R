@@ -35,9 +35,9 @@ test_that("no result", {
 
 test_that("search Glaucis photos (2 species) in parallel", {
 
-  df1 <- query_inaturalist(term = '', type =  "sound", cores = 2)
+  df1 <- query_inaturalist(term = 'bolitoglossa striatula', type =  "still image", cores = 2)
 
-  expect_true(nrow(df1) >=  725)
+  expect_true(nrow(df1) >=  52)
 
 })
 
@@ -47,5 +47,15 @@ test_that("test verbose FALSE", {
   df1 <- capture_output(query_inaturalist(term = 'a3', type =  "sound", verbose = FALSE, pb = FALSE))
 
   expect_true(df1 == "")
+
+})
+
+test_that("test all_data FALSE", {
+
+  df1 <- query_inaturalist(term = 'Smilisca baudinii', type =  "sound", all_data = FALSE)
+
+  expected_col_names <- c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")
+  query_col_names <- colnames(df1)
+  expect_true(identical(query_col_names, expected_col_names), info = "Column names do not match the expected names")
 
 })

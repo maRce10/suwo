@@ -62,3 +62,13 @@ test_that("test verbose FALSE", {
   expect_true(length(msg) == 0)
 
 })
+
+test_that("test all_data FALSE", {
+
+  df1 <- query_gbif(term = 'Glaucis dohrnii', type =  "still image", all_data = FALSE)
+
+  expected_col_names <- c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")
+  query_col_names <- colnames(df1)
+  expect_true(identical(query_col_names, expected_col_names), info = "Column names do not match the expected names")
+
+})
