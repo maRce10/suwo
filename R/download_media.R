@@ -82,16 +82,16 @@ download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cor
 } else if (metadata$repository[1] == "INAT"){
       if (!exists("media_extension", where = metadata)) {
 
-        metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {
-          x2 <- strsplit(x, "\\?")[[1]][1]
-
-          max_x2 <- max(gregexpr("\\.", x2)[[1]])
-
-          extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
-
-          return(extension)
-        }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-    }
+    #     metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {
+    #       x2 <- strsplit(x, "\\?")[[1]][1]
+    #
+    #       max_x2 <- max(gregexpr("\\.", x2)[[1]])
+    #
+    #       extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
+    #
+    #       return(extension)
+    #     }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+     }
   } else {
     metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {
       x2 <- strsplit(x, "\\?")[[1]][1]
@@ -133,8 +133,11 @@ download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cor
   ))
 
   # create file name
+  if (!exists("media_extension", where = metadata)){
+    metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, ".jpeg")
+  }else {
   metadata$file.name <- paste0(gsub(pattern = " ", "_", x = metadata$species), "-", metadata$repository, metadata$non_dup_key, metadata$extension)
-
+}
   # Function to download file according to repository
   downloadFUN <- function(metadata, x) {
     dl_result <- try(download.file(
