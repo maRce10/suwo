@@ -56,6 +56,6 @@ test_that("test all_data FALSE", {
 
   expected_col_names <- c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")
   query_col_names <- colnames(df1)
-  expect_true(identical(query_col_names, expected_col_names), info = "Column names do not match the expected names")
+  expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")
 
 })

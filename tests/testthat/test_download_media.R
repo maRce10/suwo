@@ -75,12 +75,11 @@ test_that("search inaturalist sp download", {
 
   download_media(metadata = df1, path = tempdir())
 
-  fls <- list.files(path = tempdir(), pattern = "\\.jpeg$", ignore.case = TRUE, full.names = TRUE)
+  fls <- list.files(path = tempdir(), pattern = ".jpeg$", ignore.case = TRUE)
 
   # remove files
   unlink(file.path(tempdir(), fls))
 
-
-  expect_equal(fls, c("Agalychnis_lemur-INAT149945235",
-                      "Agalychnis_lemur-INAT170947000"))
+  expect_equal(fls, c("Agalychnis_lemur-INAT149945235.jpeg",
+                      "Agalychnis_lemur-INAT170947000.jpeg"))
 })

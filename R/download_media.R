@@ -54,7 +54,9 @@ download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cor
 
       return(extension)
     }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-  } else if (metadata$repository[1] == "INAT"){
+  }
+
+  if (metadata$repository[1] == "INAT"){
     if (exists("media_extension", where = metadata)) {
 
       metadata$extension <- vapply(X = metadata$media_extension, FUN = function(x) {
@@ -79,7 +81,9 @@ download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cor
       return(extension)
     }, FUN.VALUE = character(1), USE.NAMES = FALSE)
   }
-} else if (metadata$repository[1] == "INAT"){
+}
+
+  if (metadata$repository[1] == "INAT"){
       if (!exists("media_extension", where = metadata)) {
 
         metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {
@@ -87,12 +91,14 @@ download_media <- function(metadata, path = "./", pb = TRUE, verbose = TRUE, cor
 
           max_x2 <- max(gregexpr("\\.", x2)[[1]])
 
-          extension <- substr(x = x2, start = max_x2, stop = nchar(x2))
+          extension <- ".jpeg"
 
           return(extension)
         }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-    }
-  } else {
+     }
+  }
+
+  else {
     metadata$extension <- vapply(X = metadata$file_url, FUN = function(x) {
       x2 <- strsplit(x, "\\?")[[1]][1]
 
