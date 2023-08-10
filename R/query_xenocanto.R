@@ -84,14 +84,6 @@ query_xenocanto <-
       stop2("xeno-canto.org website is apparently down")
     }
 
-    # If cores is not numeric
-    if (!is.numeric(cores)) {
-      stop2("'cores' must be a numeric vector of length 1")
-    }
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
-    }
-
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
       print("Obtaining metadata:")

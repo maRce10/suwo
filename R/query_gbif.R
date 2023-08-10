@@ -123,7 +123,8 @@ query_gbif <-
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
     # message if nothing found
-    if (base.srch.pth$count == 0 & verbose) {
+    if (base.srch.pth$count == 0) {
+      if (verbose)
       cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
     } else {
       # message number of results
