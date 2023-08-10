@@ -93,7 +93,7 @@ query_gbif <-
     }
 
     # check internet connection
-    a <- try(RCurl::getURL("https://api.gbif.org"), silent = TRUE)
+    a <- try(RCurl::getURL("https://www.gbif.org/"), silent = TRUE)
     if (is(a, "try-error")) {
       stop2("No connection to GBIF API (check your internet connection!)")
     }
@@ -236,13 +236,13 @@ query_gbif <-
 
         names(query_output_df)[names(query_output_df) == "scientificName"] <- "species"
 
-        names(query_output_df)[names(query_output_df) == "key"] <- "id"
+        names(query_output_df)[names(query_output_df) == "key"] <- "key"
 
         names(query_output_df)[names(query_output_df) == "eventDate"] <- "date"
 
         names(query_output_df)[names(query_output_df) == "locality"] <- "location"
 
-        query_output_df <- query_output_df[, c("id", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
+        query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
       }
       return(query_output_df)
     }

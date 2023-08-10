@@ -44,7 +44,7 @@ test_that("search Glaucis photos (2 species) in parallel", {
 
 test_that("test verbose FALSE", {
 
-  df1 <- capture_output(query_inaturalist(term = 'a3', type =  "sound", verbose = FALSE, pb = FALSE))
+  df1 <- capture_output(query_inaturalist(term = 'a3', type =  "sound", verbose = FALSE))
 
   expect_true(df1 == "")
 
@@ -52,7 +52,7 @@ test_that("test verbose FALSE", {
 
 test_that("test all_data FALSE", {
 
-  df1 <- query_inaturalist(term = 'Smilisca baudinii', type =  "sound", all_data = FALSE)
+  df1 <- query_inaturalist(term = 'bolitoglossa striatula', type =  "still image", all_data = FALSE)
 
   expected_col_names <- c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")
   query_col_names <- colnames(df1)
