@@ -16,9 +16,7 @@ Imports:
     methods,
     pbapply,
     rjson,
-    utils,
-    httr,
-    readr
+    utils
 Suggests: 
     covr,
     testthat

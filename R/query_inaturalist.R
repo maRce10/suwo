@@ -84,15 +84,9 @@ query_inaturalist <-
       stop2("No connection to INaturalist (check your internet connection!)")
     }
 
-    if (a == "Could not connect to the database") {
-      # If cores is not numeric
-      if (!is.numeric(cores)) {
-        stop2("'cores' must be a numeric vector of length 1")
-      }
-    }
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
-    }
+
+    if (a == "Could not connect to the database")
+      stop2("observation website is apparently down")
 
     #Save species name
     species <- term
@@ -112,7 +106,8 @@ query_inaturalist <-
     #### org_type in tolower
 
     # message if nothing found
-    if (base.srch.pth$total_results == 0 & verbose) {
+    if (base.srch.pth$total_results == 0) {
+      if (verbose)
       cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
     } else {
       # message number of results
@@ -255,7 +250,7 @@ query_inaturalist <-
       }
 
       #Remove files that have no download link
-      query_output_df <- subset(query_output_df, !is.na(file_url))
+      query_output_df <-query_output_df[!is.na(query_output_df$file_url), ]
 
       return(query_output_df)
     }

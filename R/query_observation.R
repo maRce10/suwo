@@ -70,12 +70,12 @@ query_observation <-
     )
 
     # check internet connection
-    # a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
-    # if (is(a, "try-error"))
-    #   stop2("No connection to observation (check your internet connection!)")
-    #
-    # if (a == "Could not connect to the database")
-    #   stop2("observation website is apparently down")
+    a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
+    if (is(a, "try-error"))
+      stop2("No connection to observation (check your internet connection!)")
+
+    if (a == "Could not connect to the database")
+      stop2("observation website is apparently down")
 
     # If cores is not numeric
     if (!is.numeric(cores)) {
