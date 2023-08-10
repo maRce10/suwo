@@ -1,4 +1,4 @@
-test_that("search XC Phaethornis anthophilus default file names", {
+test_that("Xenocanto Phaethornis anthophilus download", {
 
   df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
 
@@ -18,7 +18,7 @@ test_that("search XC Phaethornis anthophilus default file names", {
 
 ###############
 
-test_that("search wikiaves Glaucis dohrnii sp names", {
+test_that("wikiaves Glaucis dohrnii sp download", {
 
   df1 <- query_wikiaves(term = 'Glaucis dohrnii', type = "sound")
 
@@ -42,7 +42,7 @@ test_that("search wikiaves Glaucis dohrnii sp names", {
 ################
 
 
-test_that("search GBIF sp names", {
+test_that("search GBIF sp download", {
 
   df1 <- query_gbif(term = 'Glaucis dohrnii', type = "sound")
 
@@ -60,4 +60,26 @@ test_that("search GBIF sp names", {
 
   expect_equal(fls, c("Glaucis_dohrnii-GBIF3863342525.mp3",
                       "Glaucis_dohrnii-GBIF3863345521.mp3"))
+})
+
+################
+
+
+test_that("search inaturalist sp download", {
+
+  df1 <- query_inaturalist(term = 'Agalychnis lemur', type = "still image")
+
+  test_keys <- c("149945235", "170947000")
+
+  df1 <- subset(df1, key %in% test_keys)
+
+  download_media(metadata = df1, path = tempdir())
+
+  fls <- list.files(path = tempdir(), pattern = ".jpeg$", ignore.case = TRUE)
+
+  # remove files
+  unlink(file.path(tempdir(), fls))
+
+  expect_equal(fls, c("Agalychnis_lemur-INAT149945235.jpeg",
+                      "Agalychnis_lemur-INAT170947000.jpeg"))
 })

@@ -70,14 +70,6 @@ query_wikiaves <-
       stop2("wikiaves.com website is apparently down")
     }
 
-    # If cores is not numeric
-    if (!is.numeric(cores)) {
-      stop2("'cores' must be a numeric vector of length 1")
-    }
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
-    }
-
     org_type <- match.arg(type)
 
     type <- switch(type,

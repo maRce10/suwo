@@ -43,6 +43,24 @@ or download the associated sound files. Complex queries can be done by using sea
  Files are double-checked after downloading and "empty" files are re-downloaded.
  File downloading process can be interrupted and resume later as long as the working directory is the same.
 }
+\examples{
+\dontrun{
+# search without downloading
+
+## search using xeno-canto advance query ###
+orth.pap <- query_xenocanto(term = 'gen:orthonyx cnt:papua loc:tari')
+
+# use quotes for queries with more than 1 word (e.g. Costa Rica),note that the
+# single quotes are used for the whole 'term' and double quotes for the 2-word term inside
+#Phaeochroa genus in Costa Rica
+phae.cr <- query_xenocanto(term = 'gen:phaeochroa cnt:"costa rica"')
+
+# several terms can be searched for in the same field
+# search for all female songs in sound type
+femsong <- query_xenocanto(term = 'type:song type:female')
+}
+
+}
 \references{
 {
 Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.

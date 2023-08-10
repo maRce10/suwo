@@ -33,12 +33,10 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-#' df1 <- query_xenocanto(term = "Phaethornis anthophilus")
-#' }
-
+# df1 <- query_xenocanto(term = "Phaethornis anthophilus")
+#'
 #' ## search using xeno-canto advance query ###
 #' orth.pap <- query_xenocanto(term = 'gen:orthonyx cnt:papua loc:tari')
-#'
 #'
 #' # use quotes for queries with more than 1 word (e.g. Costa Rica),note that the
 #' # single quotes are used for the whole 'term' and double quotes for the 2-word term inside
@@ -84,14 +82,6 @@ query_xenocanto <-
 
     if (a == "Could not connect to the database") {
       stop2("xeno-canto.org website is apparently down")
-    }
-
-    # If cores is not numeric
-    if (!is.numeric(cores)) {
-      stop2("'cores' must be a numeric vector of length 1")
-    }
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
     }
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)

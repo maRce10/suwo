@@ -70,20 +70,13 @@ query_observation <-
     )
 
     # check internet connection
-    # a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
-    # if (is(a, "try-error"))
-    #   stop2("No connection to observation (check your internet connection!)")
-    #
-    # if (a == "Could not connect to the database")
-    #   stop2("observation website is apparently down")
+    a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
+    if (is(a, "try-error"))
+      stop2("No connection to observation (check your internet connection!)")
 
-    # If cores is not numeric
-    if (!is.numeric(cores)) {
-      stop2("'cores' must be a numeric vector of length 1")
-    }
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
-    }
+    if (a == "Could not connect to the database")
+      stop2("observation website is apparently down")
+
 
     # format JSON
     term <- gsub(" ", "%20", term)
@@ -114,7 +107,8 @@ query_observation <-
 
     data_org <- data
 
-    if (data$count == 0 & verbose) {
+    if (data$count == 0) {
+      if (verbose)
       cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
     } else {
       # message number of results
