@@ -44,7 +44,7 @@ test_that("search Glaucis photos (2 species) in parallel", {
 
 test_that("test verbose FALSE", {
 
-  df1 <- capture_output(query_inaturalist(term = 'a3', type =  "sound", verbose = FALSE))
+  df1 <- capture_output(query_inaturalist(term = 'Glaucis dohrnii', type =  "sound", verbose = FALSE))
 
   expect_true(df1 == "")
 
