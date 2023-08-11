@@ -85,10 +85,11 @@ query_inaturalist <-
     }
 
 
-    if (a == "Could not connect to the database")
+    if (a == "Could not connect to the database") {
       stop2("observation website is apparently down")
+    }
 
-    #Save species name
+    # Save species name
     species <- term
 
     # format JSON
@@ -107,8 +108,9 @@ query_inaturalist <-
 
     # message if nothing found
     if (base.srch.pth$total_results == 0) {
-      if (verbose)
-      cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+      if (verbose) {
+        cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+      }
     } else {
       # message number of results
       if (pb & verbose) {
@@ -134,24 +136,24 @@ query_inaturalist <-
         query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
           x <- as.data.frame(query_output$results[u, ])
 
-          if (type == "sounds"){
+          if (type == "sounds") {
             media_df <- do.call(rbind, x$sounds)
-          }else{
+          } else {
             media_df <- do.call(rbind, x$photos)
           }
-            # media data frame with image details
-            media_df <- media_df[!sapply(media_df, is.list)]
-            media_df <- data.frame(media_df)
-            names(media_df)[names(media_df) == "url"] <- "media-URL"
+          # media data frame with image details
+          media_df <- media_df[!sapply(media_df, is.list)]
+          media_df <- data.frame(media_df)
+          names(media_df)[names(media_df) == "url"] <- "media-URL"
 
-            # remove lists
-            x <- x[!sapply(x, is.list)]
+          # remove lists
+          x <- x[!sapply(x, is.list)]
 
-            # make it data frame
-            X_df <- data.frame(t(unlist(x)))
+          # make it data frame
+          X_df <- data.frame(t(unlist(x)))
 
-            # add media details
-            X_df <- cbind(X_df, media_df)
+          # add media details
+          X_df <- cbind(X_df, media_df)
 
           return(X_df)
         })
@@ -224,13 +226,13 @@ query_inaturalist <-
 
 
       # rename output columns
-      names_df <- data.frame(old = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description","time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "id", "file_content_type", "license_code", "secret_token", "hidden", "page", "repository"), new = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description","time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "file_id", "media_extension", "license_code", "secret_token", "hidden", "page", "repository"))
+      names_df <- data.frame(old = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description", "time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "id", "file_content_type", "license_code", "secret_token", "hidden", "page", "repository"), new = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description", "time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "file_id", "media_extension", "license_code", "secret_token", "hidden", "page", "repository"))
 
       for (i in 1:nrow(names_df)) {
         names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
       }
 
-       # Add species
+      # Add species
       query_output_df$species <- species
 
       if (!all_data) {
@@ -241,7 +243,7 @@ query_inaturalist <-
         query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
       }
 
-      #Replace square image size to original in file_url
+      # Replace square image size to original in file_url
       replace_image_size <- function(file_url) {
         gsub("square", "original", file_url)
       }
@@ -249,8 +251,8 @@ query_inaturalist <-
         query_output_df$file_url[i] <- replace_image_size(query_output_df$file_url[i])
       }
 
-      #Remove files that have no download link
-      query_output_df <-query_output_df[!is.na(query_output_df$file_url), ]
+      # Remove files that have no download link
+      query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
 
       return(query_output_df)
     }

@@ -71,11 +71,13 @@ query_observation <-
 
     # check internet connection
     a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
-    if (is(a, "try-error"))
+    if (is(a, "try-error")) {
       stop2("No connection to observation (check your internet connection!)")
+    }
 
-    if (a == "Could not connect to the database")
+    if (a == "Could not connect to the database") {
       stop2("observation website is apparently down")
+    }
 
 
     # format JSON
@@ -108,8 +110,9 @@ query_observation <-
     data_org <- data
 
     if (data$count == 0) {
-      if (verbose)
-      cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+      if (verbose) {
+        cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+      }
     } else {
       # message number of results
       if (pb & verbose) {
