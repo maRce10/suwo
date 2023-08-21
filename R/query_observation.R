@@ -93,7 +93,7 @@ query_observation <-
     }
 
     #Check if token is available
-    if (is.null(token)){
+    if (!exists("token")){
       stop2("Nonviable token")
     }
 
