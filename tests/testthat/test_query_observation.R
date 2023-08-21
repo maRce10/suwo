@@ -1,11 +1,11 @@
 library(testthat)
-# test_that("search Glaucis dohrnii audio", {
-#
-#   df1 <- query_observation(term = 'Glaucis dohrnii', type = "still image", token = token)
-#
-#   expect_true(nrow(df1) >= 1)
-#
-# })
+test_that("search Glaucis dohrnii audio without token", {
+
+  df1 <- query_observation(term = 'Glaucis dohrnii', type = "still image", token)
+
+  expect_true(msg == "Nonviable token")
+
+})
 #
 # test_that("search Aristolochia baetica images", {
 #

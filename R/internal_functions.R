@@ -162,6 +162,28 @@ suwo_style <- function(type = c("success", "skip", "warning", "failure", "error"
   )[[type]]
 }
 
+# Function to download file according to repository
+downloadFUN <- function(metadata, x) {
+  dl_result <- try(
+    download.file(
+      url = as.character(metadata$file_url[x]),
+      destfile = file.path(path, metadata$file.name[x]),
+      quiet = TRUE,
+      mode = "wb",
+      cacheOK = TRUE,
+      extra = getOption("download.file.extra")
+    ),
+    silent = TRUE
+  )
+
+
+  if (is(dl_result, "try-error")) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
 ## function to check arguments
 check_arguments <- function(args) {
   # create object to store check results

@@ -92,6 +92,10 @@ query_observation <-
       stop2("Species was not found in database")
     }
 
+    #Check if token is available
+    if (is.null(token)){
+      stop2("Nonviable token")
+    }
 
     # Set the species ID and API endpoint URL
     species_id <- base.srch.pth$results$id
