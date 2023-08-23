@@ -1,5 +1,3 @@
-library(testthat)
-
 #
 # test_that("search Aristolochia baetica images", {
 #
