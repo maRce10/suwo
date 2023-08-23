@@ -198,7 +198,7 @@ download_media <-
         X = 1:nrow(metadata),
         cl = cl,
         FUN = function(x) {
-          downloadFUN(metadata, x)
+          downloadFUN(metadata, x, path)
         }
       ))
 

@@ -163,7 +163,7 @@ suwo_style <- function(type = c("success", "skip", "warning", "failure", "error"
 }
 
 # Function to download file according to repository
-downloadFUN <- function(metadata, x) {
+downloadFUN <- function(metadata, x, path) {
   dl_result <- try(
     download.file(
       url = as.character(metadata$file_url[x]),
