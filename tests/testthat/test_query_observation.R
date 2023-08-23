@@ -17,7 +17,7 @@ library(testthat)
 #   expect_true(is.null(df1))
 #
 # })
-#
+
 test_that("no result", {
 
   expect_error(query_observation(term = 'asdasdasd', type = "still image"), "Species was not found in database")
