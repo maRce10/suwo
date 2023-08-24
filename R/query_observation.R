@@ -57,7 +57,7 @@ query_observation <-
     }
 
   #Check if token is available
-    if (is.null("token")){
+    if (is.null(token)){
       stop2("Invalid token for observation.org")
     }
 
