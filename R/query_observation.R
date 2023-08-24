@@ -69,14 +69,16 @@ query_observation <-
       `interactive resource` = "InteractiveResource"
     )
 
-    # check internet connection
-    a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
-    if (is(a, "try-error")) {
-      stop2("No connection to observation (check your internet connection!)")
-    }
+    if (tolower(Sys.info()[["sysname"]]) != "windows"){
+      # check internet connection
+      a <- try(RCurl::getURL("https://observation.org"), silent = TRUE)
+      if (is(a, "try-error")) {
+        stop2("No connection to observation.org (check your internet connection!)")
+      }
 
-    if (a == "Could not connect to the database") {
-      stop2("observation website is apparently down")
+      if (a == "Could not connect to the database") {
+        stop2("observation.org website is apparently down")
+      }
     }
 
 
