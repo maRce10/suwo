@@ -56,11 +56,6 @@ query_observation <-
       stop2("'term' must be supplied")
     }
 
-  #Check if token is available
-    if (is.null(token)){
-      stop2("Invalid token for observation.org")
-    }
-
     # type must be supplied
     if (is.null(type)) {
       stop2("'type' must be supplied")
@@ -97,6 +92,11 @@ query_observation <-
     # If species not found in repository
     if (base.srch.pth$count == 0) {
       stop2("Species was not found in database")
+    }
+
+  #Check if token is available
+    if (is.null(token)){
+      stop2("Invalid token for observation.org")
     }
 
     # Set the species ID and API endpoint URL
