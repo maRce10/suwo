@@ -28,7 +28,11 @@ test_that("no result", {
 
 })
 
+test_that("no result", {
+ 
+  expect_error(query_observation(term = 'Turdus grayi', type = "sound"), "Invalid token for observation.org")
 
+})
 #
 #
 # test_that("search Turdus grayi photos in parallel", {
