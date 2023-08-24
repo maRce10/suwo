@@ -70,7 +70,7 @@ query_observation <-
     )
 
     # check internet connection
-    a <- try(RCurl::getURL("https://www.observation.org/"), silent = TRUE)
+    a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
     if (is(a, "try-error")) {
       stop2("No connection to observation (check your internet connection!)")
     }
