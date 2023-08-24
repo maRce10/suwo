@@ -30,7 +30,7 @@ test_that("no result", {
 
 test_that("no result", {
  
-  expect_error(query_observation(term = 'Turdus grayi', type = "sound"), "Invalid token for observation.org")
+  expect_error(query_observation(term = 'Serinus serinus', type = "sound"), "Invalid token for observation.org")
 
 })
 #
