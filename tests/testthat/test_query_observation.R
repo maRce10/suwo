@@ -27,6 +27,14 @@ test_that("no result", {
   expect_error(query_observation(term = 'asdasdasd', type = "sound"), "Species was not found in database")
 
 })
+
+test_that("test verbose FALSE", {
+
+  df1 <- capture_output(query_observation(term = 'a3', type =  "sound", verbose = FALSE, pb = FALSE))
+
+  expect_true(df1 == "")
+
+})
 #
 #
 # test_that("search Turdus grayi photos in parallel", {
