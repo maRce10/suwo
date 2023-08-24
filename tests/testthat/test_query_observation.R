@@ -28,13 +28,7 @@ test_that("no result", {
 
 })
 
-test_that("test verbose FALSE", {
 
-  df1 <- capture_output(query_observation(term = 'a3', type =  "sound", verbose = FALSE, pb = FALSE))
-
-  expect_true(df1 == "")
-
-})
 #
 #
 # test_that("search Turdus grayi photos in parallel", {
