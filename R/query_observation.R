@@ -96,7 +96,7 @@ query_observation <-
 
     #Check if token is available
     if (is.null("token")){
-      stop2("Nonviable token")
+      stop2("Invalid token for observation.org")
     }
 
     # Set the species ID and API endpoint URL
