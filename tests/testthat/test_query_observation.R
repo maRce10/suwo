@@ -21,6 +21,12 @@
   expect_error(query_observation(term = 'asdasdasd', type = "still image"), "Species was not found in database")
 
 })
+
+test_that("no result", {
+ 
+  expect_error(query_observation(term = 'asdasdasd', type = "sound"), "Species was not found in database")
+
+})
 #
 #
 # test_that("search Turdus grayi photos in parallel", {
