@@ -21,30 +21,30 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-#check_gbif_datasets <- function(path = tempdir()) {
-  # check internet connection
-  #a <- try(RCurl::getURL("https://www.gbif.org"), silent = TRUE)
-  #if (is(a, "try-error")) {
-    #stop2("No connection to gbif (check your internet connection!)")
-  #}
+check_gbif_datasets <- function(path = tempdir()) {
+  #check internet connection
+  a <- try(RCurl::getURL("https://www.gbif.org"), silent = TRUE)
+  if (is(a, "try-error")) {
+    stop2("No connection to gbif (check your internet connection!)")
+  }
 
-  #if (a == "Could not connect to the database") {
-    #stop2("GBIF website is apparently down")
-  #}
+  if (a == "Could not connect to the database") {
+    stop2("GBIF website is apparently down")
+  }
 
   # Read the CSV data
-  #message("Downloading csv file ...")
-  #csv_data <- try(utils::read.csv("https://api.gbif.org/v1/dataset/search/export?format=CSV&"), silent = TRUE)
+  message("Downloading csv file ...")
+  csv_data <- try(utils::read.csv("https://api.gbif.org/v1/dataset/search/export?format=CSV&"), silent = TRUE)
 
-  #on.exit(rm(csv_data))
+  on.exit(rm(csv_data))
 
-  #if (is(csv_data, "try-error")) {
-    #stop2("Failed to download CSV.")
- # } else {
-    #utils::write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
- # }
+  if (is(csv_data, "try-error")) {
+    stop2("Failed to download CSV.")
+  } else {
+    utils::write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
+  }
 
   # tell users were is the file and allow them to open it
-  # cli::cli_text("... edit your {.file ~/.Rprofile} file.}")
-  #cli::cli_text(paste0("The csv file (", paste0("gbif_datasets-", Sys.time(), ".csv"), ") with the gbif datasets info can be found at ", path))
-#}
+  cli::cli_text("... edit your {.file ~/.Rprofile} file.}")
+  cli::cli_text(paste0("The csv file (", paste0("gbif_datasets-", Sys.time(), ".csv"), ") with the gbif datasets info can be found at ", path))
+}
