@@ -140,6 +140,10 @@ download_media <-
               extension <- ".mp3"
             }
 
+            if (extension == ".php") {
+              extension <- ".jpeg"
+            }
+
             return(extension)
           },
           FUN.VALUE = character(1),
