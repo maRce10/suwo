@@ -101,7 +101,7 @@ test_that("search inaturalist sp download", {
   # remove files
   unlink(file.path(tempdir(), fls))
 
-  expect_equal(fls, c("rattus_rattus-INAT169748642-2.wav",
-                      "rattus_rattus-INAT169748642-3.wav",
-                      "rattus_rattus-INAT169748642-1.wav"))
+  expect_equal(fls, c("rattus_rattus-INAT169748642-1.wav",
+                      "rattus_rattus-INAT169748642-2.wav",
+                      "rattus_rattus-INAT169748642-3.wav"))
 })
