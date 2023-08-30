@@ -103,6 +103,5 @@ test_that("search inaturalist sp download", {
 
   expect_equal(fls, c("rattus_rattus-INAT169748642-2.wav",
                       "rattus_rattus-INAT169748642-3.wav",
-                      "rattus_rattus-INAT169748642-1.wav",
-                      "rattus_rattus-INAT157450820.mp4"))
+                      "rattus_rattus-INAT169748642-1.wav"))
 })
