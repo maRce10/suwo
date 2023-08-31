@@ -105,3 +105,26 @@ test_that("search inaturalist sp download", {
                       "rattus_rattus-INAT169748642-2.wav",
                       "rattus_rattus-INAT169748642-3.wav"))
 })
+
+
+################
+
+test_that("search inaturalist sp download", {
+
+  df1 <- query_gbif(term = 'rattus rattus', type = "sound")
+
+  test_keys <- c("169748642", "157450820")
+
+  df1 <- subset(df1, key %in% test_keys)
+
+  download_media(metadata = df1, path = tempdir())
+
+  fls <- list.files(path = tempdir(), pattern = ".wav$", ignore.case = TRUE)
+
+  # remove files
+  unlink(file.path(tempdir(), fls))
+
+  expect_equal(fls, c("rattus_rattus-INAT169748642-1.wav",
+                      "rattus_rattus-INAT169748642-2.wav",
+                      "rattus_rattus-INAT169748642-3.wav"))
+})
