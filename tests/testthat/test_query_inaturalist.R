@@ -1,4 +1,3 @@
-library(testthat)
 test_that("search Glaucis dohrnii sound", {
 
   df1 <- query_inaturalist(term = "Helicobacter pylori", type =  "still image")
