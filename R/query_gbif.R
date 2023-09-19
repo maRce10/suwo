@@ -118,8 +118,8 @@ query_gbif <-
 
     srch_trm <- paste0(
       "https://api.gbif.org/v1/occurrence/search?limit=300&",
-      if (is.null(dataset)) "" else dataset,
-      "scientificName=", term, "&media_type=",
+      if (is.null(dataset)) "" else "dataset=", dataset,
+      "&scientificName=", term, "&media_type=",
       type
     )
 
