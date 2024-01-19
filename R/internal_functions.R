@@ -216,7 +216,7 @@ check_arguments <- function(args) {
 
   if (!is.null(args$dataset)) {
     if (!is.null(args$dataset)) {
-      checkmate::assert_multi_class(x = args$dataset, classes = c("integer"), add = check_collection, .var.name = "dataset")
+      checkmate::assert_multi_class(x = args$dataset, classes = c("character"), add = check_collection, .var.name = "dataset")
     }
   }
 

@@ -32,6 +32,14 @@ test_that("search Glaucis dohrnii photos", {
 
 })
 
+test_that("search Glaucis dohrnii photos", {
+
+  df1 <- query_gbif(term = 'Glaucis dohrnii', type =  "still image", dataset = "b1047888-ae52-4179-9dd5-5448ea342a24")
+
+  expect_true(nrow(df1) >=  22)
+
+})
+
 
 
 test_that("no result", {

@@ -22,7 +22,7 @@
 #'
 
 check_gbif_datasets <- function(path = tempdir()) {
-  # check internet connection
+  #check internet connection
   a <- try(RCurl::getURL("https://www.gbif.org"), silent = TRUE)
   if (is(a, "try-error")) {
     stop2("No connection to gbif (check your internet connection!)")
@@ -44,7 +44,7 @@ check_gbif_datasets <- function(path = tempdir()) {
     utils::write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
   }
 
-  # tell users were is the file and allow them to open it
-  # cli::cli_text("... edit your {.file ~/.Rprofile} file.}")
+  # tell users where is the file and allow them to open it
+  cli::cli_text("... edit your {.file ~/.Rprofile} file.}")
   cli::cli_text(paste0("The csv file (", paste0("gbif_datasets-", Sys.time(), ".csv"), ") with the gbif datasets info can be found at ", path))
 }

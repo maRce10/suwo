@@ -92,15 +92,18 @@ query_gbif <-
       stop2("'term' must be supplied")
     }
 
-    # check internet connection
-    a <- try(RCurl::getURL("https://api.gbif.org/"), silent = TRUE)
-    if (is(a, "try-error")) {
-      stop2("No connection to GBIF API (check your internet connection!)")
+    if (tolower(Sys.info()[["sysname"]]) != "windows"){
+      # check internet connection
+      a <- try(RCurl::getURL("https://api.gbif.org/"), silent = TRUE)
+      if (is(a, "try-error")) {
+        stop2("No connection to GBIF API (check your internet connection!)")
+      }
+
+      if (a == "Could not connect to the database") {
+        stop2("GBIF website is apparently down")
+      }
     }
 
-    if (a == "Could not connect to the database") {
-      stop2("GBIF website is apparently down")
-    }
 
     # If cores is not numeric
     if (!is.numeric(cores)) {
@@ -115,8 +118,8 @@ query_gbif <-
 
     srch_trm <- paste0(
       "https://api.gbif.org/v1/occurrence/search?limit=300&",
-      if (is.null(dataset)) "" else dataset,
-      "scientificName=", term, "&media_type=",
+      if (is.null(dataset)) "" else "datasetKey=", dataset,
+      "&scientificName=", term, "&media_type=",
       type
     )
 

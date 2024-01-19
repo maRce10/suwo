@@ -4,7 +4,7 @@ Title: Access Nature Media Repositories Through R
 Version: 0.1.0
 Author: Marcelo Araya-Salas & Jorge Elizondo-Calvo
 Maintainer: Marcelo Araya-Salas <marcelo.araya@ucr.ac.cr>
-Description: suwo is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for,bbtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please open a new issue if you want to suggest a new repository.
+Description: suwo is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for,obtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please open a new issue if you want to suggest a new repository.
 URL: https://marce10.github.io/suwo/, https://github.com/maRce10/suwo
 BugReports: https://github.com/maRce10/suwo/issues/
 License: GPL (>= 2)
