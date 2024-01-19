@@ -103,9 +103,9 @@ query_xenocanto <-
       }
 
       # replace remaining spaces with "&"
-      term <- gsub(" ", "&", term)
+      term <- gsub(" ", "+", term)
     } else {
-      term <- gsub(" ", "%20", term)
+      term <- gsub(" ", "+", term)
     }
 
     # initialize search
@@ -119,7 +119,8 @@ query_xenocanto <-
       if (verbose) {
         cat(paste(
           colortext("No audios were found", "failure"),
-          add_emoji("sad")
+          add_emoji("sad"),
+          "\n"
         ))
       }
     } else {
@@ -335,7 +336,7 @@ query_xenocanto <-
 
 
       if (pb & verbose) {
-        cat(colortext(paste(nrow(results), "audio(s) found"), "success"), add_emoji("happy"))
+        cat(colortext(paste(nrow(results), "audio(s) found"), "success"), add_emoji("happy"), "\n")
       }
     }
 

@@ -575,7 +575,7 @@ out <- sapply(list.files("./man", full.names = TRUE), function(x) tools::showNon
 
 ```
 
-## troubleshoot warbleR functions ####
+## troubleshoot suwo functions ####
 ```{r query_observation, eval = FALSE}
 
 FUN <- "query_observation"
@@ -606,3 +606,34 @@ df1 <- query_observation(term = 'Serinus serinus', type = "sound", token = token
 
 ```
 
+```{r query_observation, eval = FALSE}
+
+FUN <- "query_xenocanto"
+
+#run function
+source(file.path("./R", paste0(FUN,".R")))
+# setwd(tempdir())
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+source("./R/internal_functions.R")
+
+df1 <- query_xenocanto(term = 'Glaucis dohrnii')
+
+df1 <- query_xenocanto(term = 'Glaucis dohrnii')
+df1 <- query_xenocanto(term = 'Turdus grayi')
+df1 <- query_xenocanto(term = 'Serinus serinus')
+
+df1 <- query_xenocanto(term = 'Chupacabras')
+df1 <- query_xenocanto(term = 'Chupacabras')
+
+
+```
