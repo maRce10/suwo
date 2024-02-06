@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_inaturalist(term = 'Turdus iliacus', type = "Sound", cores = 4)
+# df1 <- query_inaturalist(term = 'Turdus iliacus', type = "sound", cores = 4)
 #' View(df1)
 #' }
 #'
