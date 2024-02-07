@@ -63,10 +63,9 @@ query_macaulay <-
     org_type <- match.arg(type)
 
     type <- switch(type,
-                   sound = "Sound",
-                   `still image` = "StillImage",
-                   `moving image` = "MovingImage",
-                   `interactive resource` = "InteractiveResource"
+                   sound = "audio",
+                   `still image` = "photo",
+                   `video` = "video"
     )
 
     if (tolower(Sys.info()[["sysname"]]) != "windows"){
@@ -81,36 +80,46 @@ query_macaulay <-
       }
     }
 
+    result_csv_data_zip <- download.file("https://www.birds.cornell.edu/clementschecklist/wp-content/uploads/2023/12/Clements-v2023-October-2023-csv.zip", paste("~/Documentos/GitHub/suwo/", "result_csv_data_zip", sep = ""), mode = "wb")
 
-    # format JSON
-    term <- gsub(" ", "%20", term)
+    outDir<-"~/Documentos/GitHub/suwo/"
 
+    unzip("~/Documentos/GitHub/suwo/result_csv_data_zip", exdir=outDir)
 
+    taxon_codes_csv <- try(utils::read.csv("~/Documentos/GitHub/suwo/Clements-v2023-October-2023.csv"), silent = TRUE)
 
-    srch_trm <- paste0("https://search.macaulaylibrary.org/catalog?mediaType=", media.type, "&taxonCode=", taxoncode)
-
-
-
-    base.srch.pth <- jsonlite::fromJSON(srch_trm)
+    taxon_codes_match  <- grep(term, taxon_codes_csv$scientific.name)
 
     # If species not found in repository
-    if (base.srch.pth$count == 0) {
+    if (length(taxon_codes_match) < 1) {
       stop2("Species was not found in database")
     }
 
-    #Check if token is available
-    if (is.null(token)){
-      stop2("Invalid token for observation.org")
+    taxon_code_search <- data.frame(taxon_code = taxon_codes_csv$species_code[taxon_codes_match])
+
+    result_csv_data <- try(utils::read.csv(download_srch_trm), silent = TRUE)
+
+    for (taxon_code in taxon_code_search$taxon_code) {
+
+      #Build base for url search
+      download_srch_trm <- paste0("https://search.macaulaylibrary.org/api/v2/export.csv?taxonCode=", taxon_code, "&mediaType=", type)
+
+      library(httr)
+
+
+      url <- download_srch_trm
+      username <- "your_username"
+      password <- "your_password"
+
+      response <- GET(url, authenticate(username, password))
+
+      # Download CSV file
+      taxon_code_result <- download.file(download_srch_trm, paste("~/Documentos/GitHub/suwo/", "CSV", sep = ""), mode = "wb")
+      # Combine data into the main DataFrame
+      query_output_df <- rbind(query_output_df, taxon_code_result)
+
+      Sys.sleep(10)
     }
-
-    # Set the species ID and API endpoint URL
-    species_id <- base.srch.pth$results$id
-    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
-
-    # JSON format
-    data <- jsonlite::fromJSON(dataURL)
-
-    data_org <- data
 
     if (data$count == 0) {
       if (verbose) {
@@ -122,8 +131,6 @@ query_macaulay <-
         cat(paste(colortext(paste0("Obtaining metadata (", data$count, " candidate observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
       }
     }
-    # get total number of pages
-    offsets <- (seq_len(ceiling(data$count / 100)) - 1) * 100
 
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
@@ -131,7 +138,6 @@ query_macaulay <-
     } else {
       cl <- cores
     }
-
 
     query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i) {
       # print()
