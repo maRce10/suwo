@@ -107,13 +107,6 @@ query_macaulay <-
     species_id <- base.srch.pth$results$id
     url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
 
-    # Set the authorization header with your bearer token
-    bearer_token <- token
-    headers <- c("Authorization" = paste("Bearer", bearer_token))
-
-    # Make the GET request and retrieve the response
-    dataURL <- RCurl::getURL(url_inquiry, httpheader = headers)
-
     # JSON format
     data <- jsonlite::fromJSON(dataURL)
 
