@@ -80,169 +80,32 @@ query_macaulay <-
       }
     }
 
-    result_csv_data_zip <- download.file("https://www.birds.cornell.edu/clementschecklist/wp-content/uploads/2023/12/Clements-v2023-October-2023-csv.zip", paste("~/Documentos/GitHub/suwo/", "result_csv_data_zip", sep = ""), mode = "wb")
 
-    outDir<-"~/Documentos/GitHub/suwo/"
+    search_url <- paste0("https://search.macaulaylibrary.org/catalog?view=list&mediaType=", type)
 
-    unzip("~/Documentos/GitHub/suwo/result_csv_data_zip", exdir=outDir)
+    browseURL(search_url)
 
-    taxon_codes_csv <- try(utils::read.csv("~/Documentos/GitHub/suwo/Clements-v2023-October-2023.csv"), silent = TRUE)
-
-    taxon_codes_match  <- grep(term, taxon_codes_csv$scientific.name)
-
-    # If species not found in repository
-    if (length(taxon_codes_match) < 1) {
-      stop2("Species was not found in database")
-    }
-
-    taxon_code_search <- data.frame(taxon_code = taxon_codes_csv$species_code[taxon_codes_match])
-
-    result_csv_data <- try(utils::read.csv(download_srch_trm), silent = TRUE)
-
-    for (taxon_code in taxon_code_search$taxon_code) {
-
-      #Build base for url search
-      download_srch_trm <- paste0("https://search.macaulaylibrary.org/api/v2/export.csv?taxonCode=", taxon_code, "&mediaType=", type)
-
-      library(httr)
-
-
-      url <- download_srch_trm
-      username <- "your_username"
-      password <- "your_password"
-
-      response <- GET(url, authenticate(username, password))
-
-      # Download CSV file
-      taxon_code_result <- download.file(download_srch_trm, paste("~/Documentos/GitHub/suwo/", "CSV", sep = ""), mode = "wb")
-      # Combine data into the main DataFrame
-      query_output_df <- rbind(query_output_df, taxon_code_result)
-
-      Sys.sleep(10)
-    }
-
-    if (data$count == 0) {
-      if (verbose) {
-        cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
-      }
-    } else {
-      # message number of results
-      if (pb & verbose) {
-        cat(paste(colortext(paste0("Obtaining metadata (", data$count, " candidate observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
-      }
-    }
-
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & cores > 1) {
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
-    } else {
-      cl <- cores
-    }
-
-    query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i) {
-      # print()
-      #
-      srch_trm <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
-
-      dataURL <- getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
-
-      # JSON format
-      data <- fromJSON(dataURL)
-
-      # format as list of data frame
-      data$results <- lapply(seq_len(nrow(data$results)), function(u) {
-        x <- data$results[u, ]
-
-        if (type == "StillImage") {
-          media_URL <- if (length(x$photos[[1]]) > 0) {
-            unlist(x$photos)
-          } else {
-            NA
-          }
-        }
-
-        if (type == "Sound") {
-          media_URL <- if (length(x$sounds[[1]]) > 0) {
-            unlist(x$sounds)
-          } else {
-            NA
-          }
-        }
-
-        # remove lists
-        x <- x[!sapply(x, is.list)]
-
-        # make it data frame
-        # X_df <- data.frame(t(unlist(x)))
-
-        # add media details
-        X_df <- data.frame(x, media_URL, row.names = seq_len(length(media_URL)))
-
-        # remove NAs
-        X_df <- X_df[!is.na(X_df$media_URL), ]
-
-
-        X_df$species_name <- if (nrow(X_df) > 0) data_org$results$species_detail$scientific_name[u] else vector(mode = "character")
-
-        return(X_df)
-      })
-
-      # get common names to all data frames in X
-      common_names <- unique(unlist(lapply(data$results, names)))
-
-      # add missing columns to all data frames in X
-      data$results <- lapply(data$results, function(e) {
-        nms <- names(e)
-        if (length(nms) != length(common_names)) {
-          for (o in common_names[!common_names %in% nms]) {
-            e <-
-              data.frame(e,
-                         NA,
-                         stringsAsFactors = FALSE,
-                         check.names = FALSE
-              )
-            names(e)[ncol(e)] <- o
-          }
-        }
-        return(e)
-      })
-
-      # all results in a single data frame
-      output_df <- do.call(rbind, data$results)
-
-      return(output_df)
-    })
-
-    # get common names to all data frames in X
-    common_names <- unique(unlist(lapply(query_output_list, names)))
-
-    # add missing columns to all data frames in X
-    query_output_list <- lapply(query_output_list, function(e) {
-      nms <- names(e)
-      if (length(nms) != length(common_names)) {
-        for (o in common_names[!common_names %in% nms]) {
-          e <-
-            data.frame(e,
-                       NA,
-                       stringsAsFactors = FALSE,
-                       check.names = FALSE
-            )
-          names(e)[ncol(e)] <- o
-        }
-      }
-      return(e)
-    })
-
-    # all results in a single data frame
-    query_output_df <- do.call(rbind, query_output_list)
+    # find csv in files
+    query_output_df <- "CSV"
 
     # Change column name for media download function
     colnames(query_output_df)[colnames(query_output_df) == "media_URL"] <- "file_url"
-    colnames(query_output_df)[colnames(query_output_df) == "id"] <- "key"
-    colnames(query_output_df)[colnames(query_output_df) == "species"] <- "species_code"
-    colnames(query_output_df)[colnames(query_output_df) == "species_name"] <- "species"
+    colnames(query_output_df)[colnames(query_output_df) == "assetId"] <- "key"
+    colnames(query_output_df)[colnames(query_output_df) == "eBird Species Code"] <- "species_code"
+    colnames(query_output_df)[colnames(query_output_df) == "Scientific Name"] <- "species"
+
+    for (key in query_output_df$key) {
+
+      base.srch.pth <- paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", key, "/", type)
+
+      # Download media file
+      taxon_code_result <- download.file(base.srch.pth,destfile = "~/Documentos/GitHub/suwo/", assetId,".mp3")
+
+      Sys.sleep(1)
+    }
+
     # Add repository ID
-    query_output_df$repository <- "Observation"
+    query_output_df$repository <- "Macaulay"
 
     return(query_output_df)
-  }
+}
