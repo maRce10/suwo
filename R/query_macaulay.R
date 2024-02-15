@@ -85,8 +85,10 @@ query_macaulay <-
 
     browseURL(search_url)
 
+    file_path <- file.find(path = ".", pattern = macaulay.file, up = 3, down = 1)
+
     # find csv in files
-    query_output_df <- "CSV"
+    query_output_df <- read.csv(file_path)
 
     # Change column name for media download function
     colnames(query_output_df)[colnames(query_output_df) == "media_URL"] <- "file_url"
