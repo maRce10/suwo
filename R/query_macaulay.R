@@ -32,7 +32,7 @@
 #'
 query_macaulay <-
   function(term = NULL,
-           type = c("sound", "still image"),
+           type = c("audio", "photo", "video"),
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
@@ -81,6 +81,7 @@ query_macaulay <-
     }
 
 
+
     search_url <- paste0("https://search.macaulaylibrary.org/catalog?view=list&mediaType=", type)
 
     browseURL(search_url)
@@ -89,8 +90,12 @@ query_macaulay <-
       user_input <- readline("Is the data table csv downloaded? (y/n)  ")
       if(user_input != 'y') stop('Exiting since you did not press y')
     }
-    install.packages("common")
-    library(common)
+    checkFunction()
+
+    #install.packages("common")
+    #library(common)
+
+
     file_path <- file.find(path = ".", pattern = "ML_*.csv", up = 3, down = 1)
 
     if(file_path == "") stop('file not found')
@@ -103,16 +108,10 @@ query_macaulay <-
     colnames(query_output_df)[colnames(query_output_df) == "eBird.Species.Code"] <- "species_code"
     colnames(query_output_df)[colnames(query_output_df) == "Scientific.Name"] <- "species"
 
-    for (key in query_output_df$key) {
 
-      query_output_df$file_url <- paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", key, "/", type)
-      #
-      # # Download media file
-      # taxon_code_result <- download.file(base.srch.pth,destfile = "~/Documentos/GitHub/suwo/audios/", assetId,".mp3")
-      #
-      # Sys.sleep(1)
-
-  }
+    query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x){
+      paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", query_output_df$key[x], "/", type)}
+                                       )
     # Add repository ID
     query_output_df$repository <- "Macaulay"
 

@@ -121,6 +121,38 @@ download_media <-
             USE.NAMES = FALSE
           )
       }
+    }
+
+    if (metadata$repository[1] == "Macaulay") {
+
+      metadata$extension <-
+        vapply(
+          X = metadata$file_url,
+          FUN = function(x) {
+            x2 <- strsplit(x, "asset/")[[1]][2]
+
+            media_type <- strsplit(x2, "/")[[1]][2]
+
+            if (media_type == "audio") {
+              extension <- ".mp3"
+            }
+
+            if (media_type == "photo") {
+              extension <- ".jpeg"
+            }
+
+            if (media_type == "video") {
+              extension <- ".mp4"
+            }
+
+            return(extension)
+          },
+          FUN.VALUE = character(1),
+          USE.NAMES = FALSE
+        )
+
+
+
     } else if (metadata$repository[1] != "XC") {
       metadata$extension <-
         vapply(
