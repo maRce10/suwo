@@ -86,17 +86,19 @@ query_macaulay <-
 
     browseURL(search_url)
 
+    #Obtain file snapshot
+    snapshot <- fileSnapshot()
+
     checkFunction <- function() {
       user_input <- readline("Is the data table csv downloaded? (y/n)  ")
       if(user_input != 'y') stop('Exiting since you did not press y')
     }
+
+    #Obtain file path from added files
     checkFunction()
+    changed_files <- changedFiles(snapshot)
 
-    #install.packages("common")
-    #library(common)
-
-
-    file_path <- file.find(path = ".", pattern = "ML_*.csv", up = 3, down = 1)
+    file_path <- changed_files[1][grep("\\.csv$",changed_files[1])]
 
     if(file_path == "") stop('file not found')
 
