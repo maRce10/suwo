@@ -85,27 +85,34 @@ query_macaulay <-
 
     browseURL(search_url)
 
-    file_path <- file.find(path = ".", pattern = macaulay.file, up = 3, down = 1)
+    checkFunction <- function() {
+      user_input <- readline("Is the data table csv downloaded? (y/n)  ")
+      if(user_input != 'y') stop('Exiting since you did not press y')
+    }
+    install.packages("common")
+    library(common)
+    file_path <- file.find(path = ".", pattern = "ML_*.csv", up = 3, down = 1)
+
+    if(file_path == "") stop('file not found')
 
     # find csv in files
     query_output_df <- read.csv(file_path)
 
     # Change column name for media download function
-    colnames(query_output_df)[colnames(query_output_df) == "media_URL"] <- "file_url"
-    colnames(query_output_df)[colnames(query_output_df) == "assetId"] <- "key"
-    colnames(query_output_df)[colnames(query_output_df) == "eBird Species Code"] <- "species_code"
-    colnames(query_output_df)[colnames(query_output_df) == "Scientific Name"] <- "species"
+    colnames(query_output_df)[colnames(query_output_df) == "ML.Catalog.Number"] <- "key"
+    colnames(query_output_df)[colnames(query_output_df) == "eBird.Species.Code"] <- "species_code"
+    colnames(query_output_df)[colnames(query_output_df) == "Scientific.Name"] <- "species"
 
     for (key in query_output_df$key) {
 
-      base.srch.pth <- paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", key, "/", type)
+      query_output_df$file_url <- paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", key, "/", type)
+      #
+      # # Download media file
+      # taxon_code_result <- download.file(base.srch.pth,destfile = "~/Documentos/GitHub/suwo/audios/", assetId,".mp3")
+      #
+      # Sys.sleep(1)
 
-      # Download media file
-      taxon_code_result <- download.file(base.srch.pth,destfile = "~/Documentos/GitHub/suwo/", assetId,".mp3")
-
-      Sys.sleep(1)
-    }
-
+  }
     # Add repository ID
     query_output_df$repository <- "Macaulay"
 
