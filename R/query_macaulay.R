@@ -117,5 +117,13 @@ query_macaulay <-
     # Add repository ID
     query_output_df$repository <- "Macaulay"
 
+    if (!all_data) {
+      query_output_df$country <- NA
+      query_output_df$latitude <- NA
+      query_output_df$longitude <- NA
+      query_output_df$date <- query_output_df$time_observed_at
+      query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
+    }
+
     return(query_output_df)
 }
