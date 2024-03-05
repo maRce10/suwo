@@ -171,7 +171,8 @@ downloadFUN <- function(metadata, x, path) {
       quiet = TRUE,
       mode = "wb",
       cacheOK = TRUE,
-      extra = getOption("download.file.extra")
+      extra = getOption("download.file.extra"),
+      Sys.sleep(0.1)
     ),
     silent = TRUE
   )
