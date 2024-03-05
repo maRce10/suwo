@@ -167,14 +167,17 @@ download_media <-
               start = max_x2,
               stop = nchar(x2)
             )
-
-            if (extension == ".mpga") {
-              extension <- ".mp3"
-            }
-
-            if (extension == ".php") {
-              extension <- ".jpeg"
-            }
+            # if (length(grep("photos",X)) > 0){
+            #   if (extension == ".php") {
+            #     extension <- ".jpeg"
+            #   }
+            # }
+            #
+            # if (length(grep("sounds",X)) > 0){
+            #   if (extension == ".mpga") {
+            #     extension <- ".mp3"
+            #   }
+            # }
 
             return(extension)
           },
