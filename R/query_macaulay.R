@@ -90,13 +90,11 @@ query_macaulay <-
     #Obtain file snapshot
     snapshot <- fileSnapshot()
 
-    checkFunction <- function() {
-      user_input <- readline("Is the data table csv downloaded? (y/n)  ")
-      if(user_input != 'y') stop('Exiting since you did not press y')
-    }
+    #Ask if user has downloaded csv file from Macaulay library
+    user_input <- readline("Is the data table csv downloaded? (y/n)  ")
+    if(user_input != 'y') stop('Exiting since you did not press y')
 
     #Obtain file path from added files
-    checkFunction()
     changed_files <- changedFiles(snapshot)
 
     file_path <- changed_files[["added"]][grep("\\.csv$",changed_files[["added"]])]

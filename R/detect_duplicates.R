@@ -50,19 +50,27 @@ detect_duplicates <-
       stop2("'dataframe_2' must be supplied")
     }
 
-    if (dataframe_1$repository[1] == "gbif" ) {
-      id_col_df1 <- df1[[catalogNumber]]
-      id_col_df2 <- df2[[key]]
+    if (dataframe_1$repository[1] == "GBIF" ) {
+      id_col_df1 <- as.numeric(gsub("\\D", "", dataframe_1[["catalogNumber"]]))
+      id_col_df2 <- dataframe_2[["key"]]
 
       # Find duplicates
       duplicates <- id_col_df1[id_col_df1 %in% id_col_df2]
     }
 
-    id_col_df1 <- df1[[id_column]]
-    id_col_df2 <- df2[[id_column]]
+    print(duplicates)
 
-    # Find duplicates
-    duplicates <- id_col_df1[id_col_df1 %in% id_col_df2]
+    user_input <- readline("Would you like to remove duplicates from merged metadata dataframe? (y/n)  ")
+    if(user_input != 'y') {
+      #Remove duplicates from merged dataframe
+      }
+
+
+    # id_col_df1 <- df1[[id_column]]
+    # id_col_df2 <- df2[[id_column]]
+    #
+    # # Find duplicates
+    # duplicates <- id_col_df1[id_col_df1 %in% id_col_df2]
 
     return(duplicates)
   }
