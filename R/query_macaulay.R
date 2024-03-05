@@ -36,7 +36,8 @@ query_macaulay <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           token = NULL) {
+           token = NULL,
+           all_data = TRUE) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -98,7 +99,7 @@ query_macaulay <-
     checkFunction()
     changed_files <- changedFiles(snapshot)
 
-    file_path <- changed_files[1][grep("\\.csv$",changed_files[1])]
+    file_path <- changed_files[["added"]][grep("\\.csv$",changed_files[["added"]])]
 
     if(file_path == "") stop('file not found')
 
@@ -110,6 +111,12 @@ query_macaulay <-
     colnames(query_output_df)[colnames(query_output_df) == "eBird.Species.Code"] <- "species_code"
     colnames(query_output_df)[colnames(query_output_df) == "Scientific.Name"] <- "species"
 
+    # Change column names to standard metadata used in query functions
+    colnames(query_output_df)[colnames(query_output_df) == "Date"] <- "date"
+    colnames(query_output_df)[colnames(query_output_df) == "Country"] <- "country"
+    colnames(query_output_df)[colnames(query_output_df) == "Locality"] <- "location"
+    colnames(query_output_df)[colnames(query_output_df) == "Longitude"] <- "longitude"
+    colnames(query_output_df)[colnames(query_output_df) == "Latitude"] <- "latitude"
 
     query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x){
       paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", query_output_df$key[x], "/", type)}
@@ -118,10 +125,6 @@ query_macaulay <-
     query_output_df$repository <- "Macaulay"
 
     if (!all_data) {
-      query_output_df$country <- NA
-      query_output_df$latitude <- NA
-      query_output_df$longitude <- NA
-      query_output_df$date <- query_output_df$time_observed_at
       query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
     }
 
