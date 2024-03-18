@@ -83,7 +83,7 @@ query_macaulay <-
 
 
     find_taxon_code <- function(species_name, data_frame) {
-      taxon_code <- taxon_code_df$species_code[data_frame$'scientific name' == user_input_species]
+      taxon_code <- data_frame$species_code[data_frame$scientific.name == species_name]
       if (length(taxon_code) > 0) {
         return(taxon_code[1])
       } else {
@@ -91,9 +91,10 @@ query_macaulay <-
       }
     }
 
-    #taxon_code_df <- read_csv("Clements-v2023-October-2023.csv")
 
-    user_input_species <- readline(prompt = "Enter the species name: ")
+    taxon_code_df <- read.csv("Clements-v2023-October-2023.csv")
+
+    user_input_species <- term
 
     taxon_code <- find_taxon_code(user_input_species, taxon_code_df)
 
