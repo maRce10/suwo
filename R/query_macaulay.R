@@ -82,16 +82,6 @@ query_macaulay <-
     }
 
 
-    find_taxon_code <- function(species_name, data_frame) {
-      taxon_code <- data_frame$species_code[data_frame$scientific.name == species_name]
-      if (length(taxon_code) > 0) {
-        return(taxon_code[1])
-      } else {
-        return(NULL)
-      }
-    }
-
-
     taxon_code_df <- read.csv("Clements-v2023-October-2023.csv")
 
     user_input_species <- term
