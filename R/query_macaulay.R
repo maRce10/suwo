@@ -81,19 +81,15 @@ query_macaulay <-
       }
     }
 
-
-    taxon_code_df <- read.csv("Clements-v2023-October-2023.csv")
-
     user_input_species <- term
 
-    taxon_code <- find_taxon_code(user_input_species, taxon_code_df)
+    taxon_code <- taxon_code_search(user_input_species)
 
     if (!is.null(taxon_code)) {
       cat(paste("The species code for '", user_input_species, "' is '", taxon_code, "'.\n", sep = ""))
     } else {
       cat(paste("No matching species found for '", user_input_species, "'.\n", sep = ""))
     }
-
 
     search_url <- paste0("https://search.macaulaylibrary.org/catalog?view=list&mediaType=", type,"&taxonCode=",taxon_code)
 
