@@ -48,17 +48,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">detect_duplicates</span><span class="op">(</span>dataframe_1 <span class="op">=</span> <span class="cn">NULL</span>, dataframe_2 <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">all_data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">detect_duplicates</span><span class="op">(</span>dataframe_1 <span class="op">=</span> <span class="cn">NULL</span>, dataframe_2 <span class="op">=</span> <span class="cn">NULL</span>, all_data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>all_data</dt>
+    <dl><dt>dataframe_1</dt>
+<dd><p>dataframe refering to the metadata containing the multimedia information obtained from query functions.</p></dd>
+
+
+<dt>dataframe_2</dt>
+<dd><p>dataframe refering to the metadata containing the multimedia information obtained from query functions.</p></dd>
+
+
+<dt>all_data</dt>
 <dd><p>Logical argument that determines if all data available from database is shown in the results of search. Default is <code>TRUE</code>.</p></dd>
-
-
-<dt>dataframe</dt>
-<dd><p>dataframe refering to the metadata containing the multimedia information obtained from query     functions.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -72,10 +76,6 @@ info_text, permalink, determination_requirements, file_url, repository</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function compares two dataframes to detect repeated data.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p></p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
