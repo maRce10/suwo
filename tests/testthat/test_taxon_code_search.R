@@ -1,7 +1,7 @@
 library(testthat)
 test_that("search Glaucis dohrnii taxon code", {
 
-  gd_taxon_code <- taxon_clements_search(species_name = 'Glaucis dohrnii')
+  gd_taxon_code <- taxon_code_search(species_name = 'Glaucis dohrnii')
 
   expect_true(gd_taxon_code == "hobher2")
 
