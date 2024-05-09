@@ -9,7 +9,7 @@ test_that("search Glaucis dohrnii taxon code", {
 
 test_that("search Aristolochia baetica images", {
 
-  ti_taxon_code <- query_gbif(term = 'Turdus iliacus')
+  ti_taxon_code <- taxon_code_search(term = 'Turdus iliacus')
 
   expect_true(ti_taxon_code == "redwin")
 
