@@ -20,8 +20,6 @@
 #'
 #' }
 #'
-#' @references {
-#' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 download_media <-
