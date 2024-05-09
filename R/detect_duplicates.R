@@ -17,9 +17,6 @@
 #' View(df3)
 #' }
 #'
-#' @references {
-#'
-#' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 detect_duplicates <-
