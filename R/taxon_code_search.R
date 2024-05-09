@@ -2,7 +2,7 @@
 #'
 #' \code{taxon_code_search} searches for metadata from \href{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2023/download/}{clements}.
 #' @usage taxon_code_search(species_name = NULL)
-#' @param term species name vector of length one indicating the species, to query 'clements database. For example \emph{Phaethornis longirostris}.
+#' @param species_name species name vector of length one indicating the species, to query 'clements database. For example \emph{Phaethornis longirostris}.
 #' @return Returns the taxon code for the given species name if match found in the clements taxon code data base
 #' @export
 #' @name taxon_code_search
