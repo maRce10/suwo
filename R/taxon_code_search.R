@@ -13,9 +13,6 @@
 # taxon_code_turdus <- taxon_code_search(species_name = 'Turdus iliacus', taxon_code_df = clements_data)
 #' }
 #'
-#' @references {
-#'
-#' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 #'
