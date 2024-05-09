@@ -4,10 +4,10 @@
 \alias{taxon_code_search}
 \title{Access 'taxon codes'}
 \usage{
-taxon_code_search(species_name = NULL, taxon_code_df = NULL)
+taxon_code_search(species_name = NULL)
 }
 \arguments{
-\item{term}{species name vector of length one indicating the species, to query 'clements database. For example \emph{Phaethornis longirostris}.}
+\item{species_name}{species name vector of length one indicating the species, to query 'clements database. For example \emph{Phaethornis longirostris}.}
 }
 \value{
 Returns the taxon code for the given species name if match found in the clements taxon code data base
@@ -23,11 +23,6 @@ This function queries for taxon code information from the clements taxon code da
 # search
 }
 
-}
-\references{
-{
-
-}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

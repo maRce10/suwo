@@ -3,6 +3,7 @@
 export(check_gbif_datasets)
 export(detect_duplicates)
 export(download_media)
+export(map_instances)
 export(query_gbif)
 export(query_inaturalist)
 export(query_macaulay)

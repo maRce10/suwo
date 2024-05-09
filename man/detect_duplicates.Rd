@@ -4,12 +4,14 @@
 \alias{detect_duplicates}
 \title{Access 'observation' recordings and metadata}
 \usage{
-detect_duplicates(dataframe_1 = NULL, dataframe_2 = NULL, all_data)
+detect_duplicates(dataframe_1 = NULL, dataframe_2 = NULL, all_data = TRUE)
 }
 \arguments{
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.}
+\item{dataframe_1}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}
 
-\item{dataframe}{dataframe refering to the metadata containing the multimedia information obtained from query     functions.}
+\item{dataframe_2}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}
+
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media
@@ -28,11 +30,6 @@ This function compares two dataframes to detect repeated data.
 View(df3)
 }
 
-}
-\references{
-{
-
-}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

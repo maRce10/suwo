@@ -4,14 +4,14 @@
 \alias{query_macaulay}
 \title{Access 'observation' recordings and metadata}
 \usage{
-query_macaulay(term = NULL, type = c("sound", "still image"),
-cores = 1, pb = TRUE, verbose = TRUE, token = NULL)
+query_macaulay(term = NULL, type = c("audio", "photo","video"),
+cores = 1, pb = TRUE, verbose = TRUE, token = NULL, all_data = TRUE)
 }
 \arguments{
 \item{term}{Character vector of length one indicating the
 species, to query 'observation' database. For example \emph{Phaethornis longirostris}.}
 
-\item{type}{Character vector with media type to query for. Currently 'still image' and 'sound' are available.}
+\item{type}{Character vector with media type to query for. Currently 'photo' and 'audio' are available.}
 
 \item{cores}{Numeric. Controls whether parallel computing is applied.
 It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).}
@@ -21,6 +21,8 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
 
 \item{token}{Character refering to the token assigned by Observation.org as authorization for searches.}
+
+\item{all_data}{Logical argument that defines if all data is shown.}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media
@@ -43,7 +45,7 @@ View(df1)
 }
 \references{
 {
-
+Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
 }
 }
 \author{

@@ -35,10 +35,6 @@ File downloading process can be interrupted and resume later as long as the work
 }
 
 }
-\references{
-{
-}
-}
 \seealso{
 \code{\link{query_gbif}},
 }

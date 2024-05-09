@@ -87,12 +87,14 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
   # stop if X is not a data frame
   if (!is.data.frame(X)) stop2("X is not a data frame")
 
-  # make species column
-  X$species <- X$species
-
   # make lat lon numeric and remove rows with no coords
-  X$Latitude <- as.numeric(as.character(X$latitude))
-  X$Longitude <- as.numeric(as.character(X$longitude))
+
+  #Change the names of the variables of latitude and longitude
+  names(X)[names(X) == "latitude"] <- "Latitude"
+  names(X)[names(X) == "longitude"] <- "Longitude"
+
+  X$Latitude <- as.numeric(as.character(X$Latitude))
+  X$Longitude <- as.numeric(as.character(X$Longitude))
   X <- X[!is.na(X$Latitude) & !is.na(X$Longitude), , drop = FALSE]
 
   # stop if no rows left
@@ -104,7 +106,7 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     if (!any(it == "jpeg", it == "tiff")) stop2(paste("Image type", it, "not allowed"))
 
     # get species names (common name)
-    spn <- length(unique(X$English_name))
+    spn <- length(unique(X$species))
 
     # reset graphic device
     try(dev.off(), silent = TRUE)
@@ -249,14 +251,14 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     # repeat many times so colors are "recycled"
     cols <- rep(cols, 100)
 
-    # change NAs in subspecies
-    X$Subspecies <- as.character(X$Subspecies)
-    X$Subspecies[is.na(X$Subspecies) | X$Subspecies == ""] <- "not provided"
+    # # change NAs in subspecies
+    # X$Subspecies <- as.character(X$Subspecies)
+    # X$Subspecies[is.na(X$Subspecies) | X$Subspecies == ""] <- "not provided"
 
     # if only one species use subspecies for color marker
     if (length(unique((X$species))) == 1) {
       # label pop up markers
-      X$labels <- X$Subspecies
+      X$labels <- X$species
       X$labels[X$labels == "not provided"] <- "Subsp. not provided"
     } else {
       # labels for hovering
@@ -276,7 +278,7 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     )
 
     # make content for popup
-    content <- paste0("<b><a href='https://www.xeno-canto.org/", X$Recording_ID, "'>", paste0("XC", X$Recording_ID), "</a></b>", "<br/><i>", paste(X$Genus, X$Specific_epithet, sep = " "), "</i><br/> Subspecies: ", X$Subspecies, "<br/> Country: ", X$Country, "<br/> Locality: ", X$Locality, "<br/> Voc.type: ", X$Vocalization_type, "<br/> Recordist: ", X$Recordist, paste0("<b><a href='https://www.xeno-canto.org/", X$Recording_ID, "/download'>", "<br/>", "listen</a>"))
+    content <- paste0("<b><a href='https://www.xeno-canto.org/", X$key, "'>", paste0("XC", X$Recording_ID), "</a></b>", "<br/><i>", paste(X$species, sep = " "))
 
 
     # make base map

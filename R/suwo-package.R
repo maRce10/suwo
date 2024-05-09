@@ -33,7 +33,7 @@
 #'
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name suwo
 #' @details License: GPL (>= 2)
 NULL
