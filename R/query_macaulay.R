@@ -5,12 +5,13 @@
 #' cores = 1, pb = TRUE, verbose = TRUE, token = NULL, all_data = TRUE)
 #' @param term Character vector of length one indicating the
 #'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
-#' @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
+#' @param type Character vector with media type to query for. Currently 'photo' and 'audio' are available.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param token Character refering to the token assigned by Observation.org as authorization for searches.
+#' @param all_data Logical argument that defines if all data is shown.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
