@@ -1,8 +1,8 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
-#' @usage query_macaulay(term = NULL, type = c("sound", "still image"),
-#' cores = 1, pb = TRUE, verbose = TRUE, token = NULL)
+#' @usage query_macaulay(term = NULL, type = c("audio", "photo","video"),
+#' cores = 1, pb = TRUE, verbose = TRUE, token = NULL, all_data = TRUE)
 #' @param term Character vector of length one indicating the
 #'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
