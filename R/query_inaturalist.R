@@ -33,7 +33,7 @@
 #' }
 #'
 #' @references {
-#'
+#' iNaturalist. Available from https://www.inaturalist.org. Accessed [date]
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
