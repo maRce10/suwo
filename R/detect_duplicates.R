@@ -1,7 +1,7 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{detect_duplicates} detects duplicate data in data frames.
-#' @usage detect_duplicates(dataframe_1 = NULL, dataframe_2 = NULL, all_data)
+#' @usage detect_duplicates(dataframe_1 = NULL, dataframe_2 = NULL, all_data = TRUE)
 #' @param dataframe dataframe refering to the metadata containing the multimedia information obtained from query     functions.
 #' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
 #' @return If all_data is not provided the function returns a data frame with the following media
