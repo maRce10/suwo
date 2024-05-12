@@ -637,3 +637,42 @@ df1 <- query_xenocanto(term = 'Chupacabras')
 
 
 ```
+
+
+```{r map_locations}
+
+FUN <- "map_locations"
+
+#run function
+source(file.path("./R", paste0(FUN,".R")))
+# setwd(tempdir())
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+source("./R/internal_functions.R")
+
+
+# search in xeno-canto
+metadata_xc <- query_xenocanto(term = "Phaethornis ruber")
+
+# create map
+map_locations(metadata = metadata_xc)
+
+metadata_xc2 <- query_xenocanto(term = "Phaethornis anthophilus")
+
+# create map
+map_locations(metadata = metadata_xc2)
+
+metadata_ob <- query_gbif(term = "Phaethornis ruber", type = "sound")
+
+ # create map
+map_locations(metadata_ob)
+
+
+```
+

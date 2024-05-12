@@ -2,17 +2,15 @@
 #'
 #' \code{map_locations} creates maps to visualize the geographic spread of suwo
 #'   recordings.
-#' @usage map_locations(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
+#' @usage map_locations(metadata, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
 #'  path = NULL, leaflet.map = FALSE,
-#'  leaflet.cluster = FALSE)
-#' @param X Data frame output from \code{\link{query_xc}}.
-#' @param leaflet.cluster Logical to control if icons are clustered by locality (as in Xeno-Canto maps). Default is \code{FALSE}.
-#' @return A map with the locations of the observations.
+#'  cluster = FALSE)
+#' @param metadata Data frame output from suwo's media query functions.
+#' @param cluster Logical to control if icons are clustered by locality. Default is \code{FALSE}.
+#' @return An interacrive map with the locations of the observations.
 #' @export
 #' @name map_locations
-#' @details This function creates maps for visualizing the geographic spread of observations
-#' \code{\link{query_xc}} as input. Maps can be displayed in the graphic device (or Viewer if 'leaflet.map = TRUE') or saved as images in the
-#' working directory. Note that only recordings with geographic coordinates are displayed.
+#' @details This function creates maps for visualizing the geographic spread of observations. Note that only recordings with geographic coordinates are displayed.
 #' @examples
 #' \dontrun{
 #' # search in xeno-canto
@@ -27,268 +25,78 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace Smith Vidaurre
 
-function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
-                   path = NULL, leaflet.map = FALSE,
-                   leaflet.cluster = FALSE) {
-  # error message if maps is not installed
-  if (!requireNamespace("maps", quietly = TRUE)) {
-    stop2("must install 'maps' to use this function")
-  }
+map_locations <- function(metadata, cluster = FALSE, pallete = viridis::viridis, by = "species") {
 
   # error message if leaflet is not installed
-  if (!requireNamespace("leaflet", quietly = TRUE) & leaflet.map) {
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop2("must install 'leaflet' to use leaflet style maps (when 'leaflet.map = TRUE')")
   }
 
-  #### set arguments from options
-  # get function arguments
-  argms <- methods::formalArgs(map_locations)
-
-  # get warbleR options
-  opt.argms <- if (!is.null(getOption("warbleR"))) getOption("warbleR") else SILLYNAME <- 0
-
-  # remove options not as default in call and not in function arguments
-  opt.argms <- opt.argms[!sapply(opt.argms, is.null) & names(opt.argms) %in% argms]
-
-  # get arguments set in the call
-  call.argms <- as.list(base::match.call())[-1]
-
-  # remove arguments in options that are in call
-  opt.argms <- opt.argms[!names(opt.argms) %in% names(call.argms)]
-
-  # set options left
-  if (length(opt.argms) > 0) {
-    for (q in seq_len(length(opt.argms))) {
-      assign(names(opt.argms)[q], opt.argms[[q]])
-    }
-  }
-
-  # check path if not provided set to working directory
-  if (is.null(path)) path <- getwd() else if (!dir.exists(path)) stop2("'path' provided does not exist")
-
-  # stop if X is not a data frame
-  if (!is.data.frame(X)) stop2("X is not a data frame")
-
-  # make species column
-  X$species <- paste(X$Genus, X$Specific_epithet)
-
   # make lat lon numeric and remove rows with no coords
-  X$Latitude <- as.numeric(as.character(X$Latitude))
-  X$Longitude <- as.numeric(as.character(X$Longitude))
-  X <- X[!is.na(X$Latitude) & !is.na(X$Longitude), , drop = FALSE]
+  metadata$latitude <- as.numeric(as.character(metadata$latitude))
+  metadata$longitude <- as.numeric(as.character(metadata$longitude))
 
-  # stop if no rows left
-  if (nrow(X) == 0) stop2("not  a single  with observation has coordinates")
+  # remove observations with no lat lon data
+  inx_with_coors <- !is.na(metadata$latitude) & !is.na(metadata$longitude)
 
-  # if no leatfet map
-  if (!leaflet.map) {
-    # if it argument is not "jpeg" or "tiff"
-    if (!any(it == "jpeg", it == "tiff")) stop2(paste("Image type", it, "not allowed"))
+  if (all(!inx_with_coors))
+    .stop("Not a single observation (row) has geographic coordinates")
 
-    # get species names (common name)
-    spn <- length(unique(X$English_name))
+  metadata <- metadata[inx_with_coors, , drop = FALSE]
 
-    # reset graphic device
-    try(dev.off(), silent = TRUE)
-
-    # Set threshold for maximum number of panels per plot device
-    if (spn <= 16) mat <- par(mfrow = c(ceiling(sqrt(spn)), round(sqrt(spn), 0))) else par(mfrow = c(4, 4))
-    par(mar = rep(0, 4))
-
-    # Create a map per species, with the recordings plotted over each map
-    for (i in sort(unique(X$species))) {
-      y <- X[X$species == i, ]
-
-      if (all(length(y$Latitude) > 0, length(y$Longitude) > 0)) {
-        if (abs(max(y$Longitude) - min(y$Longitude)) < 38) buf <- 12 else buf <- 5
-
-        if (img) {
-          prop <- abs((min(y$Longitude) - buf) - (max(y$Longitude) + buf)) / abs((min(y$Latitude) - buf) - (max(y$Latitude) + buf)) * 1.15
-
-          img_wrlbr_int(
-            filename = paste("Map of ", i, " recordings", it, sep = ""),
-            width = 480 * prop, path = path
-          )
-
-          # change margins
-          # par(mar = rep(2.5,4))
-
-
-          # add empty  map
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), interior = FALSE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = FALSE
-          )
-
-          # change background color
-          rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
-               col =
-                 cm.colors(10)[3]
-          )
-
-          # plot lat lon lines in background
-          abline(h = seq(-90, 90, 5), col = "white", lwd = 0.9)
-          abline(h = seq(-90, 90, 10), col = "white", lwd = 1.1)
-          abline(v = seq(-180, 180, 5), col = "white", lwd = 0.9)
-          abline(v = seq(-180, 180, 10), col = "white", lwd = 1.1)
-
-          # add map
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), add = TRUE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = TRUE,
-                    col = terrain.colors(10)[5], myborder = 0, interior = F, lty = 2
-          )
-          mtext("Longitude (DD)", side = 1, line = 2)
-          mtext("Latitude (DD)", side = 2, line = 2)
-          mtext(i, side = 3, line = 1, cex = 1.4, font = 4)
-
-          # add axes
-          maps::map.axes()
-
-          # add contour lines
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), interior = FALSE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = FALSE, add = TRUE
-          )
-
-          # add points
-          points(y$Longitude, y$Latitude, pch = 21, cex = 1.8, col = "#E37222", bg = "#E37222")
-
-          # add labels
-          if (labels) {
-            text(y$Longitude, y$Latitude, labels = X$Recording_ID, cex = 0.7, pos = 4)
-          }
-
-          # add scale
-          maps::map.scale(ratio = FALSE, relwidth = 0.4)
-          dev.off()
-        } else {
-          # change margins
-          if (par()$mfrow[1] > 2) par(mfrow = c(2, 2))
-          if (par()$mfrow[1] > 1) u <- 0 else u <- 2
-          par(mar = rep(u, 4), mai = rep(0.2, 4))
-
-
-          # add empty  map
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), interior = FALSE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = FALSE
-          )
-
-          # change background color
-          rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
-               col =
-                 adjustcolor("#07889B", alpha.f = 0.2)
-          )
-
-          # plot lat lon lines in background
-          abline(h = seq(-90, 90, 5), col = "white", lwd = 0.9)
-          abline(h = seq(-90, 90, 10), col = "white", lwd = 1.1)
-          abline(v = seq(-180, 180, 5), col = "white", lwd = 0.9)
-          abline(v = seq(-180, 180, 10), col = "white", lwd = 1.1)
-
-          # add map
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), add = TRUE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = TRUE, col = "white"
-          )
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), add = TRUE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = TRUE,
-                    col = adjustcolor("darkolivegreen2", alpha.f = 0.7), myborder = 0, interior = F, lty = 2
-          )
-          mtext("Longitude (DD)", side = 1, line = 2)
-          mtext("Latitude (DD)", side = 2, line = 2)
-          mtext(i, side = 3, line = 1, cex = 1, font = 4)
-
-          # add axes
-          maps::map.axes()
-
-          # add contour lines
-          maps::map("world",
-                    xlim = c(min(y$Longitude) - buf, max(y$Longitude) + buf), interior = FALSE,
-                    ylim = c(min(y$Latitude) - buf, max(y$Latitude) + buf), fill = FALSE, add = TRUE
-          )
-
-          # add points
-          points(y$Longitude, y$Latitude, pch = 21, cex = 1.3, bg = "white")
-          points(y$Longitude, y$Latitude, pch = 21, cex = 1.3, col = "gray3", bg = adjustcolor("#E37222", alpha.f = 0.7), lwd = 0.7)
-
-          # add labels
-          if (labels) {
-            text(y$Longitude, y$Latitude, labels = X$Recording_ID, cex = 0.7, pos = 4)
-          }
-
-          # add scale
-          maps::map.scale(ratio = FALSE, relwidth = 0.4)
-        }
-      }
-    }
-  } else { # if leaflet map
-
-    cols <- c("red", "darkred", "lightred", "orange", "beige", "green", "darkgreen", "lightgreen", "blue", "darkblue", "lightblue", "purple", "darkpurple", "pink", "cadetblue", "gray", "lightgray", "black")[c(c(1, 6, 12) + rep(1:6, each = 3), 1)]
-
-    # repeat many times so colors are "recycled"
-    cols <- rep(cols, 100)
-
-    # change NAs in subspecies
-    X$Subspecies <- as.character(X$Subspecies)
-    X$Subspecies[is.na(X$Subspecies) | X$Subspecies == ""] <- "not provided"
+  # make map
 
     # if only one species use subspecies for color marker
-    if (length(unique((X$species))) == 1) {
-      # label pop up markers
-      X$labels <- X$Subspecies
-      X$labels[X$labels == "not provided"] <- "Subsp. not provided"
-    } else {
-      # labels for hovering
-      X$labels <- X$species
-    }
+    # labels for hovering
+    if (length(unique((metadata$species))) == 1)
+      metadata$labels <- metadata[, by, drop = TRUE]
+
+  cols <- pallete(n = length(unique(metadata$labels)))
 
     # color for marker
-    mrkcol <- cols[1:(length(unique(X$labels)))][as.numeric(as.factor(X$labels))]
-    mrkcol[X$labels == "Subsp. not provided"] <- "white"
+    marker_color <- cols[as.numeric(as.factor(metadata$labels))]
+    marker_color[metadata$labels == "Subsp. not provided"] <- "white"
 
     # use ios icons with marker colors
     icons <- leaflet::awesomeIcons(
       icon = "ios-close",
       iconColor = "black",
       library = "ion",
-      markerColor = mrkcol
+      markerColor = marker_color
     )
 
     # make content for popup
-    content <- paste0("<b><a href='https://www.xeno-canto.org/", X$Recording_ID, "'>", paste0("XC", X$Recording_ID), "</a></b>", "<br/><i>", paste(X$Genus, X$Specific_epithet, sep = " "), "</i><br/> Subspecies: ", X$Subspecies, "<br/> Country: ", X$Country, "<br/> Locality: ", X$Locality, "<br/> Voc.type: ", X$Vocalization_type, "<br/> Recordist: ", X$Recordist, paste0("<b><a href='https://www.xeno-canto.org/", X$Recording_ID, "/download'>", "<br/>", "listen</a>"))
+    content <- paste0("<b><a href='https://www.xeno-canto.org/", metadata$Recording_ID, "'>", paste0("metadataC", metadata$Recording_ID), "</a></b>", "<br/><i>", paste(metadata$Genus, metadata$Specific_epithet, sep = " "), "</i><br/> Subspecies: ", metadata$Subspecies, "<br/> Country: ", metadata$Country, "<br/> Locality: ", metadata$Locality, "<br/> Voc.type: ", metadata$Vocalization_type, "<br/> Recordist: ", metadata$Recordist, paste0("<b><a href='https://www.xeno-canto.org/", metadata$Recording_ID, "/download'>", "<br/>", "listen</a>"))
 
 
     # make base map
-    leaf.map <- leaflet::leaflet(X)
+    leaf_map <- leaflet::leaflet(metadata)
 
     # add tiles
-    leaf.map <- leaflet::addTiles(leaf.map)
+    leaf_map <- leaflet::addTiles(leaf_map)
 
     # add markers
-    if (leaflet.cluster) {
-      leaf.map <- leaflet::addAwesomeMarkers(
-        map = leaf.map, ~Longitude, ~Latitude, icon = icons, label = ~labels, popup = content, data = X, clusterOptions = leaflet::markerClusterOptions(),
+    if (cluster) {
+      leaf_map <- leaflet::addAwesomeMarkers(
+        map = leaf_map, ~longitude, ~latitude, icon = icons, label = ~labels, popup = content, data = metadata, clusterOptions = leaflet::markerClusterOptions(),
         clusterId = "rec.cluster"
       )
     } else {
-      leaf.map <- leaflet::addAwesomeMarkers(map = leaf.map, ~Longitude, ~Latitude, icon = icons, label = ~labels, popup = content, data = X)
+      leaf_map <- leaflet::addAwesomeMarkers(map = leaf_map, ~longitude, ~latitude, icon = icons, label = ~labels, popup = content, data = metadata)
     }
 
 
     # add minimap view at bottom right
-    leaf.map <- leaflet::addMiniMap(leaf.map)
+    leaf_map <- leaflet::addMiniMap(leaf_map)
 
     # add zoom-out button
-    leaf.map <- leaflet::addEasyButton(leaf.map, leaflet::easyButton(
+    leaf_map <- leaflet::addEasyButton(leaf_map, leaflet::easyButton(
       icon = "fa-globe", title = "Zoom to full view",
       onClick = leaflet::JS("function(btn, map){ map.setZoom(1); }")
     ))
 
-    if (leaflet.cluster) {
-      leaf.map <- leaflet::addEasyButton(leaf.map, leaflet::easyButton(
+    if (cluster) {
+      leaf_map <- leaflet::addEasyButton(leaf_map, leaflet::easyButton(
         states = list(
           leaflet::easyButtonState(
             stateName = "unfrozen-markers",
@@ -319,6 +127,9 @@ function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     }
 
     # plot map
-    leaf.map
-  }
+    print(leaf_map)
+
+    # let users know that some observations were not
+    if (any(!inx_with_coors))
+      .warning(paste(sum(!inx_with_coors), "observations (rows) were excluded as they have no geographic coordinates"))
 }
