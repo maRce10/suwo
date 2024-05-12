@@ -2,6 +2,7 @@
 % Please edit documentation in R/suwo-package.R
 \docType{_PACKAGE}
 \name{suwo}
+\alias{suwo-package}
 \alias{suwo}
 \title{suwo: A package to streamline bioacoustic analysis}
 \description{
@@ -32,6 +33,15 @@ License: GPL (>= 2)
 
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://marce10.github.io/suwo/}
+  \item \url{https://github.com/maRce10/suwo}
+  \item Report bugs at \url{https://github.com/maRce10/suwo/issues/}
+}
+
+}
 \author{
 Marcelo Araya-Salas & Jorge Elizondo-Calvo
 

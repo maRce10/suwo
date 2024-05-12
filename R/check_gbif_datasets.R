@@ -22,14 +22,14 @@
 #'
 
 check_gbif_datasets <- function(path = tempdir()) {
-  #check internet connection
+  # check internet connection
   a <- try(RCurl::getURL("https://www.gbif.org"), silent = TRUE)
   if (is(a, "try-error")) {
-    stop2("No connection to gbif (check your internet connection!)")
+    .stop("No connection to gbif (check your internet connection!)")
   }
 
   if (a == "Could not connect to the database") {
-    stop2("GBIF website is apparently down")
+    .stop("GBIF website is apparently down")
   }
 
   # Read the CSV data
@@ -39,7 +39,7 @@ check_gbif_datasets <- function(path = tempdir()) {
   on.exit(rm(csv_data))
 
   if (is(csv_data, "try-error")) {
-    stop2("Failed to download CSV.")
+    .stop("Failed to download CSV.")
   } else {
     utils::write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
   }

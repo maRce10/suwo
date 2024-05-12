@@ -37,7 +37,7 @@ download_media <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
@@ -235,7 +235,7 @@ download_media <-
         X = 1:nrow(metadata),
         cl = cl,
         FUN = function(x) {
-          downloadFUN(metadata, x, path)
+          .download(metadata, x, path)
         }
       ))
 

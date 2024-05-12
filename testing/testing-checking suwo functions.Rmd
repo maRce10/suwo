@@ -447,7 +447,7 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 ```{r check, eval = FALSE}
 
 
-styler::style_dir("./R")
+# styler::style_dir("./R")
 # system("autoconf  ")
 
 # usethis::use_rcpp()
@@ -466,7 +466,7 @@ devtools::document(".")
 
 #check with devtools
 
-devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE, )
+devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
 
 # devtools::run_examples( start = "rm_sil")
 

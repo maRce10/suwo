@@ -69,7 +69,7 @@ query_xenocanto <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
@@ -77,11 +77,11 @@ query_xenocanto <-
     # check internet connection
     a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
     if (is(a, "try-error")) {
-      stop2("No connection to xeno-canto.org (check your internet connection!)")
+      .stop("No connection to xeno-canto.org (check your internet connection!)")
     }
 
     if (a == "Could not connect to the database") {
-      stop2("xeno-canto.org website is apparently down")
+      .stop("xeno-canto.org website is apparently down")
     }
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
@@ -118,8 +118,8 @@ query_xenocanto <-
     if (as.numeric(q$numRecordings) == 0) {
       if (verbose) {
         cat(paste(
-          colortext("No audios were found", "failure"),
-          add_emoji("sad"),
+          .color_text("No audios were found", "failure"),
+          .add_emoji("sad"),
           "\n"
         ))
       }
@@ -336,7 +336,7 @@ query_xenocanto <-
 
 
       if (pb & verbose) {
-        cat(colortext(paste(nrow(results), "audio(s) found"), "success"), add_emoji("happy"), "\n")
+        cat(.color_text(paste(nrow(results), "audio(s) found"), "success"), .add_emoji("happy"), "\n")
       }
     }
 

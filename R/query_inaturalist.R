@@ -56,14 +56,14 @@ query_inaturalist <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
 
     # # type must be supplied
     if (is.null(type)) {
-      stop2("'type' must be supplied")
+      .stop("'type' must be supplied")
     }
 
     org_type <- match.arg(type)
@@ -75,18 +75,18 @@ query_inaturalist <-
 
     # term must be supplied
     if (is.null(term)) {
-      stop2("'term' must be supplied")
+      .stop("'term' must be supplied")
     }
 
     # check internet connection
     a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
     if (is(a, "try-error")) {
-      stop2("No connection to INaturalist (check your internet connection!)")
+      .stop("No connection to INaturalist (check your internet connection!)")
     }
 
 
     if (a == "Could not connect to the database") {
-      stop2("observation website is apparently down")
+      .stop("observation website is apparently down")
     }
 
     # Save species name
@@ -109,12 +109,12 @@ query_inaturalist <-
     # message if nothing found
     if (base.srch.pth$total_results == 0) {
       if (verbose) {
-        cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+        cat(paste(.color_text(paste0("No ", tolower(org_type), "s were found"), "failure"), .add_emoji("sad")))
       }
     } else {
       # message number of results
       if (pb & verbose) {
-        cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$total_results, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+        cat(paste(.color_text(paste0("Obtaining metadata (", base.srch.pth$total_results, " matching observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
       }
 
 

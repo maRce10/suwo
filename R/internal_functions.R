@@ -91,18 +91,18 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 }
 
 # stop function that doesn't print call
-stop2 <- function(...) {
+.stop <- function(...) {
   stop(..., call. = FALSE)
 }
 
 # warning function that doesn't print call
-warning2 <- function(...) {
+.warning <- function(...) {
   warning(..., call. = FALSE)
 }
 
 # add emojis to messages. based on praise_emoji from testthat
 
-add_emoji <- function(mood) {
+.add_emoji <- function(mood) {
   if (!cli::is_utf8_output()) {
     return("")
   }
@@ -138,19 +138,19 @@ add_emoji <- function(mood) {
 #####
 
 
-colortext <- function(text, as = c("success", "skip", "warning", "failure", "error")) {
-  if (has_color()) {
-    unclass(cli::make_ansi_style(suwo_style(as))(text))
+.color_text <- function(text, as = c("success", "skip", "warning", "failure", "error")) {
+  if (.has_color()) {
+    unclass(cli::make_ansi_style(.suwo_style(as))(text))
   } else {
     text
   }
 }
 
-has_color <- function() {
+.has_color <- function() {
   cli::num_ansi_colors() > 1
 }
 
-suwo_style <- function(type = c("success", "skip", "warning", "failure", "error")) {
+.suwo_style <- function(type = c("success", "skip", "warning", "failure", "error")) {
   type <- match.arg(type)
 
   c(
@@ -163,7 +163,7 @@ suwo_style <- function(type = c("success", "skip", "warning", "failure", "error"
 }
 
 # Function to download file according to repository
-downloadFUN <- function(metadata, x, path) {
+.download <- function(metadata, x, path) {
   dl_result <- try(
     download.file(
       url = as.character(metadata$file_url[x]),
@@ -186,7 +186,7 @@ downloadFUN <- function(metadata, x, path) {
 }
 
 ## function to check arguments
-check_arguments <- function(args) {
+.check_arguments <- function(args) {
   # create object to store check results
   check_collection <- checkmate::makeAssertCollection()
 

@@ -1,43 +1,25 @@
 #' Maps of instances of observations by species
 #'
-#' \code{map_instances} creates maps to visualize the geographic spread of suwo
+#' \code{map_locations} creates maps to visualize the geographic spread of suwo
 #'   recordings.
-#' @usage map_instances(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
+#' @usage map_locations(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
 #'  path = NULL, leaflet.map = FALSE,
 #'  leaflet.cluster = FALSE)
 #' @param X Data frame output from \code{\link{query_xc}}.
-#' @param img A logical argument specifying whether an image file of each species
-#'   map should be returned, default is \code{TRUE}.
-#' @param it A character vector of length 1 giving the image type to be used. Currently only
-#' "tiff" and "jpeg" are admitted. Default is "jpeg".
-#' @param res Numeric argument of length 1. Controls image resolution.
-#'   Default is 100 (faster) although 300 - 400 is recommended for publication/
-#'   presentation quality.
-#' @param labels A logical argument defining whether dots depicting recording locations are labeled.
-#' If \code{TRUE} then the Recording_ID is used as label.
-#' @param path Character string with the directory path where the image files will be saved.
-#' If \code{NULL} (default) then the current working directory is used.
-#' Ignored if \code{img = FALSE}.
-#' @param leaflet.map Logical to control whether the package 'leaflet' is used for displaying the maps. 'leaflet' maps are interactive and display information about recordings and links to the Xeno-Canto website. If \code{TRUE} a single map is displayed regardless of the number of species and all other image related arguments are ignored. Default is \code{FALSE}. The hovering label shows the species scientific name (or the subspecies if only 1 species is present in 'X'). Note that colors will be recycled if more after 18 species (or subspecies).
 #' @param leaflet.cluster Logical to control if icons are clustered by locality (as in Xeno-Canto maps). Default is \code{FALSE}.
-#' @return A map of 'Xeno-Canto' recordings per species (image file), or a faceted
-#'   plot of species map(s) in the active graphic device.
+#' @return A map with the locations of the observations.
 #' @export
-#' @name map_instances
-#' @details This function creates maps for visualizing the geographic spread of recordings from the open-access
-#' online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. The function takes the output of
+#' @name map_locations
+#' @details This function creates maps for visualizing the geographic spread of observations
 #' \code{\link{query_xc}} as input. Maps can be displayed in the graphic device (or Viewer if 'leaflet.map = TRUE') or saved as images in the
 #' working directory. Note that only recordings with geographic coordinates are displayed.
 #' @examples
 #' \dontrun{
 #' # search in xeno-canto
-#' X <- query_inaturalist("Phaethornis anthophilus", download = FALSE)
+#' metadata <- query_xenocanto(term = "Phaethornis anthophilus")
 #'
-#' # create image in R graphic device
-#' map_instances(X, img = FALSE)
-#'
-#' # create leaflet map
-#' map_instances(X, leaflet.map = TRUE)
+#' # create map
+#' map_locations(metadata)
 #' }
 #'
 #' @references {
@@ -45,7 +27,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace Smith Vidaurre
 
-map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
+function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
                    path = NULL, leaflet.map = FALSE,
                    leaflet.cluster = FALSE) {
   # error message if maps is not installed
@@ -60,7 +42,7 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
 
   #### set arguments from options
   # get function arguments
-  argms <- methods::formalArgs(map_instances)
+  argms <- methods::formalArgs(map_locations)
 
   # get warbleR options
   opt.argms <- if (!is.null(getOption("warbleR"))) getOption("warbleR") else SILLYNAME <- 0
@@ -87,12 +69,10 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
   # stop if X is not a data frame
   if (!is.data.frame(X)) stop2("X is not a data frame")
 
+  # make species column
+  X$species <- paste(X$Genus, X$Specific_epithet)
+
   # make lat lon numeric and remove rows with no coords
-
-  #Change the names of the variables of latitude and longitude
-  names(X)[names(X) == "latitude"] <- "Latitude"
-  names(X)[names(X) == "longitude"] <- "Longitude"
-
   X$Latitude <- as.numeric(as.character(X$Latitude))
   X$Longitude <- as.numeric(as.character(X$Longitude))
   X <- X[!is.na(X$Latitude) & !is.na(X$Longitude), , drop = FALSE]
@@ -106,7 +86,7 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     if (!any(it == "jpeg", it == "tiff")) stop2(paste("Image type", it, "not allowed"))
 
     # get species names (common name)
-    spn <- length(unique(X$species))
+    spn <- length(unique(X$English_name))
 
     # reset graphic device
     try(dev.off(), silent = TRUE)
@@ -251,14 +231,14 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     # repeat many times so colors are "recycled"
     cols <- rep(cols, 100)
 
-    # # change NAs in subspecies
-    # X$Subspecies <- as.character(X$Subspecies)
-    # X$Subspecies[is.na(X$Subspecies) | X$Subspecies == ""] <- "not provided"
+    # change NAs in subspecies
+    X$Subspecies <- as.character(X$Subspecies)
+    X$Subspecies[is.na(X$Subspecies) | X$Subspecies == ""] <- "not provided"
 
     # if only one species use subspecies for color marker
     if (length(unique((X$species))) == 1) {
       # label pop up markers
-      X$labels <- X$species
+      X$labels <- X$Subspecies
       X$labels[X$labels == "not provided"] <- "Subsp. not provided"
     } else {
       # labels for hovering
@@ -278,7 +258,7 @@ map_instances <- function(X, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
     )
 
     # make content for popup
-    content <- paste0("<b><a href='https://www.xeno-canto.org/", X$key, "'>", paste0("XC", X$Recording_ID), "</a></b>", "<br/><i>", paste(X$species, sep = " "))
+    content <- paste0("<b><a href='https://www.xeno-canto.org/", X$Recording_ID, "'>", paste0("XC", X$Recording_ID), "</a></b>", "<br/><i>", paste(X$Genus, X$Specific_epithet, sep = " "), "</i><br/> Subspecies: ", X$Subspecies, "<br/> Country: ", X$Country, "<br/> Locality: ", X$Locality, "<br/> Voc.type: ", X$Vocalization_type, "<br/> Recordist: ", X$Recordist, paste0("<b><a href='https://www.xeno-canto.org/", X$Recording_ID, "/download'>", "<br/>", "listen</a>"))
 
 
     # make base map

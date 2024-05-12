@@ -68,14 +68,14 @@ query_gbif <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
 
     # type must be supplied
     if (is.null(type)) {
-      stop2("'type' must be supplied")
+      .stop("'type' must be supplied")
     }
 
     org_type <- match.arg(type)
@@ -89,28 +89,28 @@ query_gbif <-
 
     # term must be supplied
     if (is.null(term)) {
-      stop2("'term' must be supplied")
+      .stop("'term' must be supplied")
     }
 
-    if (tolower(Sys.info()[["sysname"]]) != "windows"){
+    if (tolower(Sys.info()[["sysname"]]) != "windows") {
       # check internet connection
       a <- try(RCurl::getURL("https://api.gbif.org/"), silent = TRUE)
       if (is(a, "try-error")) {
-        stop2("No connection to GBIF API (check your internet connection!)")
+        .stop("No connection to GBIF API (check your internet connection!)")
       }
 
       if (a == "Could not connect to the database") {
-        stop2("GBIF website is apparently down")
+        .stop("GBIF website is apparently down")
       }
     }
 
 
     # If cores is not numeric
     if (!is.numeric(cores)) {
-      stop2("'cores' must be a numeric vector of length 1")
+      .stop("'cores' must be a numeric vector of length 1")
     }
     if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
+      .stop("'cores' should be a positive integer")
     }
 
     # fix term for html
@@ -128,12 +128,12 @@ query_gbif <-
     # message if nothing found
     if (base.srch.pth$count == 0) {
       if (verbose) {
-        cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+        cat(paste(.color_text(paste0("No ", tolower(org_type), "s were found"), "failure"), .add_emoji("sad")))
       }
     } else {
       # message number of results
       if (pb & verbose) {
-        cat(paste(colortext(paste0("Obtaining metadata (", base.srch.pth$count, " matching observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+        cat(paste(.color_text(paste0("Obtaining metadata (", base.srch.pth$count, " matching observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
       }
 
 

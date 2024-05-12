@@ -46,19 +46,19 @@ query_observation <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
 
     # term must be supplied
     if (is.null(term)) {
-      stop2("'term' must be supplied")
+      .stop("'term' must be supplied")
     }
 
     # type must be supplied
     if (is.null(type)) {
-      stop2("'type' must be supplied")
+      .stop("'type' must be supplied")
     }
     org_type <- match.arg(type)
 
@@ -69,15 +69,15 @@ query_observation <-
       `interactive resource` = "InteractiveResource"
     )
 
-    if (tolower(Sys.info()[["sysname"]]) != "windows"){
+    if (tolower(Sys.info()[["sysname"]]) != "windows") {
       # check internet connection
       a <- try(RCurl::getURL("https://observation.org"), silent = TRUE)
       if (is(a, "try-error")) {
-        stop2("No connection to observation.org (check your internet connection!)")
+        .stop("No connection to observation.org (check your internet connection!)")
       }
 
       if (a == "Could not connect to the database") {
-        stop2("observation.org website is apparently down")
+        .stop("observation.org website is apparently down")
       }
     }
 
@@ -91,12 +91,12 @@ query_observation <-
 
     # If species not found in repository
     if (base.srch.pth$count == 0) {
-      stop2("Species was not found in database")
+      .stop("Species was not found in database")
     }
 
-  #Check if token is available
-    if (is.null(token)){
-      stop2("Invalid token for observation.org")
+    # Check if token is available
+    if (is.null(token)) {
+      .stop("Invalid token for observation.org")
     }
 
     # Set the species ID and API endpoint URL
@@ -117,12 +117,12 @@ query_observation <-
 
     if (data$count == 0) {
       if (verbose) {
-        cat(paste(colortext(paste0("No ", tolower(org_type), "s were found"), "failure"), add_emoji("sad")))
+        cat(paste(.color_text(paste0("No ", tolower(org_type), "s were found"), "failure"), .add_emoji("sad")))
       }
     } else {
       # message number of results
       if (pb & verbose) {
-        cat(paste(colortext(paste0("Obtaining metadata (", data$count, " candidate observation(s) found)"), "success"), add_emoji("happy"), ":\n"))
+        cat(paste(.color_text(paste0("Obtaining metadata (", data$count, " candidate observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
       }
     }
     # get total number of pages

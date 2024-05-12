@@ -45,29 +45,29 @@ query_wikiaves <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
 
     # type must be supplied
     if (is.null(type)) {
-      stop2("'type' must be supplied")
+      .stop("'type' must be supplied")
     }
 
     # type must be supplied
     if (is.null(term)) {
-      stop2("'term' must be supplied")
+      .stop("'term' must be supplied")
     }
 
     # check internet connection
     a <- try(RCurl::getURL("www.wikiaves.com"), silent = TRUE)
     if (is(a, "try-error")) {
-      stop2("No connection to wikiaves (check your internet connection!)")
+      .stop("No connection to wikiaves (check your internet connection!)")
     }
 
     if (a == "Could not connect to the database") {
-      stop2("wikiaves.com website is apparently down")
+      .stop("wikiaves.com website is apparently down")
     }
 
     org_type <- match.arg(type)
@@ -90,7 +90,7 @@ query_wikiaves <-
 
     if (length(get_ids) == 0) {
       if (verbose) {
-        cat(paste(colortext("Search term not found", "failure"), add_emoji("sad")))
+        cat(paste(.color_text("Search term not found", "failure"), .add_emoji("sad")))
       }
     } else {
       # make it a data frame
@@ -113,7 +113,7 @@ query_wikiaves <-
       })
 
       if (sum(get_ids$total_registers) == 0 & verbose) {
-        cat(paste(colortext(paste0("No ", type, "s were found"), "failure"), add_emoji("sad")))
+        cat(paste(.color_text(paste0("No ", type, "s were found"), "failure"), .add_emoji("sad")))
       } else {
         # get number of pages (20 is the default number of registers per page)
         get_ids$pages <- ceiling(get_ids$total_registers / 20)
@@ -130,7 +130,7 @@ query_wikiaves <-
 
         # search recs in wikiaves (results are returned in pages with 500 recordings each)
         if (pb & verbose) {
-          cat(paste(colortext(paste0("Obtaining metadata (", sum(get_ids$total_registers), " ", type, "(s) found)"), "success"), add_emoji("happy"), ":\n"))
+          cat(paste(.color_text(paste0("Obtaining metadata (", sum(get_ids$total_registers), " ", type, "(s) found)"), "success"), .add_emoji("happy"), ":\n"))
         }
 
         # set clusters for windows OS
