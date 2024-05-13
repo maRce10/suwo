@@ -1,7 +1,6 @@
 #' Download media files from repositories
 #'
 #' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.
-#' @usage download_media(metadata, path = "./", pb = TRUE, verbose = TRUE, cores = 1)
 #' @param metadata Data frame with a 'file_url' column and any other column listed in the file.name argument. Only the media listed in the data frame
 #' will be downloaded (\code{download} argument is automatically set to \code{TRUE}). This can be used to select
 #' the recordings to be downloaded based on their attributes.

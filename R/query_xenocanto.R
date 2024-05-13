@@ -1,7 +1,6 @@
 #' Access 'Xeno-Canto' recordings and metadata
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
-#' @usage query_xenocanto(term = NULL, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
 #' @param term Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
 #'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
 #'  More complex queries can be done by using search terms that follow the

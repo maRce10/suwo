@@ -1,7 +1,6 @@
 #' Access 'wikiaves' recordings and metadata
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
-#' @usage query_wikiaves(term, type, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
 #' @param term Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.

@@ -4,7 +4,14 @@
 \alias{query_wikiaves}
 \title{Access 'wikiaves' recordings and metadata}
 \usage{
-query_wikiaves(term, type, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
+query_wikiaves(
+  term = NULL,
+  type = c("sound", "still image"),
+  cores = 1,
+  pb = TRUE,
+  verbose = TRUE,
+  all_data = TRUE
+)
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.}

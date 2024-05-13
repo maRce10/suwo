@@ -4,8 +4,14 @@
 \alias{query_observation}
 \title{Access 'observation' recordings and metadata}
 \usage{
-query_observation(term = NULL, type = c("sound", "still image"),
-cores = 1, pb = TRUE, verbose = TRUE, token = NULL)
+query_observation(
+  term = NULL,
+  type = c("sound", "still image"),
+  cores = 1,
+  pb = TRUE,
+  verbose = TRUE,
+  token = NULL
+)
 }
 \arguments{
 \item{term}{Character vector of length one indicating the

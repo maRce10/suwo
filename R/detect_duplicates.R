@@ -1,7 +1,6 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{detect_duplicates} detects duplicate data in data frames.
-#' @usage detect_duplicates(dataframe_1 = NULL, dataframe_2 = NULL, all_data = TRUE)
 #' @param dataframe_1 dataframe refering to the metadata containing the multimedia information obtained from query functions.
 #' @param dataframe_2 dataframe refering to the metadata containing the multimedia information obtained from query functions.
 #' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
@@ -33,19 +32,19 @@ detect_duplicates <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
 
     # dataframe 1 must be supplied
     if (is.null(dataframe_1)) {
-      stop2("'dataframe_1' must be supplied")
+      .stop("'dataframe_1' must be supplied")
     }
 
     # dataframe 2 must be supplied
     if (is.null(dataframe_2)) {
-      stop2("'dataframe_2' must be supplied")
+      .stop("'dataframe_2' must be supplied")
     }
 
     if (dataframe_1$repository[1] == "GBIF" ) {

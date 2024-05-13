@@ -4,8 +4,15 @@
 \alias{query_macaulay}
 \title{Access 'observation' recordings and metadata}
 \usage{
-query_macaulay(term = NULL, type = c("audio", "photo","video"),
-cores = 1, pb = TRUE, verbose = TRUE, token = NULL, all_data = TRUE)
+query_macaulay(
+  term = NULL,
+  type = c("audio", "photo", "video"),
+  cores = 1,
+  pb = TRUE,
+  verbose = TRUE,
+  token = NULL,
+  all_data = TRUE
+)
 }
 \arguments{
 \item{term}{Character vector of length one indicating the

@@ -4,9 +4,15 @@
 \alias{query_gbif}
 \title{Access 'gbif' recordings and metadata}
 \usage{
-query_gbif(term = NULL, type = c("sound", "still image",
-"moving image", "interactive resource"),
-cores = 1, pb = TRUE, verbose = TRUE, dataset = NULL, all_data = TRUE)
+query_gbif(
+  term = NULL,
+  type = c("sound", "still image", "moving image", "interactive resource"),
+  cores = 1,
+  pb = TRUE,
+  verbose = TRUE,
+  dataset = NULL,
+  all_data = TRUE
+)
 }
 \arguments{
 \item{term}{Character vector of length one indicating genus and

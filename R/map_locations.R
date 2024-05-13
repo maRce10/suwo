@@ -2,11 +2,10 @@
 #'
 #' \code{map_locations} creates maps to visualize the geographic spread of suwo
 #'   recordings.
-#' @usage map_locations(metadata, img = TRUE, it = "jpeg", res = 100, labels = FALSE,
-#'  path = NULL, leaflet.map = FALSE,
-#'  cluster = FALSE)
 #' @param metadata Data frame output from suwo's media query functions.
 #' @param cluster Logical to control if icons are clustered by locality. Default is \code{FALSE}.
+#' @param palette Color palette function used for location markers.
+#' @param by Name of column to be used for coloring markers. Default is "species".
 #' @return An interacrive map with the locations of the observations.
 #' @export
 #' @name map_locations
@@ -25,11 +24,11 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace Smith Vidaurre
 
-map_locations <- function(metadata, cluster = FALSE, pallete = viridis::viridis, by = "species") {
+map_locations <- function(metadata, cluster = FALSE, palette = viridis::viridis, by = "species") {
 
   # error message if leaflet is not installed
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop2("must install 'leaflet' to use leaflet style maps (when 'leaflet.map = TRUE')")
+    .stop("must install 'leaflet' to use leaflet style maps (when 'leaflet.map = TRUE')")
   }
 
   # make lat lon numeric and remove rows with no coords
@@ -51,7 +50,7 @@ map_locations <- function(metadata, cluster = FALSE, pallete = viridis::viridis,
     if (length(unique((metadata$species))) == 1)
       metadata$labels <- metadata[, by, drop = TRUE]
 
-  cols <- pallete(n = length(unique(metadata$labels)))
+  cols <- palette(n = length(unique(metadata$labels)))
 
     # color for marker
     marker_color <- cols[as.numeric(as.factor(metadata$labels))]

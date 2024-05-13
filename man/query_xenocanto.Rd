@@ -4,7 +4,13 @@
 \alias{query_xenocanto}
 \title{Access 'Xeno-Canto' recordings and metadata}
 \usage{
-query_xenocanto(term = NULL, cores = 1, pb = TRUE, verbose = TRUE, all_data = TRUE)
+query_xenocanto(
+  term = NULL,
+  cores = 1,
+  pb = TRUE,
+  verbose = TRUE,
+  all_data = TRUE
+)
 }
 \arguments{
 \item{term}{Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)

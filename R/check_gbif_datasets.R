@@ -1,7 +1,6 @@
 #' Access 'gbif' dataset information
 #'
 #' \code{check_gbif_datasets} searches for dataset information from \href{https://www.gbif.org}{gbif}.
-#' @usage check_gbif_datasets(path = tempdir())
 #' @param path Character that defines the location for the downloaded file. By default is downloaded to a temporary directory (\code{tempdir()}).
 #' @return returns dataset csv from gbif
 #' @export

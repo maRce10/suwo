@@ -1,8 +1,6 @@
 #' Access 'inaturalist' recordings and metadata
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
-#' @usage query_inaturalist(term = NULL, cores = 1, pb = TRUE, verbose = TRUE,
-#' type = c("sound", "still image"), identified = FALSE, verifiable = FALSE, all_data = TRUE)
 #' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.

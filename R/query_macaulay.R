@@ -1,8 +1,6 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
-#' @usage query_macaulay(term = NULL, type = c("audio", "photo","video"),
-#' cores = 1, pb = TRUE, verbose = TRUE, token = NULL, all_data = TRUE)
 #' @param term Character vector of length one indicating the
 #'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Currently 'photo' and 'audio' are available.
@@ -48,19 +46,19 @@ query_macaulay <-
     }
 
     # check each arguments
-    check_results <- check_arguments(args = arguments)
+    check_results <- .check_arguments(args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)
 
     # term must be supplied
     if (is.null(term)) {
-      stop2("'term' must be supplied")
+      .stop("'term' must be supplied")
     }
 
     # type must be supplied
     if (is.null(type)) {
-      stop2("'type' must be supplied")
+      .stop("'type' must be supplied")
     }
     org_type <- match.arg(type)
 
@@ -74,11 +72,11 @@ query_macaulay <-
       # check internet connection
       a <- try(RCurl::getURL("https://www.macaulaylibrary.org/"), silent = TRUE)
       if (is(a, "try-error")) {
-        stop2("No connection to macaulaylibrary.org (check your internet connection!)")
+        .stop("No connection to macaulaylibrary.org (check your internet connection!)")
       }
 
       if (a == "Could not connect to the database") {
-        stop2("macaulaylibrary.org website is apparently down")
+        .stop("macaulaylibrary.org website is apparently down")
       }
     }
 
@@ -94,17 +92,17 @@ query_macaulay <-
 
     search_url <- paste0("https://search.macaulaylibrary.org/catalog?view=list&mediaType=", type,"&taxonCode=",taxon_code)
 
-    browseURL(search_url)
+    utils::browseURL(search_url)
 
     #Obtain file snapshot
-    snapshot <- fileSnapshot()
+    snapshot <- utils::fileSnapshot()
 
     #Ask if user has downloaded csv file from Macaulay library
     user_input <- readline("Is the data table csv downloaded? (y/n)  ")
     if(user_input != 'y') stop('Exiting since you did not press y')
 
     #Obtain file path from added files
-    changed_files <- changedFiles(snapshot)
+    changed_files <- utils::changedFiles(snapshot)
 
     file_path <- changed_files[["added"]][grep("\\.csv$",changed_files[["added"]])]
 

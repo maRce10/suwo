@@ -15,3 +15,5 @@ LICENSE.md
 ^tic\.R$
 ^_pkgdown\.yml$
 ^vignettesTEMP$
+^Suwo\.ipynb$
+^__MACOSX$

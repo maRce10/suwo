@@ -4,8 +4,16 @@
 \alias{query_inaturalist}
 \title{Access 'inaturalist' recordings and metadata}
 \usage{
-query_inaturalist(term = NULL, cores = 1, pb = TRUE, verbose = TRUE,
-type = c("sound", "still image"), identified = FALSE, verifiable = FALSE, all_data = TRUE)
+query_inaturalist(
+  term = NULL,
+  cores = 1,
+  pb = TRUE,
+  verbose = TRUE,
+  type = c("sound", "still image"),
+  identified = FALSE,
+  verifiable = FALSE,
+  all_data = TRUE
+)
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.}

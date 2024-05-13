@@ -17,15 +17,10 @@
 #'
 #' Most of the functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency. Tools to evaluate the performance of the analysis at each step are also available. In addition, warbleR satisfies the need for rigorous open source bioacoustic analysis, which facilitates opportunities for use in research and innovation of additional custom analyzes.
 #'
-#' The suwo package offers three overarching categories of
-#'   functions:
-#'
-#' @section Obtaining animal vocalization data:
-#'
-#'
 #' @import parallel
 #' @import RCurl
 #' @import jsonlite
+#' @importFrom viridis viridis
 #' @importFrom utils download.file read.csv write.csv
 #' @importFrom methods is
 #' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors cli_text
@@ -33,9 +28,11 @@
 #'
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-#' @docType _PACKAGE
-#' @name suwo
+#' @docType package
 #' @details License: GPL (>= 2)
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
+## usethis namespace: end
 NULL
-#> NULL
-#'
