@@ -85,7 +85,7 @@ query_xenocanto <-
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
-      print("Obtaining metadata:")
+      cat(paste(.color_text(paste0("Obtaining metadata (matching observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
     }
 
     # format query term

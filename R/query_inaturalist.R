@@ -213,6 +213,17 @@ query_inaturalist <-
       # Add repository ID
       query_output_df$repository <- "INAT"
 
+      split_location <- do.call(rbind, strsplit(as.character(query_output_df$location), ","))
+
+      # Convert the split values to numeric
+      latitude <- split_location[, 1]
+      longitude <- split_location[, 2]
+
+      # Add the latitude and longitude columns to the data frame
+      query_output_df$latitude <- latitude
+      query_output_df$longitude <- longitude
+
+
       # Find the index of the first occurrence of "id" in the old column names
       first_id_index <- which(names(query_output_df) == "id")[1]
 
@@ -224,7 +235,7 @@ query_inaturalist <-
 
 
       # rename output columns
-      names_df <- data.frame(old = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description", "time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "id", "file_content_type", "license_code", "secret_token", "hidden", "page", "repository"), new = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description", "time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "file_id", "media_extension", "license_code", "secret_token", "hidden", "page", "repository"))
+      names_df <- data.frame(old = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description", "time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "id", "file_content_type", "license_code", "secret_token", "hidden", "page", "repository","latitude", "longitude"), new = c("quality_grade", "time_observed_at", "taxon_geoprivacy", "uuid", "key", "cached_votes_total", "identifications_most_agree", "species_guess", "identifications_most_disagree", "positional_accuracy", "comments_count", "site_id", "created_time_zone", "license_code", "observed_time_zone", "public_positional_accuracy", "oauth_application_id", "created_at", "description", "time_zone_offset", "observed_on", "observed_on_string", "updated_at", "captive", "faves_count", "num_identification_agreements", "map_scale", "uri", "community_taxon_id", "owners_identification_from_vision", "identifications_count", "obscured", "num_identification_disagreements", "geoprivacy", "location", "spam", "mappable", "identifications_some_agree", "place_guess", "file_url", "subtype", "play_local", "native_sound_id", "attribution", "file_id", "media_extension", "license_code", "secret_token", "hidden", "page", "repository", "latitude", "longitude"))
 
       for (i in 1:nrow(names_df)) {
         names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
@@ -235,8 +246,6 @@ query_inaturalist <-
 
       if (!all_data) {
         query_output_df$country <- NA
-        query_output_df$latitude <- NA
-        query_output_df$longitude <- NA
         query_output_df$date <- query_output_df$time_observed_at
         query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
       }
@@ -251,6 +260,7 @@ query_inaturalist <-
 
       # Remove files that have no download link
       query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
+
 
       return(query_output_df)
     }
