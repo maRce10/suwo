@@ -21,7 +21,9 @@ Imports:
 Suggests: 
     covr,
     testthat,
-    leaflet
+    leaflet,
+    knitr,
+    rmarkdown
 Depends:
      RCurl,
      jsonlite
@@ -34,3 +36,4 @@ Authors@R:
       comment = c(ORCID = "0000-0003-3594-619X")),
       person("Jorge", "Elizondo-Calvo", 
       role = c("aut")))
+VignetteBuilder: knitr

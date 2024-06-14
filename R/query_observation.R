@@ -239,5 +239,13 @@ query_observation <-
     # Add repository ID
     query_output_df$repository <- "Observation"
 
+    # Add a timestamp attribute
+    search_time <- Sys.time()
+    attr(query_output_df, "search_time") <- search_time
+    attr(query_output_df, "query_term") <- term
+    attr(query_output_df, "query_type") <- org_type
+    attr(query_output_df, "query_all_data") <- all_data
+
+
     return(query_output_df)
   }

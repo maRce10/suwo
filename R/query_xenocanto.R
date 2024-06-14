@@ -355,6 +355,13 @@ query_xenocanto <-
         results <- results[, c("location", "latitude", "longitude", "file_url", "repository", "key", "species", "date", "country")]
       }
 
+      # Add a timestamp and search query attribute
+      search_time <- Sys.time()
+      attr(query_output_df, "search_time") <- search_time
+      attr(query_output_df, "query_term") <- term
+      attr(query_output_df, "query_all_data") <- all_data
+
+
       return(droplevels(results))
     }
   }

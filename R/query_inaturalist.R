@@ -261,6 +261,13 @@ query_inaturalist <-
       # Remove files that have no download link
       query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
 
+      # Add a timestamp attribute
+      search_time <- Sys.time()
+      attr(query_output_df, "search_time") <- search_time
+      attr(query_output_df, "query_term") <- term
+      attr(query_output_df, "query_type") <- org_type
+      attr(query_output_df, "query_all_data") <- all_data
+
 
       return(query_output_df)
     }

@@ -1,0 +1,57 @@
+---
+title: "suwo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{suwo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(suwo)
+#install.packages("dplyr")
+library("dplyr")
+#install.packages('raster')
+library(raster) # For raster creation and manipulation
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('maptools')
+library(maptools)
+#install.packages('ggspatial')
+library(ggspatial)
+#install.packages('sf')
+library(sf)
+#install.packages('ggnewscale')
+library(ggnewscale)
+#install.packages('plotly')
+library(plotly)
+#install.packages("tidyverse")
+library(tidyverse)
+#install.packages("viridis")
+library(viridis)
+#install.packages("hrbrthemes")
+library(hrbrthemes)
+#install.packages("mapdata")
+library(mapdata)
+#install.packages("rgdal")
+library(rgdal) # For spatial data manipulation
+#install.packages("sp")
+library(sp)     # For spatial data handling
+```
+
+```{r}
+
+Calo <- query_inaturalist(term = "Calochortus", type = "still image" )
+Calo$genus<-as.factor(Calo$genus)
+colnames(Calo)[1]<-'Calochortus'
+
+
+```
+
