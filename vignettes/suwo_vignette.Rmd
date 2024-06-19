@@ -48,10 +48,40 @@ library(sp)     # For spatial data handling
 
 ```{r}
 
-Calo <- query_inaturalist(term = "Calochortus", type = "still image" )
-Calo$genus<-as.factor(Calo$genus)
+Calo <- query_inaturalist(term = "Hymenoxys texana", type = "still image" )
+Calo$species<-as.factor(Calo$species)
 colnames(Calo)[1]<-'Calochortus'
 
 
 ```
+
+```{r}
+
+Calochort <- ggplot() +
+  geom_map(data = states_usa, map = states_usa,
+           aes(x = long, y = lat, map_id = region),
+           color = 'black', fill = "azure", size = 0.3) +  # Add state borders for the USA
+  geom_map(data = states_mexico, map = states_mexico,
+           aes(x = long, y = lat, map_id = region),
+           color = 'black', fill = "honeydew", size = 0.3) +  # Add country borders for Mexico
+  geom_map(data = states_canada, map = states_canada,
+           aes(x = long, y = lat, map_id = region),
+           color = 'black', fill = "lavender", size = 0.3) +  # Add country borders for Canada
+  scale_fill_gradient(name = 'Elevation (m)', low = 'white', high = 'black') +
+  coord_sf(xlim = c(-125, -90), ylim = c(12, 50)) +
+  geom_point(mapping = aes(x = as.numeric(longitude), 
+                           y = as.numeric(latitude),
+                           colour = Calochortus,
+                           fill = Calochortus,
+                           shape = Calochortus),
+             data = Calo, cex = 0.25) +
+  scale_shape_manual(name = 'Calochortus', values = c(22, 21, 24, 23)) +
+  scale_color_manual(values = c('grey26', '#000000', '#000000', '#000000')) +
+  scale_fill_manual(values = c('grey76', '#1E88E5', '#FF880A', '#8C0808')) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),  # Remove major gridlines
+        panel.grid.minor = element_blank())  # Remove minor gridlines
+
+```
+
 
