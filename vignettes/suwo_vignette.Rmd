@@ -40,18 +40,67 @@ library(viridis)
 library(hrbrthemes)
 #install.packages("mapdata")
 library(mapdata)
-#install.packages("rgdal")
-library(rgdal) # For spatial data manipulation
 #install.packages("sp")
 library(sp)     # For spatial data handling
 ```
 
 ```{r}
 
+<<<<<<< Updated upstream
 Calo <- query_inaturalist(term = "Hymenoxys texana", type = "still image" )
 Calo$species<-as.factor(Calo$species)
 colnames(Calo)[1]<-'Calochortus'
 
+=======
+Calo <- query_inaturalist(term = "Calochortus tolmiei", type = "still image", all_data = FALSE )
+Calo2 <- Calo
+Calo <- subset(Calo2, select = c("species","latitude","longitude"))
+colnames(Calo)[1]<-'species'
+Calo$species <- as.factor(Calo$species)
+
+```
+
+```{r}
+
+states_usa <- map_data("state")
+states_mexico <- map_data("world", region = "Mexico")
+states_canada <- map_data("world", region = "Canada")
+
+```
+
+```{r}
+
+Calochort <- ggplot() +
+  geom_map(data = states_usa, map = states_usa,
+           aes(x = longitude, y = latitude, map_id = region),
+           color = 'black', fill = "azure", size = 0.3) +  # Add state borders for the USA
+  geom_map(data = states_mexico, map = states_mexico,
+           aes(x = longitude, y = latitude, map_id = region),
+           color = 'black', fill = "honeydew", size = 0.3) +  # Add country borders for Mexico
+  geom_map(data = states_canada, map = states_canada,
+           aes(x = longitude, y = latitude, map_id = region),
+           color = 'black', fill = "lavender", size = 0.3) +  # Add country borders for Canada
+  scale_fill_gradient(name = 'Elevation (m)', low = 'white', high = 'black') +
+  coord_sf(xlim = c(-125, -90), ylim = c(12, 50)) +
+  geom_point(mapping = aes(x = as.numeric(longitude), 
+                           y = as.numeric(latitude),
+                           colour = species,
+                           fill = species,
+                           shape = species),
+             data = Calo, cex = 0.25) +
+  scale_shape_manual(name = 'Calochortus', values = c(22, 21, 24, 23)) +
+  scale_color_manual(values = c('grey26', '#000000', '#000000', '#000000')) +
+  scale_fill_manual(values = c('grey76', '#1E88E5', '#FF880A', '#8C0808')) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),  # Remove major gridlines
+        panel.grid.minor = element_blank())  # Remove minor gridlines
+
+```
+
+```{r}
+p=ggplotly(Calochort)  
+#htmlwidgets::saveWidget(as_widget(p), "Calochortus.html")
+>>>>>>> Stashed changes
 
 ```
 
