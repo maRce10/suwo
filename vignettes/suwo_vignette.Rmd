@@ -7,12 +7,41 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
+
+suwo is intended to facilitate the acquisition of observational data from multiple databases available on the internet. These databases include Inaturalist, Observation, Wikiaves, Xenocanto, Macaulay Library and GBIF. This vignette provides a general overview of the download of data using the suwo query functions and the analysis of the metadata.
+
+The package can be installed from CRAN as follows:
+
+```{r}
+
+# From CRAN would be
+install.packages("suwo")
+
+#load package
+library(suwo)
+
+
+```
+
+To install the latest developmental version from github you will need the R package remotes:
+```{r}
+
+# install package
+remotes::install_github("maRce10/suwo")
+
+#load packages
+library(suwo)
+
+```
+
+Finding data using suwo follows a basic sequence. First a database is selected and the corresponding query function is used to search for the data needed.
 
 ```{r setup}
 library(suwo)
@@ -44,14 +73,10 @@ library(mapdata)
 library(sp)     # For spatial data handling
 ```
 
+A search query consists of a term (species name), a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if a summary of the metadata is generated as the output of the query.
+
 ```{r}
 
-<<<<<<< Updated upstream
-Calo <- query_inaturalist(term = "Hymenoxys texana", type = "still image" )
-Calo$species<-as.factor(Calo$species)
-colnames(Calo)[1]<-'Calochortus'
-
-=======
 Calo <- query_inaturalist(term = "Calochortus tolmiei", type = "still image", all_data = FALSE )
 Calo2 <- Calo
 Calo <- subset(Calo2, select = c("species","latitude","longitude"))
@@ -72,17 +97,17 @@ states_canada <- map_data("world", region = "Canada")
 
 Calochort <- ggplot() +
   geom_map(data = states_usa, map = states_usa,
-           aes(x = longitude, y = latitude, map_id = region),
+           aes(x = long, y = lat, map_id = region),
            color = 'black', fill = "azure", size = 0.3) +  # Add state borders for the USA
   geom_map(data = states_mexico, map = states_mexico,
-           aes(x = longitude, y = latitude, map_id = region),
+           aes(x = long, y = lat, map_id = region),
            color = 'black', fill = "honeydew", size = 0.3) +  # Add country borders for Mexico
   geom_map(data = states_canada, map = states_canada,
-           aes(x = longitude, y = latitude, map_id = region),
+           aes(x = long, y = lat, map_id = region),
            color = 'black', fill = "lavender", size = 0.3) +  # Add country borders for Canada
   scale_fill_gradient(name = 'Elevation (m)', low = 'white', high = 'black') +
   coord_sf(xlim = c(-125, -90), ylim = c(12, 50)) +
-  geom_point(mapping = aes(x = as.numeric(longitude), 
+  geom_point(mapping = aes(x = as.numeric(longitude),
                            y = as.numeric(latitude),
                            colour = species,
                            fill = species,
@@ -100,37 +125,6 @@ Calochort <- ggplot() +
 ```{r}
 p=ggplotly(Calochort)  
 #htmlwidgets::saveWidget(as_widget(p), "Calochortus.html")
->>>>>>> Stashed changes
 
 ```
-
-```{r}
-
-Calochort <- ggplot() +
-  geom_map(data = states_usa, map = states_usa,
-           aes(x = long, y = lat, map_id = region),
-           color = 'black', fill = "azure", size = 0.3) +  # Add state borders for the USA
-  geom_map(data = states_mexico, map = states_mexico,
-           aes(x = long, y = lat, map_id = region),
-           color = 'black', fill = "honeydew", size = 0.3) +  # Add country borders for Mexico
-  geom_map(data = states_canada, map = states_canada,
-           aes(x = long, y = lat, map_id = region),
-           color = 'black', fill = "lavender", size = 0.3) +  # Add country borders for Canada
-  scale_fill_gradient(name = 'Elevation (m)', low = 'white', high = 'black') +
-  coord_sf(xlim = c(-125, -90), ylim = c(12, 50)) +
-  geom_point(mapping = aes(x = as.numeric(longitude), 
-                           y = as.numeric(latitude),
-                           colour = Calochortus,
-                           fill = Calochortus,
-                           shape = Calochortus),
-             data = Calo, cex = 0.25) +
-  scale_shape_manual(name = 'Calochortus', values = c(22, 21, 24, 23)) +
-  scale_color_manual(values = c('grey26', '#000000', '#000000', '#000000')) +
-  scale_fill_manual(values = c('grey76', '#1E88E5', '#FF880A', '#8C0808')) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(),  # Remove major gridlines
-        panel.grid.minor = element_blank())  # Remove minor gridlines
-
-```
-
 
