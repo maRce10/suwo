@@ -127,25 +127,32 @@ query_inaturalist <- function(term = NULL,
     # x <- as.data.frame(query_output$results[1, ])
     # x$id
 
-    # Determine the last processed page from the csv
-    last_processed_page <- if (file.exists(save_path)) {
+    # Determine the last processed id from the csv
+    last_id <- if (file.exists(save_path)) {
       save_path_data <- read.csv(save_path)
-      max(save_path_data$page)
+      min(save_path_data$id)
     } else {
       0
     }
 
-    pages <- (last_processed_page + 1):(ceiling(base.srch.pth$total_results / base.srch.pth$per_page))
+    # Determine the last processed page from the csv
+    last_processed_page <- if (file.exists(save_path)) {
+      save_path_data <- read.csv(save_path)
+      min(save_path_data$result_number)
+    } else {
+      0
+    }
+    if (last_processed_page != 0) {number_results <- (result_number + 1):base.srch.pth$total_results} else {number_results <- 0:base.srch.pth$total_results}
 
 #-------------------------------------------------------------------------------------------------------------------
-    query_output_list <- pblapply_sw_int(pages, cl = cl, pbar = pb, function(i) {
-      query_output <- jsonlite::fromJSON(paste0(srch_trm, "&page=", i))
+    query_output_list <- pblapply_sw_int(number_results, cl = cl, pbar = pb, function(i) {
+      query_output <- if (last_id != 0){jsonlite::fromJSON(paste0(srch_trm, "&id_below=", last_id))} else {jsonlite::fromJSON(paste0(srch_trm, "&id_above=", last_id))}
 
       # format as list of data frame
       query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
         x <- as.data.frame(query_output$results[u, ])
 
-        x$page <- i
+        x$result_number <- i+1
 
         if (type == "sounds") {
           media_df <- do.call(rbind, x$sounds)
@@ -168,8 +175,10 @@ query_inaturalist <- function(term = NULL,
 
         if (file.exists(save_path)) {
           write.table(X_df, file = save_path, sep = ",", row.names = FALSE, col.names = FALSE, append = TRUE)
+          last_id <- max(query_output$results$id)
         } else {
           write.table(X_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
+          last_id <- max(query_output$results$id)
         }
 
         return(X_df)
