@@ -142,17 +142,14 @@ query_inaturalist <- function(term = NULL,
     } else {
       0
     }
-    if (last_processed_page != 0) {number_results <-  seq((result_number + 1), by = 201, length.out = base.srch.pth$total_results)} else {number_results <- seq(0, by = 201, length.out = base.srch.pth$total_results)}
-
+    if (last_processed_page != 0) {number_results <-  list()} else {number_results <- list(last_id)}
 #-------------------------------------------------------------------------------------------------------------------
     query_output_list <- pblapply_sw_int(number_results, cl = cl, pbar = pb, function(i) {
-      query_output <- if (last_id != 0){jsonlite::fromJSON(paste0(srch_trm, "&id_below=", last_id))} else {jsonlite::fromJSON(paste0(srch_trm, "&id_above=", last_id))}
+      query_output <- if (last_id != 0){jsonlite::fromJSON(paste0(srch_trm, "&id_below=", last_id))} else {jsonlite::fromJSON(paste0(srch_trm, "&id_above=0"))}
 
       # format as list of data frame
       query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
         x <- as.data.frame(query_output$results[u, ])
-
-        x$result_number <- i
 
         if (type == "sounds") {
           media_df <- do.call(rbind, x$sounds)
@@ -181,6 +178,9 @@ query_inaturalist <- function(term = NULL,
           last_id <- max(query_output$results$id)
         }
 
+        if (u == 199) {
+          number_results <- append(number_results, x$id)
+        }
         return(X_df)
       })
 #-------------------------------------------------------------------------------------------------------------------
