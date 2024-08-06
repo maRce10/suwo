@@ -142,7 +142,7 @@ query_inaturalist <- function(term = NULL,
     } else {
       0
     }
-    if (last_processed_page != 0) {number_results <- (result_number + 1):base.srch.pth$total_results} else {number_results <- 0:base.srch.pth$total_results}
+    if (last_processed_page != 0) {number_results <-  seq((result_number + 1), by = 201, length.out = base.srch.pth$total_results)} else {number_results <- seq(0, by = 201, length.out = base.srch.pth$total_results)}
 
 #-------------------------------------------------------------------------------------------------------------------
     query_output_list <- pblapply_sw_int(number_results, cl = cl, pbar = pb, function(i) {
@@ -152,7 +152,7 @@ query_inaturalist <- function(term = NULL,
       query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
         x <- as.data.frame(query_output$results[u, ])
 
-        x$result_number <- i+1
+        x$result_number <- i
 
         if (type == "sounds") {
           media_df <- do.call(rbind, x$sounds)
