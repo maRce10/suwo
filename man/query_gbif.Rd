@@ -11,7 +11,8 @@ query_gbif(
   pb = TRUE,
   verbose = TRUE,
   dataset = NULL,
-  all_data = TRUE
+  all_data = TRUE,
+  save_path = paste0(term, ".csv")
 )
 }
 \arguments{

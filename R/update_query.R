@@ -64,11 +64,11 @@ update_query <-
 
     }
     if (dataframe_1$repository[1] == "Observation"){
-      query_output_new <- query_observation(term = query_term, type = query_type, all_data = TRUE)
+      query_output_new <- query_observation(term = query_term, type = query_type, all_data = TRUE, token = Token)
 
     }
     if (dataframe_1$repository[1] == "XC"){
-      query_output_new <- query_xenocanto()
+      query_output_new <- query_xenocanto(term = query_term)
 
     }
     if (dataframe_1$repository[1] == "wikiaves"){

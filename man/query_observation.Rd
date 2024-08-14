@@ -10,7 +10,8 @@ query_observation(
   cores = 1,
   pb = TRUE,
   verbose = TRUE,
-  token = NULL
+  token = NULL,
+  save_path = paste0(term, ".csv")
 )
 }
 \arguments{

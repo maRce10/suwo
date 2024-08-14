@@ -81,4 +81,3 @@ htmlwidgets::saveWidget(widget = Calo_map,
 <iframe src = "~/Documents/GitHub/suwo/Calo_map.html" width="400" height = "500"> </iframe>
 <!--html_preserve-->
 
-asdasd

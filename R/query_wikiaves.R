@@ -34,7 +34,8 @@ query_wikiaves <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           all_data = TRUE) {
+           all_data = TRUE,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -218,6 +219,7 @@ query_wikiaves <-
         attr(query_output_df, "query_type") <- org_type
         attr(query_output_df, "query_all_data") <- all_data
 
+        write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
         return(query_output_df)
       }
     }

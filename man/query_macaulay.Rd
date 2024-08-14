@@ -11,7 +11,8 @@ query_macaulay(
   pb = TRUE,
   verbose = TRUE,
   token = NULL,
-  all_data = TRUE
+  all_data = TRUE,
+  save_path = paste0(term, ".csv")
 )
 }
 \arguments{

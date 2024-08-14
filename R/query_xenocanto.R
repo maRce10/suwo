@@ -58,7 +58,8 @@ query_xenocanto <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           all_data = TRUE) {
+           all_data = TRUE,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -361,7 +362,7 @@ query_xenocanto <-
       attr(query_output_df, "query_term") <- term
       attr(query_output_df, "query_all_data") <- all_data
 
-
+      write.table(results, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
       return(droplevels(results))
     }
   }

@@ -19,7 +19,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_observation(term = 'Turdus iliacus', type = "Sound", cores = 4)
+# df1 <- query_observation(term = 'Turdus iliacus', type = "Sound", cores = 4, token = ".....")
 #' View(df1)
 #' }
 #'
@@ -34,7 +34,8 @@ query_observation <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           token = NULL) {
+           token = NULL,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -246,6 +247,6 @@ query_observation <-
     attr(query_output_df, "query_type") <- org_type
     attr(query_output_df, "query_all_data") <- all_data
 
-
+    write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
     return(query_output_df)
   }
