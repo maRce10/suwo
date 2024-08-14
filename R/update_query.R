@@ -12,14 +12,14 @@
 #' @examples
 #' \dontrun{
 #' # compare
-# df3 <- update_query(dataframe_1 = df1)
+# df3 <- update_query(previous_query = df1)
 #' View(df3)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 update_query <-
-  function(dataframe_1 = NULL) {
+  function(previous_query = NULL, token = NULL) {
 
     # check arguments
     arguments <- as.list(base::match.call())[-1]
@@ -64,6 +64,10 @@ update_query <-
 
     }
     if (dataframe_1$repository[1] == "Observation"){
+      # Check if token is available
+      if (is.null(token)) {
+        .stop("Invalid token for observation.org")
+      }
       query_output_new <- query_observation(term = query_term, type = query_type, all_data = TRUE, token = Token)
 
     }

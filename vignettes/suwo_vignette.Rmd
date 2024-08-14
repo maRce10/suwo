@@ -80,4 +80,31 @@ htmlwidgets::saveWidget(widget = Calo_map,
 <!--html_preserve-->
 <iframe src = "~/Documents/GitHub/suwo/Calo_map.html" width="400" height = "500"> </iframe>
 <!--html_preserve-->
+Queries may me made to any of the six available query functions that connect to one repository.
+
+```{r, eval = TRUE, echo = FALSE}
+
+query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
+
+#Queries from observation.org require a token provided by the observation.org website through a terminal request
+#query_result_Observation <- query_observation(term = 'Turdus iliacus', type = "Sound", token = ".....")
+
+#Queries from Macaulay require user confirmation after download of the csv file that contains the information from the search in the Macaulay library.
+#query_result_Macaulay <- query_macaulay(term = 'Turdus iliacus', type = "Sound")
+
+query_result_GBIF <- query_gbif(term = 'Turdus iliacus', type = "Sound")
+
+query_result_Wikiaves <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
+
+query_result_Xenocanto <- query_xenocanto(term = "Phaethornis anthophilus")
+```
+
+The function update_query allows users to update previous searches from the same function to obtain new data starting from the last search. The previous search must be loaded as an rds file because it uses the attributes of the dataframe.
+
+```{r}
+
+Updated_query  <- update_query(Previous_Query = df1)
+
+```
+
 

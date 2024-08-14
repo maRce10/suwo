@@ -290,6 +290,8 @@ query_inaturalist <- function(term = NULL,
     attr(query_output_df, "query_type") <- org_type
     attr(query_output_df, "query_all_data") <- all_data
 
+    write.table(results, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
+    saveRDS(query_output_df, file = save_path)
     return(query_output_df)
   }
 }

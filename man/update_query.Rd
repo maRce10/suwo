@@ -4,7 +4,7 @@
 \alias{update_query}
 \title{Access 'observation' recordings and metadata}
 \usage{
-update_query(dataframe_1 = NULL)
+update_query(previous_query = NULL, token = NULL)
 }
 \arguments{
 \item{dataframe_1}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}

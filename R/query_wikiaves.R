@@ -220,6 +220,7 @@ query_wikiaves <-
         attr(query_output_df, "query_all_data") <- all_data
 
         write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
+        saveRDS(query_output_df, file = save_path)
         return(query_output_df)
       }
     }
