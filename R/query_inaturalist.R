@@ -121,11 +121,6 @@ query_inaturalist <- function(term = NULL,
       cl <- cores
     }
 
-    # query_output <- jsonlite::fromJSON(paste0(srch_trm, "&page=1"))
-    #
-    # query_output$results
-    # x <- as.data.frame(query_output$results[1, ])
-    # x$id
 
     # Determine the last processed id from the csv
     last_id <- if (file.exists(save_path)) {
@@ -156,6 +151,7 @@ query_inaturalist <- function(term = NULL,
         } else {
           media_df <- do.call(rbind, x$photos)
         }
+
         # media data frame with image details
         media_df <- media_df[!sapply(media_df, is.list)]
         media_df <- data.frame(media_df)
@@ -166,7 +162,7 @@ query_inaturalist <- function(term = NULL,
 
         # make it data frame
         X_df <- data.frame(t(unlist(x)))
-
+        X_df$unitnumber <- u
         # add media details
         X_df <- cbind(X_df, media_df)
 
@@ -178,7 +174,7 @@ query_inaturalist <- function(term = NULL,
           last_id <- max(query_output$results$id)
         }
 
-        if (u == 199) {
+        if (u == 200) {
           number_results <- append(number_results, x$id)
         }
         return(X_df)
