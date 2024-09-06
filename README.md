@@ -45,14 +45,12 @@ suggest a new repository.
 Install/load the package from CRAN as follows:
 
 ```{r, eval = FALSE}
-
 # From CRAN would be
 # install.packages("suwo")
 
 # load package
 library(suwo)
 ```
-
 To install the latest developmental version from
 [github](https://github.com/) you will need the R package
 [remotes](https://cran.r-project.org/package=remotes):
