@@ -10,7 +10,8 @@ query_wikiaves(
   cores = 1,
   pb = TRUE,
   verbose = TRUE,
-  all_data = TRUE
+  all_data = TRUE,
+  save_path = paste0(term, ".csv")
 )
 }
 \arguments{

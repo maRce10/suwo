@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--08--07-yellowgreen.svg)](/commits/master)
+![GitHub last commit](https://img.shields.io/github/last-commit/maRce10/suwo)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=master)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
@@ -20,12 +20,15 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](htt
 <!-- badges: end -->
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
+<img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/>
 
 [suwo](https://github.com/maRce10/suwo) is intended streamline
 searching/downloading of nature media files (e.g. audios, photos) from
 online repositories.
 
-The package offers functions for:
+[suwo](https://github.com/maRce10/suwo) offers functions for critical steps in the acquisition of data necessary to develop methods that require a large amount of data.
+
+The main features of the package are:
 
 - Obtaining media metadata from online repositories
 - Downloading associated media files
@@ -37,6 +40,17 @@ Please [open a new
 issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to
 suggest a new repository.
 
+## Installing suwo
+
+Install/load the package from CRAN as follows:
+
+```{r, eval = FALSE}
+# From CRAN would be
+# install.packages("suwo")
+
+# load package
+library(suwo)
+```
 To install the latest developmental version from
 [github](https://github.com/) you will need the R package
 [remotes](https://cran.r-project.org/package=remotes):

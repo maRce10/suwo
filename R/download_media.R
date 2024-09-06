@@ -16,7 +16,7 @@
 #' @seealso \code{\link{query_gbif}},
 #' @examples
 #' \dontrun{
-#'
+#'   download_media(query_result, path = "./home")
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

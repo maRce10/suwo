@@ -58,7 +58,8 @@ query_xenocanto <-
            cores = 1,
            pb = TRUE,
            verbose = TRUE,
-           all_data = TRUE) {
+           all_data = TRUE,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -85,7 +86,7 @@ query_xenocanto <-
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
-      print("Obtaining metadata:")
+      cat(paste(.color_text(paste0("Obtaining metadata (matching observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
     }
 
     # format query term
@@ -355,6 +356,14 @@ query_xenocanto <-
         results <- results[, c("location", "latitude", "longitude", "file_url", "repository", "key", "species", "date", "country")]
       }
 
+      # Add a timestamp and search query attribute
+      search_time <- Sys.time()
+      attr(query_output_df, "search_time") <- search_time
+      attr(query_output_df, "query_term") <- term
+      attr(query_output_df, "query_all_data") <- all_data
+
+      write.table(results, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
+      saveRDS(query_output_df, file = save_path)
       return(droplevels(results))
     }
   }

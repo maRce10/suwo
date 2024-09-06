@@ -36,7 +36,8 @@ query_macaulay <-
            pb = TRUE,
            verbose = TRUE,
            token = NULL,
-           all_data = TRUE) {
+           all_data = TRUE,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -94,22 +95,29 @@ query_macaulay <-
 
     utils::browseURL(search_url)
 
-    #Obtain file snapshot
+    # Take snapshot before asking for download confirmation
     snapshot <- utils::fileSnapshot()
 
     #Ask if user has downloaded csv file from Macaulay library
     user_input <- readline("Is the data table csv downloaded? (y/n)  ")
-    if(user_input != 'y') stop('Exiting since you did not press y')
+    if(user_input != 'y') {
+      stop('Exiting since you did not press y')
+      }
 
-    #Obtain file path from added files
+    # Obtain updated file path after the user confirms the download
     changed_files <- utils::changedFiles(snapshot)
 
-    file_path <- changed_files[["added"]][grep("\\.csv$",changed_files[["added"]])]
+    # Filter for CSV files, ignoring case
+    csv_files <- changed_files[["added"]][grep("\\.csv$", changed_files[["added"]], ignore.case = TRUE)]
 
-    if(file_path == "") stop('file not found')
+    # Check if any CSV file is found
+    if (length(csv_files) == 0) stop('No CSV file found')
 
-    # find csv in files
-    query_output_df <- read.csv(file_path)
+    # Check the csv file for file path
+    file_path <- csv_files[1]
+
+    # Read the CSV file
+    query_output_df <- read.csv(file_path, stringsAsFactors = FALSE)
 
     # Change column name for media download function
     colnames(query_output_df)[colnames(query_output_df) == "ML.Catalog.Number"] <- "key"
@@ -133,5 +141,14 @@ query_macaulay <-
       query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
     }
 
+    # Add a timestamp attribute
+    search_time <- Sys.time()
+    attr(query_output_df, "search_time") <- search_time
+    attr(query_output_df, "query_term") <- term
+    attr(query_output_df, "query_type") <- org_type
+    attr(query_output_df, "query_all_data") <- all_data
+
+    write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
+    saveRDS(query_output_df, file = save_path)
     return(query_output_df)
 }

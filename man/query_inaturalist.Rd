@@ -12,7 +12,8 @@ query_inaturalist(
   type = c("sound", "still image"),
   identified = FALSE,
   verifiable = FALSE,
-  all_data = TRUE
+  all_data = TRUE,
+  save_path = paste0(term, ".csv")
 )
 }
 \arguments{

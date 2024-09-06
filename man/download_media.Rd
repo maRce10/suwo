@@ -31,7 +31,7 @@ File downloading process can be interrupted and resume later as long as the work
 }
 \examples{
 \dontrun{
-
+  download_media(query_result, path = "./home")
 }
 
 }

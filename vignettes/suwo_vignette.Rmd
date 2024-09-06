@@ -1,0 +1,153 @@
+---
+title: "suwo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{suwo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+suwo is intended to facilitate the acquisition of observational data from multiple databases available on the internet. These databases include Inaturalist, Observation, Wikiaves, Xenocanto, Macaulay Library and GBIF. This vignette provides a general overview of the download of data using the suwo query functions and the analysis of the metadata.
+
+The package can be installed from CRAN as follows:
+
+```{r}
+
+# From CRAN would be
+install.packages("suwo")
+
+#load package
+library(suwo)
+library(htmlwidgets)
+
+
+```
+
+To install the latest developmental version from github you will need the R package remotes:
+```{r}
+
+# install package
+#remotes::install_github("maRce10/suwo")
+
+#load packages
+#library(suwo)
+
+```
+
+Finding data using suwo follows a basic sequence. First a database is selected and the corresponding query function is used to search for the data needed.
+
+
+A search query consists of a term (species name), a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if a summary of the metadata is generated as the output of the query.
+
+```{r, eval = FALSE}
+
+Calo <- query_inaturalist(term = "Calochortus plummerae", type = "still image", all_data = FALSE )
+Calo2 <- Calo
+Calo <- subset(Calo2, select = c("species","latitude","longitude"))
+colnames(Calo)[1]<-'species'
+Calo$species <- as.factor(Calo$species)
+
+
+saveRDS(Calo, "~/Downloads/calo_data.RDS")
+```
+
+```{r, eval = TRUE, echo = FALSE}
+
+Calo <- readRDS("~/Downloads/calo_data.RDS")
+
+```
+
+
+
+```{r}
+
+Calo_map <- leaflet::leaflet(Calo)
+
+
+htmlwidgets::saveWidget(widget = Calo_map,
+                        file = "Calo_map.html",
+                        selfcontained = TRUE)
+  
+```
+<!--html_preserve-->
+<iframe src = "~/Documents/GitHub/suwo/Calo_map.html" width="400" height = "500"> </iframe>
+<!--html_preserve-->
+Queries may me made to any of the six available query functions that connect to one repository.
+
+```{r, eval = TRUE, echo = FALSE}
+
+query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
+
+#Queries from observation.org require a token provided by the observation.org website through a terminal request
+#query_result_Observation <- query_observation(term = 'Turdus iliacus', type = "Sound", token = ".....")
+
+#Queries from Macaulay require user confirmation after download of the csv file that contains the information from the search in the Macaulay library.
+#query_result_Macaulay <- query_macaulay(term = 'Turdus iliacus', type = "Sound")
+
+query_result_GBIF <- query_gbif(term = 'Turdus iliacus', type = "Sound")
+
+query_result_Wikiaves <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
+
+query_result_Xenocanto <- query_xenocanto(term = "Phaethornis anthophilus")
+```
+
+The function update_query allows users to update previous searches from the same function to obtain new data starting from the last search. The previous search must be loaded as an rds file because it uses the attributes of the dataframe.
+
+```{r}
+
+Updated_query  <- update_query(Previous_Query = df1)
+
+```
+
+Metadata can be used to download the available files from the data stored from the query. This can be done utilizing the function download_media. This function may take a longer time to run depending on the available resources and the amount of data that needs to be downloaded.
+
+```{r}
+
+download_media(query_result, path = getwd())
+
+```
+
+When checking between repository metadata, users may use the function detect_duplicates to identify and eliminate the repeated observations. This function can return a merged data frame without the repeated observations, or just identify the repetitions.
+
+```{r}
+
+Merged_Dataframe <- detect_duplicates(dataframe_1 = df1, dataframe_2 = df2)
+
+```
+
+The GBIF repository dataset may me consulted to filter what repositories the user would like to consult specifically. This may be viewed by downloading the data using the function check_gbif_dataset. This function downloads the csv of the complete repository list available on GBIF.
+
+```{r}
+
+check_gbif_datasets()
+
+```
+
+Users may display the coordinate information of the observations from a query using the map_locations function. This will allow the user to show the locations of the observations on a map.
+
+```{r}
+
+metadata <- query_xenocanto(term = "Phaethornis anthophilus")
+
+# create map
+map_locations(metadata)
+
+```
+
+A query search may require a taxon code to correctly display the species observation data. This information can be consulted using the taxon_code_search function that consults the clements database
+
+```{r}
+
+taxon_code_turdus <- taxon_code_search(species_name = 'Turdus iliacus', taxon_code_df = clements_data)
+
+```
+
+

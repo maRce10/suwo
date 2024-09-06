@@ -55,7 +55,8 @@ query_gbif <-
            pb = TRUE,
            verbose = TRUE,
            dataset = NULL,
-           all_data = TRUE) {
+           all_data = TRUE,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -246,6 +247,16 @@ query_gbif <-
 
         query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
       }
+
+      # Add a timestamp attribute
+      search_time <- Sys.time()
+      attr(query_output_df, "search_time") <- search_time
+      attr(query_output_df, "query_term") <- term
+      attr(query_output_df, "query_type") <- org_type
+      attr(query_output_df, "query_all_data") <- all_data
+
+      write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
+      saveRDS(query_output_df, file = save_path)
       return(query_output_df)
     }
   }
