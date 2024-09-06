@@ -26,7 +26,9 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](htt
 searching/downloading of nature media files (e.g. audios, photos) from
 online repositories.
 
-The package offers functions for:
+[suwo](https://github.com/maRce10/suwo) offers functions for critical steps in the acquisition of data necessary to develop methods that require a large amount of data.
+
+The main features of the package are:
 
 - Obtaining media metadata from online repositories
 - Downloading associated media files
@@ -37,6 +39,19 @@ searching for new online repositories to be included in the package.
 Please [open a new
 issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to
 suggest a new repository.
+
+## Installing suwo
+
+Install/load the package from CRAN as follows:
+
+```{r, eval = FALSE}
+
+# From CRAN would be
+# install.packages("suwo")
+
+# load package
+library(suwo)
+```
 
 To install the latest developmental version from
 [github](https://github.com/) you will need the R package
