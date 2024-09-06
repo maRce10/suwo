@@ -20,6 +20,7 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](htt
 <!-- badges: end -->
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
+<img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/>
 
 [suwo](https://github.com/maRce10/suwo) is intended streamline
 searching/downloading of nature media files (e.g. audios, photos) from
