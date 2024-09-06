@@ -23,29 +23,48 @@ editor_options:
 
 <img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/>
 
-[suwo](https://github.com/maRce10/suwo) is intended streamline searching/downloading
-of nature media files (e.g. audios, photos) from online repositories.
+[suwo](https://github.com/maRce10/suwo) is intended streamline
+searching/downloading of nature media files (e.g. audios, photos) from
+online repositories.
 
-The package offers functions for:
+[suwo](https://github.com/maRce10/suwo) offers functions for critical steps in the acquisition of data necessary to develop methods that require a large amount of data.
 
-   - Obtaining media metadata from online repositories
-   - Downloading associated media files
-   - Updating data sets with new records
-   
-THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please [open a new issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to suggest a new repository.
+The main features of the package are:
 
+- Obtaining media metadata from online repositories
+- Downloading associated media files
+- Updating data sets with new records
 
-To install the latest developmental version from [github](https://github.com/) you will need the R package [remotes](https://cran.r-project.org/package=remotes):
+THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently
+searching for new online repositories to be included in the package.
+Please [open a new
+issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to
+suggest a new repository.
+
+## Installing suwo
+
+Install/load the package from CRAN as follows:
 
 ```{r, eval = FALSE}
+# From CRAN would be
+# install.packages("suwo")
+
+# load package
+library(suwo)
+```
+To install the latest developmental version from
+[github](https://github.com/) you will need the R package
+[remotes](https://cran.r-project.org/package=remotes):
+
+``` r
 remotes::install_github("maRce10/suwo")
 
 #load package
 library(suwo)
-
 ```
 
 Please cite [suwo](https://github.com/maRce10/suwo) as follows:
 
-Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media repositories through R. R package version 0.1.0.
+Araya-Salas, M., & Elizondo-Calvo, J. 2023. suwo: access nature media
+repositories through R. R package version 0.1.0.
 
