@@ -60,13 +60,14 @@ query_wikiaves <-
       .stop("'term' must be supplied")
     }
 
-    # check internet connection
-    a <- try(RCurl::getURL("www.wikiaves.com"), silent = TRUE)
-    if (is(a, "try-error")) {
+    # Check internet connection using httr and error handling
+    response <- try(httr::GET("https://www.wikiaves.com"), silent = TRUE)
+    if (inherits(response, "try-error") || httr::http_error(response)) {
       .stop("No connection to wikiaves (check your internet connection!)")
     }
 
-    if (a == "Could not connect to the database") {
+    content <- httr::content(response, as = "text")
+    if (grepl("Could not connect to the database", content)) {
       .stop("wikiaves.com website is apparently down")
     }
 
@@ -81,12 +82,17 @@ query_wikiaves <-
     # format JSON
     term <- gsub(" ", "%20", term)
 
-    # initialize search
-    get_ids <-
-      jsonlite::fromJSON(paste0(
-        "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
-        term
-      ))
+    # initialize search with user agent
+    response <- GET(
+      url = paste0("https://www.wikiaves.com.br/getTaxonsJSON.php?term=", term),
+      user_agent("suwo (https://github.com/maRce10/suwo)")
+    )
+
+    # check if request succeeded
+    stop_for_status(response)
+
+    get_ids <- content(response, as = "parsed", type = "application/json")
+
 
     if (length(get_ids) == 0) {
       if (verbose) {
@@ -97,19 +103,14 @@ query_wikiaves <-
       get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
 
       get_ids$total_registers <- sapply(1:nrow(get_ids), function(u) {
-        as.numeric(jsonlite::fromJSON(
-          paste0(
-            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            if (type == "photo") {
-              "f"
-            } else {
-              "s"
-            },
-            "&t=s&s=",
-            get_ids$id[u],
-            "&o=mp&p=1"
-          )
-        )$registros$total)
+        response <- GET(
+          url = paste0("https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+                       if (type == "photo") { "f" } else { "s" },
+                       "&t=s&s=", get_ids$id[u], "&o=mp&p=1"),
+          user_agent("suwo (https://github.com/maRce10/suwo)")
+        )
+        stop_for_status(response)
+        as.numeric(content(response, as = "parsed")$registros$total)
       })
 
       if (sum(get_ids$total_registers) == 0 & verbose) {

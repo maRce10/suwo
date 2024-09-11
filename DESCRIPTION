@@ -17,7 +17,8 @@ Imports:
     pbapply,
     rjson,
     utils,
-    viridis
+    viridis,
+    httr
 Suggests: 
     covr,
     testthat,
