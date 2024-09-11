@@ -69,16 +69,27 @@ query_macaulay <-
                    `video` = "video"
     )
 
-    if (tolower(Sys.info()[["sysname"]]) != "windows"){
-      # check internet connection
-      a <- try(RCurl::getURL("https://www.macaulaylibrary.org/"), silent = TRUE)
-      if (is(a, "try-error")) {
-        .stop("No connection to macaulaylibrary.org (check your internet connection!)")
-      }
+    # if (tolower(Sys.info()[["sysname"]]) != "windows"){
+    #   # check internet connection
+    #   a <- try(RCurl::getURL("https://www.macaulaylibrary.org/"), silent = TRUE)
+    #   if (is(a, "try-error")) {
+    #     .stop("No connection to macaulaylibrary.org (check your internet connection!)")
+    #   }
+    #
+    #   if (a == "Could not connect to the database") {
+    #     .stop("macaulaylibrary.org website is apparently down")
+    #   }
+    # }
 
-      if (a == "Could not connect to the database") {
-        .stop("macaulaylibrary.org website is apparently down")
-      }
+    # Check internet connection using httr and error handling
+    response <- try(httr::GET("https://www.macaulaylibrary.org/"), silent = TRUE)
+    if (inherits(response, "try-error") || httr::http_error(response)) {
+      .stop("No connection to macaulaylibrary.org (check your internet connection!)")
+    }
+
+    content <- httr::content(response, as = "text")
+    if (grepl("Could not connect to the database", content)) {
+      .stop("macaulaylibrary.org website is apparently down")
     }
 
     user_input_species <- term

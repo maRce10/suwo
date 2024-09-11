@@ -76,14 +76,25 @@ query_inaturalist <- function(term = NULL,
     .stop("'term' must be supplied")
   }
 
-  # check internet connection
-  a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
-  if (is(a, "try-error")) {
+  # # check internet connection
+  # a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
+  # if (is(a, "try-error")) {
+  #   .stop("No connection to INaturalist (check your internet connection!)")
+  # }
+  #
+  # if (a == "Could not connect to the database") {
+  #   .stop("observation website is apparently down")
+  # }
+
+  # Check internet connection using httr and error handling
+  response <- try(httr::GET("https://www.inaturalist.org/"), silent = TRUE)
+  if (inherits(response, "try-error") || httr::http_error(response)) {
     .stop("No connection to INaturalist (check your internet connection!)")
   }
 
-  if (a == "Could not connect to the database") {
-    .stop("observation website is apparently down")
+  content <- httr::content(response, as = "text")
+  if (grepl("Could not connect to the database", content)) {
+    .stop("INaturalist website is apparently down")
   }
 
   # Save species name

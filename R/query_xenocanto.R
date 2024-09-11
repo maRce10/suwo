@@ -74,15 +74,27 @@ query_xenocanto <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # check internet connection
-    a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
-    if (is(a, "try-error")) {
+    # # check internet connection
+    # a <- try(RCurl::getURL("www.xeno-canto.org"), silent = TRUE)
+    # if (is(a, "try-error")) {
+    #   .stop("No connection to xeno-canto.org (check your internet connection!)")
+    # }
+    #
+    # if (a == "Could not connect to the database") {
+    #   .stop("xeno-canto.org website is apparently down")
+    # }
+
+    # Check internet connection using httr and error handling
+    response <- try(httr::GET("www.xeno-canto.org"), silent = TRUE)
+    if (inherits(response, "try-error") || httr::http_error(response)) {
       .stop("No connection to xeno-canto.org (check your internet connection!)")
     }
 
-    if (a == "Could not connect to the database") {
+    content <- httr::content(response, as = "text")
+    if (grepl("Could not connect to the database", content)) {
       .stop("xeno-canto.org website is apparently down")
     }
+
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
