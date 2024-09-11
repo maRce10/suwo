@@ -125,10 +125,11 @@ map_locations <- function(metadata, cluster = FALSE, palette = viridis::viridis,
       ))
     }
 
-    # plot map
-    print(leaf_map)
 
     # let users know that some observations were not
     if (any(!inx_with_coors))
       .warning(paste(sum(!inx_with_coors), "observations (rows) were excluded as they have no geographic coordinates"))
+
+    # plot map
+    return(leaf_map)
 }
