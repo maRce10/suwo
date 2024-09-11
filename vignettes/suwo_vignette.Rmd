@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-suwo is intended to facilitate the acquisition of observational data from multiple databases available on the internet. These databases include Inaturalist, Observation, Wikiaves, Xenocanto, Macaulay Library and GBIF. This vignette provides a general overview of the download of data using the suwo query functions and the analysis of the metadata.
+suwo is intended to facilitate the acquisition of observational data from multiple databases available on the internet. These databases include Inaturalist, Observation, Wikiaves, Xenocanto, Macaulay Library and GBIF. This vignette provides a general overview of the download of data using the suwo query functions and the analysis of the metadata. Some results may not appear because of missing links in the database consulted or deleted observations that no longer are available.
 
 The package can be installed from CRAN as follows:
 
