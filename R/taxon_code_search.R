@@ -16,10 +16,11 @@
 #'
 #'
 
-taxon_code_search <-
-    function(species_name = NULL) {
-  taxon_code_df <- read.csv("Clements-v2023-October-2023.csv")
+taxon_code_search <- function(species_name = NULL) {
+  file_path <- system.file("extdata", "Clements-v2023-October-2023.csv", package = "suwo")
+  taxon_code_df <- read.csv(file_path)
   taxon_code <- taxon_code_df$species_code[taxon_code_df$scientific.name == species_name]
+
   if (length(taxon_code) > 0) {
     return(taxon_code[1])
   } else {
