@@ -22,7 +22,7 @@ The package can be installed from CRAN as follows:
 ```{r}
 
 # From CRAN would be
-install.packages("suwo")
+install.packages("suwo",repos = "http://cran.us.r-project.org")
 
 #load package
 library(suwo)
@@ -56,18 +56,11 @@ colnames(Calo)[1]<-'species'
 Calo$species <- as.factor(Calo$species)
 
 
-saveRDS(Calo, "~/Downloads/calo_data.RDS")
-```
+# saveRDS(Calo, "~/Downloads/calo_data.RDS")
 
-```{r, eval = TRUE, echo = FALSE}
-
-Calo <- readRDS("~/Downloads/calo_data.RDS")
-
-```
+# Calo <- readRDS("~/Downloads/calo_data.RDS")
 
 
-
-```{r}
 
 Calo_map <- leaflet::leaflet(Calo)
 
@@ -84,7 +77,7 @@ Queries may me made to any of the six available query functions that connect to 
 
 ```{r, eval = TRUE, echo = FALSE}
 
-query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
+# query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
 
 #Queries from observation.org require a token provided by the observation.org website through a terminal request
 #query_result_Observation <- query_observation(term = 'Turdus iliacus', type = "Sound", token = ".....")
@@ -92,7 +85,7 @@ query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", ty
 #Queries from Macaulay require user confirmation after download of the csv file that contains the information from the search in the Macaulay library.
 #query_result_Macaulay <- query_macaulay(term = 'Turdus iliacus', type = "Sound")
 
-query_result_GBIF <- query_gbif(term = 'Turdus iliacus', type = "Sound")
+query_result_GBIF <- query_gbif(term = 'Turdus iliacus', type = "sound")
 
 query_result_Wikiaves <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
 

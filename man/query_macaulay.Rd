@@ -5,14 +5,12 @@
 \title{Access 'observation' recordings and metadata}
 \usage{
 query_macaulay(
-  term = NULL,
+  term,
   type = c("audio", "photo", "video"),
-  cores = 1,
-  pb = TRUE,
-  verbose = TRUE,
-  token = NULL,
-  all_data = TRUE,
-  save_path = paste0(term, ".csv")
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  verbose = getOption("verbose", TRUE),
+  all_data = getOption("all_data", TRUE)
 )
 }
 \arguments{
@@ -21,16 +19,13 @@ species, to query 'observation' database. For example \emph{Phaethornis longiros
 
 \item{type}{Character vector with media type to query for. Currently 'photo' and 'audio' are available.}
 
-\item{cores}{Numeric. Controls whether parallel computing is applied.
-It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
 
-\item{pb}{Logical argument to control progress bar. Default is \code{TRUE}.}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
-\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
-\item{token}{Character refering to the token assigned by Observation.org as authorization for searches.}
-
-\item{all_data}{Logical argument that defines if all data is shown.}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media

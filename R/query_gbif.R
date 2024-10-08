@@ -1,16 +1,12 @@
 #' Access 'gbif' recordings and metadata
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
+#' @inheritParams template_params
 #' @param term Character vector of length one indicating genus and
 #'  species, to query 'gbif' database. For example, \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
-#' @param cores Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
 #' @return If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
-#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
-#' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
 #' @return If all_data is \code{TRUE} the function returns a data frame with the following media
 #' information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
 #' publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
@@ -49,14 +45,13 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-
-  function(term = NULL,
+  function(term,
            type = c("sound", "still image", "moving image", "interactive resource"),
-           cores = 1,
-           pb = TRUE,
-           verbose = TRUE,
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           verbose = getOption("verbose", TRUE),
            dataset = NULL,
-           all_data = TRUE,
-           save_path = paste0(term,".csv")) {
+          all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -255,8 +250,6 @@ query_gbif <-
       attr(query_output_df, "query_type") <- org_type
       attr(query_output_df, "query_all_data") <- all_data
 
-      write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
-      saveRDS(query_output_df, file = save_path)
-      return(query_output_df)
+       return(query_output_df)
     }
   }

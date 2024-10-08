@@ -1,7 +1,7 @@
 #' Access 'taxon codes'
 #'
 #' \code{taxon_code_search} searches for metadata from \href{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2023/download/}{clements}.
-#' @param species_name species name vector of length one indicating the species, to query 'clements database. For example \emph{Phaethornis longirostris}.
+#' @param term species name vector of length one indicating the species, to query 'clements database. For example \emph{Phaethornis longirostris}.
 #' @return Returns the taxon code for the given species name if match found in the clements taxon code data base
 #' @export
 #' @name taxon_code_search
@@ -9,7 +9,7 @@
 #' @examples
 #' \dontrun{
 #' # search
-# taxon_code_turdus <- taxon_code_search(species_name = 'Turdus iliacus', taxon_code_df = clements_data)
+# taxon_code_turdus <- taxon_code_search(term = 'Turdus iliacus')
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -17,9 +17,8 @@
 #'
 
 taxon_code_search <-
-    function(species_name = NULL) {
-  taxon_code_df <- read.csv("Clements-v2023-October-2023.csv")
-  taxon_code <- taxon_code_df$species_code[taxon_code_df$scientific.name == species_name]
+    function(term) {
+   taxon_code <- taxon_code_df$species_code[taxon_code_df$scientific.name == term & !is.na(taxon_code_df$scientific.name)]
   if (length(taxon_code) > 0) {
     return(taxon_code[1])
   } else {

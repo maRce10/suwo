@@ -1,13 +1,9 @@
 #' Access 'wikiaves' recordings and metadata
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
+#' @inheritParams template_params
 #' @param term Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
-#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
-#' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
-#' @param cores Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
 #' @return If all_data is not provided the function returns a data frame with the following
 #' recording information: recording ID, media type, user ID, species ID, scientific name, common
 #' name, repository ID, author, user name, date, verified condition, location, location ID,
@@ -29,13 +25,12 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_wikiaves <-
-  function(term = NULL,
+  function(term,
            type = c("sound", "still image"),
-           cores = 1,
-           pb = TRUE,
-           verbose = TRUE,
-           all_data = TRUE,
-           save_path = paste0(term,".csv")) {
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           verbose = getOption("verbose", TRUE),
+          all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -219,8 +214,6 @@ query_wikiaves <-
         attr(query_output_df, "query_type") <- org_type
         attr(query_output_df, "query_all_data") <- all_data
 
-        write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
-        saveRDS(query_output_df, file = save_path)
         return(query_output_df)
       }
     }

@@ -639,6 +639,42 @@ df1 <- query_xenocanto(term = 'Chupacabras')
 ```
 
 
+```{r query_macaulay, eval = FALSE}
+
+FUN <- "query_macaulay"
+
+#run function
+source(file.path("./R", paste0(FUN,".R")))
+# setwd(tempdir())
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+source("./R/internal_functions.R")
+load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
+source("./R/taxon_code_search.R")
+
+setwd(tempdir())
+df1 <- query_macaulay(term = 'Glaucis dohrnii')
+
+df1 <- query_macaulay(term = 'Glaucis dohrnii')
+df1 <- query_macaulay(term = 'Turdus grayi')
+df1 <- query_macaulay(term = 'Serinus serinus')
+
+df1 <- query_macaulay(term = 'Chupacabras')
+df1 <- query_macaulay(term = 'Chupacabras')
+
+
+```
+
+
 ```{r map_locations}
 
 FUN <- "map_locations"
@@ -673,6 +709,14 @@ metadata_ob <- query_gbif(term = "Phaethornis ruber", type = "sound")
  # create map
 map_locations(metadata_ob)
 
+
+```
+
+```{r}
+
+taxon_code_df <- read.csv("./examples/Clements-v2023-October-2023.csv", na.strings = "")
+
+usethis::use_data(taxon_code_df, internal = TRUE, overwrite = TRUE)
 
 ```
 

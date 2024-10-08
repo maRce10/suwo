@@ -1,8 +1,8 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{update_query} detects duplicate data in data frames and updates new query results.
-#' @param dataframe_1 dataframe refering to the metadata containing the multimedia information obtained from query functions.
-#' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
+#' @inheritParams template_params
+#' @param previous_query data frame referring to the metadata containing the multimedia information previously obtained from query functions.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
@@ -19,7 +19,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 update_query <-
-  function(previous_query = NULL, token = NULL) {
+  function(previous_query, token) {
 
     # check arguments
     arguments <- as.list(base::match.call())[-1]
@@ -35,53 +35,44 @@ update_query <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # dataframe 1 must be supplied
-    if (is.null(dataframe_1)) {
-      .stop("'dataframe_1' must be supplied")
-    }
 
-
-    if (dataframe_1$repository[1] == "GBIF" ) {
-      id_col_df1 <- as.numeric(gsub("\\D", "", dataframe_1[["catalogNumber"]]))
-      id_col_df2 <- dataframe_2[["key"]]
+    if (previous_query$repository[1] == "GBIF" ) {
+      id_col_df1 <- as.numeric(gsub("\\D", "", previous_query[["catalogNumber"]]))
+      id_col_df2 <- previous_query$key
     }
 
     #Set query term and type for new query search
-    query_term <- attr(dataframe_1, "query_term")
-    query_type <- attr(dataframe_1, "query_type")
-    query_all_data <- attr(dataframe_1, "query_add_data")
+    query_term <- attr(previous_query, "query_term")
+    query_type <- attr(previous_query, "query_type")
+    query_all_data <- attr(previous_query, "query_add_data")
 
-    if (dataframe_1$repository[1] == "GBIF") {
-      query_output_new <- query_gbif(term = query_term, type = query_type, all_data = TRUE)
-
-    }
-    if (dataframe_1$repository[1] == "INAT") {
-      query_output_new <- query_inaturalist(term = query_term, type = query_type, all_data = TRUE)
+    if (previous_query$repository[1] == "GBIF") {
+      query_output_new <- query_gbif(term = query_term, type = query_type, all_data = query_all_data)
 
     }
-    if (dataframe_1$repository[1] == "Macaulay"){
-      query_output_new <- query_macaulay(term = query_term, type = query_type, all_data = TRUE)
+    if (previous_query$repository[1] == "INAT") {
+      query_output_new <- query_inaturalist(term = query_term, type = query_type, all_data = query_all_data)
 
     }
-    if (dataframe_1$repository[1] == "Observation"){
-      # Check if token is available
-      if (is.null(token)) {
-        .stop("Invalid token for observation.org")
-      }
-      query_output_new <- query_observation(term = query_term, type = query_type, all_data = TRUE, token = Token)
+    if (previous_query$repository[1] == "Macaulay"){
+      query_output_new <- query_macaulay(term = query_term, type = query_type, all_data = query_all_data)
 
     }
-    if (dataframe_1$repository[1] == "XC"){
+    if (previous_query$repository[1] == "Observation"){
+      query_output_new <- query_observation(term = query_term, type = query_type, token = token)
+    }
+
+    if (previous_query$repository[1] == "XC"){
       query_output_new <- query_xenocanto(term = query_term)
 
     }
-    if (dataframe_1$repository[1] == "wikiaves"){
-      query_output_new <- query_wikiaves(term = query_term, type = query_type, all_data = TRUE)
+    if (previous_query$repository[1] == "wikiaves"){
+      query_output_new <- query_wikiaves(term = query_term, type = query_type, all_data = query_all_data)
 
     }
 
       # Find duplicates
-    query_output_df <- detect_duplicates(dataframe_1, query_output_new, query_duplicate = FALSE)
+    query_output_df <- detect_duplicates(previous_query, query_output_new, query_duplicate = FALSE)
 
     # Add a timestamp attribute
     search_time <- Sys.time()

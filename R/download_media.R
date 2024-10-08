@@ -1,14 +1,11 @@
 #' Download media files from repositories
 #'
 #' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.
+#' @inheritParams template_params
 #' @param metadata Data frame with a 'file_url' column and any other column listed in the file.name argument. Only the media listed in the data frame
 #' will be downloaded (\code{download} argument is automatically set to \code{TRUE}). This can be used to select
 #' the recordings to be downloaded based on their attributes.
 #' @param path Character that defines the location for the downloaded files.
-#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
-#' @param cores Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @return media files
 #' @export
 #' @name download_media
@@ -24,9 +21,9 @@
 download_media <-
   function(metadata,
            path = "./",
-           pb = TRUE,
-           verbose = TRUE,
-           cores = 1) {
+           pb = getOption("pb", TRUE),
+           verbose = getOption("verbose", TRUE),
+           cores = getOption("mc.cores", 1)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 

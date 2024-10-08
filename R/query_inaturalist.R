@@ -1,15 +1,10 @@
 #' Access 'inaturalist' recordings and metadata
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
-#' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
-#' @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
-#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
-#' @param cores Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
+#' @inheritParams template_params
 #' @param identified Logical argument to define if search results are categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are categorized as verifiable by inaturalist.
-#' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
+#' @param type Character vector with media type to query for. Options are 'sound', 'still image'. Required.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: quality_grade, time_observed_at, taxon_geoprivacy, uuid, id, cached_votes_total,
 #' identifications_most_agree, species_guess, identifications_most_disagree, positional_accuracy,
@@ -36,15 +31,14 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-query_inaturalist <- function(term = NULL,
-                              cores = 1,
-                              pb = TRUE,
-                              verbose = TRUE,
+query_inaturalist <- function(term,
+                              cores = getOption("mc.cores", 1),
+                              pb = getOption("pb", TRUE),
+                              verbose = getOption("verbose", TRUE),
                               type = c("sound", "still image"),
                               identified = FALSE,
                               verifiable = FALSE,
-                              all_data = TRUE,
-                              save_path = paste0(term,".csv")) {
+                             all_data = getOption("all_data", TRUE)) {
   # check arguments
   arguments <- as.list(base::match.call())[-1]
 
@@ -125,27 +119,28 @@ query_inaturalist <- function(term = NULL,
     pages <- ceiling(base.srch.pth$total_results / 200)
 
     # Determine the last processed id from the csv
-    last_id <- if (file.exists(save_path)) {
-      save_path_data <- read.csv(save_path)
-      min(save_path_data$id)
-    } else {
-      0
-    }
+    # last_id <- if (file.exists(save_path)) {
+    #   save_path_data <- read.csv(save_path)
+    #   min(save_path_data$id)
+    # } else {
+    #   0
+    # }
+    last_id <- 0
 
     # Determine the last processed page from the csv
-    last_processed_page <- if (file.exists(save_path)) {
-      save_path_data <- read.csv(save_path)
-      max(save_path_data$page)
-    } else {
-      0
-    }
-    if (last_processed_page != 0) {
-      options(query_inaturalist = last_id)
-      pages <- pages - last_processed_page
-    } else {
-        options(query_inat = {})
-        number_results = {}
-      }
+    # last_processed_page <- if (file.exists(save_path)) {
+    #   save_path_data <- read.csv(save_path)
+    #   max(save_path_data$page)
+    # } else {
+    #   0
+    # }
+    # if (last_processed_page != 0) {
+    #   options(query_inaturalist = last_id)
+    #   pages <- pages - last_processed_page
+    # } else {
+    #     options(query_inat = {})
+    #     number_results = {}
+    #   }
 #-------------------------------------------------------------------------------------------------------------------
     query_output_list <- pblapply_sw_int(pages, cl = cl, pbar = pb, function(i) {
       if (last_id != 0){
@@ -187,13 +182,6 @@ query_inaturalist <- function(term = NULL,
         # add media details
         X_df <- cbind(X_df, media_df)
 
-        if (file.exists(save_path)) {
-          write.table(X_df, file = save_path, sep = ",", row.names = FALSE, col.names = FALSE, append = TRUE)
-          last_id <- max(query_output$results$id)
-        } else {
-          write.table(X_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
-          last_id <- max(query_output$results$id)
-        }
 
         #if (u == 200) {
         #  number_results <- append(number_results, x$id)
@@ -311,8 +299,6 @@ query_inaturalist <- function(term = NULL,
     attr(query_output_df, "query_type") <- org_type
     attr(query_output_df, "query_all_data") <- all_data
 
-    write.table(query_output_df, file = save_path, sep = ",", row.names = FALSE, col.names = TRUE, append = FALSE)
-    saveRDS(query_output_df, file = save_path)
     return(query_output_df)
   }
 }

@@ -21,6 +21,7 @@
 #' @import RCurl
 #' @import jsonlite
 #' @importFrom viridis viridis
+#' @importFrom rlang arg_match
 #' @importFrom utils download.file read.csv write.csv
 #' @importFrom methods is
 #' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors cli_text

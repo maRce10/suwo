@@ -5,18 +5,18 @@
 \title{Access 'observation' recordings and metadata}
 \usage{
 detect_duplicates(
-  dataframe_1 = NULL,
-  dataframe_2 = NULL,
-  all_data = TRUE,
+  X,
+  Y,
+  all_data = getOption("all_data", TRUE),
   query_duplicate = TRUE
 )
 }
 \arguments{
-\item{dataframe_1}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}
+\item{X}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}
 
-\item{dataframe_2}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}
+\item{Y}{a second dataframe refering to the metadata containing the multimedia information obtained from query functions.}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
 
 \item{query_duplicate}{Logical argument that determines if user is asked to remove duplicates. Default is \code{TRUE}.}
 }

@@ -4,12 +4,12 @@
 \alias{update_query}
 \title{Access 'observation' recordings and metadata}
 \usage{
-update_query(previous_query = NULL, token = NULL)
+update_query(previous_query, token)
 }
 \arguments{
-\item{dataframe_1}{dataframe refering to the metadata containing the multimedia information obtained from query functions.}
+\item{previous_query}{data frame referring to the metadata containing the multimedia information previously obtained from query functions.}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.}
+\item{token}{Character referring to the token assigned by Observation.org as authorization for searches.}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media
