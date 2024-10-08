@@ -70,14 +70,25 @@ query_inaturalist <- function(term,
     .stop("'term' must be supplied")
   }
 
-  # check internet connection
-  a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
-  if (is(a, "try-error")) {
+  # # check internet connection
+  # a <- try(RCurl::getURL("https://www.inaturalist.org/"), silent = TRUE)
+  # if (is(a, "try-error")) {
+  #   .stop("No connection to INaturalist (check your internet connection!)")
+  # }
+  #
+  # if (a == "Could not connect to the database") {
+  #   .stop("observation website is apparently down")
+  # }
+
+  # Check internet connection using httr and error handling
+  response <- try(httr::GET("https://www.inaturalist.org/"), silent = TRUE)
+  if (inherits(response, "try-error") || httr::http_error(response)) {
     .stop("No connection to INaturalist (check your internet connection!)")
   }
 
-  if (a == "Could not connect to the database") {
-    .stop("observation website is apparently down")
+  content <- httr::content(response, as = "text")
+  if (grepl("Could not connect to the database", content)) {
+    .stop("INaturalist website is apparently down")
   }
 
   # Save species name
@@ -142,6 +153,7 @@ query_inaturalist <- function(term,
     #     number_results = {}
     #   }
 #-------------------------------------------------------------------------------------------------------------------
+
     query_output_list <- pblapply_sw_int(pages, cl = cl, pbar = pb, function(i) {
       if (last_id != 0){
         for (n in number_results) {
@@ -151,9 +163,9 @@ query_inaturalist <- function(term,
       } else {
         query_output <- jsonlite::fromJSON(paste0(srch_trm, "&id_above=0"))
         number_results <- append(number_results, query_output$results[[200]]$id)
-          for (n in number_results) {
-            query_output <- jsonlite::fromJSON(paste0(srch_trm, "&id_above=", last_id))
-            number_results <- append(number_results, query_output$results[[200]]$id)
+        for (n in number_results) {
+          query_output <- jsonlite::fromJSON(paste0(srch_trm, "&id_above=", last_id))
+          number_results <- append(number_results, query_output$results[[200]]$id)
         }
       }
 
@@ -188,7 +200,7 @@ query_inaturalist <- function(term,
         #}
         return(X_df)
       })
-#-------------------------------------------------------------------------------------------------------------------
+      #-------------------------------------------------------------------------------------------------------------------
       # get common names to all data frames in X
       common_names <- unique(unlist(lapply(query_output$results, names)))
 

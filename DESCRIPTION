@@ -19,6 +19,7 @@ Imports:
     utils,
     viridis,
     rlang
+    httr
 Suggests: 
     covr,
     testthat,

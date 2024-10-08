@@ -63,17 +63,29 @@ query_observation <-
       `interactive resource` = "InteractiveResource"
     )
 
-    if (tolower(Sys.info()[["sysname"]]) != "windows") {
-      # check internet connection
-      a <- try(RCurl::getURL("https://observation.org"), silent = TRUE)
-      if (is(a, "try-error")) {
-        .stop("No connection to observation.org (check your internet connection!)")
-      }
+    # if (tolower(Sys.info()[["sysname"]]) != "windows") {
+    #   # check internet connection
+    #   a <- try(RCurl::getURL("https://observation.org"), silent = TRUE)
+    #   if (is(a, "try-error")) {
+    #     .stop("No connection to observation.org (check your internet connection!)")
+    #   }
+    #
+    #   if (a == "Could not connect to the database") {
+    #     .stop("observation.org website is apparently down")
+    #   }
+    # }
 
-      if (a == "Could not connect to the database") {
-        .stop("observation.org website is apparently down")
-      }
+    # Check internet connection using httr and error handling
+    response <- try(httr::GET("https://observation.org"), silent = TRUE)
+    if (inherits(response, "try-error") || httr::http_error(response)) {
+      .stop("No connection to observation.org (check your internet connection!)")
     }
+
+    content <- httr::content(response, as = "text")
+    if (grepl("Could not connect to the database", content)) {
+      .stop("observation.org website is apparently down")
+    }
+
 
 
     # format JSON
