@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /home/m/Downloads/cvs_rats/selecting_files.R="FADB3B2C"
 /home/m/Dropbox/Projects/barulho_paper/output/presentation/ibac2023.qmd="B2B512F2"
 /home/m/Dropbox/R_package_testing/baRulho/DESCRIPTION="222BB17B"
@@ -31,8 +30,3 @@
 /home/m/Dropbox/R_package_testing/suwo/tests/testthat/test_query_xenocanto.R="9CFC6B33"
 /home/m/Dropbox/R_package_testing/suwo/tests/testthat/test_taxon_code_search.R="B1E92E1D"
 /home/m/Dropbox/R_package_testing/suwo/vignettes/suwo_vignette.Rmd="39030A2B"
-=======
-D:/Lab/suwo/README.Rmd="81DEBC9B"
-D:/Lab/suwo/Turdus grayi.csv="42C6176C"
-D:/Lab/suwo/testing/testing-checking suwo functions.Rmd="3413FEFD"
->>>>>>> f7fbb4d14f0016fa5e055a5f509cc412e9a9f66f
