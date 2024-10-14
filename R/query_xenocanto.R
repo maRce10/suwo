@@ -1,7 +1,6 @@
 #' Access 'Xeno-Canto' recordings and metadata
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
-#' @inheritParams template_params
 #' @param term Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
 #'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
 #'  More complex queries can be done by using search terms that follow the
@@ -11,6 +10,11 @@
 #'  Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
 #'  results for birds in the genus \emph{Phaethornis} that were recorded in Belize. Queries are case insensitive. Make sure taxonomy related tags (Genus or scientific name) are found first in multi-tag queries. See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
 #'  for queries using terms with more than one word.
+#' @param cores Numeric. Controls whether parallel computing is applied.
+#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
+#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
+#' @param all_data All
 #' @return The function returns a data frame with the following recording information: recording ID,
 #' Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
 #' Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3
@@ -50,11 +54,12 @@
 # last modification on nov-16-2016 (MAS)
 
 query_xenocanto <-
-  function(term,
-           cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE),
-          all_data = getOption("all_data", TRUE)) {
+  function(term = NULL,
+           cores = 1,
+           pb = TRUE,
+           verbose = TRUE,
+           all_data = TRUE,
+           save_path = paste0(term,".csv")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -359,6 +364,7 @@ query_xenocanto <-
       attr(query_output_df, "query_term") <- term
       attr(query_output_df, "query_all_data") <- all_data
 
+      saveRDS(droplevels(results), file = tempdir())
       return(droplevels(results))
     }
   }
