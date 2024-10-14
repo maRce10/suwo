@@ -2,9 +2,8 @@
 #'
 #' \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating the
-#'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
+#' @param token Character refering to the token assigned by Observation.org as authorization for searches.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
@@ -30,7 +29,8 @@ query_observation <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           token) {
+           token = NULL,
+           all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -252,7 +252,12 @@ query_observation <-
     attr(query_output_df, "search_time") <- search_time
     attr(query_output_df, "query_term") <- term
     attr(query_output_df, "query_type") <- org_type
-    attr(query_output_df, "query_all_data") <- NULL
+    attr(query_output_df, "query_all_data") <- all_data
 
+    # Generate a file path by combining tempdir() with a file name
+    file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+    # Save the object to the file
+    saveRDS(query_output_df, file = file_path)
     return(query_output_df)
   }

@@ -54,7 +54,7 @@ query_xenocanto <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-          all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -355,10 +355,15 @@ query_xenocanto <-
 
       # Add a timestamp and search query attribute
       search_time <- Sys.time()
-      attr(query_output_df, "search_time") <- search_time
-      attr(query_output_df, "query_term") <- term
-      attr(query_output_df, "query_all_data") <- all_data
+      attr(results, "search_time") <- search_time
+      attr(results, "query_term") <- term
+      attr(results, "query_all_data") <- all_data
 
+      # Generate a file path by combining tempdir() with a file name
+      file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+      # Save the object to the file
+      saveRDS(droplevels(results), file = file_path)
       return(droplevels(results))
     }
   }

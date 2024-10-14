@@ -2,9 +2,8 @@
 #'
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating the
-#'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Currently 'photo' and 'audio' are available.
+#' @param token Character refering to the token assigned by Observation.org as authorization for searches.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
@@ -30,11 +29,7 @@ query_macaulay <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-          all_data = getOption("all_data", TRUE)) {
-
-    # assign a value to noise.ref
-    type <- rlang::arg_match(type)
-
+           all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -49,6 +44,15 @@ query_macaulay <-
     # report errors
     checkmate::reportAssertions(check_results)
 
+    # term must be supplied
+    if (is.null(term)) {
+      .stop("'term' must be supplied")
+    }
+
+    # type must be supplied
+    if (is.null(type)) {
+      .stop("'type' must be supplied")
+    }
     org_type <- match.arg(type)
 
     type <- switch(type,
@@ -69,12 +73,14 @@ query_macaulay <-
       .stop("macaulaylibrary.org website is apparently down")
     }
 
-    taxon_code <- taxon_code_search(term = term)
+    user_input_species <- term
+
+    taxon_code <- taxon_code_search(user_input_species)
 
     if (!is.null(taxon_code)) {
-      cat(paste("The species code for '", term, "' is '", taxon_code, "'.\n", sep = ""))
+      cat(paste("The species code for '", user_input_species, "' is '", taxon_code, "'.\n", sep = ""))
     } else {
-      cat(paste("No matching species found for '", term, "'.\n", sep = ""))
+      cat(paste("No matching species found for '", user_input_species, "'.\n", sep = ""))
     }
 
     search_url <- paste0("https://search.macaulaylibrary.org/catalog?view=list&mediaType=", type,"&taxonCode=",taxon_code)
@@ -134,5 +140,10 @@ query_macaulay <-
     attr(query_output_df, "query_type") <- org_type
     attr(query_output_df, "query_all_data") <- all_data
 
+    # Generate a file path by combining tempdir() with a file name
+    file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+    # Save the object to the file
+    saveRDS(query_output_df, file = file_path)
     return(query_output_df)
 }
