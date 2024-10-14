@@ -2,7 +2,6 @@
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
 #' @return If all_data is not provided the function returns a data frame with the following
 #' recording information: recording ID, media type, user ID, species ID, scientific name, common
@@ -78,13 +77,13 @@ query_wikiaves <-
     term <- gsub(" ", "%20", term)
 
     # initialize search with user agent
-    response <- GET(
+    response <- httr::GET(
       url = paste0("https://www.wikiaves.com.br/getTaxonsJSON.php?term=", term),
-      user_agent("suwo (https://github.com/maRce10/suwo)")
+      httr::user_agent("suwo (https://github.com/maRce10/suwo)")
     )
 
     # check if request succeeded
-    stop_for_status(response)
+    httr::stop_for_status(response)
 
     get_ids <- content(response, as = "parsed", type = "application/json")
 
@@ -98,13 +97,13 @@ query_wikiaves <-
       get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
 
       get_ids$total_registers <- sapply(1:nrow(get_ids), function(u) {
-        response <- GET(
+        response <- httr::GET(
           url = paste0("https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
                        if (type == "photo") { "f" } else { "s" },
                        "&t=s&s=", get_ids$id[u], "&o=mp&p=1"),
-          user_agent("suwo (https://github.com/maRce10/suwo)")
+          httr::user_agent("suwo (https://github.com/maRce10/suwo)")
         )
-        stop_for_status(response)
+        httr::stop_for_status(response)
         as.numeric(content(response, as = "parsed")$registros$total)
       })
 
@@ -215,6 +214,11 @@ query_wikiaves <-
         attr(query_output_df, "query_type") <- org_type
         attr(query_output_df, "query_all_data") <- all_data
 
+        # Generate a file path by combining tempdir() with a file name
+        file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+        # Save the object to the file
+        saveRDS(query_output_df, file = file_path)
         return(query_output_df)
       }
     }

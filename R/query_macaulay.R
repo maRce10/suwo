@@ -1,15 +1,9 @@
 #' Access 'observation' recordings and metadata
 #'
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
-#' @param term Character vector of length one indicating the
-#'  species, to query 'observation' database. For example \emph{Phaethornis longirostris}.
+#' @inheritParams template_params
 #' @param type Character vector with media type to query for. Currently 'photo' and 'audio' are available.
-#' @param cores Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
-#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param token Character refering to the token assigned by Observation.org as authorization for searches.
-#' @param all_data Logical argument that defines if all data is shown.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
@@ -30,14 +24,12 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_macaulay <-
-  function(term = NULL,
+  function(term,
            type = c("audio", "photo", "video"),
-           cores = 1,
-           pb = TRUE,
-           verbose = TRUE,
-           token = NULL,
-           all_data = TRUE,
-           save_path = paste0(term,".csv")) {
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           verbose = getOption("verbose", TRUE),
+           all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -148,6 +140,10 @@ query_macaulay <-
     attr(query_output_df, "query_type") <- org_type
     attr(query_output_df, "query_all_data") <- all_data
 
-    saveRDS(query_output_df, file = tempdir())
+    # Generate a file path by combining tempdir() with a file name
+    file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+    # Save the object to the file
+    saveRDS(query_output_df, file = file_path)
     return(query_output_df)
 }

@@ -3,9 +3,6 @@
 #' \code{update_query} detects duplicate data in data frames and updates new query results.
 #' @inheritParams template_params
 #' @param previous_query data frame referring to the metadata containing the multimedia information previously obtained from query functions.
-#' @return If all_data is not provided the function returns a data frame with the following media
-#' information: id, scientific_name, name, group, group_name, status, rarity, photo,
-#' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name update_query
 #' @details This function updates a previous query to add new information from the corresponding database of the original search

@@ -2,8 +2,6 @@
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating genus and
-#'  species, to query 'gbif' database. For example, \emph{Phaethornis longirostris}.
 #' @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
 #' @return If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
@@ -51,7 +49,7 @@ query_gbif <-
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            dataset = NULL,
-          all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -84,18 +82,6 @@ query_gbif <-
     if (is.null(term)) {
       .stop("'term' must be supplied")
     }
-
-    # if (tolower(Sys.info()[["sysname"]]) != "windows") {
-    #   # check internet connection
-    #   a <- try(RCurl::getURL("https://api.gbif.org/"), silent = TRUE)
-    #   if (is(a, "try-error")) {
-    #     .stop("No connection to GBIF API (check your internet connection!)")
-    #   }
-    #
-    #   if (a == "Could not connect to the database") {
-    #     .stop("GBIF website is apparently down")
-    #   }
-    # }
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("https://api.gbif.org/"), silent = TRUE)
@@ -261,6 +247,12 @@ query_gbif <-
       attr(query_output_df, "query_type") <- org_type
       attr(query_output_df, "query_all_data") <- all_data
 
-       return(query_output_df)
+      # Generate a file path by combining tempdir() with a file name
+      file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+      # Save the object to the file
+      saveRDS(query_output_df, file = file_path)
+
+      return(query_output_df)
     }
   }
