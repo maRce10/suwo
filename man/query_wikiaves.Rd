@@ -14,7 +14,7 @@ query_wikiaves(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating species, to query 'wikiaves' database. For example, \emph{Phaethornis longirostris}.}
+\item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
 \item{type}{Character vector with media type to query for. Options are 'still image' or 'sound'. Required.}
 

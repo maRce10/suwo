@@ -11,11 +11,6 @@ update_query(previous_query, token)
 
 \item{token}{Character referring to the token assigned by Observation.org as authorization for searches.}
 }
-\value{
-If all_data is not provided the function returns a data frame with the following media
-information: id, scientific_name, name, group, group_name, status, rarity, photo,
-info_text, permalink, determination_requirements, file_url, repository
-}
 \description{
 \code{update_query} detects duplicate data in data frames and updates new query results.
 }

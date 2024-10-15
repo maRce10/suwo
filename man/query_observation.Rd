@@ -10,12 +10,12 @@ query_observation(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  token
+  token = NULL,
+  all_data = getOption("all_data", TRUE)
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating the
-species, to query 'observation' database. For example \emph{Phaethornis longirostris}.}
+\item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
 \item{type}{Character vector with media type to query for. Currently 'still image' and 'sound' are available.}
 
@@ -25,7 +25,9 @@ species, to query 'observation' database. For example \emph{Phaethornis longiros
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
-\item{token}{Character referring to the token assigned by Observation.org as authorization for searches.}
+\item{token}{Character refering to the token assigned by Observation.org as authorization for searches.}
+
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media

@@ -15,8 +15,7 @@ query_gbif(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating genus and
-species, to query 'gbif' database. For example, \emph{Phaethornis longirostris}.}
+\item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
 \item{type}{Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.}
 

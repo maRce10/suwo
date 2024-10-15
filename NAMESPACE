@@ -26,4 +26,3 @@ importFrom(utils,download.file)
 importFrom(utils,read.csv)
 importFrom(utils,write.csv)
 importFrom(viridis,viridis)
-
