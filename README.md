@@ -40,6 +40,13 @@ Please [open a new
 issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to
 suggest a new repository.
 
+Online repositories currently supported:
+- INaturalist
+- Wikiaves
+- Macaulay Library
+- Xenocanto
+- Observation.org
+
 ## Installing suwo
 
 Install/load the package from CRAN as follows:
