@@ -113,8 +113,10 @@ query_observation <-
     bearer_token <- token
     headers <- c("Authorization" = paste("Bearer", bearer_token))
 
-    # Make the GET request and retrieve the response
-    dataURL <- RCurl::getURL(url_inquiry, httpheader = headers)
+    # Make the GET request and retrieve the response content as text
+    response <- httr::GET(url_inquiry, httr::add_headers(.headers = headers))
+    dataURL <- httr::content(response, "text", encoding = "UTF-8")
+
 
     # JSON format
     data <- jsonlite::fromJSON(dataURL)
