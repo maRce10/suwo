@@ -3,7 +3,6 @@
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
 #' @param type Character vector with media type to query for. Currently 'photo' and 'audio' are available.
-#' @param token Character refering to the token assigned by Observation.org as authorization for searches.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
@@ -44,16 +43,8 @@ query_macaulay <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # term must be supplied
-    if (is.null(term)) {
-      .stop("'term' must be supplied")
-    }
-
-    # type must be supplied
-    if (is.null(type)) {
-      .stop("'type' must be supplied")
-    }
-    org_type <- match.arg(type)
+    # assign a value to type
+    org_type <- type <- rlang::arg_match(type)
 
     type <- switch(type,
                    sound = "audio",

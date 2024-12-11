@@ -45,16 +45,9 @@ query_observation <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # term must be supplied
-    if (is.null(term)) {
-      .stop("'term' must be supplied")
-    }
+    # assign a value to type
+    org_type <- type <- rlang::arg_match(type)
 
-    # type must be supplied
-    if (is.null(type)) {
-      .stop("'type' must be supplied")
-    }
-    org_type <- match.arg(type)
 
     type <- switch(type,
       sound = "Sound",
@@ -63,17 +56,6 @@ query_observation <-
       `interactive resource` = "InteractiveResource"
     )
 
-    # if (tolower(Sys.info()[["sysname"]]) != "windows") {
-    #   # check internet connection
-    #   a <- try(RCurl::getURL("https://observation.org"), silent = TRUE)
-    #   if (is(a, "try-error")) {
-    #     .stop("No connection to observation.org (check your internet connection!)")
-    #   }
-    #
-    #   if (a == "Could not connect to the database") {
-    #     .stop("observation.org website is apparently down")
-    #   }
-    # }
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("https://observation.org"), silent = TRUE)
@@ -113,8 +95,10 @@ query_observation <-
     bearer_token <- token
     headers <- c("Authorization" = paste("Bearer", bearer_token))
 
-    # Make the GET request and retrieve the response
-    dataURL <- RCurl::getURL(url_inquiry, httpheader = headers)
+    # Make the GET request and retrieve the response content as text
+    response <- httr::GET(url_inquiry, httr::add_headers(.headers = headers))
+    dataURL <- httr::content(response, "text", encoding = "UTF-8")
+
 
     # JSON format
     data <- jsonlite::fromJSON(dataURL)

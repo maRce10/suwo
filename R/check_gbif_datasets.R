@@ -21,29 +21,39 @@
 #'
 
 check_gbif_datasets <- function(path = tempdir()) {
-  # check internet connection
-  a <- try(RCurl::getURL("https://www.gbif.org"), silent = TRUE)
-  if (is(a, "try-error")) {
-    .stop("No connection to gbif (check your internet connection!)")
+  # Check internet connection
+  response <- try(httr::GET("https://www.gbif.org"), silent = TRUE)
+  if (inherits(response, "try-error") || httr::http_error(response)) {
+    stop("No connection to GBIF (check your internet connection!)")
   }
 
-  if (a == "Could not connect to the database") {
-    .stop("GBIF website is apparently down")
+  # Check if GBIF website is down
+  content_text <- httr::content(response, "text", encoding = "UTF-8")
+  if (grepl("Could not connect to the database", content_text)) {
+    stop("GBIF website is apparently down")
   }
 
-  # Read the CSV data
-  message("Downloading csv file ...")
-  csv_data <- try(utils::read.csv("https://api.gbif.org/v1/dataset/search/export?format=CSV&"), silent = TRUE)
+  # Download the CSV data
+  message("Downloading CSV file ...")
+  csv_url <- "https://api.gbif.org/v1/dataset/search/export?format=CSV&"
+  csv_response <- try(httr::GET(csv_url), silent = TRUE)
 
-  on.exit(rm(csv_data))
-
-  if (is(csv_data, "try-error")) {
-    .stop("Failed to download CSV.")
+  if (inherits(csv_response, "try-error") || httr::http_error(csv_response)) {
+    stop("Failed to download CSV.")
   } else {
-    utils::write.csv(csv_data, file.path(path, paste0("gbif_datasets-", Sys.time(), ".csv")))
+    # Read CSV data into R
+    csv_data <- try(read.csv(text = httr::content(csv_response, "text", encoding = "UTF-8")), silent = TRUE)
+    if (inherits(csv_data, "try-error")) {
+      stop("Failed to parse CSV.")
+    }
+
+    # Save the CSV file
+    file_name <- paste0("gbif_datasets-", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".csv")
+    file_path <- file.path(path, file_name)
+    write.csv(csv_data, file_path)
   }
 
-  # tell users where is the file and allow them to open it
+  # Inform the user about the file
   cli::cli_text("... edit your {.file ~/.Rprofile} file.}")
-  cli::cli_text(paste0("The csv file (", paste0("gbif_datasets-", Sys.time(), ".csv"), ") with the gbif datasets info can be found at ", path))
+  cli::cli_text(paste0("The CSV file (", file_name, ") with the GBIF datasets info can be found at ", path))
 }

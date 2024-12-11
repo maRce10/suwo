@@ -59,12 +59,8 @@ query_inaturalist <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # # type must be supplied
-    if (is.null(type)) {
-      .stop("'type' must be supplied")
-    }
-
-    org_type <- match.arg(type)
+    # assign a value to type
+    org_type <- type <- rlang::arg_match(type)
 
     type <- switch(type,
                    sound = "sounds",

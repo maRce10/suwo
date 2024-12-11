@@ -9,7 +9,7 @@ test_that("search Glaucis dohrnii sound", {
 
 test_that("search Spatula discors sound (no sounds)", {
 
-  df1 <- query_wikiaves(term = 'Spatula discors', type =  "sound")
+  df1 <- query_wikiaves(term = 'Spatula discors', type = "sound")
 
   expect_true(is.null(df1))
 

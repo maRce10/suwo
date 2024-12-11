@@ -1,0 +1,10 @@
+---
+title: "TO DO LIST"
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+* update clements 2024
+* COntrol + shift + A to all code (might not fix long code lines)

@@ -5,6 +5,7 @@
 #' @param previous_query data frame referring to the metadata containing the multimedia information previously obtained from query functions.
 #' @export
 #' @name update_query
+#' @return returns a data frame similar to the input 'previous_query' with new data appended.
 #' @details This function updates a previous query to add new information from the corresponding database of the original search
 #' @examples
 #' \dontrun{

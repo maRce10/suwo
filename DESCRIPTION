@@ -15,11 +15,12 @@ Imports:
     cli,
     methods,
     pbapply,
-    rjson,
     utils,
     viridis,
     rlang,
-    httr
+    httr,
+    RCurl,
+    jsonlite
 Suggests: 
     covr,
     testthat,
@@ -27,8 +28,6 @@ Suggests:
     knitr,
     rmarkdown
 Depends:
-    RCurl,
-    jsonlite,
     R (>= 2.10)
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2

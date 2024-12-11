@@ -44,15 +44,6 @@ query_wikiaves <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # type must be supplied
-    if (is.null(type)) {
-      .stop("'type' must be supplied")
-    }
-
-    # type must be supplied
-    if (is.null(term)) {
-      .stop("'term' must be supplied")
-    }
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("https://www.wikiaves.com"), silent = TRUE)
@@ -65,13 +56,13 @@ query_wikiaves <-
       .stop("wikiaves.com website is apparently down")
     }
 
-    org_type <- match.arg(type)
+    # assign a value to type
+    org_type <- type <- rlang::arg_match(type)
 
     type <- switch(type,
       sound = "Sound",
       `still image` = "photo"
     )
-
 
     # format JSON
     term <- gsub(" ", "%20", term)
@@ -85,7 +76,7 @@ query_wikiaves <-
     # check if request succeeded
     httr::stop_for_status(response)
 
-    get_ids <- content(response, as = "parsed", type = "application/json")
+    get_ids <- httr::content(response, as = "parsed", type = "application/json")
 
 
     if (length(get_ids) == 0) {
@@ -96,7 +87,7 @@ query_wikiaves <-
       # make it a data frame
       get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
 
-      get_ids$total_registers <- sapply(1:nrow(get_ids), function(u) {
+      get_ids$total_registers <- sapply(seq_len(nrow(get_ids)), function(u) {
         response <- httr::GET(
           url = paste0("https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
                        if (type == "photo") { "f" } else { "s" },
@@ -104,10 +95,10 @@ query_wikiaves <-
           httr::user_agent("suwo (https://github.com/maRce10/suwo)")
         )
         httr::stop_for_status(response)
-        as.numeric(content(response, as = "parsed")$registros$total)
+        as.numeric(httr::content(response, as = "parsed")$registros$total)
       })
 
-      if (sum(get_ids$total_registers) == 0 & verbose) {
+      if (sum(get_ids$total_registers) == 0) {
         cat(paste(.color_text(paste0("No ", type, "s were found"), "failure"), .add_emoji("sad")))
       } else {
         # get number of pages (20 is the default number of registers per page)
@@ -116,7 +107,7 @@ query_wikiaves <-
         # remove those rows with no pages (only needed when many species are returned)
         get_ids <- get_ids[get_ids$pages > 0, ]
 
-        id_by_page_list <- lapply(1:nrow(get_ids), function(x) {
+        id_by_page_list <- lapply(seq_len(nrow(get_ids)), function(x) {
           X <- get_ids[x, ]
           out_df <- data.frame(id = X$id, page = 1:X$pages)
         })

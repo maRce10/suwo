@@ -22,6 +22,8 @@ remove.packages("suwo")
 
 # devtools::install()
 
+remotes::install_github("ropensci-review-tools/pkgcheck")
+
 pkgs <- c("remotes", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli")
 
 # install/ load packages
@@ -483,6 +485,15 @@ devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE,
 
 ```
 
+# additional checks
+```{r}
+pkgcheck::pkgcheck(".")
+
+cyclocomp::cyclocomp_package_dir(".")
+
+pkgstats::pkgstats(".")
+```
+
 # check and build package
 ```{r check and build package, eval = FALSE}
 
@@ -605,7 +616,7 @@ df1 <- query_observation(term = 'Serinus serinus', type = "sound", token = token
 
 ```
 
-```{r query_observation, eval = FALSE}
+```{r query_xenocanto, eval = FALSE}
 
 FUN <- "query_xenocanto"
 
@@ -666,6 +677,40 @@ df1 <- query_macaulay(term = 'Glaucis')
 df1 <- query_macaulay(term = 'Glaucis dohrnii')
 df1 <- query_macaulay(term = 'Turdus grayi')
 df1 <- query_macaulay(term = 'Serinus serinus')
+
+df1 <- query_macaulay(term = 'Chupacabras')
+df1 <- query_macaulay(term = 'Chupacabras')
+
+
+```
+
+```{r query_macaulay, eval = FALSE}
+
+FUN <- "query_inaturalist"
+
+#run function
+source(file.path("./R", paste0(FUN,".R")))
+# setwd(tempdir())
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+source("./R/internal_functions.R")
+load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
+source("./R/taxon_code_search.R")
+
+setwd(tempdir())
+
+df1 <- query_inaturalist(term = 'Glaucis dohrnii')
+df1 <- query_inaturalist(term = 'Turdus grayi')
+df1 <- query_inaturalist(term = 'Serinus serinus')
 
 df1 <- query_macaulay(term = 'Chupacabras')
 df1 <- query_macaulay(term = 'Chupacabras')
