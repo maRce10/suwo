@@ -7,4 +7,10 @@ editor_options:
 
 
 * update clements 2024
-* COntrol + shift + A to all code (might not fix long code lines)
+* Control + shift + A to all code (might not fix long code lines)
+* update past queries
+* continue failed queries
+* check downloads from download_media 
+* redo failed downloads from download_media
+* fix pkgcheck diagnostics
+* make sure vignette can be rendered
