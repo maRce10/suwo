@@ -363,7 +363,8 @@ query_xenocanto <-
       file_path <- file.path(tempdir(), paste0(term, ".rds"))
 
       # Save the object to the file
-      saveRDS(droplevels(results), file = file_path)
+      # MARCELO: I added a try function to avoid errors when saving the file, double check (why do we need to save it and how people can find the RDS)
+      try(saveRDS(droplevels(results), file = file_path), silent = TRUE)
       return(droplevels(results))
     }
   }
