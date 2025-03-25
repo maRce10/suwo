@@ -28,7 +28,7 @@ check_gbif_datasets()
 }
 \references{
 {
-Ivanova, N. V., & Shashkov, M. P. (2021). The possibilities of GBIF data use in ecological research. Russian Journal of Ecology, 52(1), 1-8.
+
 }
 }
 \seealso{

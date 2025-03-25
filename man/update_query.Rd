@@ -11,6 +11,9 @@ update_query(previous_query, token)
 
 \item{token}{Character referring to the token assigned by Observation.org as authorization for searches.}
 }
+\value{
+returns a data frame similar to the input 'previous_query' with new data appended.
+}
 \description{
 \code{update_query} detects duplicate data in data frames and updates new query results.
 }
