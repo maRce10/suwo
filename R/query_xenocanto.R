@@ -71,7 +71,8 @@ query_xenocanto <-
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("www.xeno-canto.org"), silent = TRUE)
-    if (inherits(response, "try-error") || httr::http_error(response)) {
+    if (inherits(response, "try-error") ||
+        httr::http_error(response)) {
       .stop("No connection to xeno-canto.org (check your internet connection!)")
     }
 
@@ -83,11 +84,19 @@ query_xenocanto <-
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
-      cat(paste(.color_text(paste0("Obtaining metadata (matching observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
+      cat(paste(
+        .color_text(
+          paste0("Obtaining metadata (matching observation(s) found)"),
+          "success"
+        ),
+        .add_emoji("happy"),
+        ":\n"
+      ))
     }
 
     # format query term
-    if (grepl("\\:", term)) { # if using advanced search
+    if (grepl("\\:", term)) {
+      # if using advanced search
 
       # replace first space with %20 when using full species name
       first_colon_pos <- gregexpr(":", term)[[1]][1]
@@ -95,7 +104,11 @@ query_xenocanto <-
 
       if (length(spaces_pos) > 1) {
         if (all(spaces_pos[1:2] < first_colon_pos)) {
-          term <- paste0(substr(term, start = 0, stop = spaces_pos - 1), "%20", substr(term, start = spaces_pos + 1, stop = nchar(term)))
+          term <- paste0(
+            substr(term, start = 0, stop = spaces_pos - 1),
+            "%20",
+            substr(term, start = spaces_pos + 1, stop = nchar(term))
+          )
         }
       }
 
@@ -171,9 +184,7 @@ query_xenocanto <-
             # put together as data frame
             d <-
               lapply(1:length(a$recordings), function(z) {
-                data.frame(t(unlist(
-                  a$recordings[[z]]
-                )))
+                data.frame(t(unlist(a$recordings[[z]])))
               })
 
             d2 <- lapply(d, function(x) {
@@ -196,10 +207,9 @@ query_xenocanto <-
                 for (i in cnms[!cnms %in% nms]) {
                   X <-
                     data.frame(X,
-                      NA,
-                      stringsAsFactors = FALSE,
-                      check.names = FALSE
-                    )
+                               NA,
+                               stringsAsFactors = FALSE,
+                               check.names = FALSE)
                   names(X)[ncol(X)] <- i
                 }
               }
@@ -222,10 +232,9 @@ query_xenocanto <-
           for (i in cnms[!cnms %in% nms]) {
             X <-
               data.frame(X,
-                NA,
-                stringsAsFactors = FALSE,
-                check.names = FALSE
-              )
+                         NA,
+                         stringsAsFactors = FALSE,
+                         check.names = FALSE)
             names(X)[ncol(X)] <- i
           }
         }
@@ -333,7 +342,9 @@ query_xenocanto <-
 
 
       if (pb & verbose) {
-        cat(.color_text(paste(nrow(results), "audio(s) found"), "success"), .add_emoji("happy"), "\n")
+        cat(.color_text(paste(nrow(results), "audio(s) found"), "success"),
+            .add_emoji("happy"),
+            "\n")
       }
     }
 
@@ -350,7 +361,17 @@ query_xenocanto <-
       results$file_url <- paste0("https:", results$file_url, "/download")
 
       if (!all_data) {
-        results <- results[, c("location", "latitude", "longitude", "file_url", "repository", "key", "species", "date", "country")]
+        results <- results[, c(
+          "location",
+          "latitude",
+          "longitude",
+          "file_url",
+          "repository",
+          "key",
+          "species",
+          "date",
+          "country"
+        )]
       }
 
       # Add a timestamp and search query attribute

@@ -49,7 +49,8 @@ query_observation <-
     org_type <- type <- rlang::arg_match(type)
 
 
-    type <- switch(type,
+    type <- switch(
+      type,
       sound = "Sound",
       `still image` = "StillImage",
       `moving image` = "MovingImage",
@@ -59,7 +60,8 @@ query_observation <-
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("https://observation.org"), silent = TRUE)
-    if (inherits(response, "try-error") || httr::http_error(response)) {
+    if (inherits(response, "try-error") ||
+        httr::http_error(response)) {
       .stop("No connection to observation.org (check your internet connection!)")
     }
 
@@ -73,7 +75,9 @@ query_observation <-
     # format JSON
     term <- gsub(" ", "%20", term)
 
-    srch_trm <- paste0("https://observation.org/api/v1/species/search/?", "q=", term)
+    srch_trm <- paste0("https://observation.org/api/v1/species/search/?",
+                       "q=",
+                       term)
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
@@ -89,7 +93,11 @@ query_observation <-
 
     # Set the species ID and API endpoint URL
     species_id <- base.srch.pth$results$id
-    url_inquiry <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
+    url_inquiry <- paste0(
+      "https://observation.org/api/v1/species/",
+      species_id,
+      "/observations/?limit=100"
+    )
 
     # Set the authorization header with your bearer token
     bearer_token <- token
@@ -107,12 +115,25 @@ query_observation <-
 
     if (data$count == 0) {
       if (verbose) {
-        cat(paste(.color_text(paste0("No ", tolower(org_type), "s were found"), "failure"), .add_emoji("sad")))
+        cat(paste(.color_text(
+          paste0("No ", tolower(org_type), "s were found"), "failure"
+        ), .add_emoji("sad")))
       }
     } else {
       # message number of results
       if (pb & verbose) {
-        cat(paste(.color_text(paste0("Obtaining metadata (", data$count, " candidate observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
+        cat(paste(
+          .color_text(
+            paste0(
+              "Obtaining metadata (",
+              data$count,
+              " candidate observation(s) found)"
+            ),
+            "success"
+          ),
+          .add_emoji("happy"),
+          ":\n"
+        ))
       }
     }
     # get total number of pages
@@ -129,7 +150,11 @@ query_observation <-
     query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i) {
       # print()
       #
-      srch_trm <- paste0("https://observation.org/api/v1/species/", species_id, "/observations/?limit=100")
+      srch_trm <- paste0(
+        "https://observation.org/api/v1/species/",
+        species_id,
+        "/observations/?limit=100"
+      )
 
       dataURL <- getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
 
@@ -169,7 +194,10 @@ query_observation <-
         X_df <- X_df[!is.na(X_df$media_URL), ]
 
 
-        X_df$species_name <- if (nrow(X_df) > 0) data_org$results$species_detail$scientific_name[u] else vector(mode = "character")
+        X_df$species_name <- if (nrow(X_df) > 0)
+          data_org$results$species_detail$scientific_name[u]
+        else
+          vector(mode = "character")
 
         return(X_df)
       })
@@ -184,10 +212,9 @@ query_observation <-
           for (o in common_names[!common_names %in% nms]) {
             e <-
               data.frame(e,
-                NA,
-                stringsAsFactors = FALSE,
-                check.names = FALSE
-              )
+                         NA,
+                         stringsAsFactors = FALSE,
+                         check.names = FALSE)
             names(e)[ncol(e)] <- o
           }
         }
@@ -210,10 +237,9 @@ query_observation <-
         for (o in common_names[!common_names %in% nms]) {
           e <-
             data.frame(e,
-              NA,
-              stringsAsFactors = FALSE,
-              check.names = FALSE
-            )
+                       NA,
+                       stringsAsFactors = FALSE,
+                       check.names = FALSE)
           names(e)[ncol(e)] <- o
         }
       }

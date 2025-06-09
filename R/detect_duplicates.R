@@ -23,7 +23,7 @@
 detect_duplicates <-
   function(X,
            Y,
-          all_data = getOption("all_data", TRUE),
+           all_data = getOption("all_data", TRUE),
            query_duplicate = TRUE) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
@@ -39,24 +39,24 @@ detect_duplicates <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    if (X$repository[1] == "GBIF" ) {
+    if (X$repository[1] == "GBIF") {
       id_col_df1 <- as.numeric(gsub("\\D", "", X[["catalogNumber"]]))
       id_col_df2 <- Y[["key"]]
     } else {
       id_col_df1 <- X[["key"]]
       id_col_df2 <- Y[["key"]]
     }
-      # Find duplicates
-      duplicates <- id_col_df1[id_col_df1 %in% id_col_df2]
+    # Find duplicates
+    duplicates <- id_col_df1[id_col_df1 %in% id_col_df2]
 
     print(duplicates)
     if (query_duplicate == TRUE) {
-     user_input <- readline("Would you like to remove duplicates from merged metadata dataframe? (y/n)  ")
+      user_input <- readline("Would you like to remove duplicates from merged metadata dataframe? (y/n)  ")
       if (user_input == 'y') {
         # Remove duplicates from X
         X <- X[!id_col_df1 %in% duplicates, ]
       } else {
-       return(invisible(NULL))
+        return(invisible(NULL))
       }
     }
 
@@ -65,5 +65,4 @@ detect_duplicates <-
 
     return(merged_dataframe)
 
-    }
-
+  }

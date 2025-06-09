@@ -13,16 +13,20 @@ taxon_code_search(term)
 Returns the taxon code for the given species name if match found in the clements taxon code data base
 }
 \description{
-\code{taxon_code_search} searches for metadata from \href{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2023/download/}{clements}.
+\code{taxon_code_search} searches for metadata from \href{https://www.birds.cornell.edu/clementschecklist/download/}{clements}.
 }
 \details{
-This function queries for taxon code information from the clements taxon code data base \href{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2023/download/}{clements}. It can return taxon code data. Clements data base must be downloaded and available in the work directory.
+This function queries for taxon code information from the clements taxon code data base \href{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}{clements}. It can return taxon code data. Clements data base must be downloaded and available in the work directory.
 }
 \examples{
 \dontrun{
 # search
 }
 
+}
+\references{
+{
+Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, T. A. Fredericks, J. A. Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M. Smith, and C. L. Wood. 2024. The eBird/Clements checklist of Birds of the World: v2024.}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

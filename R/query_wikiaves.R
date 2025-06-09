@@ -29,7 +29,7 @@ query_wikiaves <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-          all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -47,7 +47,8 @@ query_wikiaves <-
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("https://www.wikiaves.com"), silent = TRUE)
-    if (inherits(response, "try-error") || httr::http_error(response)) {
+    if (inherits(response, "try-error") ||
+        httr::http_error(response)) {
       .stop("No connection to wikiaves (check your internet connection!)")
     }
 
@@ -59,17 +60,17 @@ query_wikiaves <-
     # assign a value to type
     org_type <- type <- rlang::arg_match(type)
 
-    type <- switch(type,
-      sound = "Sound",
-      `still image` = "photo"
-    )
+    type <- switch(type, sound = "Sound", `still image` = "photo")
 
     # format JSON
     term <- gsub(" ", "%20", term)
 
     # initialize search with user agent
     response <- httr::GET(
-      url = paste0("https://www.wikiaves.com.br/getTaxonsJSON.php?term=", term),
+      url = paste0(
+        "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
+        term
+      ),
       httr::user_agent("suwo (https://github.com/maRce10/suwo)")
     )
 
@@ -81,7 +82,10 @@ query_wikiaves <-
 
     if (length(get_ids) == 0) {
       if (verbose) {
-        cat(paste(.color_text("Search term not found", "failure"), .add_emoji("sad")))
+        cat(paste(
+          .color_text("Search term not found", "failure"),
+          .add_emoji("sad")
+        ))
       }
     } else {
       # make it a data frame
@@ -89,9 +93,17 @@ query_wikiaves <-
 
       get_ids$total_registers <- sapply(seq_len(nrow(get_ids)), function(u) {
         response <- httr::GET(
-          url = paste0("https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                       if (type == "photo") { "f" } else { "s" },
-                       "&t=s&s=", get_ids$id[u], "&o=mp&p=1"),
+          url = paste0(
+            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+            if (type == "photo") {
+              "f"
+            } else {
+              "s"
+            },
+            "&t=s&s=",
+            get_ids$id[u],
+            "&o=mp&p=1"
+          ),
           httr::user_agent("suwo (https://github.com/maRce10/suwo)")
         )
         httr::stop_for_status(response)
@@ -99,7 +111,9 @@ query_wikiaves <-
       })
 
       if (sum(get_ids$total_registers) == 0) {
-        cat(paste(.color_text(paste0("No ", type, "s were found"), "failure"), .add_emoji("sad")))
+        cat(paste(.color_text(
+          paste0("No ", type, "s were found"), "failure"
+        ), .add_emoji("sad")))
       } else {
         # get number of pages (20 is the default number of registers per page)
         get_ids$pages <- ceiling(get_ids$total_registers / 20)
@@ -116,7 +130,20 @@ query_wikiaves <-
 
         # search recs in wikiaves (results are returned in pages with 500 recordings each)
         if (pb & verbose) {
-          cat(paste(.color_text(paste0("Obtaining metadata (", sum(get_ids$total_registers), " ", type, "(s) found)"), "success"), .add_emoji("happy"), ":\n"))
+          cat(paste(
+            .color_text(
+              paste0(
+                "Obtaining metadata (",
+                sum(get_ids$total_registers),
+                " ",
+                type,
+                "(s) found)"
+              ),
+              "success"
+            ),
+            .add_emoji("happy"),
+            ":\n"
+          ))
         }
 
         # set clusters for windows OS
@@ -183,7 +210,50 @@ query_wikiaves <-
         query_output_df$tipo <- type
 
         # rename output columns
-        names_df <- data.frame(old = c("id", "tipo", "id_usuario", "sp.id", "sp.nome", "sp.nvt", "sp.idwiki", "autor", "perfil", "data", "is_questionada", "local", "idMunicipio", "coms", "likes", "vis", "link", "dura", "repository"), new = c("key", "media.type", "user.id", "sp.id", "species", "common.name", "repository.id", "author", "user.name", "date", "verified", "location", "location.id", "comments", "likes", "visualizations", "file_url", "duration", "repository"))
+        names_df <- data.frame(
+          old = c(
+            "id",
+            "tipo",
+            "id_usuario",
+            "sp.id",
+            "sp.nome",
+            "sp.nvt",
+            "sp.idwiki",
+            "autor",
+            "perfil",
+            "data",
+            "is_questionada",
+            "local",
+            "idMunicipio",
+            "coms",
+            "likes",
+            "vis",
+            "link",
+            "dura",
+            "repository"
+          ),
+          new = c(
+            "key",
+            "media.type",
+            "user.id",
+            "sp.id",
+            "species",
+            "common.name",
+            "repository.id",
+            "author",
+            "user.name",
+            "date",
+            "verified",
+            "location",
+            "location.id",
+            "comments",
+            "likes",
+            "visualizations",
+            "file_url",
+            "duration",
+            "repository"
+          )
+        )
 
         for (i in 1:nrow(names_df)) {
           names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
@@ -195,7 +265,17 @@ query_wikiaves <-
           names(query_output_df)[names(query_output_df) == "record.id"] <- "key"
           query_output_df$latitude <- NA
           query_output_df$longitude <- NA
-          query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
+          query_output_df <- query_output_df[, c(
+            "key",
+            "species",
+            "date",
+            "country",
+            "location",
+            "latitude",
+            "longitude",
+            "file_url",
+            "repository"
+          )]
         }
 
         # Add a timestamp, term and type attribute

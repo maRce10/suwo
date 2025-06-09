@@ -48,11 +48,9 @@ download_media <-
 
             max_x2 <- max(gregexpr("\\.", x2)[[1]])
 
-            extension <- substr(
-              x = x2,
-              start = max_x2,
-              stop = nchar(x2)
-            )
+            extension <- substr(x = x2,
+                                start = max_x2,
+                                stop = nchar(x2))
 
             if (extension == ".mpga") {
               extension <- ".mp3"
@@ -118,7 +116,6 @@ download_media <-
     }
 
     if (metadata$repository[1] == "Macaulay") {
-
       metadata$extension <-
         vapply(
           X = metadata$file_url,
@@ -156,11 +153,9 @@ download_media <-
 
             max_x2 <- max(gregexpr("\\.", x2)[[1]])
 
-            extension <- substr(
-              x = x2,
-              start = max_x2,
-              stop = nchar(x2)
-            )
+            extension <- substr(x = x2,
+                                start = max_x2,
+                                stop = nchar(x2))
             # if (length(grep("photos",X)) > 0){
             #   if (extension == ".php") {
             #     extension <- ".jpeg"
@@ -183,7 +178,8 @@ download_media <-
     # Abbreviate repository name
     repo <- metadata$repository[1]
 
-    metadata$repository <- switch(repo,
+    metadata$repository <- switch(
+      repo,
       XC = "XC",
       Observation = "OBS",
       GBIF = "GBIF",
@@ -193,17 +189,14 @@ download_media <-
     )
 
     # rename if any duplicated names
-    metadata$non_dup_key <- unlist(lapply(
-      unique(metadata$key),
-      function(x) {
-        on <- metadata$key[metadata$key == x]
-        if (length(on) > 1) {
-          return(paste0(on, "-", seq_len(length(on))))
-        } else {
-          return(x)
-        }
+    metadata$non_dup_key <- unlist(lapply(unique(metadata$key), function(x) {
+      on <- metadata$key[metadata$key == x]
+      if (length(on) > 1) {
+        return(paste0(on, "-", seq_len(length(on))))
+      } else {
+        return(x)
       }
-    ))
+    }))
 
     # create file name
     metadata$file.name <-

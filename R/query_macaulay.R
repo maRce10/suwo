@@ -49,13 +49,13 @@ query_macaulay <-
     type <- switch(type,
                    sound = "audio",
                    `still image` = "photo",
-                   `video` = "video"
-    )
+                   `video` = "video")
 
 
     # Check internet connection using httr and error handling
     response <- try(httr::GET("https://www.macaulaylibrary.org/"), silent = TRUE)
-    if (inherits(response, "try-error") || httr::http_error(response)) {
+    if (inherits(response, "try-error") ||
+        httr::http_error(response)) {
       .stop("No connection to macaulaylibrary.org (check your internet connection!)")
     }
 
@@ -69,12 +69,31 @@ query_macaulay <-
     taxon_code <- taxon_code_search(user_input_species)
 
     if (!is.null(taxon_code)) {
-      cat(paste("The species code for '", user_input_species, "' is '", taxon_code, "'.\n", sep = ""))
+      cat(
+        paste(
+          "The species code for '",
+          user_input_species,
+          "' is '",
+          taxon_code,
+          "'.\n",
+          sep = ""
+        )
+      )
     } else {
-      cat(paste("No matching species found for '", user_input_species, "'.\n", sep = ""))
+      cat(paste(
+        "No matching species found for '",
+        user_input_species,
+        "'.\n",
+        sep = ""
+      ))
     }
 
-    search_url <- paste0("https://search.macaulaylibrary.org/catalog?view=list&mediaType=", type,"&taxonCode=",taxon_code)
+    search_url <- paste0(
+      "https://search.macaulaylibrary.org/catalog?view=list&mediaType=",
+      type,
+      "&taxonCode=",
+      taxon_code
+    )
 
     utils::browseURL(search_url)
 
@@ -83,9 +102,9 @@ query_macaulay <-
 
     #Ask if user has downloaded csv file from Macaulay library
     user_input <- readline("Is the data table csv downloaded? (y/n)  ")
-    if(user_input != 'y') {
+    if (user_input != 'y') {
       stop('Exiting since you did not press y')
-      }
+    }
 
     # Obtain updated file path after the user confirms the download
     changed_files <- utils::changedFiles(snapshot)
@@ -94,7 +113,8 @@ query_macaulay <-
     csv_files <- changed_files[["added"]][grep("\\.csv$", changed_files[["added"]], ignore.case = TRUE)]
 
     # Check if any CSV file is found
-    if (length(csv_files) == 0) stop('No CSV file found')
+    if (length(csv_files) == 0)
+      stop('No CSV file found')
 
     # Check the csv file for file path
     file_path <- csv_files[1]
@@ -114,14 +134,29 @@ query_macaulay <-
     colnames(query_output_df)[colnames(query_output_df) == "Longitude"] <- "longitude"
     colnames(query_output_df)[colnames(query_output_df) == "Latitude"] <- "latitude"
 
-    query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x){
-      paste0("https://cdn.download.ams.birds.cornell.edu/api/v1/asset/", query_output_df$key[x], "/", type)}
-                                       )
+    query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x) {
+      paste0(
+        "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/",
+        query_output_df$key[x],
+        "/",
+        type
+      )
+    })
     # Add repository ID
     query_output_df$repository <- "Macaulay"
 
     if (!all_data) {
-      query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
+      query_output_df <- query_output_df[, c(
+        "key",
+        "species",
+        "date",
+        "country",
+        "location",
+        "latitude",
+        "longitude",
+        "file_url",
+        "repository"
+      )]
     }
 
     # Add a timestamp attribute
@@ -137,4 +172,4 @@ query_macaulay <-
     # Save the object to the file
     saveRDS(query_output_df, file = file_path)
     return(query_output_df)
-}
+  }

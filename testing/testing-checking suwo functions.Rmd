@@ -759,7 +759,7 @@ map_locations(metadata_ob)
 
 ```{r}
 
-taxon_code_df <- read.csv("./examples/Clements-v2023-October-2023.csv", na.strings = "")
+taxon_code_df <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.strings = "")
 
 usethis::use_data(taxon_code_df, internal = TRUE, overwrite = TRUE)
 

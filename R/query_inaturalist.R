@@ -44,7 +44,6 @@ query_inaturalist <- function(term,
                               identified = FALSE,
                               verifiable = FALSE,
                               all_data = getOption("all_data", TRUE)) {
-
   arguments <- as.list(base::match.call())[-1]
 
   for (i in names(arguments)) {
@@ -58,7 +57,8 @@ query_inaturalist <- function(term,
   type <- switch(type, sound = "sounds", "still image" = "photos")
 
   response <- try(httr::GET("https://www.inaturalist.org/"), silent = TRUE)
-  if (inherits(response, "try-error") || httr::http_error(response)) {
+  if (inherits(response, "try-error") ||
+      httr::http_error(response)) {
     .stop("No connection to INaturalist (check your internet connection!)")
   }
 
@@ -72,21 +72,42 @@ query_inaturalist <- function(term,
 
   base_url <- paste0(
     "https://api.inaturalist.org/v1/observations?per_page=200&",
-    "taxon_name=", term, "&",
-    type, "=true", "&", "identified=",
-    identified, "&", "verifiable=", verifiable
+    "taxon_name=",
+    term,
+    "&",
+    type,
+    "=true",
+    "&",
+    "identified=",
+    identified,
+    "&",
+    "verifiable=",
+    verifiable
   )
 
   first_query <- jsonlite::fromJSON(base_url)
   total_results <- first_query$total_results
   if (total_results == 0) {
     if (verbose) {
-      cat(paste(.color_text(paste0("No ", tolower(org_type), "s were found"), "failure"), .add_emoji("sad")))
+      cat(paste(.color_text(
+        paste0("No ", tolower(org_type), "s were found"), "failure"
+      ), .add_emoji("sad")))
     }
     return(data.frame())
   } else {
     if (pb & verbose) {
-      cat(paste(.color_text(paste0("Obtaining metadata (", total_results, " matching observation(s) found)"), "success"), .add_emoji("happy"), ":\n"))
+      cat(paste(
+        .color_text(
+          paste0(
+            "Obtaining metadata (",
+            total_results,
+            " matching observation(s) found)"
+          ),
+          "success"
+        ),
+        .add_emoji("happy"),
+        ":\n"
+      ))
     }
 
     offsets <- seq(0, total_results, by = 200)
@@ -106,7 +127,10 @@ query_inaturalist <- function(term,
 
       query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
         x <- as.data.frame(query_output$results[u, ])
-        media_df <- if (type == "sounds") do.call(rbind, x$sounds) else do.call(rbind, x$photos)
+        media_df <- if (type == "sounds")
+          do.call(rbind, x$sounds)
+        else
+          do.call(rbind, x$photos)
         media_df <- media_df[!sapply(media_df, is.list)]
         media_df <- data.frame(media_df)
         names(media_df)[names(media_df) == "url"] <- "media-URL"
@@ -122,7 +146,10 @@ query_inaturalist <- function(term,
         nms <- names(e)
         if (length(nms) != length(common_names)) {
           for (o in common_names[!common_names %in% nms]) {
-            e <- data.frame(e, NA, stringsAsFactors = FALSE, check.names = FALSE)
+            e <- data.frame(e,
+                            NA,
+                            stringsAsFactors = FALSE,
+                            check.names = FALSE)
             names(e)[ncol(e)] <- o
           }
         }
@@ -139,7 +166,10 @@ query_inaturalist <- function(term,
       nms <- names(e)
       if (length(nms) != length(common_names)) {
         for (o in common_names[!common_names %in% nms]) {
-          e <- data.frame(e, NA, stringsAsFactors = FALSE, check.names = FALSE)
+          e <- data.frame(e,
+                          NA,
+                          stringsAsFactors = FALSE,
+                          check.names = FALSE)
           names(e)[ncol(e)] <- o
         }
       }
@@ -166,7 +196,17 @@ query_inaturalist <- function(term,
     if (!all_data) {
       query_output_df$country <- NA
       query_output_df$date <- query_output_df$time_observed_at
-      query_output_df <- query_output_df[, c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")]
+      query_output_df <- query_output_df[, c(
+        "key",
+        "species",
+        "date",
+        "country",
+        "location",
+        "latitude",
+        "longitude",
+        "file_url",
+        "repository"
+      )]
     }
 
     replace_image_size <- function(file_url) {
@@ -188,4 +228,3 @@ query_inaturalist <- function(term,
     return(query_output_df)
   }
 }
-

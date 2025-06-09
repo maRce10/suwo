@@ -5,10 +5,15 @@
 
 # Create internal funciton to update datasets from gbif, launch once before every session
 
-pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
+pblapply_sw_int <- function(X,
+                            FUN,
+                            cl = 1,
+                            pbar = TRUE,
+                            ...) {
   # conver parallel 1 to null
   if (!inherits(cl, "cluster")) {
-    if (cl == 1) cl <- NULL
+    if (cl == 1)
+      cl <- NULL
   }
 
   FUN <- match.fun(FUN)
@@ -61,10 +66,7 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
       on.exit(pbapply::closepb(pb), add = TRUE)
       rval <- vector("list", B)
       for (i in seq_len(B)) {
-        rval[i] <- list(PAR_FUN(
-          cl, X[Split[[i]]], FUN,
-          ...
-        ))
+        rval[i] <- list(PAR_FUN(cl, X[Split[[i]]], FUN, ...))
         pbapply::setpb(pb, i)
       }
     } else {
@@ -77,10 +79,7 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
       on.exit(pbapply::closepb(pb), add = TRUE)
       rval <- vector("list", B)
       for (i in seq_len(B)) {
-        rval[i] <- list(parallel::mclapply(X[Split[[i]]],
-          FUN, ...,
-          mc.cores = as.integer(cl)
-        ))
+        rval[i] <- list(parallel::mclapply(X[Split[[i]]], FUN, ..., mc.cores = as.integer(cl)))
         pbapply::setpb(pb, i)
       }
     }
@@ -108,23 +107,36 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
   }
 
   happy_emoji <- c(
-    "\U0001f600", # smile
-    "\U0001f973", # party face
-    "\U0001f638", # cat grin
-    "\U0001f308", # rainbow
-    "\U0001f947", # gold medal
-    "\U0001f389", # party popper
+    "\U0001f600",
+    # smile
+    "\U0001f973",
+    # party face
+    "\U0001f638",
+    # cat grin
+    "\U0001f308",
+    # rainbow
+    "\U0001f947",
+    # gold medal
+    "\U0001f389",
+    # party popper
     "\U0001f38a" # confetti ball
   )
 
   sad_emoji <- c(
-    "\U0001f62C", # grimacing face
-    "\U0001f635", # face with spiral eyes
-    "\U0001f62D", # loudly crying face
-    "\U0001f613", #  	weary face
-    "\U0001f480", # skull
-    "\U0001F4A9", # pile of poop
-    "\U0001f624", # face with steam from nose
+    "\U0001f62C",
+    # grimacing face
+    "\U0001f635",
+    # face with spiral eyes
+    "\U0001f62D",
+    # loudly crying face
+    "\U0001f613",
+    #  	weary face
+    "\U0001f480",
+    # skull
+    "\U0001F4A9",
+    # pile of poop
+    "\U0001f624",
+    # face with steam from nose
     "\U0001f648" # see-no-evil monkey
   )
 
@@ -138,7 +150,8 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 #####
 
 
-.color_text <- function(text, as = c("success", "skip", "warning", "failure", "error")) {
+.color_text <- function(text,
+                        as = c("success", "skip", "warning", "failure", "error")) {
   if (.has_color()) {
     unclass(cli::make_ansi_style(.suwo_style(as))(text))
   } else {
@@ -164,18 +177,16 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 
 # Function to download file according to repository
 .download <- function(metadata, x, path) {
-  dl_result <- try(
-    download.file(
-      url = as.character(metadata$file_url[x]),
-      destfile = file.path(path, metadata$file.name[x]),
-      quiet = TRUE,
-      mode = "wb",
-      cacheOK = TRUE,
-      extra = getOption("download.file.extra"),
-      Sys.sleep(0.1)
-    ),
-    silent = TRUE
-  )
+  dl_result <- try(download.file(
+    url = as.character(metadata$file_url[x]),
+    destfile = file.path(path, metadata$file.name[x]),
+    quiet = TRUE,
+    mode = "wb",
+    cacheOK = TRUE,
+    extra = getOption("download.file.extra"),
+    Sys.sleep(0.1)
+  ),
+  silent = TRUE)
 
 
   if (is(dl_result, "try-error")) {
@@ -192,51 +203,107 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 
   ### check arguments
   if (!is.null(args$term)) {
-    checkmate::assert_multi_class(x = args$term, classes = c("character"), add = check_collection, .var.name = "term")
+    checkmate::assert_multi_class(
+      x = args$term,
+      classes = c("character"),
+      add = check_collection,
+      .var.name = "term"
+    )
   }
 
   if (!is.null(args$type)) {
-    checkmate::assert_multi_class(x = args$type, classes = c("character"), add = check_collection, .var.name = "type")
+    checkmate::assert_multi_class(
+      x = args$type,
+      classes = c("character"),
+      add = check_collection,
+      .var.name = "type"
+    )
   }
 
   if (!is.null(args$cores)) {
-    checkmate::assert_integerish(args$cores, add = check_collection, lower = 1, upper = parallel::detectCores(), .var.name = "cores")
+    checkmate::assert_integerish(
+      args$cores,
+      add = check_collection,
+      lower = 1,
+      upper = parallel::detectCores(),
+      .var.name = "cores"
+    )
   }
 
   if (!is.null(args$pb)) {
-    checkmate::assert_logical(x = args$pb, len = 1, add = check_collection, .var.name = "pb")
+    checkmate::assert_logical(
+      x = args$pb,
+      len = 1,
+      add = check_collection,
+      .var.name = "pb"
+    )
   }
 
   if (!is.null(args$identified)) {
-    checkmate::assert_logical(x = args$identified, len = 1, add = check_collection, .var.name = "identified")
+    checkmate::assert_logical(
+      x = args$identified,
+      len = 1,
+      add = check_collection,
+      .var.name = "identified"
+    )
   }
 
   if (!is.null(args$verifiable)) {
-    checkmate::assert_logical(x = args$verifiable, len = 1, add = check_collection, .var.name = "verifiable")
+    checkmate::assert_logical(
+      x = args$verifiable,
+      len = 1,
+      add = check_collection,
+      .var.name = "verifiable"
+    )
   }
 
   if (!is.null(args$dataset)) {
     if (!is.null(args$dataset)) {
-      checkmate::assert_multi_class(x = args$dataset, classes = c("character"), add = check_collection, .var.name = "dataset")
+      checkmate::assert_multi_class(
+        x = args$dataset,
+        classes = c("character"),
+        add = check_collection,
+        .var.name = "dataset"
+      )
     }
   }
 
   if (!is.null(args$all_data)) {
-    checkmate::assert_logical(x = args$all_data, len = 1, add = check_collection, .var.name = "all_data")
+    checkmate::assert_logical(
+      x = args$all_data,
+      len = 1,
+      add = check_collection,
+      .var.name = "all_data"
+    )
   }
 
   if (!is.null(args$token)) {
-    checkmate::assert_multi_class(x = args$token, classes = c("character"), add = check_collection, .var.name = "token")
+    checkmate::assert_multi_class(
+      x = args$token,
+      classes = c("character"),
+      add = check_collection,
+      .var.name = "token"
+    )
   }
 
   if (!is.null(args$path)) {
     if (!is.null(args$path)) {
-      checkmate::assert_directory(x = args$path, access = "r", add = check_collection, .var.name = "path")
+      checkmate::assert_directory(
+        x = args$path,
+        access = "r",
+        add = check_collection,
+        .var.name = "path"
+      )
     }
   }
 
   if (!is.null(args$metadata)) {
-    checkmate::assert_multi_class(x = args$metadata, classes = c("data.frame"), add = check_collection, .var.name = "metadata")
+    checkmate::assert_multi_class(
+      x = args$metadata,
+      classes = c("data.frame"),
+      add = check_collection,
+      .var.name = "metadata"
+    )
   }
 
   return(check_collection)
@@ -246,5 +313,7 @@ pblapply_sw_int <- function(X, FUN, cl = 1, pbar = TRUE, ...) {
 .onAttach <-
   function(libname, pkgname) {
     packageStartupMessage("\nPlease cite 'suwo' as: \n")
-    packageStartupMessage("Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media repositories through R. R package version 0.1.0.")
+    packageStartupMessage(
+      "Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media repositories through R. R package version 0.1.0."
+    )
   }

@@ -23,7 +23,8 @@
 check_gbif_datasets <- function(path = tempdir()) {
   # Check internet connection
   response <- try(httr::GET("https://www.gbif.org"), silent = TRUE)
-  if (inherits(response, "try-error") || httr::http_error(response)) {
+  if (inherits(response, "try-error") ||
+      httr::http_error(response)) {
     stop("No connection to GBIF (check your internet connection!)")
   }
 
@@ -38,7 +39,8 @@ check_gbif_datasets <- function(path = tempdir()) {
   csv_url <- "https://api.gbif.org/v1/dataset/search/export?format=CSV&"
   csv_response <- try(httr::GET(csv_url), silent = TRUE)
 
-  if (inherits(csv_response, "try-error") || httr::http_error(csv_response)) {
+  if (inherits(csv_response, "try-error") ||
+      httr::http_error(csv_response)) {
     stop("Failed to download CSV.")
   } else {
     # Read CSV data into R
@@ -48,12 +50,19 @@ check_gbif_datasets <- function(path = tempdir()) {
     }
 
     # Save the CSV file
-    file_name <- paste0("gbif_datasets-", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".csv")
+    file_name <- paste0("gbif_datasets-",
+                        format(Sys.time(), "%Y-%m-%d_%H-%M-%S"),
+                        ".csv")
     file_path <- file.path(path, file_name)
     write.csv(csv_data, file_path)
   }
 
   # Inform the user about the file
   cli::cli_text("... edit your {.file ~/.Rprofile} file.}")
-  cli::cli_text(paste0("The CSV file (", file_name, ") with the GBIF datasets info can be found at ", path))
+  cli::cli_text(paste0(
+    "The CSV file (",
+    file_name,
+    ") with the GBIF datasets info can be found at ",
+    path
+  ))
 }
