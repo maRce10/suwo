@@ -27,7 +27,7 @@ test_that("no result", {
 
   df1 <- query_inaturalist(term = 'asdasdasd', type =  "still image")
 
-  expect_true(is.null(df1))
+  expect_true(nrow(df1) == 0 && ncol(df1) == 0)
 
 })
 

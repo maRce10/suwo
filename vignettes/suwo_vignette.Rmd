@@ -77,15 +77,15 @@ Queries may me made to any of the six available query functions that connect to 
 
 ```{r, eval = TRUE, echo = FALSE}
 
-# query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
+query_result_Inaturalist <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
 
 #Queries from observation.org require a token provided by the observation.org website through a terminal request
 #query_result_Observation <- query_observation(term = 'Turdus iliacus', type = "Sound", token = ".....")
 
 #Queries from Macaulay require user confirmation after download of the csv file that contains the information from the search in the Macaulay library.
-#query_result_Macaulay <- query_macaulay(term = 'Turdus iliacus', type = "Sound")
+#query_result_Macaulay <- query_macaulay(term = 'Turdus iliacus', type = "audio")
 
-query_result_GBIF <- query_gbif(term = 'Turdus iliacus', type = "sound")
+query_result_GBIF <- query_gbif(term = 'Agalychnis callidryas', type = "sound")
 
 query_result_Wikiaves <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
 
@@ -139,7 +139,9 @@ A query search may require a taxon code to correctly display the species observa
 
 ```{r}
 
-taxon_code_turdus <- taxon_code_search(species_name = 'Turdus iliacus', taxon_code_df = clements_data)
+taxon_code_turdus <- taxon_code_search(term = "Turdus iliacus")
+
+taxon_code_turdus
 
 ```
 
