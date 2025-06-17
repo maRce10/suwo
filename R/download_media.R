@@ -236,4 +236,7 @@ download_media <-
 
       message("Some files couldn't be downloaded, check `.Options$suwo$failed_downloads`")
     }
+
+    # return file names without printing them
+    invisible(file.path(normalizePath(path), metadata$file.name))
   }

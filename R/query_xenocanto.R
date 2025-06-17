@@ -119,13 +119,13 @@ query_xenocanto <-
     }
 
     # initialize search
-    q <-
+    query <-
       jsonlite::fromJSON(paste0(
         "https://www.xeno-canto.org/api/2/recordings?query=",
         term
       ))
 
-    if (as.numeric(q$numRecordings) == 0) {
+    if (as.numeric(query$numRecordings) == 0) {
       if (verbose) {
         cat(paste(
           .color_text("No audios were found", "failure"),
@@ -167,7 +167,7 @@ query_xenocanto <-
       records_list <-
         pblapply_sw_int(
           pbar = pb,
-          X = 1:q$numPages,
+          X = 1:query$numPages,
           cl = cl,
           FUN = function(y) {
             # search for each page
@@ -335,8 +335,10 @@ query_xenocanto <-
       names(results) <- gsub("also", "other.species", names(results))
       # rename
       names(results) <- gsub("sono.", "spectrogram.", names(results))
+
       # Add repository ID
       results$repository <- "XC"
+
       # remove duplicates
       results <- results[!duplicated(results$id), ]
 
@@ -348,7 +350,7 @@ query_xenocanto <-
       }
     }
 
-    if (as.numeric(q$numRecordings) > 0) {
+    if (as.numeric(query$numRecordings) > 0) {
       # convert lat long to numbers
       results$latitude <- as.numeric(results$latitude)
       results$longitude <- as.numeric(results$longitude)

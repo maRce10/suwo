@@ -1,7 +1,6 @@
 ---
 title: "suwo"
-subtitle: Access nature media from online repositories
-pagetitle: Access nature media from online repositories
+pagetitle: Access Nature Media Repositories Through R
 author: 
 - <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
 - Jorge Elizondo
@@ -108,7 +107,7 @@ Finding data using suwo follows a basic sequence. First a database is selected a
 
 A search query consists of a term (species name), a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if a summary of the metadata is generated as the output of the query. Queries may me made to any of the six available query functions that connect to one repository.
 
-```{r, eval = TRUE, echo = TRUE}
+```{r, eval = TRUE, echo = FALSE}
 
 inat <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
 

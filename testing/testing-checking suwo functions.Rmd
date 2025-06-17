@@ -469,6 +469,12 @@ devtools::document(".")
 
 devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
 
+devtools::test()
+
+urlchecker::url_check()
+
+
+
 # devtools::run_examples( start = "rm_sil")
 
 # devtools::build_manual()

@@ -49,7 +49,7 @@ detect_duplicates <-
     # Find duplicates
     duplicates <- id_col_df1[id_col_df1 %in% id_col_df2]
 
-    print(duplicates)
+    # print(duplicates)
     if (query_duplicate == TRUE) {
       user_input <- readline("Would you like to remove duplicates from merged metadata dataframe? (y/n)  ")
       if (user_input == 'y') {
