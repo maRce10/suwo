@@ -2,8 +2,8 @@
 title: "suwo"
 pagetitle: Access Nature Media Repositories Through R
 author: 
-- <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
 - Jorge Elizondo
+- <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
 date:  "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
