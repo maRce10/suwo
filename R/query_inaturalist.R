@@ -18,7 +18,7 @@
 #' observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements,
 #' map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count,
 #' obscured, num_identification_disagreements, geoprivacy, location, spam, mappable,
-#' identifications_some_agree, place_guess, id, license_code, file_url, attribution, page, repository
+#' identifications_some_agree, place_guess, file_url, attribution, page, repository
 #' @export
 #' @name query_inaturalist
 #' @details This function queries for species observation info in the open-access
