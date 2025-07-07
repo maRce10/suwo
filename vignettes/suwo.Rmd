@@ -1,10 +1,11 @@
 ---
 title: "suwo"
-pagetitle: Access Nature Media Repositories Through R
+subtitle: Access nature media from online repositories
+pagetitle: Access nature media from online repositories
 author: 
 - Jorge Elizondo
 - <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
-date:  "`r Sys.Date()`"
+date:  "r Sys.Date()"
 output:
   rmarkdown::html_document:
     self_contained: yes
@@ -18,7 +19,9 @@ vignette: >
    %\usepackage[utf8]{inputenc}
    %\VignetteEncoding{UTF-8}
    %\VignetteDepends{Rraven}
-   %\VignetteDepends{viridis}   
+   %\VignetteDepends{viridis}
+   %\VignetteDepends{suwo}
+   %\VignetteDepends{kableExtra}
    %\VignetteEngine{knitr::rmarkdown}     
 editor_options: 
   chunk_output_type: console
@@ -34,33 +37,29 @@ library(knitr)
 library(htmlwidgets)
 library(suwo)
 
-# create custom printing method
+# Create custom printing method
 .print_df <- function(x, highlight = NULL, ...) {
   kbl <- kableExtra::kable(
     head(as.data.frame(x)),
     align = "c",
-    row.names = F,
+    row.names = FALSE,
     format = "html",
-    escape = F
+    escape = FALSE
   )
   
   if (!is.null(highlight))
-  kbl <- column_spec(kbl, column = which(names(x) %in% highlight), background = "#ccebff", bold = TRUE)
+    kbl <- column_spec(kbl, column = which(names(x) %in% highlight), background = "#ccebff", bold = TRUE)
   
-  kbl <-
-    kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-  
-  kbl <-
-    kableExtra::scroll_box(kbl, width = "100%", height = "300px")
+  kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+  kbl <- kableExtra::scroll_box(kbl, width = "100%", height = "300px")
   
   asis_output(kbl)
 }
 
-# register data frame printing method
+# Register custom data frame print method
 registerS3method("knit_print", "data.frame", .print_df)
 
-# global option chunks
+# Global chunk options
 knitr::opts_chunk$set(
   fig.width = 5, 
   fig.height = 3.5,
@@ -74,11 +73,17 @@ knitr::opts_chunk$set(
 
 options(width = 100, max.print = 100)
 
+
 ```
 
-suwo is intended to facilitate the acquisition of observational data from multiple databases available on the internet. These databases include Inaturalist, Observation, Wikiaves, Xenocanto, Macaulay Library and GBIF. This vignette provides a general overview of the download of data using the suwo query functions and the analysis of the metadata. Some results may not appear because of missing links in the database consulted or deleted observations that no longer are available.
 
-The package can be installed from CRAN as follows:
+The suwo package is designed to simplify the retrieval of observational and media data for species across multiple online biodiversity databases, including GBIF, iNaturalist, Macaulay Library, Wikiaves, Xeno-Canto, and Observation.org. This vignette provides an overview of the package’s core querying functions and demonstrates how to work with species metadata, especially for projects involving bioacoustics or species distribution modeling.
+
+Some queries may not return results due to missing links or removed records in the consulted databases.
+
+Installation
+
+Install from CRAN:
 
 ```{r, eval = FALSE}
 
@@ -91,7 +96,8 @@ library(suwo)
 
 ```
 
-To install the latest developmental version from github you will need the R package remotes:
+Or install the latest development version from GitHub:
+
 ```{r, eval = FALSE}
 
 # install package
@@ -102,52 +108,210 @@ library(suwo)
 
 ```
 
+# Query Functions Overview
+
+The following table summarizes the available suwo query functions and the types of metadata they retrieve:
+
+```{r query_summary_table, echo=FALSE, results='asis', message=FALSE}
+
+library(knitr)
+library(kableExtra)
+
+query_summary <- data.frame(
+  `Function` = c("query_gbif", "query_inaturalist", "query_macaulay",
+                 "query_observation", "query_wikiaves", "query_xenocanto"),
+  `Repository` = c("GBIF", "iNaturalist", "Macaulay Library",
+                   "Observation.org", "Wikiaves", "Xeno-Canto"),
+  `URL link` = c(
+    "https://www.gbif.org/",
+    "https://www.inaturalist.org/",
+    "https://www.macaulaylibrary.org/",
+    "https://observation.org/",
+    "https://www.wikiaves.com.br/",
+    "https://www.xeno-canto.org/"
+  ),
+  `Requires Token` = c("No", "No", "No", "Yes", "No", "No"),
+  `File Types` = c("sound, still image, moving image, interactive resource",
+                   "sound, still image", "audio, photo, video",
+                   "sound, still image", "sound, still image", "sound"),
+  `Taxonomic Range` = c("species", "species", "species, subspecies",
+                        "species", "species", "species, genus, family"),
+  `Max Results` = rep("not specified", 6),
+  `Geographic Coverage` = c("worldwide", "worldwide", "worldwide",
+                            "worldwide", "Brazil", "worldwide"),
+  `Additional Data` = c(
+    "key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey, publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus, taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey, acceptedTaxonKey, scientificName, acceptedScientificName, kingdom, phylum, order, family, genus, species, genericName, specificEpithet, taxonRank, taxonomicStatus, iucnRedListCategory, dateIdentified, decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters, continent, stateProvince, year, month, day, eventDate, modified, lastInterpreted, references, license, isInCluster, datasetName, recordedBy, identifiedBy, geodeticDatum, class, countryCode, country, rightsHolder, identifier, http...unknown.org.nick, verbatimEventDate, verbatimLocality, collectionCode, gbifID, occurrenceID, taxonID, catalogNumber, institutionCode, eventTime, occurrenceRemarks, http...unknown.org.captive, identificationID, identificationRemarks, distanceFromCentroidInMeters, informationWithheld, sex, lifeStage, preparations, nomenclaturalCode, dynamicProperties, locality, vernacularName, fieldNotes, verbatimElevation, behavior, higherClassification, associatedTaxa, infraspecificEpithet, media-type, media-format, media-references, media-created, media-creator, media-publisher, media-license, media-rightsHolder, file_url, media-description, page, elevation, elevationAccuracy, organismQuantity, organismQuantityType, georeferenceProtocol, verbatimSRS, county, verbatimCoordinateSystem, type, collectionID, individualCount, samplingProtocol, scientificNameID, georeferenceRemarks, language, georeferenceSources, media-title, repository"
+,
+    "quality_grade, time_observed_at, taxon_geoprivacy, uuid, id, cached_votes_total, identifications_most_agree, species_guess, identifications_most_disagree, positional_accuracy, comments_count, site_id, created_time_zone, license_code, observed_time_zone, public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset, observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements, map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count, obscured, num_identification_disagreements, geoprivacy, location, spam, mappable, identifications_some_agree, place_guess, file_url, attribution, page, repository"
+,
+    "id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, repository"
+,
+    "id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, repository"
+,
+    "recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository"
+,
+    "recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date, Sound files in .mp3"
+
+  ),
+  stringsAsFactors = FALSE, 
+check.names = FALSE
+)
+
+query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
+
+query_summary[, names(query_summary) != "Additional Data"] |>
+  kbl(
+    caption = "Table 1: Summary of query functions.",
+    format = "html",
+    escape = FALSE
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "left"
+  )
+
+
+query_summary[,c("Function", "Additional Data")] |>
+  kbl(
+    caption = "Table 2: Summary of available metadata.",
+    format = "html",
+    escape = TRUE
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "left"
+  )
+
+
+```
+
+
 Finding data using suwo follows a basic sequence. First a database is selected and the corresponding query function is used to search for the data needed.
 
+<div class="alert alert-info">
+
+<font size = "4">Search queries</font>
 
 A search query consists of a term (species name), a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if a summary of the metadata is generated as the output of the query. Queries may me made to any of the six available query functions that connect to one repository.
 
-```{r, eval = TRUE, echo = FALSE}
+</div>
 
-inat <- query_inaturalist(term = "Calochortus plummerae", type = "still image")
 
-#Queries from observation.org require a token provided by the observation.org website through a terminal request
-#query_result_Observation <- query_observation(term = 'Turdus iliacus', type = "Sound", token = ".....")
+# Case study: observations of the Honduran White Bat (*Ectophylla alba*)
 
-#Queries from Macaulay require user confirmation after download of the csv file that contains the information from the search in the Macaulay library.
-#query_result_Macaulay <- query_macaulay(term = 'Turdus iliacus', type = "audio")
+The Honduran White Bat is a rare, visually striking species found in Central America. It constructs tents from Heliconia leaves and emits distinct ultrasonic vocalizations. Using suwo, we can easily gather observational data, photos, and sound recordings of this species from various public databases.
 
-aga_cal_gbif <- query_gbif(term = 'Agalychnis callidryas', type = "sound")
+Let's say we'd like to analyze the geographic distribution of this species, as well
+as obtain information on the appearance and sound emited by the species.
 
-phae_natt_wka <- query_wikiaves(term = "Phaethornis nattereri", type = "sound")
+First, we can obtain data observational data and media from the query functions by
+searching for information on GBIF, INaturalist and Xenocanto.
 
-phae_natt_xc <- query_xenocanto(term = "Phaethornis nattereri")
+```{r, eval = TRUE, echo = TRUE}
+
+# Get occurrence data from GBIF
+ectophylla_gbif <- query_gbif(term = "Ectophylla alba", type = "still image")
+
+# Get observations from iNaturalist
+ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", type = "still image")
+
+# Get audio recordings from xeno-canto
+ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
+
+ectophylla_gbif
 ```
 
-The function update_query allows users to update previous searches from the same function to obtain new data starting from the last search. The previous search must be loaded as an rds file because it uses the attributes of the dataframe.
+```{r, echo=FALSE}
+
+# Get occurrence data from GBIF
+ectophylla_gbif <- query_gbif(term = "Ectophylla alba", type = "still image")
+
+# Get observations from iNaturalist
+ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", type = "still image")
+
+# Get audio recordings from xeno-canto
+ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
+
+kable_styling(
+  kable(head(ectophylla_gbif, 2), caption = "First 2 rows from GBIF"),
+  bootstrap_options = c("striped", "hover"),
+  full_width = FALSE
+)
+
+kable_styling(
+  kable(head(ectophylla_inat, 2), caption = "First 2 rows from iNaturalist"),
+  bootstrap_options = c("striped", "hover"),
+  full_width = FALSE
+)
+
+kable_styling(
+  kable(head(ectophylla_xc, 2), caption = "First 2 rows from Xeno-Canto"),
+  bootstrap_options = c("striped", "hover"),
+  full_width = FALSE
+)
+
+```
+
+## Updating queries
+
+When past searches must be checked for new information, the function update_query allows users to update previous searches from the same function to obtain new data starting from the last search. The previous search must be loaded as an rds file because it uses the attributes of the dataframe.
 
 ```{r}
 
-updated_query_result_xenocanto  <- update_query(previous_query = phae_natt_xc)
+#Remove one row from previous query
+ectohpylla_xc <- ectophylla_xc[-1, ]
+#Update the query
+updated_query_result_xenocanto  <- update_query(previous_query = ectophylla_xc)
 
 ```
 
-Metadata can be used to download the available files from the data stored from the query. This can be done utilizing the function download_media. This function may take a longer time to run depending on the available resources and the amount of data that needs to be downloaded.
+Metadata can be used to download the available files from the data stored from the query. This can be done utilizing the function download_media. This function may take a longer time to run depending on the available resources and the amount of data that needs to be downloaded. This information can be used to run computer vision analysis on the appearance of the species or to analyze the sound structure of the echolocation emitted by the Honduran White Bat. Updating queries must be done before merging metadata (see next section) as the required attributes are lost when merging.
+
+We'll subset the image dataset from INaturalist to speed up the download process.
 
 ```{r, eval = TRUE}
 
-paths <- download_media(phae_natt_wka)
+ectophylla_gbif <- ectophylla_gbif[1:10, ]
 
-paths
 ```
 
-When checking between repository metadata, users may use the function detect_duplicates to identify and eliminate the repeated observations. This function can return a merged data frame without the repeated observations, or just identify the repetitions.
+
+```{r, eval = TRUE, echo = TRUE}
+
+#Download media for audios from the query from Xenocanto
+paths_aud <- download_media(ectophylla_xc, path = tempdir())
+
+#Download media for still images from the query from GBIF
+paths_img <- download_media(ectophylla_gbif, path = tempdir())
+
+paths_aud
+
+paths_img
+```
+
+## Combining metadata from multiple repositories
+
+Users may want to combine metadata from different repositories to create a comprehensive dataset. The function `merge_metadata` combines the metadata from different repositories, ensuring that the resulting dataset contains unique observations. `merge_metadata` allows to detect possible duplicated observations from the data from different repositories, which can occur when the same observation is recorded in multiple databases. This function returns a combined data frame in which only a single copy of the duplicated observations is kept.
 
 ```{r}
 
-Merged_Dataframe <- detect_duplicates(X = phae_natt_wka, Y = phae_natt_xc)
+Merged_Dataframe <- detect_duplicates(X = ectophylla_gbif, Y = ectophylla_inat)
+
 
 ```
+
+Users may display the coordinate information of the observations from a query using the map_locations function. This will allow the user to show the locations of the observations on a map.
+
+```{r}
+
+# create map
+map_locations(ectophylla_inat)
+
+```
+
+# Some notes for specific searches
 
 The GBIF repository dataset may me consulted to filter what repositories the user would like to consult specifically. This may be viewed by downloading the data using the function check_gbif_dataset. This function downloads the csv of the complete repository list available on GBIF.
 
@@ -157,26 +321,26 @@ check_gbif_datasets()
 
 ```
 
-Users may display the coordinate information of the observations from a query using the map_locations function. This will allow the user to show the locations of the observations on a map.
+
+A query search may require a taxon code to correctly display the species observation data. This information can be consulted using the taxon_code_search function that consults the Clements database
 
 ```{r}
 
-metadata <- query_xenocanto(term = "Phaethornis anthophilus")
+taxon_code_pharomachrus <- taxon_code_search(term = "Pharomachrus mocinno")
 
-# create map
-map_locations(metadata)
-
-```
-
-A query search may require a taxon code to correctly display the species observation data. This information can be consulted using the taxon_code_search function that consults the clements database
-
-```{r}
-
-taxon_code_turdus <- taxon_code_search(term = "Turdus iliacus")
-
-taxon_code_turdus
+taxon_code_pharomachrus
 
 ```
+
+
+<div class="alert alert-warning">
+
+<font size = "4">Saving and sharing query outputs</font>
+
+Query outputs contain additional metadata as dataframe attributes. These attributes are lost when saving the dataframe as a data file (e.g. CSV, TXT, XSLX, etc) To preserve this metadata, users must save their query results as RDS files using the `saveRDS()` function from base R. This allows for easy sharing and reloading of the data with all its attributes intact.
+ 
+
+</div>
 
 
 
