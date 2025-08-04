@@ -47,14 +47,13 @@
 #' Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-# last modification on nov-16-2016 (MAS)
 
 query_xenocanto <-
   function(term,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -80,7 +79,6 @@ query_xenocanto <-
     if (grepl("Could not connect to the database", content)) {
       .stop("xeno-canto.org website is apparently down")
     }
-
 
     # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
@@ -134,26 +132,37 @@ query_xenocanto <-
         ))
       }
     } else {
-      nms <-
-        c(
-          "id",
-          "gen",
-          "sp",
-          "ssp",
-          "en",
-          "rec",
-          "cnt",
-          "loc",
-          "lat",
-          "lng",
-          "type",
-          "file",
-          "lic",
-          "url",
-          "q",
-          "time",
-          "date"
-        )
+
+      # default and new names for output columns
+      column_names <- c(
+        "key" = "id",
+        "genus" = "gen",
+        "specific_epithet" = "sp",
+        "subspecies" = "ssp",
+        "english_name" = "en",
+        "recordist" = "rec",
+        "country" = "cnt",
+        "locality" = "loc",
+        "latitude" = "lat",
+        "longitude" = "lon",
+        "altitude" = "alt",
+        "vocalization_type" = "type",
+        "file_url" = "file",
+        "license" = "lic",
+        "url" = "url",
+        "quality" = "q",
+        "taxonomic_group" = "grp",
+        "file_name" = "file-name",
+        "sonogram" = "sono",
+        "other_species" = "also",
+        "sampling_rate" = "smp",
+        "device" = "dvc",
+        "microphone" = "mic",
+        "upload_date" = "uploaded",
+        "remarks" = "rmk",
+         "animal_seen" = "animal.seen",
+        "playback_used" = "playback.used"
+      )
 
       ### loop over pages
       # set clusters for windows OS
@@ -167,13 +176,13 @@ query_xenocanto <-
       records_list <-
         pblapply_sw_int(
           pbar = pb,
-          X = 1:query$numPages,
+          X = seq_len(query$numPages),
           cl = cl,
           FUN = function(y) {
             # search for each page
-            a <-
-              rjson::fromJSON(
-                file = paste0(
+            query_output <-
+              jsonlite::fromJSON(
+                txt = paste0(
                   "https://www.xeno-canto.org/api/2/recordings?query=",
                   term,
                   "&page=",
@@ -181,55 +190,36 @@ query_xenocanto <-
                 )
               )
 
-            # put together as data frame
-            d <-
-              lapply(1:length(a$recordings), function(z) {
-                data.frame(t(unlist(a$recordings[[z]])))
-              })
+            query_output$recordings$also <- sapply(query_output$recordings$also, paste, collapse = "-")
 
-            d2 <- lapply(d, function(x) {
-              if (!all(nms %in% names(x))) {
-                dif <- setdiff(nms, names(x))
-                mis <- rep(NA, length(dif))
-                names(mis) <- dif
-                return(cbind(x, t(mis)))
-              }
-              return(x)
-            })
 
-            # determine all column names in all pages
-            cnms <- unique(unlist(lapply(d2, names)))
+            # split sonogram in 3 columns
+            sono_df <- as.data.frame(query_output$recordings$sono)
 
-            # add columns that are missing to each selection table
-            d3 <- lapply(d2, function(X) {
-              nms <- names(X)
-              if (length(nms) != length(cnms)) {
-                for (i in cnms[!cnms %in% nms]) {
-                  X <-
-                    data.frame(X,
-                               NA,
-                               stringsAsFactors = FALSE,
-                               check.names = FALSE)
-                  names(X)[ncol(X)] <- i
-                }
-              }
-              return(X)
-            })
+            names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
 
-            e <- do.call(rbind, d3)
+            # split oscillograms in 3 columns
+            osci_df <- as.data.frame(query_output$recordings$osci)
 
-            return(e)
+            names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
+
+            # remove raw columns
+            query_output$recordings$sono <- query_output$recordings$osci <- NULL
+
+            query_output <- cbind(query_output$recordings, sono_df, osci_df)
+
+            return(query_output)
           }
         )
 
       # determine all column names in all pages
-      cnms <- unique(unlist(lapply(records_list, names)))
+      pooled_column_names <- unique(unlist(lapply(records_list, names)))
 
       # add columns that are missing to each selection table
       records_list2 <- lapply(records_list, function(X) {
         nms <- names(X)
-        if (length(nms) != length(cnms)) {
-          for (i in cnms[!cnms %in% nms]) {
+        if (length(nms) != length(pooled_column_names)) {
+          for (i in pooled_column_names[!pooled_column_names %in% column_names]) {
             X <-
               data.frame(X,
                          NA,
@@ -249,98 +239,17 @@ query_xenocanto <-
       results[indx] <- lapply(results[indx], as.character)
 
       # order columns
-      results <- results[, order(match(names(results), nms))]
+      results <- results[, order(match(names(results), column_names))]
 
-      names(results)[match(
-        c(
-          "id",
-          "gen",
-          "sp",
-          "ssp",
-          "en",
-          "rec",
-          "cnt",
-          "loc",
-          "lat",
-          "lng",
-          "alt",
-          "type",
-          "file",
-          "lic",
-          "url",
-          "q",
-          "length",
-          "time",
-          "date",
-          "uploaded",
-          "rmk",
-          "bird.seen",
-          "playback.used"
-        ),
-        names(results)
-      )] <-
-        c(
-          "id",
-          "genus",
-          "specific.epithet",
-          "subspecies",
-          "english.name",
-          "recordist",
-          "country",
-          "location",
-          "latitude",
-          "longitude",
-          "altitude",
-          "vocalization.type",
-          "audio_file",
-          "license",
-          "file_url",
-          "quality",
-          "length",
-          "time",
-          "date",
-          "uploaded",
-          "remarks",
-          "bird.seen",
-          "playback.used"
-        )[which(
-          c(
-            "id",
-            "gen",
-            "sp",
-            "ssp",
-            "en",
-            "rec",
-            "cnt",
-            "loc",
-            "lat",
-            "lng",
-            "alt",
-            "type",
-            "file",
-            "lic",
-            "url",
-            "q",
-            "length",
-            "time",
-            "date",
-            "uploaded",
-            "rmk",
-            "bird.seen",
-            "playback.used"
-          ) %in% names(results)
-        )]
-
-      # rename also columns
-      names(results) <- gsub("also", "other.species", names(results))
-      # rename
-      names(results) <- gsub("sono.", "spectrogram.", names(results))
+      # rename columns
+      for (i in seq_along(column_names))
+        names(results)[names(results) == column_names[i]] <- names(column_names)[i]
 
       # Add repository ID
       results$repository <- "XC"
 
       # remove duplicates
-      results <- results[!duplicated(results$id), ]
+      results <- results[!duplicated(results$key), ]
 
 
       if (pb & verbose) {
@@ -356,21 +265,20 @@ query_xenocanto <-
       results$longitude <- as.numeric(results$longitude)
 
       # create species name column
-      results$species <- paste(results$genus, results$specific.epithet, sep = "_")
-      # rename id
-      names(results)[names(results) == "id"] <- "key"
-      # fix url
-      results$file_url <- paste0("https:", results$file_url, "/download")
+      results$species <- paste(results$genus, results$specific_epithet, sep = " ")
+
+      # order names so species goes first
+      results <- results[, c("species", names(results)[names(results) != "species"])]
 
       if (!all_data) {
         results <- results[, c(
-          "location",
+          "species",
+          "key", #"key",
+          "locality", #"location",
           "latitude",
           "longitude",
           "file_url",
           "repository",
-          "key",
-          "species",
           "date",
           "country"
         )]
@@ -387,7 +295,7 @@ query_xenocanto <-
 
       # Save the object to the file
       # MARCELO: I added a try function to avoid errors when saving the file, double check (why do we need to save it and how people can find the RDS)
-      try(saveRDS(droplevels(results), file = file_path), silent = TRUE)
+      # try(saveRDS(droplevels(results), file = file_path), silent = TRUE)
       return(droplevels(results))
     }
   }

@@ -49,13 +49,13 @@ update_query <-
                                      all_data = query_all_data)
 
     }
-    if (previous_query$repository[1] == "INAT") {
+    if (previous_query$repository[1] == "iNaturalist") {
       query_output_new <- query_inaturalist(term = query_term,
                                             type = query_type,
                                             all_data = query_all_data)
 
     }
-    if (previous_query$repository[1] == "Macaulay") {
+    if (previous_query$repository[1] == "Macaulay Library") {
       query_output_new <- query_macaulay(term = query_term,
                                          type = query_type,
                                          all_data = query_all_data)

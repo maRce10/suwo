@@ -32,7 +32,7 @@ test_that("no result", {
 })
 
 
-test_that("search Glaucis photos (2 species) in parallel", {
+test_that("search in parallel", {
 
   df1 <- query_inaturalist(term = 'bolitoglossa striatula', type =  "still image", cores = 2)
 

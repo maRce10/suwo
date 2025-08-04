@@ -5,7 +5,7 @@
 #' @param metadata Data frame with a 'file_url' column and any other column listed in the file.name argument. Only the media listed in the data frame
 #' will be downloaded (\code{download} argument is automatically set to \code{TRUE}). This can be used to select
 #' the recordings to be downloaded based on their attributes.
-#' @param path Character that defines the location for the downloaded files.
+#' @param path Character that defines the location for the downloaded files. By default media files are downloaded to the current working directory (\code{"."}).
 #' @return media files
 #' @export
 #' @name download_media
@@ -20,7 +20,7 @@
 
 download_media <-
   function(metadata,
-           path = "./",
+           path = ".",
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            cores = getOption("mc.cores", 1)) {
@@ -63,7 +63,7 @@ download_media <-
         )
     }
 
-    if (metadata$repository[1] == "INAT") {
+    if (metadata$repository[1] == "iNaturalist") {
       if (exists("media_extension", where = metadata)) {
         metadata$extension <-
           vapply(
@@ -95,7 +95,7 @@ download_media <-
       }
     }
 
-    if (metadata$repository[1] == "INAT") {
+    if (metadata$repository[1] == "iNaturalist") {
       if (!exists("media_extension", where = metadata)) {
         metadata$extension <-
           vapply(
@@ -115,7 +115,7 @@ download_media <-
       }
     }
 
-    if (metadata$repository[1] == "Macaulay") {
+    if (metadata$repository[1] == "Macaulay Library") {
       metadata$extension <-
         vapply(
           X = metadata$file_url,
@@ -184,8 +184,8 @@ download_media <-
       Observation = "OBS",
       GBIF = "GBIF",
       wikiaves = "WA",
-      INAT = "INAT",
-      Macaulay = "ML"
+      iNaturalist = "INAT",
+      `Macaulay Library` = "ML"
     )
 
     # rename if any duplicated names
@@ -221,7 +221,7 @@ download_media <-
     success_dwnld <-
       unlist(pblapply_sw_int(
         pbar = pb,
-        X = 1:nrow(metadata),
+        X = seq_len(nrow(metadata)),
         cl = cl,
         FUN = function(x) {
           .download(metadata, x, path)

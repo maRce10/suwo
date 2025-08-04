@@ -99,6 +99,23 @@ pblapply_sw_int <- function(X,
   warning(..., call. = FALSE)
 }
 
+
+
+# colored message
+colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "orange", "black", "silver")) {
+  if (has_color()) {
+    unclass(cli::make_ansi_style(warbleR_style(as))(text))
+  } else {
+    text
+  }
+}
+
+.message <- function(x, color = "black", no.color = FALSE) {
+  if (!no.color)
+    message(colortext(x, as = color)) else
+      message(cli::ansi_strip(x))
+}
+
 # add emojis to messages. based on praise_emoji from testthat
 
 .add_emoji <- function(mood) {
@@ -317,3 +334,42 @@ pblapply_sw_int <- function(X,
       "Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media repositories through R. R package version 0.1.0."
     )
   }
+
+## check internet
+# gracefully fail if internet resource is not available
+.try_GET <- function(x, ...) {
+  tryCatch(
+    httr::GET(url = x, httr::timeout(10),
+              agent = "suwo (https://github.com/maRce10/suwo)"),
+    error = function(e) conditionMessage(e),
+    warning = function(w) conditionMessage(w)
+    )
+}
+
+.is_response <- function(x) {
+  class(x) == "response"
+}
+
+.check_internet_resource <- function(url, skip.error = FALSE) {
+
+  output <- "OK"
+  # First check internet connection
+  if (!curl::has_internet()) {
+    .message(x = "No internet connection.", color = "cyan")
+    output <- "not_OK"
+  } else {
+    # Then try for timeout problems
+    resp <- .try_GET(url)
+    if (!.is_response(resp)) {
+      .message(x = resp, color = "cyan")
+      output <- "not_OK"
+    } else {
+      if (httr::http_error(resp) & !skip.error) {
+        httr::message_for_status(resp)
+        output <- "not_OK"
+      }
+    }
+  }
+
+  return(output)
+}

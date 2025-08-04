@@ -42,7 +42,7 @@ public_positional_accuracy, oauth_application_id, created_at, description, time_
 observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements,
 map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count,
 obscured, num_identification_disagreements, geoprivacy, location, spam, mappable,
-identifications_some_agree, place_guess, id, license_code, file_url, attribution, page, repository
+identifications_some_agree, place_guess, file_url, attribution, page, repository
 }
 \description{
 \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.

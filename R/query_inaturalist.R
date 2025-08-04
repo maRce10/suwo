@@ -43,7 +43,7 @@ query_inaturalist <- function(term,
                               type = c("sound", "still image"),
                               identified = FALSE,
                               verifiable = FALSE,
-                              all_data = getOption("all_data", TRUE)) {
+                              all_data = getOption("all_data", FALSE)) {
   arguments <- as.list(base::match.call())[-1]
 
   for (i in names(arguments)) {
@@ -178,7 +178,7 @@ query_inaturalist <- function(term,
 
     query_output_df <- do.call(rbind, query_output_list)
     colnames(query_output_df)[colnames(query_output_df) == "media-URL"] <- "file_url"
-    query_output_df$repository <- "INAT"
+    query_output_df$repository <- "iNaturalist"
 
     split_location <- do.call(rbind, strsplit(as.character(query_output_df$location), ","))
     latitude <- split_location[, 1]
@@ -212,7 +212,7 @@ query_inaturalist <- function(term,
     replace_image_size <- function(file_url) {
       gsub("square", "original", file_url)
     }
-    for (i in 1:nrow(query_output_df)) {
+    for (i in seq_len(nrow(query_output_df))) {
       query_output_df$file_url[i] <- replace_image_size(query_output_df$file_url[i])
     }
 

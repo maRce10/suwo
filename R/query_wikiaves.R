@@ -22,14 +22,14 @@
 #' Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo Guaraldo. 2019. Revealing the potential of a huge citizen-science platform to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#'
+
 query_wikiaves <-
   function(term,
            type = c("sound", "still image"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -44,19 +44,21 @@ query_wikiaves <-
     # report errors
     checkmate::reportAssertions(check_results)
 
+    url_check <- .check_internet_resource(url = "https://www.wikiaves.com.br", skip.error = TRUE)
 
     # Check internet connection using httr and error handling
-    response <- try(httr::GET("https://www.wikiaves.com"), silent = TRUE)
-    if (inherits(response, "try-error") ||
-        httr::http_error(response)) {
-      .stop("No connection to wikiaves (check your internet connection!)")
-    }
+    # response <- try(httr::GET("https://www.wikiaves.com.br/wiki/aves"), silent = TRUE)
+    # if (inherits(response, "try-error") ||
+    #     httr::http_error(response)) {
+    #   .stop("No connection to wikiaves (check your internet connection!)")
+    # }
+    #
+    # content <- httr::content(response, as = "text")
+    # if (grepl("Could not connect to the database", content)) {
+    #   .stop("wikiaves.com website is apparently down")
+    # }
 
-    content <- httr::content(response, as = "text")
-    if (grepl("Could not connect to the database", content)) {
-      .stop("wikiaves.com website is apparently down")
-    }
-
+    if (url_check == "OK") {
     # assign a value to type
     org_type <- type <- rlang::arg_match(type)
 
@@ -154,9 +156,12 @@ query_wikiaves <-
         }
 
         # loop over pages
-        query_output_list <- pblapply_sw_int(1:nrow(id_by_page_df), cl = cl, pbar = pb, function(i) {
+        query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl, pbar = pb, function(i) {
+          # print(i)
+          Sys.sleep(1)
+
           query_output <-
-            jsonlite::fromJSON(
+            try(jsonlite::fromJSON(
               paste0(
                 "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
                 if (type == "photo") {
@@ -171,7 +176,31 @@ query_wikiaves <-
                 "&o=mp&p=",
                 id_by_page_df$page[i]
               )
-            )
+            ),
+            silent = TRUE)
+
+          # retry if an error occurs waiting 1 s
+          if (is(query_output, "try-error")) {
+print("asdasdasd")
+            Sys.sleep(1)
+
+            query_output <-jsonlite::fromJSON(
+              paste0(
+                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+                if (type == "photo") {
+                  "f"
+                } else {
+                  "s"
+                },
+                "&t=",
+                "s",
+                "&s=",
+                id_by_page_df$id[i],
+                "&o=mp&p=",
+                id_by_page_df$page[i]
+              ))
+            }
+
 
           # make it a data frame
           output_df <-
@@ -189,7 +218,7 @@ query_wikiaves <-
         query_output_df <- do.call(rbind, query_output_list)
 
         # rename rows
-        rownames(query_output_df) <- 1:nrow(query_output_df)
+        rownames(query_output_df) <- seq_len(nrow(query_output_df))
 
         # change jpg to mp3 in links
         if (type == "Sound") {
@@ -255,7 +284,7 @@ query_wikiaves <-
           )
         )
 
-        for (i in 1:nrow(names_df)) {
+        for (i in seq_len(nrow(names_df))) {
           names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
         }
 
@@ -294,3 +323,4 @@ query_wikiaves <-
       }
     }
   }
+}

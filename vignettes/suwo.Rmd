@@ -269,7 +269,7 @@ updated_query_result_xenocanto  <- update_query(previous_query = ectophylla_xc)
 
 Metadata can be used to download the available files from the data stored from the query. This can be done utilizing the function download_media. This function may take a longer time to run depending on the available resources and the amount of data that needs to be downloaded. This information can be used to run computer vision analysis on the appearance of the species or to analyze the sound structure of the echolocation emitted by the Honduran White Bat. Updating queries must be done before merging metadata (see next section) as the required attributes are lost when merging.
 
-We'll subset the image dataset from INaturalist to speed up the download process.
+We'll subset the image dataset from iNaturalist to speed up the download process.
 
 ```{r, eval = TRUE}
 

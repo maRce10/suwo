@@ -4,8 +4,7 @@
 #' @inheritParams template_params
 #' @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
-#' @return If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
-#' @return If all_data is \code{TRUE} the function returns a data frame with the following media
+#' @return If all_data is \code{FALSE} the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is \code{TRUE} the function returns a data frame with the following media
 #' information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
 #' publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
 #' taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,
@@ -49,7 +48,7 @@ query_gbif <-
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            dataset = NULL,
-           all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -243,6 +242,9 @@ query_gbif <-
 
         names(query_output_df)[names(query_output_df) == "scientificName"] <- "species"
 
+        # remove everything after the first parenthesis
+        query_output_df$species <- gsub("\\s*\\(.*?\\)", "", query_output_df$species)
+
         names(query_output_df)[names(query_output_df) == "key"] <- "key"
 
         names(query_output_df)[names(query_output_df) == "eventDate"] <- "date"
@@ -270,10 +272,10 @@ query_gbif <-
       attr(query_output_df, "query_all_data") <- all_data
 
       # Generate a file path by combining tempdir() with a file name
-      file_path <- file.path(tempdir(), paste0(term, ".rds"))
+      # file_path <- file.path(tempdir(), paste0(term, ".rds"))
 
       # Save the object to the file
-      saveRDS(query_output_df, file = file_path)
+      # saveRDS(query_output_df, file = file_path)
 
       return(query_output_df)
     }

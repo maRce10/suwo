@@ -30,7 +30,7 @@ query_observation <-
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            token = NULL,
-           all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 

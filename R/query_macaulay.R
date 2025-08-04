@@ -1,19 +1,19 @@
-#' Access 'observation' recordings and metadata
+#' Searches for media files in the Macaulay Library
 #'
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
-#' @param type Character vector with media type to query for. Currently 'photo' and 'audio' are available.
+#' @param path Character that defines the location where the .csv file will be downloaded. By default is downloaded to the current working directory (\code{"."}).
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_macaulay
 #' @details This function queries for species observation info in the open-access
-#' online repository \href{https://https://www.macaulaylibrary.org/}{macaulay}. It can return media metadata.
+#' online repository \href{https://https://www.macaulaylibrary.org/}{macaulay} and returns media metadata. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is downloaded, the user must confirm that the file has been downloaded. The function then reads the .csv file and returns a data frame with the metadata. Term must be a species name.
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_macaulay(term = 'Turdus iliacus', type = "Sound", cores = 4)
+# df1 <- query_macaulay(term = 'Turdus iliacus', type = "sound", cores = 4, path = tempdir())
 #' View(df1)
 #' }
 #'
@@ -24,11 +24,12 @@
 #'
 query_macaulay <-
   function(term,
-           type = c("audio", "photo", "video"),
+           type = c("sound", "photo", "video"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           all_data = getOption("all_data", TRUE)) {
+           all_data = getOption("all_data", FALSE),
+           path = ".") {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -56,12 +57,12 @@ query_macaulay <-
     response <- try(httr::GET("https://www.macaulaylibrary.org/"), silent = TRUE)
     if (inherits(response, "try-error") ||
         httr::http_error(response)) {
-      .stop("No connection to macaulaylibrary.org (check your internet connection!)")
+      return("No connection to macaulaylibrary.org (check your internet connection!)")
     }
 
     content <- httr::content(response, as = "text")
     if (grepl("Could not connect to the database", content)) {
-      .stop("macaulaylibrary.org website is apparently down")
+      return("macaulaylibrary.org website is apparently down")
     }
 
     user_input_species <- term
@@ -69,16 +70,28 @@ query_macaulay <-
     taxon_code <- taxon_code_search(user_input_species)
 
     if (!is.null(taxon_code)) {
+      # cat(
+      #   paste(
+      #     "The species code for '",
+      #     user_input_species,
+      #     "' is '",
+      #     taxon_code,
+      #     "'.\n",
+      #     sep = ""
+      #   )
+      # )
+
       cat(
         paste(
-          "The species code for '",
-          user_input_species,
-          "' is '",
-          taxon_code,
+          "A browser will open the macaulay website. Save the csv file ('export' button) in this directory: '",
+          path,
           "'.\n",
           sep = ""
         )
       )
+      # pause 1 s so users can read message
+      Sys.sleep(3)
+
     } else {
       cat(paste(
         "No matching species found for '",
@@ -86,8 +99,13 @@ query_macaulay <-
         "'.\n",
         sep = ""
       ))
+      return(NULL)
     }
 
+    # Take snapshot before asking for download confirmation
+    snapshot <- utils::fileSnapshot(path = path)
+
+    # construct the search URL
     search_url <- paste0(
       "https://search.macaulaylibrary.org/catalog?view=list&mediaType=",
       type,
@@ -95,10 +113,8 @@ query_macaulay <-
       taxon_code
     )
 
+    # open the search URL in the default web browser
     utils::browseURL(search_url)
-
-    # Take snapshot before asking for download confirmation
-    snapshot <- utils::fileSnapshot()
 
     #Ask if user has downloaded csv file from Macaulay library
     user_input <- readline("Is the data table csv downloaded? (y/n)  ")
@@ -120,7 +136,8 @@ query_macaulay <-
     file_path <- csv_files[1]
 
     # Read the CSV file
-    query_output_df <- read.csv(file_path, stringsAsFactors = FALSE)
+    query_output_df <- read.csv(file.path(path, file_path), stringsAsFactors = FALSE)
+
 
     # Change column name for media download function
     colnames(query_output_df)[colnames(query_output_df) == "ML.Catalog.Number"] <- "key"
@@ -143,7 +160,7 @@ query_macaulay <-
       )
     })
     # Add repository ID
-    query_output_df$repository <- "Macaulay"
+    query_output_df$repository <- "Macaulay Library"
 
     if (!all_data) {
       query_output_df <- query_output_df[, c(
@@ -165,11 +182,15 @@ query_macaulay <-
     attr(query_output_df, "query_term") <- term
     attr(query_output_df, "query_type") <- org_type
     attr(query_output_df, "query_all_data") <- all_data
+    attr(query_output_df, "input_file") <- file.path(path, csv_files[1])
 
-    # Generate a file path by combining tempdir() with a file name
-    file_path <- file.path(tempdir(), paste0(term, ".rds"))
+    # let users know the name of the csv file that was read
+    cat(paste("The data was read from the file:", csv_files, "\n"))
 
-    # Save the object to the file
-    saveRDS(query_output_df, file = file_path)
+    # # Generate a file path by combining tempdir() with a file name
+    # file_path <- file.path(tempdir(), paste0(term, ".rds"))
+    #
+    # # Save the object to the file
+    # saveRDS(query_output_df, file = file_path)
     return(query_output_df)
   }

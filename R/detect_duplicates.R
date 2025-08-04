@@ -23,7 +23,7 @@
 detect_duplicates <-
   function(X,
            Y,
-           all_data = getOption("all_data", TRUE),
+           all_data = getOption("all_data", FALSE),
            query_duplicate = TRUE) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]

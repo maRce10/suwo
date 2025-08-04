@@ -1,12 +1,28 @@
 test_that("search Phaethornis check rows", {
 
-  df1 <- query_xenocanto(term = 'Phaethornis anthophilus')
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
 
-  expect_true(nrow(df1) > 10)
+  expect_true(nrow(df1) > 15)
+
+  expect_true(ncol(df1) == 9)
+
 
   })
 
+
+test_that("all data TRUE", {
+
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = TRUE)
+
+  expect_true(nrow(df1) > 15)
+
+  expect_true(ncol(df1) == 44)
+
+})
+
+
 test_that("no recs found", {
+
 
   df1 <- query_xenocanto(term = '000')
 
@@ -39,8 +55,7 @@ test_that("test all_data FALSE", {
 
   df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
 
-
-  expected_col_names <- c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")
+  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository")
   query_col_names <- colnames(df1)
   expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")
 

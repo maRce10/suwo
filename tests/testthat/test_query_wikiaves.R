@@ -2,7 +2,7 @@ test_that("search Glaucis dohrnii sound", {
 
   df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "sound")
 
-  expect_true(nrow(df1) >= 25)
+  expect_true(nrow(df1) >= 30)
 
 })
 
@@ -17,9 +17,9 @@ test_that("search Spatula discors sound (no sounds)", {
 
 test_that("search Glaucis dohrnii photos", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image")
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type = "still image")
 
-  expect_true(nrow(df1) >=  257)
+  expect_true(nrow(df1) >=  420)
 
 })
 
@@ -34,7 +34,7 @@ test_that("no result", {
 })
 
 
-test_that("search Glaucis photos (2 species) in parallel", {
+test_that("search Glaucis photos in parallel", {
 
   df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image", cores = 2)
 

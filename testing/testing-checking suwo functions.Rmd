@@ -24,7 +24,7 @@ remove.packages("suwo")
 
 remotes::install_github("ropensci-review-tools/pkgcheck")
 
-pkgs <- c("remotes", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli")
+pkgs <- c("remotes", "curl", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli")
 
 # install/ load packages
 out <- lapply(pkgs, function(y) {
@@ -467,13 +467,15 @@ devtools::document(".")
 
 #check with devtools
 
-devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
+devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE, test = FALSE)
 
 # devtools::run_examples( start = "rm_sil")
 
 # devtools::build_manual()
 
 # devtools::install()
+
+#devtools::test()
 
 # check in R version 3.X.X
 
@@ -637,6 +639,7 @@ rm(i)
 
 source("./R/internal_functions.R")
 
+options(verbose = TRUE)
 df1 <- query_xenocanto(term = 'Glaucis dohrnii')
 
 df1 <- query_xenocanto(term = 'Glaucis dohrnii')
