@@ -9,10 +9,10 @@ query_inaturalist(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  type = c("sound", "still image"),
+  format = c("sound", "image"),
   identified = FALSE,
   verifiable = FALSE,
-  all_data = getOption("all_data", TRUE)
+  all_data = getOption("all_data", FALSE)
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}.}
 
-\item{type}{Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.}
+\item{format}{Character vector with the media format to query for. Options are 'sound', 'image'. Required.}
 
 \item{identified}{Logical argument to define if search results are categorized as identified by inaturalist.}
 
@@ -41,7 +41,7 @@ comments_count, site_id, created_time_zone, license_code, observed_time_zone,
 public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset,
 observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements,
 map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count,
-obscured, num_identification_disagreements, geoprivacy, location, spam, mappable,
+obscured, num_identification_disagreements, geoprivacy, locality, spam, mappable,
 identifications_some_agree, place_guess, file_url, attribution, page, repository
 }
 \description{

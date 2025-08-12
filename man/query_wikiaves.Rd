@@ -2,35 +2,32 @@
 % Please edit documentation in R/query_wikiaves.R
 \name{query_wikiaves}
 \alias{query_wikiaves}
-\title{Access 'wikiaves' recordings and metadata}
+\title{Access 'Wikiaves' recordings and metadata}
 \usage{
 query_wikiaves(
   term,
-  type = c("sound", "still image"),
+  format = c("sound", "image"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  all_data = getOption("all_data", TRUE)
+  all_data = getOption("all_data", FALSE)
 )
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
-\item{type}{Character vector with media type to query for. Options are 'still image' or 'sound'. Required.}
+\item{format}{Character vector with the media format to query for. Options are 'sound' or 'image'. Required.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
 }
 \value{
-If all_data is not provided the function returns a data frame with the following
-recording information: recording ID, media type, user ID, species ID, scientific name, common
-name, repository ID, author, user name, date, verified condition, location, location ID,
-comments, likes, visualizations, url, duration and repository
+A data frame with the metadata of the observations matching the query.  If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.
 }
 \description{
 \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
@@ -42,7 +39,7 @@ online repository \href{https://www.wikiaves.com/}{wikiaves}. It can return reco
 \examples{
 \dontrun{
 # search
-df1 <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
+df1 <- query_wikiaves(term = "Phaethornis nattereri", format = "image")
 View(df1)
 }
 

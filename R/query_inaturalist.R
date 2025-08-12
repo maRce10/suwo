@@ -2,7 +2,7 @@
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
 #' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
-#' @param type Character vector with media type to query for. Options are 'sound', 'stillimage'. Required.
+#' @param format Character vector with the media format to query for. Options are 'sound', 'image'. Required.
 #' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
 #' @param cores Numeric. Controls whether parallel computing is applied.
 #' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -17,7 +17,7 @@
 #' public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset,
 #' observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements,
 #' map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count,
-#' obscured, num_identification_disagreements, geoprivacy, location, spam, mappable,
+#' obscured, num_identification_disagreements, geoprivacy, locality, spam, mappable,
 #' identifications_some_agree, place_guess, file_url, attribution, page, repository
 #' @export
 #' @name query_inaturalist
@@ -26,7 +26,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_inaturalist(term = 'Turdus iliacus', type = "sound", cores = 4)
+# df1 <- query_inaturalist(term = 'Turdus iliacus', format = "sound", cores = 4)
 #' View(df1)
 #' }
 #'
@@ -40,7 +40,7 @@ query_inaturalist <- function(term,
                               cores = getOption("mc.cores", 1),
                               pb = getOption("pb", TRUE),
                               verbose = getOption("verbose", TRUE),
-                              type = c("sound", "still image"),
+                              format = c("sound", "image"),
                               identified = FALSE,
                               verifiable = FALSE,
                               all_data = getOption("all_data", FALSE)) {
@@ -53,8 +53,8 @@ query_inaturalist <- function(term,
   check_results <- .check_arguments(args = arguments)
   checkmate::reportAssertions(check_results)
 
-  org_type <- type <- rlang::arg_match(type)
-  type <- switch(type, sound = "sounds", "still image" = "photos")
+  org_format <- format <- rlang::arg_match(format)
+  format <- switch(format, sound = "sounds", image = "photos")
 
   response <- try(httr::GET("https://www.inaturalist.org/"), silent = TRUE)
   if (inherits(response, "try-error") ||
@@ -75,7 +75,7 @@ query_inaturalist <- function(term,
     "taxon_name=",
     term,
     "&",
-    type,
+    format,
     "=true",
     "&",
     "identified=",
@@ -90,7 +90,7 @@ query_inaturalist <- function(term,
   if (total_results == 0) {
     if (verbose) {
       cat(paste(.color_text(
-        paste0("No ", tolower(org_type), "s were found"), "failure"
+        paste0("No ", tolower(org_format), "s were found"), "failure"
       ), .add_emoji("sad")))
     }
     return(data.frame())
@@ -127,7 +127,7 @@ query_inaturalist <- function(term,
 
       query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
         x <- as.data.frame(query_output$results[u, ])
-        media_df <- if (type == "sounds")
+        media_df <- if (format == "sounds")
           do.call(rbind, x$sounds)
         else
           do.call(rbind, x$photos)
@@ -178,7 +178,6 @@ query_inaturalist <- function(term,
 
     query_output_df <- do.call(rbind, query_output_list)
     colnames(query_output_df)[colnames(query_output_df) == "media-URL"] <- "file_url"
-    query_output_df$repository <- "iNaturalist"
 
     split_location <- do.call(rbind, strsplit(as.character(query_output_df$location), ","))
     latitude <- split_location[, 1]
@@ -193,21 +192,29 @@ query_inaturalist <- function(term,
 
     query_output_df$species <- species
 
-    if (!all_data) {
-      query_output_df$country <- NA
-      query_output_df$date <- query_output_df$time_observed_at
-      query_output_df <- query_output_df[, c(
-        "key",
-        "species",
-        "date",
-        "country",
-        "location",
-        "latitude",
-        "longitude",
-        "file_url",
-        "repository"
-      )]
-    }
+    # add format
+    query_output_df$file_extension <- sub(".*\\.", "", sub("\\?.*", "", query_output_df$file_url))
+
+    # fix formatting
+    query_output_df$file_extension <- .fix_extension(query_output_df$file_extension)
+
+    # fix column names
+    query_output_df$country <- NA
+    query_output_df$date <- substr(x = query_output_df$time_observed_at,
+                                   start = 1,
+                                   stop = 10)
+
+    # format output data frame column names
+    query_output_df <- .format_query_output(
+      X = query_output_df,
+      call = base::match.call(),
+      colm_names = c(
+        "location" = "locality",
+        "time_observed_at" = "time"
+                     ),
+      all_data = all_data,
+      format = org_format
+    )
 
     replace_image_size <- function(file_url) {
       gsub("square", "original", file_url)
@@ -218,13 +225,7 @@ query_inaturalist <- function(term,
 
     query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
 
-    search_time <- Sys.time()
-    attr(query_output_df, "search_time") <- search_time
-    attr(query_output_df, "query_term") <- term
-    attr(query_output_df, "query_type") <- org_type
-    attr(query_output_df, "query_all_data") <- all_data
-
-    file_path <- file.path(tempdir(), paste0(term, ".rds"))
+    # file_path <- file.path(tempdir(), paste0(term, ".rds"))
     return(query_output_df)
   }
 }

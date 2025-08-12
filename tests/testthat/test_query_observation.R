@@ -1,7 +1,10 @@
 #
 # test_that("search Aristolochia baetica images", {
 #
-#   df1 <- query_observation(term = 'Aristolochia baetica', type = "still image", token = token)
+# skip_on_cran()
+# skip_if_offline()
+#
+#   df1 <- query_observation(term = 'Aristolochia baetica', format = "image", token = token)
 #
 #   expect_true(nrow(df1) >= 1)
 #
@@ -10,40 +13,58 @@
 #
 # test_that("search Floractus heimi (no observations)", {
 #
-#   df1 <- query_observation(term = 'Floractus heimi', type = "still image", token = token)
+## skip_on_cran()
+# skip_if_offline()
+#
+#  df1 <- query_observation(term = 'Floractus heimi', format = "image", token = token)
 #
 #   expect_true(is.null(df1))
 #
 # })
 
  test_that("no result", {
- 
-  expect_error(query_observation(term = 'asdasdasd', type = "still image"), "Species was not found in database")
+
+   skip_on_cran()
+   skip_if_offline()
+
+  expect_error(query_observation(term = 'asdasdasd', format = "image"), "Species was not found in database")
 
 })
 
 test_that("no result", {
- 
-  expect_error(query_observation(term = 'asdasdasd', type = "sound"), "Species was not found in database")
+
+  skip_on_cran()
+  skip_if_offline()
+
+  expect_error(query_observation(term = 'asdasdasd', format = "sound"), "Species was not found in database")
 
 })
 
 test_that("no result", {
- 
-  expect_error(query_observation(term = 'Serinus serinus', type = "sound"), "Invalid token for observation.org")
+
+  skip_on_cran()
+  skip_if_offline()
+
+  expect_error(query_observation(term = 'Serinus serinus', format = "sound"), "Invalid token for observation.org")
 
 })
 #
 #
 # test_that("search Turdus grayi photos in parallel", {
 #
-#     df1 <- query_observation(term = 'Serinus serinus', type = "sound", token = token, cores = 2)
+# skip_on_cran()
+# skip_if_offline()
+
+#     df1 <- query_observation(term = 'Serinus serinus', format = "sound", token = token, cores = 2)
 #
 #   expect_true(nrow(df1) >= 177)
 #
 # })
 #
 # test_that("test verbose FALSE", {
+#
+# skip_on_cran()
+# skip_if_offline()
 #
 #   df1 <- capture_output(query_observation(term = 'a3', verbose = FALSE, pb = FALSE))
 #

@@ -2,22 +2,26 @@
 #'
 #' \code{update_query} detects duplicate data in data frames and updates new query results.
 #' @inheritParams template_params
-#' @param previous_query data frame referring to the metadata containing the multimedia information previously obtained from query functions.
+#' @param X data frame previously obtained from any query function (i.e. `query_reponame()`).
+#' @param path Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).
 #' @export
 #' @name update_query
-#' @return returns a data frame similar to the input 'previous_query' with new data appended.
+#' @return returns a data frame similar to the input 'X' with new data appended.
 #' @details This function updates a previous query to add new information from the corresponding database of the original search
 #' @examples
 #' \dontrun{
 #' # compare
-# df3 <- update_query(previous_query = df1)
+# df3 <- update_query(X = df1)
 #' View(df3)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 update_query <-
-  function(previous_query, token) {
+  function(X, token = NULL, path = ".",
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           verbose = getOption("verbose", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -33,57 +37,90 @@ update_query <-
     checkmate::reportAssertions(check_results)
 
 
-    if (previous_query$repository[1] == "GBIF") {
-      id_col_df1 <- as.numeric(gsub("\\D", "", previous_query[["catalogNumber"]]))
-      id_col_df2 <- previous_query$key
-    }
+    if (length(unique(X$repository)) > 1)
+      .stop(
+        "All observations should belong to the same repository. ",
+        "Please provide a single repository query result to update_query().",
+        call = match.call()
+      )
 
-    #Set query term and type for new query search
-    query_term <- attr(previous_query, "query_term")
-    query_type <- attr(previous_query, "query_type")
-    query_all_data <- attr(previous_query, "query_all_data")
+    #Set query term and format for new query search
+    query_term <- attr(X, "query_term")
+    query_format <- attr(X, "query_format")
+    query_all_data <- attr(X, "query_all_data")
 
-    if (previous_query$repository[1] == "GBIF") {
+    if (X$repository[1] == "GBIF") {
       query_output_new <- query_gbif(term = query_term,
-                                     type = query_type,
-                                     all_data = query_all_data)
+                                     format = query_format,
+                                     all_data = query_all_data,
+                                     cores = cores,
+                                     verbose = verbose,
+                                     pb = pb)
 
     }
-    if (previous_query$repository[1] == "iNaturalist") {
+
+    if (X$repository[1] == "iNaturalist") {
       query_output_new <- query_inaturalist(term = query_term,
-                                            type = query_type,
-                                            all_data = query_all_data)
+                                            format = query_format,
+                                            all_data = query_all_data,
+                                            cores = cores,
+                                            verbose = verbose,
+                                            pb = pb)
 
     }
-    if (previous_query$repository[1] == "Macaulay Library") {
-      query_output_new <- query_macaulay(term = query_term,
-                                         type = query_type,
-                                         all_data = query_all_data)
+    if (X$repository[1] == "Macaulay Library") {
+      query_output_new <- query_macaulay(
+        term = query_term,
+        format = query_format,
+        all_data = query_all_data,
+        path = path,
+        dates = eval(rlang::call_args(attributes(X)$query_call)$dates),
+        verbose = verbose
+      )
 
     }
-    if (previous_query$repository[1] == "Observation") {
+    if (X$repository[1] == "Observation") {
       query_output_new <- query_observation(term = query_term,
-                                            type = query_type,
-                                            token = token)
+                                            format = query_format,
+                                            token = token,
+                                            cores = cores,
+                                            verbose = verbose,
+                                            pb = pb)
     }
 
-    if (previous_query$repository[1] == "XC") {
-      query_output_new <- query_xenocanto(term = query_term)
+    if (X$repository[1] == "Xeno-Canto") {
+      query_output_new <- query_xenocanto(term = query_term,
+                                          cores = cores,
+                                          verbose = verbose,
+                                          pb = pb)
 
     }
-    if (previous_query$repository[1] == "wikiaves") {
+    if (X$repository[1] == "Wikiaves") {
       query_output_new <- query_wikiaves(term = query_term,
-                                         type = query_type,
-                                         all_data = query_all_data)
-
+                                         format = query_format,
+                                         all_data = query_all_data,
+                                         cores = cores,
+                                         verbose = verbose,
+                                         pb = pb)
     }
 
     # Find duplicates
-    query_output_df <- detect_duplicates(previous_query, query_output_new, query_duplicate = FALSE)
+    query_output_df <- merge_query_results(X = X, Y = query_output_new)
 
-    # Add a timestamp attribute
-    search_time <- Sys.time()
-    attr(query_output_df, "search_time") <- search_time
+    # tag new entries
+    names(query_output_df)[names(query_output_df) == "source"] <- "new_entry"
+    query_output_df$new_entry <- ifelse(query_output_df$key %in% X$key, FALSE, TRUE)
+
+    sum_new <- sum(query_output_df$new_entry)
+
+    if (verbose) {
+      if (sum_new > 0)
+      cat(.color_text(paste(sum_new, "new entries found"
+      ), "success"), .add_emoji("happy"), "\n")
+
+      if (sum_new == 0)
+        cat(.color_text("No new entries found", "failure"), .add_emoji("sad"), "\n")
+    }
 
     return(query_output_df)
   }

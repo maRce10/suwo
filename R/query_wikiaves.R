@@ -1,12 +1,9 @@
-#' Access 'wikiaves' recordings and metadata
+#' Access 'Wikiaves' recordings and metadata
 #'
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @inheritParams template_params
-#' @param type Character vector with media type to query for. Options are 'still image' or 'sound'. Required.
-#' @return If all_data is not provided the function returns a data frame with the following
-#' recording information: recording ID, media type, user ID, species ID, scientific name, common
-#' name, repository ID, author, user name, date, verified condition, location, location ID,
-#' comments, likes, visualizations, url, duration and repository
+#' @param format Character vector with the media format to query for. Options are 'sound' or 'image'. Required.
+#' @return A data frame with the metadata of the observations matching the query.  If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.
 #' @export
 #' @name query_wikiaves
 #' @details This function queries for avian vocalization recordings in the open-access
@@ -14,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #' # search
-#' df1 <- query_wikiaves(term = "Phaethornis nattereri", type = "still image")
+#' df1 <- query_wikiaves(term = "Phaethornis nattereri", format = "image")
 #' View(df1)
 #' }
 #'
@@ -25,7 +22,7 @@
 
 query_wikiaves <-
   function(term,
-           type = c("sound", "still image"),
+           format = c("sound", "image"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
@@ -59,12 +56,13 @@ query_wikiaves <-
     # }
 
     if (url_check == "OK") {
-    # assign a value to type
-    org_type <- type <- rlang::arg_match(type)
+    # assign a value to format
+    org_format <- format <- rlang::arg_match(format)
 
-    type <- switch(type, sound = "Sound", `still image` = "photo")
+    format <- switch(format, sound = "Sound", image = "photo")
 
     # format JSON
+    org_term <- term
     term <- gsub(" ", "%20", term)
 
     # initialize search with user agent
@@ -97,7 +95,7 @@ query_wikiaves <-
         response <- httr::GET(
           url = paste0(
             "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            if (type == "photo") {
+            if (format == "photo") {
               "f"
             } else {
               "s"
@@ -114,7 +112,7 @@ query_wikiaves <-
 
       if (sum(get_ids$total_registers) == 0) {
         cat(paste(.color_text(
-          paste0("No ", type, "s were found"), "failure"
+          paste0("No ", format, "s were found"), "failure"
         ), .add_emoji("sad")))
       } else {
         # get number of pages (20 is the default number of registers per page)
@@ -138,7 +136,7 @@ query_wikiaves <-
                 "Obtaining metadata (",
                 sum(get_ids$total_registers),
                 " ",
-                type,
+                format,
                 "(s) found)"
               ),
               "success"
@@ -164,7 +162,7 @@ query_wikiaves <-
             try(jsonlite::fromJSON(
               paste0(
                 "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                if (type == "photo") {
+                if (format == "photo") {
                   "f"
                 } else {
                   "s"
@@ -181,13 +179,12 @@ query_wikiaves <-
 
           # retry if an error occurs waiting 1 s
           if (is(query_output, "try-error")) {
-print("asdasdasd")
             Sys.sleep(1)
 
             query_output <-jsonlite::fromJSON(
               paste0(
                 "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                if (type == "photo") {
+                if (format == "photo") {
                   "f"
                 } else {
                   "s"
@@ -221,13 +218,10 @@ print("asdasdasd")
         rownames(query_output_df) <- seq_len(nrow(query_output_df))
 
         # change jpg to mp3 in links
-        if (type == "Sound") {
+        if (format == "Sound") {
           query_output_df$link <-
             gsub(".jpg$", ".mp3", query_output_df$link)
         }
-
-        # add repository
-        query_output_df$repository <- "wikiaves"
 
         # remove weird columns
         query_output_df$por <- query_output_df$grande <- query_output_df$enviado <- NULL
@@ -235,90 +229,52 @@ print("asdasdasd")
         # flip verified
         query_output_df$is_questionada <- !as.logical(query_output_df$is_questionada)
 
-        # fix media type
-        query_output_df$tipo <- type
+        # add file format
+        query_output_df$file_extension <- sub(".*\\.", "", query_output_df$link)
+
+        # fix formatting
+        query_output_df$file_extension <- .fix_extension(query_output_df$file_extension)
+
+        # add missing basic columns
+        query_output_df$format <- org_format
+        query_output_df$country <- "Brazil"
 
         # rename output columns
-        names_df <- data.frame(
-          old = c(
-            "id",
-            "tipo",
-            "id_usuario",
-            "sp.id",
-            "sp.nome",
-            "sp.nvt",
-            "sp.idwiki",
-            "autor",
-            "perfil",
-            "data",
-            "is_questionada",
-            "local",
-            "idMunicipio",
-            "coms",
-            "likes",
-            "vis",
-            "link",
-            "dura",
-            "repository"
+        query_output_df <- .format_query_output(
+          X = query_output_df,
+          call = base::match.call(),
+          colm_names = c(
+            "id" = "key",
+            "tipo" = "format",
+            "id_usuario" = "user.id",
+            "sp.id" = "species_id",
+            "sp.nome" = "species",
+            "sp.nvt" = "common.name",
+            "sp.idwiki" = "repository.id",
+            "autor" = "author",
+            "perfil" = "user_name",
+            "data" = "date",
+            "is_questionada" = "verified",
+            "local" = "locality",
+            "idMunicipio" = "locality.id",
+            "coms" = "number_of_comments",
+            "likes" = "likes",
+            "vis" = "visualizations",
+            "link" = "file_url",
+            "dura" = "duration",
+            "scientific.name" = "species",
+            "record.id" = "key",
+            "species_id" = "species_code"
           ),
-          new = c(
-            "key",
-            "media.type",
-            "user.id",
-            "sp.id",
-            "species",
-            "common.name",
-            "repository.id",
-            "author",
-            "user.name",
-            "date",
-            "verified",
-            "location",
-            "location.id",
-            "comments",
-            "likes",
-            "visualizations",
-            "file_url",
-            "duration",
-            "repository"
-          )
+          all_data = all_data,
+          format = org_format
         )
 
-        for (i in seq_len(nrow(names_df))) {
-          names(query_output_df)[names(query_output_df) == names_df$old[i]] <- names_df$new[i]
-        }
-
-        if (!all_data) {
-          query_output_df$country <- "Brazil"
-          names(query_output_df)[names(query_output_df) == "scientific.name"] <- "species"
-          names(query_output_df)[names(query_output_df) == "record.id"] <- "key"
-          query_output_df$latitude <- NA
-          query_output_df$longitude <- NA
-          query_output_df <- query_output_df[, c(
-            "key",
-            "species",
-            "date",
-            "country",
-            "location",
-            "latitude",
-            "longitude",
-            "file_url",
-            "repository"
-          )]
-        }
-
-        # Add a timestamp, term and type attribute
-        search_time <- Sys.time()
-        attr(query_output_df, "search_time") <- search_time
-        attr(query_output_df, "query_term") <- term
-        attr(query_output_df, "query_type") <- org_type
-        attr(query_output_df, "query_all_data") <- all_data
-
         # Generate a file path by combining tempdir() with a file name
-        file_path <- file.path(tempdir(), paste0(term, ".rds"))
-
-        # Save the object to the file
-        saveRDS(query_output_df, file = file_path)
+        # file_path <- file.path(tempdir(), paste0(term, ".rds"))
+        #
+        # # Save the object to the file
+        # saveRDS(query_output_df, file = file_path)
         return(query_output_df)
       }
     }

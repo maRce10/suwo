@@ -4,15 +4,30 @@
 \alias{update_query}
 \title{Access 'observation' recordings and metadata}
 \usage{
-update_query(previous_query, token)
+update_query(
+  X,
+  token = NULL,
+  path = ".",
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  verbose = getOption("verbose", TRUE)
+)
 }
 \arguments{
-\item{previous_query}{data frame referring to the metadata containing the multimedia information previously obtained from query functions.}
+\item{X}{data frame previously obtained from any query function (i.e. `query_reponame()`).}
 
 \item{token}{Character referring to the token assigned by Observation.org as authorization for searches.}
+
+\item{path}{Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).}
+
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 }
 \value{
-returns a data frame similar to the input 'previous_query' with new data appended.
+returns a data frame similar to the input 'X' with new data appended.
 }
 \description{
 \code{update_query} detects duplicate data in data frames and updates new query results.

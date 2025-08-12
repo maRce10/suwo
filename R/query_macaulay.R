@@ -2,18 +2,20 @@
 #'
 #' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
-#' @param path Character that defines the location where the .csv file will be downloaded. By default is downloaded to the current working directory (\code{"."}).
+#' @param format Character vector with the media format to query for. Options are 'sound', 'image' of 'video'. Required.
+#' @param path Directory path where the .csv file will be saved. By default it is saved into the current working directory (\code{"."}).
+#' @param files Optional character vector with the name(s) of the .csv file(s) to read. If not provided, the function will open a browser window to the search results page, where the user must download a .csv file with the metadata.
+#' @param dates Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_macaulay
-#' @details This function queries for species observation info in the open-access
-#' online repository \href{https://https://www.macaulaylibrary.org/}{macaulay} and returns media metadata. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is downloaded, the user must confirm that the file has been downloaded. The function then reads the .csv file and returns a data frame with the metadata. Term must be a species name.
+#' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of birds, other wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is saved, the user must confirm that into the R console. The function then reads the .csv file and returns a data frame with the metadata. If the file is saved overwritting a pre-existing file the function will not detect it. The query term must be a species name. A maximum of 1000 records per query can be returned. Users must log in to the Macaulay Library/eBird account in order to access large batches of observations.
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_macaulay(term = 'Turdus iliacus', type = "sound", cores = 4, path = tempdir())
+# df1 <- query_macaulay(term = 'Turdus iliacus', format = "sound", path = tempdir())
 #' View(df1)
 #' }
 #'
@@ -24,12 +26,12 @@
 #'
 query_macaulay <-
   function(term,
-           type = c("sound", "photo", "video"),
-           cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
+           format = c("sound", "image", "video"),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
-           path = ".") {
+           path = ".",
+           files = NULL,
+           dates = NULL) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -44,153 +46,196 @@ query_macaulay <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # assign a value to type
-    org_type <- type <- rlang::arg_match(type)
+    # assign a value to format
+    org_format <- format <- rlang::arg_match(format)
 
-    type <- switch(type,
+    format <- switch(format,
                    sound = "audio",
-                   `still image` = "photo",
+                   image = "photo",
                    `video` = "video")
 
 
-    # Check internet connection using httr and error handling
-    response <- try(httr::GET("https://www.macaulaylibrary.org/"), silent = TRUE)
-    if (inherits(response, "try-error") ||
-        httr::http_error(response)) {
-      return("No connection to macaulaylibrary.org (check your internet connection!)")
-    }
+    new_csv_file_list <- list()
 
-    content <- httr::content(response, as = "text")
-    if (grepl("Could not connect to the database", content)) {
-      return("macaulaylibrary.org website is apparently down")
-    }
+    if (is.null(files)) {
+      # Check internet connection using httr and error handling
+      response <- try(httr::GET("https://www.macaulaylibrary.org/"), silent = TRUE)
+      if (inherits(response, "try-error") ||
+          httr::http_error(response)) {
+        return("No connection to macaulaylibrary.org (check your internet connection!)")
+      }
 
-    user_input_species <- term
+      content <- httr::content(response, as = "text")
+      if (grepl("Could not connect to the database", content)) {
+        return("macaulaylibrary.org website is apparently down")
+      }
 
-    taxon_code <- taxon_code_search(user_input_species)
+      user_input_species <- term
 
-    if (!is.null(taxon_code)) {
-      # cat(
-      #   paste(
-      #     "The species code for '",
-      #     user_input_species,
-      #     "' is '",
-      #     taxon_code,
-      #     "'.\n",
-      #     sep = ""
-      #   )
-      # )
+      taxon_code <- taxon_code_search(user_input_species)
 
-      cat(
-        paste(
-          "A browser will open the macaulay website. Save the csv file ('export' button) in this directory: '",
-          path,
-          "'.\n",
-          sep = ""
+      # function will stop here
+      if (is.null(taxon_code)) {
+        .message(
+          paste(
+            "No matching species found for '",
+            user_input_species,
+            "'.\n",
+            sep = ""
+          ),
+          color = "magenta"
         )
-      )
-      # pause 1 s so users can read message
-      Sys.sleep(3)
 
+        return(NULL)
+      }
+
+      # Apply to all elements
+      if (!is.null(dates)) {
+        date_ranges_df <- .date_ranges(x = dates)
+      } else {
+        date_ranges_df <- data.frame(start_year = NA)
+      }
+
+      for (i in seq_len(nrow(date_ranges_df))) {
+        if (!is.null(dates)) {
+          # extract date range to let users know while batching
+          date_range <- if (date_ranges_df$by_year[1]) {
+            if (date_ranges_df$start_year[i] !=  date_ranges_df$end_year[i]) {
+              paste0(date_ranges_df$start_year[i],
+                     "-",
+                     date_ranges_df$end_year[i])
+            } else {
+              date_ranges_df$start_year[i]
+            }
+          } else {
+            paste0(
+              month.abb[date_ranges_df$start_month[i]],
+              "-",
+              date_ranges_df$start_year[i],
+              " - ",
+              month.abb[date_ranges_df$end_month[i]],
+              "-",
+              date_ranges_df$end_year[1]
+            )
+          }
+
+          if (nrow(date_ranges_df) > 1) {
+            .message(paste0(
+              "* Query ",
+              i,
+              " of ",
+              nrow(date_ranges_df),
+              " (",
+              date_range,
+              "):"
+            ),
+            color = "cyan")
+          }
+        }
+        .message(x =
+                   "A browser will open the macaulay library website. Save the .csv file ('export' button) to this directory:", color = "cyan")
+
+        .message(x = normalizePath(path))
+
+        .message(x = "R is monitoring for new .csv files. Press ESC to stop the function", color = "cyan")
+
+
+        # pause 3 s so users can read message but only in the first query in a batch
+        if (i == 1)
+          Sys.sleep(3)
+
+        # construct the search URL
+        search_url <- paste0(
+          "https://search.macaulaylibrary.org/catalog?view=list&mediaType=",
+          format,
+          "&taxonCode=",
+          taxon_code
+        )
+
+        # if (!is.na(date_ranges_df$start_year[i])) {
+        if (!is.null(dates)) {
+          search_url <- paste0(
+            search_url,
+            "&beginYear=",
+            date_ranges_df$start_year[i],
+            "&endYear=",
+            date_ranges_df$end_year[i]
+          )
+
+          if (!date_ranges_df$by_year[1]) {
+            search_url <- paste0(
+              search_url,
+              "&beginMonth=",
+              date_ranges_df$start_month[i],
+              "&endMonth=",
+              date_ranges_df$end_month[i]
+            )
+          }
+        }
+
+        # open the search URL in the default web browser
+        utils::browseURL(search_url)
+
+        # monitor for new files
+        new_csv_file_list[[length(new_csv_file_list) + 1]] <- .monitor_new_files(path  = path)
+
+        # let users know the name of the csv file that was read
+        .message("The data will be read from the file:", color = "cyan")
+
+        .message(x = paste(new_csv_file_list[[length(new_csv_file_list)]], "\n"))
+      }
     } else {
-      cat(paste(
-        "No matching species found for '",
-        user_input_species,
-        "'.\n",
-        sep = ""
-      ))
-      return(NULL)
+      new_csv_file_list <- as.list(files)
     }
-
-    # Take snapshot before asking for download confirmation
-    snapshot <- utils::fileSnapshot(path = path)
-
-    # construct the search URL
-    search_url <- paste0(
-      "https://search.macaulaylibrary.org/catalog?view=list&mediaType=",
-      type,
-      "&taxonCode=",
-      taxon_code
-    )
-
-    # open the search URL in the default web browser
-    utils::browseURL(search_url)
-
-    #Ask if user has downloaded csv file from Macaulay library
-    user_input <- readline("Is the data table csv downloaded? (y/n)  ")
-    if (user_input != 'y') {
-      stop('Exiting since you did not press y')
-    }
-
-    # Obtain updated file path after the user confirms the download
-    changed_files <- utils::changedFiles(snapshot)
-
-    # Filter for CSV files, ignoring case
-    csv_files <- changed_files[["added"]][grep("\\.csv$", changed_files[["added"]], ignore.case = TRUE)]
-
-    # Check if any CSV file is found
-    if (length(csv_files) == 0)
-      stop('No CSV file found')
-
-    # Check the csv file for file path
-    file_path <- csv_files[1]
 
     # Read the CSV file
-    query_output_df <- read.csv(file.path(path, file_path), stringsAsFactors = FALSE)
+    query_output_list <- lapply(new_csv_file_list, function(x)
+      read.csv(file.path(path, x), stringsAsFactors = FALSE))
 
-
-    # Change column name for media download function
-    colnames(query_output_df)[colnames(query_output_df) == "ML.Catalog.Number"] <- "key"
-    colnames(query_output_df)[colnames(query_output_df) == "eBird.Species.Code"] <- "species_code"
-    colnames(query_output_df)[colnames(query_output_df) == "Scientific.Name"] <- "species"
-
-    # Change column names to standard metadata used in query functions
-    colnames(query_output_df)[colnames(query_output_df) == "Date"] <- "date"
-    colnames(query_output_df)[colnames(query_output_df) == "Country"] <- "country"
-    colnames(query_output_df)[colnames(query_output_df) == "Locality"] <- "location"
-    colnames(query_output_df)[colnames(query_output_df) == "Longitude"] <- "longitude"
-    colnames(query_output_df)[colnames(query_output_df) == "Latitude"] <- "latitude"
+    query_output_df <- do.call(rbind, query_output_list)
 
     query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x) {
       paste0(
         "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/",
-        query_output_df$key[x],
-        "/",
-        type
+        query_output_df$ML.Catalog.Number[x],
+        "/"
       )
     })
-    # Add repository ID
-    query_output_df$repository <- "Macaulay Library"
 
-    if (!all_data) {
-      query_output_df <- query_output_df[, c(
-        "key",
-        "species",
-        "date",
-        "country",
-        "location",
-        "latitude",
-        "longitude",
-        "file_url",
-        "repository"
-      )]
+    # fix formatting
+    query_output_df$file_extension <- .fix_extension(query_output_df$Format)
+    query_output_df$Format <- NULL
+
+    # rename output columns
+    query_output_df <- .format_query_output(
+      X = query_output_df,
+      call = base::match.call(),
+      colm_names = c(
+        "ML.Catalog.Number" = "key",
+        "eBird.Species.Code" = "species_code",
+        "Scientific.Name" = "species",
+        "Format" = "file_extension",
+        "behaviors" = "behavior",
+        "state" = "state_province"
+      ),
+      all_data = all_data,
+      format = org_format,
+      input_file = file.path(normalizePath(path), unlist(new_csv_file_list))
+    )
+
+    if (verbose) {
+      cat(.color_text(paste(
+        nrow(query_output_df), org_format, "(s) found "
+      ), "success"), .add_emoji("happy"), "\n")
     }
 
-    # Add a timestamp attribute
-    search_time <- Sys.time()
-    attr(query_output_df, "search_time") <- search_time
-    attr(query_output_df, "query_term") <- term
-    attr(query_output_df, "query_type") <- org_type
-    attr(query_output_df, "query_all_data") <- all_data
-    attr(query_output_df, "input_file") <- file.path(path, csv_files[1])
 
-    # let users know the name of the csv file that was read
-    cat(paste("The data was read from the file:", csv_files, "\n"))
+    if (nrow(query_output_df) == 10000) {
+      .message(
+        "The query returned 10,000 records, which is the maximum allowed. It is likely that more observations that matched the query exists but were not retrieved.",
+        color = "magenta"
+      )
+    }
 
-    # # Generate a file path by combining tempdir() with a file name
-    # file_path <- file.path(tempdir(), paste0(term, ".rds"))
-    #
-    # # Save the object to the file
-    # saveRDS(query_output_df, file = file_path)
     return(query_output_df)
   }

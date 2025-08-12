@@ -17,7 +17,7 @@ The main features of the package are:
 
 The package offers functions to:
   \itemize{
-  \item Explore and download observational data from GBIF, inaturalist, Xenocanto, Observation.org and Wikiaves
+  \item Explore and download observational data from iNaturalist, GBIF, Macaulay Library, Observation.org, Wikiaves and Xenocanto.
   \item Download different types of data across multiple databases
   \item Consolidate databases and annotation tables
   }

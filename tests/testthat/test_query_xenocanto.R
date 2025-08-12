@@ -1,10 +1,13 @@
 test_that("search Phaethornis check rows", {
 
+  skip_on_cran()
+  skip_if_offline()
+
   df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
 
   expect_true(nrow(df1) > 15)
 
-  expect_true(ncol(df1) == 9)
+  expect_true(ncol(df1) == 12)
 
 
   })
@@ -12,17 +15,22 @@ test_that("search Phaethornis check rows", {
 
 test_that("all data TRUE", {
 
+  skip_on_cran()
+  skip_if_offline()
+
   df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = TRUE)
 
-  expect_true(nrow(df1) > 15)
+  expect_true(nrow(df1) >= 15)
 
-  expect_true(ncol(df1) == 44)
+  expect_true(ncol(df1) == 46)
 
 })
 
 
 test_that("no recs found", {
 
+  skip_on_cran()
+  skip_if_offline()
 
   df1 <- query_xenocanto(term = '000')
 
@@ -32,6 +40,9 @@ test_that("no recs found", {
 
 
 test_that("check messages", {
+
+  skip_on_cran()
+  skip_if_offline()
 
   msg <- capture.output(query_xenocanto(term = '000', verbose = TRUE))
 
@@ -53,9 +64,13 @@ test_that("check messages", {
 
 test_that("test all_data FALSE", {
 
+  skip_on_cran()
+  skip_if_offline()
+
   df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
 
-  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository")
+  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository", "file_extension", "time", "format")
+
   query_col_names <- colnames(df1)
   expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")
 

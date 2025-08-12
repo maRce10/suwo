@@ -2,29 +2,32 @@
 % Please edit documentation in R/query_macaulay.R
 \name{query_macaulay}
 \alias{query_macaulay}
-\title{Access 'observation' recordings and metadata}
+\title{Searches for media files in the Macaulay Library}
 \usage{
 query_macaulay(
   term,
-  type = c("audio", "photo", "video"),
-  cores = getOption("mc.cores", 1),
-  pb = getOption("pb", TRUE),
+  format = c("sound", "image", "video"),
   verbose = getOption("verbose", TRUE),
-  all_data = getOption("all_data", TRUE)
+  all_data = getOption("all_data", FALSE),
+  path = ".",
+  files = NULL,
+  dates = NULL
 )
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
-\item{type}{Character vector with media type to query for. Currently 'photo' and 'audio' are available.}
-
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
-
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{format}{Character vector with the media format to query for. Options are 'sound', 'image' of 'video'. Required.}
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+
+\item{path}{Directory path where the .csv file will be saved. By default it is saved into the current working directory (\code{"."}).}
+
+\item{files}{Optional character vector with the name(s) of the .csv file(s) to read. If not provided, the function will open a browser window to the search results page, where the user must download a .csv file with the metadata.}
+
+\item{dates}{Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well.}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media
@@ -35,8 +38,7 @@ info_text, permalink, determination_requirements, file_url, repository
 \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 }
 \details{
-This function queries for species observation info in the open-access
-online repository \href{https://https://www.macaulaylibrary.org/}{macaulay}. It can return media metadata.
+This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of birds, other wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is saved, the user must confirm that into the R console. The function then reads the .csv file and returns a data frame with the metadata. If the file is saved overwritting a pre-existing file the function will not detect it. The query term must be a species name. A maximum of 1000 records per query can be returned. Users must log in to the Macaulay Library/eBird account in order to access large batches of observations.
 }
 \examples{
 \dontrun{

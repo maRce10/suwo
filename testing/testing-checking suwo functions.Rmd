@@ -313,7 +313,7 @@ return(sel_tab)
 }
 
 # run all warbleR fuctions
-run.all <- function() invisible(lapply(list.files(pattern = "\\.R", path = "./R", full.names = T, all.files = T), function(x) try(source(x), silent = T)))
+run.all <- function() invisible(lapply(list.files(pattern = "\\.R", path = "./R", full.names = T, all.files = T), function(x) source(x)))
 
 # run.all()
 
@@ -447,7 +447,6 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 # check
 ```{r check, eval = FALSE}
 
-
 # styler::style_dir("./R")
 # system("autoconf  ")
 
@@ -467,7 +466,7 @@ devtools::document(".")
 
 #check with devtools
 
-devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE, test = FALSE)
+devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
 
 # devtools::run_examples( start = "rm_sil")
 
@@ -475,7 +474,7 @@ devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE,
 
 # devtools::install()
 
-#devtools::test()
+devtools::test()
 
 # check in R version 3.X.X
 
@@ -676,19 +675,25 @@ load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
 source("./R/taxon_code_search.R")
 
 setwd(tempdir())
-df1 <- query_macaulay(term = 'Glaucis')
+df1 <- query_macaulay(term = 'Glaucis', path = tempdir())
 
-df1 <- query_macaulay(term = 'Glaucis dohrnii')
-df1 <- query_macaulay(term = 'Turdus grayi')
-df1 <- query_macaulay(term = 'Serinus serinus')
+df1 <- query_macaulay(term = 'Glaucis dohrnii', path = tempdir())
+df1 <- query_macaulay(term = 'Turdus grayi', path = tempdir())
+df1 <- query_macaulay(term = 'Serinus serinus', path = tempdir())
 
-df1 <- query_macaulay(term = 'Chupacabras')
-df1 <- query_macaulay(term = 'Chupacabras')
+df1 <- query_macaulay(term = 'Chupacabras', path = tempdir())
+df1 <- query_macaulay(term = 'Chupacabras', path = tempdir())
+
+# test a query with more than 10000 results
+df1 <- query_macaulay(term = 'Calypte costae', type = "image", path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
+ 
+# usa esta funcion internamente para sacar los rangos
+.date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
 
 
 ```
 
-```{r query_macaulay, eval = FALSE}
+```{r query_inaturalist, eval = FALSE}
 
 FUN <- "query_inaturalist"
 
@@ -766,5 +771,112 @@ taxon_code_df <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.s
 
 usethis::use_data(taxon_code_df, internal = TRUE, overwrite = TRUE)
 
+```
+
+# Homogenize column names across repos
+```{r, eval = FALSE}
+# all data false
+
+options(all_data = FALSE)
+
+xc_adf <- query_xenocanto(term = 'Phaethornis anthophilus')
+
+wa_adf <- query_wikiaves(term = 'Glaucis dohrnii', type = "sound")
+ 
+gb_adf <- query_gbif(term = 'Glaucis dohrnii', type = "image")
+
+in_adf <- query_inaturalist(term = 'Agalychnis lemur', type = "image")
+ 
+ml_adf <- query_macaulay(term = 'Glaucis dohrnii', type = "sound", path = tempdir())
+
+
+adf_list <- list(xc_adf[1:2, ], wa_adf[1:2, ], gb_adf[1:2, ], in_adf[1:2, ], ml_adf[1:2, ])
+
+sapply(adf_list, ncol)
+
+nms <- lapply(adf_list, names)
+names(nms) <- c("xc", "wa", "gb", "in", "ml")
+nms
+
+# all functions return the same columns
+all(table(unlist(nms)) == 5)
+
+sapply(adf_list, names)
+
+adf_list_full <- list(xc_adf, wa_adf, gb_adf, in_adf, ml_adf)
+
+all_adf <- do.call(rbind, adf_list_full)
+
+all_adf$time
+
+# all data true
+
+options(all_data = TRUE)
+
+xc_adt <- query_xenocanto(term = 'Phaethornis anthophilus')
+
+wa_adt <- query_wikiaves(term = 'Glaucis dohrnii', type = "sound")
+ 
+gb_adt <- query_gbif(term = 'Glaucis dohrnii', type = "image")
+
+in_adt <- query_inaturalist(term = 'Agalychnis lemur', type = "image")
+ 
+ml_adt <- query_macaulay(term = 'Glaucis dohrnii', type = "sound", path = tempdir())
+
+adt_list <- list(xc_adt[1:2, ], wa_adt[1:2, ], gb_adt[1:2, ], in_adt[1:2, ], ml_adt[1:2, ])
+
+names(adt_list) <- c("xc", "wa", "gb", "in", "ml")
+
+sapply(adt_list, ncol)
+
+nms <- lapply(adt_list, names)
+names(nms) <- c("xc", "wa", "gb", "in", "ml")
+nms
+
+tbnms <- table(unlist(nms))
+
+
+
+sort(tbnms)
+
+un_nms <- unique(unlist(nms))
+
+sort(un_nms)
+
+basic_colms <- unique(lapply(adf_list, names))[[1]]
+
+# do all have basic columns
+all(sapply(nms, function(x) length(basic_colms[!basic_colms %in% x])) == 0)
+
+nms_by_fun <- do.call(rbind, lapply(seq_along(adt_list), function(x) data.frame(fun = names(adt_list)[x], col = names(adt_list[[x]]))))
+
+nms_by_fun <- nms_by_fun[!nms_by_fun$col %in% (basic_colms),]
+
+nms_by_fun[order(nms_by_fun$col), ]
+
+```
+
+# get observation token
+```{r}
+
+curl -X POST https://observation.org/api/v1/oauth2/token/ \
+-d "client_id=<maRce10>&grant_type=password&email=<marcelo.araya@ucr.ac.cr>&password=<chichi3000X>"
+
+
+curl -X POST https://observation.org/api/v1/oauth2/token/ \
+-d "client_id=1161266&grant_type=password&email=maRce10&password=chichi5000X"
+
+
+# curl -X POST https://observation.org/api/v1/oauth2/token/ -d  "client_id=1161267&grant_type=password&email=marceloa27@gmail.com&password=chichi3000X"
+
+curl -X POST https://observation.org/api/v1/oauth2/token/ \ -d "client_id='1161266'&grant_type='client_credentials'&email='marcelo.araya@ucr.ac.cr'&password='chichi3000X'"
+
+curl -X POST https://observation.org/api/v1/oauth2/token/ 
+-d "client_id=<client_id>&grant_type=password&email=<email>&password=<passsword>"
+
+
+curl -X POST https://observation.org/api/v1/user/register/ -d "name=Marcelo&email=marcelo.araya@ucr.ac.cr&password=chichi3000X&is_mail_allowed=true&country=CR"
+
+curl -X POST https://observation.org/api/v1/user/register/ -d "name=Marcelo&email=marceloa27@gmail.com&password=chichi3000X&is_mail_allowed=true&country=CR"
 ```
 

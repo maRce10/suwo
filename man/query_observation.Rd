@@ -6,20 +6,20 @@
 \usage{
 query_observation(
   term,
-  type = c("sound", "still image"),
+  format = c("sound", "image"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
   token = NULL,
-  all_data = getOption("all_data", TRUE)
+  all_data = getOption("all_data", FALSE)
 )
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
-\item{type}{Character vector with media type to query for. Currently 'still image' and 'sound' are available.}
+\item{format}{Character vector with the media format to query for. Currently 'image' and 'sound' are available.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
@@ -27,7 +27,7 @@ query_observation(
 
 \item{token}{Character refering to the token assigned by Observation.org as authorization for searches.}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
 }
 \value{
 If all_data is not provided the function returns a data frame with the following media

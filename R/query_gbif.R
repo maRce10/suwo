@@ -2,7 +2,7 @@
 #'
 #' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
 #' @inheritParams template_params
-#' @param type Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.
+#' @param format Character vector with the media format to query for. Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
 #' @return If all_data is \code{FALSE} the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is \code{TRUE} the function returns a data frame with the following media
 #' information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
@@ -32,7 +32,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_gbif(term = 'Turdus iliacus', type = "Sound", cores = 4)
+# df1 <- query_gbif(term = 'Turdus iliacus', format = "Sound", cores = 4)
 #' View(df1)
 #' }
 #'
@@ -43,7 +43,7 @@
 #'
 query_gbif <-
   function(term,
-           type = c("sound", "still image", "moving image", "interactive resource"),
+           format = c("sound", "image", "video", "interactive resource"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
@@ -63,14 +63,14 @@ query_gbif <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # assign a value to type
-    org_type <- type <- rlang::arg_match(type)
+    # assign a value to format
+    org_format <- format <- rlang::arg_match(format)
 
-    type <- switch(
-      type,
+    format <- switch(
+      format,
       sound = "Sound",
-      `still image` = "StillImage",
-      `moving image` = "MovingImage",
+      `image` = "StillImage",
+      `video` = "MovingImage",
       `interactive resource` = "InteractiveResource"
     )
 
@@ -95,7 +95,8 @@ query_gbif <-
       .stop("'cores' should be a positive integer")
     }
 
-    # fix term for html
+    # fix term for html but keep original for attributes
+    org_term <- term
     term <- gsub(" ", "%20", term)
 
     srch_trm <- paste0(
@@ -108,7 +109,7 @@ query_gbif <-
       "&scientificName=",
       term,
       "&media_type=",
-      type
+      format
     )
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
@@ -117,7 +118,7 @@ query_gbif <-
     if (base.srch.pth$count == 0) {
       if (verbose) {
         cat(paste(.color_text(
-          paste0("No ", tolower(org_type), "s were found"), "failure"
+          paste0("No ", tolower(org_format), "s were found"), "failure"
         ), .add_emoji("sad")))
       }
     } else {
@@ -160,8 +161,8 @@ query_gbif <-
           # media_df <- do.call(rbind, media_list)
           media_df <- do.call(rbind, x$media)
 
-          # select type
-          media_df <- media_df[media_df$type == type, ]
+          # select format
+          media_df <- media_df[media_df$type == format, ]
 
           # fix identifier column name
           names(media_df)[names(media_df) == "identifier"] <- "URL"
@@ -229,53 +230,43 @@ query_gbif <-
       # all results in a single data frame
       query_output_df <- do.call(rbind, query_output_list)
 
-      # Change column name for media download function
-      names(query_output_df)[names(query_output_df) == "media-URL"] <- "file_url"
+      # add file format
+      query_output_df$file_extension <- sub(".*\\.", "", query_output_df$`media-URL`)
 
-      # Add repository ID
-      query_output_df$repository <- "GBIF"
+      # fix formatting
+      query_output_df$file_extension <- .fix_extension(query_output_df$file_extension)
 
-      if (!all_data) {
-        names(query_output_df)[names(query_output_df) == "decimalLatitude"] <- "latitude"
+      # remove everything after the first parenthesis
+      query_output_df$species <- gsub("\\s*\\(.*?\\)", "", query_output_df$scientificName)
 
-        names(query_output_df)[names(query_output_df) == "decimalLongitude"] <- "longitude"
+      # remove duplicated info
+      query_output_df$gbifid <- query_output_df$scientificName <- NULL
 
-        names(query_output_df)[names(query_output_df) == "scientificName"] <- "species"
-
-        # remove everything after the first parenthesis
-        query_output_df$species <- gsub("\\s*\\(.*?\\)", "", query_output_df$species)
-
-        names(query_output_df)[names(query_output_df) == "key"] <- "key"
-
-        names(query_output_df)[names(query_output_df) == "eventDate"] <- "date"
-
-        names(query_output_df)[names(query_output_df) == "locality"] <- "location"
-
-        query_output_df <- query_output_df[, c(
-          "key",
-          "species",
-          "date",
-          "country",
-          "location",
-          "latitude",
-          "longitude",
-          "file_url",
-          "repository"
-        )]
-      }
-
-      # Add a timestamp attribute
-      search_time <- Sys.time()
-      attr(query_output_df, "search_time") <- search_time
-      attr(query_output_df, "query_term") <- term
-      attr(query_output_df, "query_type") <- org_type
-      attr(query_output_df, "query_all_data") <- all_data
-
-      # Generate a file path by combining tempdir() with a file name
-      # file_path <- file.path(tempdir(), paste0(term, ".rds"))
-
-      # Save the object to the file
-      # saveRDS(query_output_df, file = file_path)
+      # format output data frame column names
+      query_output_df <- .format_query_output(
+        X = query_output_df,
+        call = base::match.call(),
+        colm_names = c(
+          "media-URL" = "file_url",
+          "eventDate" = "date",
+          "decimalLatitude" = "latitude",
+          "decimalLongitude" = "longitude",
+          "specificepithet" = "specific_epithet",
+          "recordedby" = "recordist",
+          "stateprovince" = "state_province",
+          "specieskey" = "species_code",
+          "genuskey" = "genus_code",
+          "kingdomkey" = "kingdom_code",
+          "phylumkey" = "phylum_code",
+          "classkey" = "class_code",
+          "orderkey" = "order_code",
+          "familykey" = "family_key",
+          "fieldnotes" = "comments",
+          "eventtime" = "time"
+        ),
+        all_data = all_data,
+        format = org_format
+      )
 
       return(query_output_df)
     }

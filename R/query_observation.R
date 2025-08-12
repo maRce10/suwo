@@ -2,7 +2,7 @@
 #'
 #' \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
 #' @inheritParams template_params
-#' @param type Character vector with media type to query for. Currently 'still image' and 'sound' are available.
+#' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
 #' @param token Character refering to the token assigned by Observation.org as authorization for searches.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_observation(term = 'Turdus iliacus', type = "Sound", cores = 4, token = ".....")
+# df1 <- query_observation(term = 'Turdus iliacus', format = "Sound", cores = 4, token = ".....")
 #' View(df1)
 #' }
 #'
@@ -25,7 +25,7 @@
 #'
 query_observation <-
   function(term,
-           type = c("sound", "still image"),
+           format = c("sound", "image"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
@@ -45,17 +45,14 @@ query_observation <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # assign a value to type
-    org_type <- type <- rlang::arg_match(type)
+    # assign a value to format
+    org_format <- format <- rlang::arg_match(format)
 
 
-    type <- switch(
-      type,
+    format <- switch(
+      format,
       sound = "Sound",
-      `still image` = "StillImage",
-      `moving image` = "MovingImage",
-      `interactive resource` = "InteractiveResource"
-    )
+      `image` = "StillImage")
 
 
     # Check internet connection using httr and error handling
@@ -73,6 +70,7 @@ query_observation <-
 
 
     # format JSON
+    org_term <- term
     term <- gsub(" ", "%20", term)
 
     srch_trm <- paste0("https://observation.org/api/v1/species/search/?",
@@ -116,7 +114,7 @@ query_observation <-
     if (data$count == 0) {
       if (verbose) {
         cat(paste(.color_text(
-          paste0("No ", tolower(org_type), "s were found"), "failure"
+          paste0("No ", tolower(org_format), "s were found"), "failure"
         ), .add_emoji("sad")))
       }
     } else {
@@ -165,7 +163,7 @@ query_observation <-
       data$results <- lapply(seq_len(nrow(data$results)), function(u) {
         x <- data$results[u, ]
 
-        if (type == "StillImage") {
+        if (format == "StillImage") {
           media_URL <- if (length(x$photos[[1]]) > 0) {
             unlist(x$photos)
           } else {
@@ -173,7 +171,7 @@ query_observation <-
           }
         }
 
-        if (type == "Sound") {
+        if (format == "Sound") {
           media_URL <- if (length(x$sounds[[1]]) > 0) {
             unlist(x$sounds)
           } else {
@@ -249,25 +247,19 @@ query_observation <-
     # all results in a single data frame
     query_output_df <- do.call(rbind, query_output_list)
 
-    # Change column name for media download function
-    colnames(query_output_df)[colnames(query_output_df) == "media_URL"] <- "file_url"
-    colnames(query_output_df)[colnames(query_output_df) == "id"] <- "key"
-    colnames(query_output_df)[colnames(query_output_df) == "species"] <- "species_code"
-    colnames(query_output_df)[colnames(query_output_df) == "species_name"] <- "species"
-    # Add repository ID
-    query_output_df$repository <- "Observation"
+    # format output data frame column names
+    query_output_df <- .format_query_output(
+      X = query_output_df,
+      call = base::match.call(),
+      colm_names = c(
+        "media-URL" = "file_url",
+        "id" = "key",
+        "species" = "species_code",
+        "species_name" = "species"
+      ),
+      all_data = all_data,
+      format = org_format
+    )
 
-    # Add a timestamp attribute
-    search_time <- Sys.time()
-    attr(query_output_df, "search_time") <- search_time
-    attr(query_output_df, "query_term") <- term
-    attr(query_output_df, "query_type") <- org_type
-    attr(query_output_df, "query_all_data") <- all_data
-
-    # Generate a file path by combining tempdir() with a file name
-    file_path <- file.path(tempdir(), paste0(term, ".rds"))
-
-    # Save the object to the file
-    saveRDS(query_output_df, file = file_path)
     return(query_output_df)
   }

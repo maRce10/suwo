@@ -94,30 +94,80 @@ pblapply_sw_int <- function(X,
   stop(..., call. = FALSE)
 }
 
+
 # warning function that doesn't print call
-.warning <- function(...) {
-  warning(..., call. = FALSE)
+.warning <- function(x, color = "magenta") {
+  warning(.colortext_2(x, as = color), call. = FALSE)
 }
 
+# message function that changes colors
+.message <- function(x, color = "black") {
+  message(.colortext_2(x, as = color))
+}
 
+# coloring text
+.colortext_2 <-
+  function(text,
+           as = c("red",
+                  "blue",
+                  "green",
+                  "magenta",
+                  "cyan",
+                  "orange",
+                  "black",
+                  "silver")) {
+    if (.has_color()) {
+      unclass(cli::make_ansi_style(.suwo_message_style(as))(text))
+    } else {
+      text
+    }
+  }
+
+.has_color <- function() {
+  cli::num_ansi_colors() > 1
+}
+
+.suwo_message_style <-
+  function(color = c("red",
+                     "blue",
+                     "green",
+                     "magenta",
+                     "cyan",
+                     "orange",
+                     "black",
+                     "silver")) {
+    color <- match.arg(color)
+
+    c(
+      red = "red",
+      blue = "blue",
+      green = "green",
+      magenta = "magenta",
+      cyan = "cyan",
+      orange = "orange",
+      black = "black",
+      silver = "silver"
+    )[[color]]
+  }
 
 # colored message
-colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "orange", "black", "silver")) {
-  if (has_color()) {
-    unclass(cli::make_ansi_style(warbleR_style(as))(text))
+.colortext <- function(text,
+                       as = c("red",
+                              "blue",
+                              "green",
+                              "magenta",
+                              "cyan",
+                              "orange",
+                              "black",
+                              "silver")) {
+  if (.has_color()) {
+    unclass(cli::make_ansi_style(.suwo_style(as))(text))
   } else {
     text
   }
 }
 
-.message <- function(x, color = "black", no.color = FALSE) {
-  if (!no.color)
-    message(colortext(x, as = color)) else
-      message(cli::ansi_strip(x))
-}
-
 # add emojis to messages. based on praise_emoji from testthat
-
 .add_emoji <- function(mood) {
   if (!cli::is_utf8_output()) {
     return("")
@@ -166,6 +216,215 @@ colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "o
 
 #####
 
+.suwo_style <- function(type = c("success", "skip", "warning", "failure", "error")) {
+  type <- match.arg(type)
+
+  c(
+    success = "green",
+    skip = "blue",
+    warning = "magenta",
+    failure = "orange",
+    error = "orange"
+  )[[type]]
+}
+
+# Function to download file according to repository
+.download <- function(metadata, x, path) {
+  dl_result <- try(download.file(
+    url = as.character(metadata$file_url[x]),
+    destfile = file.path(path, metadata$download_file_name[x]),
+    quiet = TRUE,
+    mode = "wb",
+    cacheOK = TRUE,
+    extra = getOption("download.file.extra"),
+    Sys.sleep(0.1)
+  ),
+  silent = TRUE)
+
+
+  if (is(dl_result, "try-error")) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
+# fix extension so it is homogenuous across functions
+.fix_extension <- function(x) {
+  # jpg to jpeg
+  x <- gsub("jpg$", "jpeg", x, ignore.case = TRUE)
+
+  # tif to tiff
+  x <- gsub("tif$", "tiff", x, ignore.case = TRUE)
+
+  # mpeg to mp3
+  x <- gsub("mpeg$", "mp3", x, ignore.case = TRUE)
+
+  # x-wav to wav
+  x <- gsub("x-wav$", "wav", x, ignore.case = TRUE)
+
+  # x-m4a to m4a
+  x <- gsub("x-m4a$", "m4a", x, ignore.case = TRUE)
+
+  # x-m4a to m4a
+  x <- gsub("x-m4a$", "m4a", x, ignore.case = TRUE)
+
+  # convert to lower case
+  x <- tolower(x)
+
+  # for Macaulay
+  x <- ifelse(x == "audio", "mp3", x)
+  x <- ifelse(x == "photo", "jpeg", x)
+  x <- ifelse(x == "video", "mp4", x)
+
+  # return
+  return(x)
+}
+
+
+# format query output dataframe to standardize column names
+.format_query_output <- function(X,
+                                 colm_names,
+                                 all_data,
+                                 format,
+                                 call,
+                                 input_file = NA) {
+  # lower case
+  names(X) <- tolower(names(X))
+  names(colm_names) <- tolower(names(colm_names))
+
+  names_df <- data.frame(old = names(colm_names), new = colm_names)
+
+  for (i in seq_len(nrow(names_df))) {
+    names(X)[names(X) == names_df$old[i]] <- names_df$new[i]
+  }
+
+
+  # replace "." with "_"
+  names(X) <- gsub("\\.|\\-", "_", names(X))
+
+  # replace "__" with "_"
+  names(X) <- gsub("___", "_", names(X), fixed = TRUE)
+
+  if (is.null(X$latitude))
+    X$latitude <- NA
+
+  if (is.null(X$longitude))
+    X$longitude <- NA
+
+  # convert lat long to numbers
+  X$latitude <- as.numeric(X$latitude)
+  X$longitude <- as.numeric(X$longitude)
+
+  # add format
+  X$format <- format
+
+  # repo
+  X$repository <- .repo_from_call(call)
+
+  # format time column
+  if (X$repository[1] == "Xeno-Canto") {
+    X$time[X$time == "?"] <- NA
+  }
+
+  if (X$repository[1] == "Wikiaves") {
+    X$time <- NA
+  }
+
+  if (X$repository[1] == "GBIF") {
+    X$time <- substr(x = X$time,
+                     start = 1,
+                     stop = 5)
+  }
+
+  if (X$repository[1] == "iNaturalist") {
+    X$time <- substr(x = X$time,
+                     start = 12,
+                     stop = 16)
+  }
+
+  if (X$repository[1] == "Macaulay Library") {
+    X$time <- ifelse(nchar(X$time) == 3, paste0(0, X$time), X$time)
+
+    X$time <- paste0(substr(X$time, 1, 2), ":", substr(X$time, 3, 4))
+  }
+
+
+  basic_colums <- c(
+    "repository",
+    "format",
+    "key",
+    "species",
+    "date",
+    "time",
+    "country",
+    "locality",
+    "latitude",
+    "longitude",
+    "file_url",
+    "file_extension"
+  )
+
+  # order so basic columns go first
+  non_basic_colms <- setdiff(names(X), basic_colums)
+  X <- X[, c(basic_colums, non_basic_colms)]
+
+  if (!all_data) {
+    # remove columns that are not basic
+    X <- X[, basic_colums]
+  }
+
+  ## add attributes
+  X <- .add_attributes(
+    X = X,
+    term = rlang::call_args(call)$term,
+    format = format,
+    all_data = all_data,
+    call = call,
+    input_file = input_file
+  )
+
+  # drop additional levels
+  X <- droplevels(X)
+
+  return(X)
+}
+
+# get repo name from call
+.repo_from_call <- function(x) {
+  switch(
+    strsplit(
+      x = as.character(x),
+      split = "(",
+      fixed = TRUE
+    )[[1]][1],
+    query_wikiaves = "Wikiaves",
+    query_xenocanto = "Xeno-Canto",
+    query_gbif = "GBIF",
+    query_inaturalist = "iNaturalist",
+    query_observation = "Observation",
+    query_macaulay = "Macaulay Library"
+  )
+
+}
+
+
+# add attributes to output data frames
+.add_attributes <- function(X, term, format, all_data, input_file = NA, call) {
+  term <- gsub("%20", " ", term)
+
+  # Add a timestamp attribute
+  search_time <- Sys.time()
+  attr(X, "query_call") <- call
+  attr(X, "repository") <- .repo_from_call(call)
+  attr(X, "query_time") <- search_time
+  attr(X, "query_term") <- term
+  attr(X, "query_format") <- format
+  attr(X, "query_all_data") <- all_data
+  attr(X, "input_file(s)") <- input_file
+  attr(X, "suwo_version") <- utils::packageVersion("suwo")
+  return(X)
+}
 
 .color_text <- function(text,
                         as = c("success", "skip", "warning", "failure", "error")) {
@@ -192,24 +451,114 @@ colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "o
   )[[type]]
 }
 
-# Function to download file according to repository
-.download <- function(metadata, x, path) {
-  dl_result <- try(download.file(
-    url = as.character(metadata$file_url[x]),
-    destfile = file.path(path, metadata$file.name[x]),
-    quiet = TRUE,
-    mode = "wb",
-    cacheOK = TRUE,
-    extra = getOption("download.file.extra"),
-    Sys.sleep(0.1)
-  ),
-  silent = TRUE)
+## function to split macaulay queries by year-month
+.date_ranges <- function(x) {
 
+  x <- sort(x)
+  # current year as year.decimal
+  current_year <- as.numeric(format(Sys.Date(), "%Y"))
+  current_month <- as.numeric(format(Sys.Date(), "%m"))
 
-  if (is(dl_result, "try-error")) {
-    return(FALSE)
+  unique_years <- floor(min(x)):floor(max(x))
+
+  # determine if has to be split by month
+  if (!all(x == floor(x))) {
+    # Calculate fraction of the year (0 = Jan, 1/12 ≈ 0.0833 per month)
+    current_date <- current_year + (current_month) / 12
+
+    # filter dates in the future (higher than current date)
+    x <- x[x <= current_date]
+
+    if (current_year %in% unique_years) {
+      x <- c(x, current_date)
+    }
+
+    # Extract year and calculate month (0.5 of a year = 6 months)
+    start_year <- floor(x)
+    month_frac <- (x - start_year) * 12
+    start_month <- floor(month_frac) + 1  # +1 because months are 1-12
+
+    # Handle case where month_frac is very close to 12 (e.g., 2024.999)
+    start_month <- ifelse(start_month > 12, 13, start_month)
+
+    end_month <- start_month[-1] - 1
+
+    dates_df <- data.frame(
+      start_month = start_month[-length(start_month)],
+      start_year = start_year[-length(start_month)],
+      end_month,
+      end_year = start_year[-length(start_month)]
+    )
+
+    # convert 0 to 12
+    dates_df$end_month[dates_df$end_month == 0] <- 12
+
+    dates_df <- dates_df[!duplicated(dates_df[, c("start_month", "start_year")]), ]
+
+    # expand rows that cross years
+    dates_list <- lapply(seq_len(nrow(dates_df)), function(i) {
+      Y <- dates_df[i, ]
+      if (Y$start_month > Y$end_month)
+        Y <- data.frame(
+          start_month = c(Y$start_month, 1),
+          start_year = c(Y$start_year, Y$start_year + 1),
+          end_month = c(12, Y$end_month),
+          end_year = c(Y$end_year, Y$end_year + 1)
+        )
+
+      return(Y)
+    })
+
+    dates_df <- do.call(rbind, dates_list)
+    dates_df$by_year <- FALSE
+
   } else {
-    return(TRUE)
+    # remove years above current year
+    unique_years <- unique_years[unique_years <= current_year]
+
+    dates_df <- data.frame(start_year = x[-length(x)], end_year = c(x[-c(1, length(x))] - 1, x[length(x)]), stringsAsFactors = FALSE)
+    dates_df$start_month <- 1
+    dates_df$end_month <- 12
+    dates_df$by_year <- TRUE
+
+  }
+  return(dates_df)
+}
+
+
+# monitor if a new file is added
+.monitor_new_files <- function(path, interval = 1) {
+  # Create initial snapshot
+  prev_snap <- utils::fileSnapshot(
+    path = path,
+    full.names = FALSE,
+    # Return only file names (not full paths)
+    pattern = "\\.csv$",
+    recursive = FALSE    # Don't check subfolders
+  )
+
+  while (TRUE) {
+    # Take new snapshot
+    current_snap <- utils::fileSnapshot(
+      path = path,
+      full.names = FALSE,
+      pattern = "\\.csv$",
+      recursive = FALSE
+    )
+
+    # Compare snapshots
+    changes <- utils::changedFiles(prev_snap, current_snap)
+
+    # Return only names of new files
+    if (length(changes$added) > 0) {
+      return(changes$added)  # Returns character vector of new file names
+    }
+
+    # Wait before checking again
+    Sys.sleep(interval)
+
+    # Update snapshot for next comparison
+    prev_snap <- current_snap
   }
 }
 
@@ -228,12 +577,12 @@ colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "o
     )
   }
 
-  if (!is.null(args$type)) {
+  if (!is.null(args$format)) {
     checkmate::assert_multi_class(
-      x = args$type,
+      x = args$format,
       classes = c("character"),
       add = check_collection,
-      .var.name = "type"
+      .var.name = "format"
     )
   }
 
@@ -326,7 +675,7 @@ colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "o
   return(check_collection)
 }
 
-
+# message when loading package
 .onAttach <-
   function(libname, pkgname) {
     packageStartupMessage("\nPlease cite 'suwo' as: \n")
@@ -339,11 +688,12 @@ colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "o
 # gracefully fail if internet resource is not available
 .try_GET <- function(x, ...) {
   tryCatch(
-    httr::GET(url = x, httr::timeout(10),
-              agent = "suwo (https://github.com/maRce10/suwo)"),
-    error = function(e) conditionMessage(e),
-    warning = function(w) conditionMessage(w)
-    )
+    httr::GET(url = x, httr::timeout(10), agent = "suwo (https://github.com/maRce10/suwo)"),
+    error = function(e)
+      conditionMessage(e),
+    warning = function(w)
+      conditionMessage(w)
+  )
 }
 
 .is_response <- function(x) {
@@ -351,7 +701,6 @@ colortext <- function(text, as = c("red", "blue", "green", "magenta", "cyan", "o
 }
 
 .check_internet_resource <- function(url, skip.error = FALSE) {
-
   output <- "OK"
   # First check internet connection
   if (!curl::has_internet()) {

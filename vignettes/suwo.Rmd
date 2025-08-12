@@ -297,7 +297,7 @@ Users may want to combine metadata from different repositories to create a compr
 
 ```{r}
 
-Merged_Dataframe <- detect_duplicates(X = ectophylla_gbif, Y = ectophylla_inat)
+# Merged_Dataframe <- detect_duplicates(X = ectophylla_gbif, Y = ectophylla_inat)
 
 
 ```

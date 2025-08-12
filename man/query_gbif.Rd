@@ -6,20 +6,20 @@
 \usage{
 query_gbif(
   term,
-  type = c("sound", "still image", "moving image", "interactive resource"),
+  format = c("sound", "image", "video", "interactive resource"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
   dataset = NULL,
-  all_data = getOption("all_data", TRUE)
+  all_data = getOption("all_data", FALSE)
 )
 }
 \arguments{
 \item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
 
-\item{type}{Character vector with media type to query for. Options are 'sound', 'stillimage', 'movingimage' and 'interactiveresource'. Required.}
+\item{format}{Character vector with the media format to query for. Options are 'sound', 'image', 'video' and 'interactive resource'. Required.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
@@ -27,12 +27,10 @@ query_gbif(
 
 \item{dataset}{see \url{https://www.gbif.org/dataset/search?q=}.}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
 }
 \value{
-If all_data is false the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository
-
-If all_data is \code{TRUE} the function returns a data frame with the following media
+If all_data is \code{FALSE} the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is \code{TRUE} the function returns a data frame with the following media
 information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
 publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
 taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,

@@ -1,6 +1,9 @@
 test_that("search Glaucis dohrnii sound", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "sound")
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
 
   expect_true(nrow(df1) >= 30)
 
@@ -9,7 +12,10 @@ test_that("search Glaucis dohrnii sound", {
 
 test_that("search Spatula discors sound (no sounds)", {
 
-  df1 <- query_wikiaves(term = 'Alagoas Tyrannulet', type = "sound")
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- query_wikiaves(term = 'Alagoas Tyrannulet', format = "sound")
 
   expect_true(is.null(df1))
 
@@ -17,7 +23,10 @@ test_that("search Spatula discors sound (no sounds)", {
 
 test_that("search Glaucis dohrnii photos", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type = "still image")
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', format = "image")
 
   expect_true(nrow(df1) >=  420)
 
@@ -27,7 +36,10 @@ test_that("search Glaucis dohrnii photos", {
 
 test_that("no result", {
 
-  df1 <- query_wikiaves(term = 'asdasdasd', type =  "still image")
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- query_wikiaves(term = 'asdasdasd', format =  "image")
 
   expect_true(is.null(df1))
 
@@ -36,16 +48,22 @@ test_that("no result", {
 
 test_that("search Glaucis photos in parallel", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image", cores = 2)
+  skip_on_cran()
+  skip_if_offline()
 
-  expect_true(nrow(df1) >=  77)
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', format =  "image", cores = 2)
+
+  expect_true(nrow(df1) >  400)
 
 })
 
 
 test_that("test verbose FALSE", {
 
-  df1 <- capture_output(query_wikiaves(term = 'a3', type =  "sound", verbose = FALSE, pb = FALSE))
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- capture_output(query_wikiaves(term = 'a3', format =  "sound", verbose = FALSE, pb = FALSE))
 
   expect_true(df1 == "")
 
@@ -53,10 +71,15 @@ test_that("test verbose FALSE", {
 
 test_that("test all_data FALSE", {
 
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', type =  "still image", all_data = FALSE)
+  skip_on_cran()
+  skip_if_offline()
 
-  expected_col_names <- c("key", "species", "date", "country", "location", "latitude", "longitude", "file_url", "repository")
+  df1 <- query_wikiaves(term = 'Glaucis dohrnii', format =  "image", all_data = FALSE)
+
+  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository", "file_extension", "time", "format")
+
   query_col_names <- colnames(df1)
-  expect_true(identical(query_col_names, expected_col_names), info = "Column names do not match the expected names")
+
+  expect_true(all(query_col_names %in% expected_col_names) & all(expected_col_names %in% query_col_names), info = "Column names do not match the expected names")
 
 })
