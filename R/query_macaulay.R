@@ -14,9 +14,21 @@
 #' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of birds, other wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is saved, the user must confirm that into the R console. The function then reads the .csv file and returns a data frame with the metadata. If the file is saved overwritting a pre-existing file the function will not detect it. The query term must be a species name. A maximum of 1000 records per query can be returned. Users must log in to the Macaulay Library/eBird account in order to access large batches of observations.
 #' @examples
 #' \dontrun{
-#' # search without downloading
-# df1 <- query_macaulay(term = 'Turdus iliacus', format = "sound", path = tempdir())
-#' View(df1)
+#' # query sounds
+#' df1 <- query_macaulay(term = 'Turdus iliacus', format = "sound",
+#' path = tempdir())
+#'
+#' # test a query with more than 10000 results paging by date
+#' df2 <- query_macaulay(term = 'Calypte costae', type = "image",
+#' path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
+#'
+#' # this is the internal function that splits the search by year intervals
+#' # it can split by entire year intervals
+#' suwo:::.date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
+#'
+#' # or by year-month intervals if dates have decimals
+#' # (note that it cannot split across years)
+#' suwo:::.date_ranges(x = seq(2020, 2026, length.out = 10))
 #' }
 #'
 #' @references {
@@ -99,7 +111,7 @@ query_macaulay <-
       for (i in seq_len(nrow(date_ranges_df))) {
         if (!is.null(dates)) {
           # extract date range to let users know while batching
-          date_range <- if (date_ranges_df$by_year[1]) {
+          date_range <- if (date_ranges_df$start_month[i] == 1 & date_ranges_df$end_month[i] == 12) {
             if (date_ranges_df$start_year[i] !=  date_ranges_df$end_year[i]) {
               paste0(date_ranges_df$start_year[i],
                      "-",
@@ -162,7 +174,7 @@ query_macaulay <-
             date_ranges_df$end_year[i]
           )
 
-          if (!date_ranges_df$by_year[1]) {
+          if (date_ranges_df$start_month[i] != 1 | date_ranges_df$end_month[i] != 12) {
             search_url <- paste0(
               search_url,
               "&beginMonth=",
@@ -224,8 +236,8 @@ query_macaulay <-
     )
 
     if (verbose) {
-      cat(.color_text(paste(
-        nrow(query_output_df), org_format, "(s) found "
+      cat(.color_text(paste0(
+        nrow(query_output_df), " ", org_format, "(s) found "
       ), "success"), .add_emoji("happy"), "\n")
     }
 

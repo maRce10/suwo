@@ -547,7 +547,7 @@ system("git push origin master")
 # usethis::use_github_action("pkgdown") 
 # 
 # #codecov
-# usethis::use_coverage(type = c("codecov"))
+# usethis::use_coverage(format = c("codecov"))
 # 
 # covr::codecov(token = "94049bb4-baf6-4851-a830-405d9ae77a41")
 # 
@@ -610,11 +610,11 @@ source("~/Documentos/GitHub/suwo/R/internal_functions.R")
 
 token <- "e9uJgF2mO0Vd81vd5N1kR1bZzuCWUA"
 
-df1 <- query_observation(term = 'Glaucis dohrnii', type = "still image", token = token)
+df1 <- query_observation(term = 'Glaucis dohrnii', format = "still image", token = token)
 
-df1 <- query_observation(term = 'Turdus grayi', type = "still image", token = token)
+df1 <- query_observation(term = 'Turdus grayi', format = "still image", token = token)
 
-df1 <- query_observation(term = 'Serinus serinus', type = "sound", token = token, cores = 2)
+df1 <- query_observation(term = 'Serinus serinus', format = "sound", token = token, cores = 2)
 
 ```
 
@@ -685,11 +685,12 @@ df1 <- query_macaulay(term = 'Chupacabras', path = tempdir())
 df1 <- query_macaulay(term = 'Chupacabras', path = tempdir())
 
 # test a query with more than 10000 results
-df1 <- query_macaulay(term = 'Calypte costae', type = "image", path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
+df1 <- query_macaulay(term = 'Calypte costae', format = "image", path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
  
 # usa esta funcion internamente para sacar los rangos
 .date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
 
+.date_ranges(x = seq(2020, 2026, length.out = 6))
 
 ```
 
@@ -757,7 +758,7 @@ metadata_xc2 <- query_xenocanto(term = "Phaethornis anthophilus")
 # create map
 map_locations(metadata = metadata_xc2)
 
-metadata_ob <- query_gbif(term = "Phaethornis ruber", type = "sound")
+metadata_ob <- query_gbif(term = "Phaethornis ruber", format = "sound")
 
  # create map
 map_locations(metadata_ob)
@@ -781,13 +782,13 @@ options(all_data = FALSE)
 
 xc_adf <- query_xenocanto(term = 'Phaethornis anthophilus')
 
-wa_adf <- query_wikiaves(term = 'Glaucis dohrnii', type = "sound")
+wa_adf <- query_wikiaves(term = 'Glaucis dohrnii', format = "sound")
  
-gb_adf <- query_gbif(term = 'Glaucis dohrnii', type = "image")
+gb_adf <- query_gbif(term = 'Glaucis dohrnii', format = "image")
 
-in_adf <- query_inaturalist(term = 'Agalychnis lemur', type = "image")
+in_adf <- query_inaturalist(term = 'Agalychnis lemur', format = "image")
  
-ml_adf <- query_macaulay(term = 'Glaucis dohrnii', type = "sound", path = tempdir())
+ml_adf <- query_macaulay(term = 'Glaucis dohrnii', format = "sound", path = tempdir())
 
 
 adf_list <- list(xc_adf[1:2, ], wa_adf[1:2, ], gb_adf[1:2, ], in_adf[1:2, ], ml_adf[1:2, ])
@@ -815,13 +816,13 @@ options(all_data = TRUE)
 
 xc_adt <- query_xenocanto(term = 'Phaethornis anthophilus')
 
-wa_adt <- query_wikiaves(term = 'Glaucis dohrnii', type = "sound")
+wa_adt <- query_wikiaves(term = 'Glaucis dohrnii', format = "sound")
  
-gb_adt <- query_gbif(term = 'Glaucis dohrnii', type = "image")
+gb_adt <- query_gbif(term = 'Glaucis dohrnii', format = "image")
 
-in_adt <- query_inaturalist(term = 'Agalychnis lemur', type = "image")
+in_adt <- query_inaturalist(term = 'Agalychnis lemur', format = "image")
  
-ml_adt <- query_macaulay(term = 'Glaucis dohrnii', type = "sound", path = tempdir())
+ml_adt <- query_macaulay(term = 'Glaucis dohrnii', format = "sound", path = tempdir())
 
 adt_list <- list(xc_adt[1:2, ], wa_adt[1:2, ], gb_adt[1:2, ], in_adt[1:2, ], ml_adt[1:2, ])
 

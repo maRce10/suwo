@@ -473,54 +473,53 @@ pblapply_sw_int <- function(X,
       x <- c(x, current_date)
     }
 
-    # Extract year and calculate month (0.5 of a year = 6 months)
-    start_year <- floor(x)
-    month_frac <- (x - start_year) * 12
-    start_month <- floor(month_frac) + 1  # +1 because months are 1-12
+    first_year <- min(floor(x))
+    last_year <- max(floor(x)) + 1 # add one to include the end of the year
 
-    # Handle case where month_frac is very close to 12 (e.g., 2024.999)
-    start_month <- ifelse(start_month > 12, 13, start_month)
+    # create df with all possible month year combinations
+    poss_month_year_df <- expand.grid(month = 1:12, year = first_year:last_year)
 
-    end_month <- start_month[-1] - 1
+    poss_month_year_df$year_decimal <-
+      poss_month_year_df$year + (poss_month_year_df$month - 1) / 12
 
-    dates_df <- data.frame(
-      start_month = start_month[-length(start_month)],
-      start_year = start_year[-length(start_month)],
-      end_month,
-      end_year = start_year[-length(start_month)]
+
+    date_list <- lapply(seq_along(x[-1]), function(y){
+      time_diff <- poss_month_year_df$year_decimal - x[y]
+
+      start <- poss_month_year_df[poss_month_year_df$year_decimal == poss_month_year_df$year_decimal[time_diff >= 0][1], ]
+      time_diff <- poss_month_year_df$year_decimal - x[y + 1]
+      end <- poss_month_year_df[poss_month_year_df$year_decimal == rev(poss_month_year_df$year_decimal[time_diff < 0])[1], ]
+
+      out <- cbind(start[, 1:2], end[, 1:2])
+
+      names(out) <- c("start_month", "start_year", "end_month", "end_year")
+    return(out)
+      }
     )
 
-    # convert 0 to 12
-    dates_df$end_month[dates_df$end_month == 0] <- 12
-
-    dates_df <- dates_df[!duplicated(dates_df[, c("start_month", "start_year")]), ]
+    dates_df <- do.call(rbind, date_list)
 
     # expand rows that cross years
     dates_list <- lapply(seq_len(nrow(dates_df)), function(i) {
       Y <- dates_df[i, ]
-      if (Y$start_month > Y$end_month)
+      if (Y$start_month > Y$end_month | Y$start_year < Y$end_year)
         Y <- data.frame(
           start_month = c(Y$start_month, 1),
           start_year = c(Y$start_year, Y$start_year + 1),
           end_month = c(12, Y$end_month),
-          end_year = c(Y$end_year, Y$end_year + 1)
+          end_year = c(Y$start_year, Y$start_year + 1)
         )
 
       return(Y)
     })
 
     dates_df <- do.call(rbind, dates_list)
-    dates_df$by_year <- FALSE
 
   } else {
     # remove years above current year
     unique_years <- unique_years[unique_years <= current_year]
 
-    dates_df <- data.frame(start_year = x[-length(x)], end_year = c(x[-c(1, length(x))] - 1, x[length(x)]), stringsAsFactors = FALSE)
-    dates_df$start_month <- 1
-    dates_df$end_month <- 12
-    dates_df$by_year <- TRUE
-
+    dates_df <- data.frame(start_month = 1, start_year = x[-length(x)], end_month = 12, end_year = c(x[-c(1, length(x))] - 1, x[length(x)]), stringsAsFactors = FALSE)
   }
   return(dates_df)
 }
