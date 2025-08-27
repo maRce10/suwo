@@ -42,8 +42,21 @@ This function queries for species observation info in the \href{https://https://
 }
 \examples{
 \dontrun{
-# search without downloading
-View(df1)
+# query sounds
+df1 <- query_macaulay(term = 'Turdus iliacus', format = "sound",
+path = tempdir())
+
+# test a query with more than 10000 results paging by date
+df2 <- query_macaulay(term = 'Calypte costae', type = "image",
+path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
+
+# this is the internal function that splits the search by year intervals
+# it can split by entire year intervals
+suwo:::.date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
+
+# or by year-month intervals if dates have decimals
+# (note that it cannot split across years)
+suwo:::.date_ranges(x = seq(2020, 2026, length.out = 10))
 }
 
 }

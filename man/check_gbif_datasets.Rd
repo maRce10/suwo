@@ -4,10 +4,10 @@
 \alias{check_gbif_datasets}
 \title{Access 'gbif' dataset information}
 \usage{
-check_gbif_datasets(path = tempdir())
+check_gbif_datasets(path = ".")
 }
 \arguments{
-\item{path}{Directory path where the output .csv file will be saved. By default is downloaded to a temporary directory (\code{tempdir()}).}
+\item{path}{Directory path where the output .csv file will be saved. By default is downloaded to the current working directory (\code{"."}).}
 }
 \value{
 returns dataset csv from gbif
@@ -17,7 +17,7 @@ returns dataset csv from gbif
 }
 \details{
 This function queries for dataset info in the open-access
-online repository \href{https://www.gbif.org}{gbif}. It saves a csv file in a temporary directory (~42 MB). The file contains some 89000 rows of datasets to explore.
+online repository \href{https://www.gbif.org}{gbif}. It saves a csv file in a the supplied `path` directory (~42 MB). The file contains some 89000 rows of datasets to explore.
 }
 \examples{
 \dontrun{

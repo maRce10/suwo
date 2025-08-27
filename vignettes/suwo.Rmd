@@ -131,9 +131,9 @@ query_summary <- data.frame(
     "https://www.xeno-canto.org/"
   ),
   `Requires Token` = c("No", "No", "No", "Yes", "No", "No"),
-  `File Types` = c("sound, still image, moving image, interactive resource",
-                   "sound, still image", "audio, photo, video",
-                   "sound, still image", "sound, still image", "sound"),
+  `File Types` = c("sound, image, moving image, interactive resource",
+                   "sound, image", "audio, photo, video",
+                   "sound, image", "sound, image", "sound"),
   `Taxonomic Range` = c("species", "species", "species, subspecies",
                         "species", "species", "species, genus, family"),
   `Max Results` = rep("not specified", 6),
@@ -212,10 +212,10 @@ searching for information on GBIF, INaturalist and Xenocanto.
 ```{r, eval = TRUE, echo = TRUE}
 
 # Get occurrence data from GBIF
-ectophylla_gbif <- query_gbif(term = "Ectophylla alba", type = "still image")
+ectophylla_gbif <- query_gbif(term = "Ectophylla alba", format = "image")
 
 # Get observations from iNaturalist
-ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", type = "still image")
+ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", format = "image")
 
 # Get audio recordings from xeno-canto
 ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
@@ -226,10 +226,10 @@ ectophylla_gbif
 ```{r, echo=FALSE}
 
 # Get occurrence data from GBIF
-ectophylla_gbif <- query_gbif(term = "Ectophylla alba", type = "still image")
+ectophylla_gbif <- query_gbif(term = "Ectophylla alba", format = "image")
 
 # Get observations from iNaturalist
-ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", type = "still image")
+ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", format = "image")
 
 # Get audio recordings from xeno-canto
 ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
@@ -263,7 +263,7 @@ When past searches must be checked for new information, the function update_quer
 #Remove one row from previous query
 ectohpylla_xc <- ectophylla_xc[-1, ]
 #Update the query
-updated_query_result_xenocanto  <- update_query(previous_query = ectophylla_xc)
+updated_query_result_xenocanto  <- update_query(ectophylla_xc)
 
 ```
 
@@ -283,7 +283,7 @@ ectophylla_gbif <- ectophylla_gbif[1:10, ]
 #Download media for audios from the query from Xenocanto
 paths_aud <- download_media(ectophylla_xc, path = tempdir())
 
-#Download media for still images from the query from GBIF
+#Download media for images from the query from GBIF
 paths_img <- download_media(ectophylla_gbif, path = tempdir())
 
 paths_aud
@@ -317,7 +317,7 @@ The GBIF repository dataset may me consulted to filter what repositories the use
 
 ```{r}
 
-check_gbif_datasets()
+gbif_datasets <- check_gbif_datasets()
 
 ```
 
@@ -337,7 +337,7 @@ taxon_code_pharomachrus
 
 <font size = "4">Saving and sharing query outputs</font>
 
-Query outputs contain additional metadata as dataframe attributes. These attributes are lost when saving the dataframe as a data file (e.g. CSV, TXT, XSLX, etc) To preserve this metadata, users must save their query results as RDS files using the `saveRDS()` function from base R. This allows for easy sharing and reloading of the data with all its attributes intact.
+Query outputs contain additional metadata as dataframe attributes. These attributes are lost when saving the dataframe as a data file (e.g. CSV, TXT, XSLX, etc) To preserve this metadata, users must save their query results as RDS files using the `saveRDS()` function from base R. This allows for easy sharing and reloading of the data with all its attributes intact. Dataframes can be retrieved from this files using the `readRDS()`. 
  
 
 </div>
