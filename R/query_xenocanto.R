@@ -48,6 +48,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
+
 query_xenocanto <-
   function(term,
            cores = getOption("mc.cores", 1),
@@ -57,36 +58,59 @@ query_xenocanto <-
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
+
     # add objects to argument names
     for (i in names(arguments)) {
       arguments[[i]] <- get(i)
     }
 
+
     # check each arguments
     check_results <- .check_arguments(args = arguments)
+
 
     # report errors
     checkmate::reportAssertions(check_results)
 
-    # Check internet connection
+
+    # Check internet connection using httr and error handling
     response <- try(httr::GET("www.xeno-canto.org"), silent = TRUE)
     if (inherits(response, "try-error") ||
         httr::http_error(response)) {
       .stop("No connection to xeno-canto.org (check your internet connection!)")
     }
 
+
     content <- httr::content(response, as = "text")
     if (grepl("Could not connect to the database", content)) {
       .stop("xeno-canto.org website is apparently down")
     }
 
-    # save original term
+
+    # search recs in xeno-canto (results are returned in pages with 500 recordings each)
+    if (pb & verbose) {
+      cat(paste(
+        .color_text(
+          paste0("Obtaining metadata (matching observation(s) found)"),
+          "success"
+        ),
+        .add_emoji("happy"),
+        ":\n"
+      ))
+    }
+
+
+    # save original term for query metadata
     org_term <- term
+
 
     # format query term
     if (grepl("\\:", term)) {
+      # if using advanced searc
+      # replace first space with %20 when using full species name
       first_colon_pos <- gregexpr(":", term)[[1]][1]
       spaces_pos <- gregexpr(" ", term)[[1]]
+
 
       if (length(spaces_pos) > 1) {
         if (all(spaces_pos[1:2] < first_colon_pos)) {
@@ -98,10 +122,13 @@ query_xenocanto <-
         }
       }
 
+
+      # replace remaining spaces with "&"
       term <- gsub(" ", "+", term)
     } else {
       term <- gsub(" ", "+", term)
     }
+
 
     # initialize search
     query <-
@@ -109,6 +136,7 @@ query_xenocanto <-
         "https://www.xeno-canto.org/api/2/recordings?query=",
         term
       ))
+
 
     if (as.numeric(query$numRecordings) == 0) {
       if (verbose) {
@@ -118,14 +146,16 @@ query_xenocanto <-
           "\n"
         ))
       }
-      return(data.frame()) # empty df
     } else {
       ### loop over pages
+      # set clusters for windows OS
       if (Sys.info()[1] == "Windows" & cores > 1) {
-        cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+        cl <-
+          parallel::makePSOCKcluster(getOption("cl.cores", cores))
       } else {
         cl <- cores
       }
+
 
       records_list <-
         pblapply_sw_int(
@@ -133,6 +163,7 @@ query_xenocanto <-
           X = seq_len(query$numPages),
           cl = cl,
           FUN = function(y) {
+            # search for each page
             query_output <-
               jsonlite::fromJSON(
                 txt = paste0(
@@ -143,92 +174,126 @@ query_xenocanto <-
                 )
               )
 
-            # Handle 'also'
-            if (!is.null(query_output$recordings$also)) {
-              query_output$recordings$also <- sapply(query_output$recordings$also, function(x) {
-                if (is.null(x) || all(is.na(x))) {
-                  return(NA_character_)
-                } else {
-                  paste(x, collapse = "-")
-                }
-              })
-            }
 
-            # sonograms
-            if (!is.null(query_output$recordings$sono)) {
-              sono_df <- as.data.frame(query_output$recordings$sono)
-              names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
-            } else {
-              sono_df <- data.frame(sonogram_full = NA_character_,
-                                    sonogram_small = NA_character_,
-                                    sonogram_med = NA_character_)
-            }
+            query_output$recordings$also <- sapply(query_output$recordings$also, paste, collapse = "-")
 
-            # oscillograms
-            if (!is.null(query_output$recordings$osci)) {
-              osci_df <- as.data.frame(query_output$recordings$osci)
-              names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
-            } else {
-              osci_df <- data.frame(oscillogram_full = NA_character_,
-                                    oscillogram_small = NA_character_,
-                                    oscillogram_med = NA_character_)
-            }
 
+
+
+            # split sonogram in 3 columns
+            sono_df <- as.data.frame(query_output$recordings$sono)
+
+
+            names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
+
+
+            # split oscillograms in 3 columns
+            osci_df <- as.data.frame(query_output$recordings$osci)
+
+
+            names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
+
+
+            # remove raw columns
             query_output$recordings$sono <- query_output$recordings$osci <- NULL
+
+
             query_output <- cbind(query_output$recordings, sono_df, osci_df)
+
 
             return(query_output)
           }
         )
 
-      # unify colnames
+
+      # determine all column names in all pages
       pooled_column_names <- unique(unlist(lapply(records_list, names)))
+
+
+      # add columns that are missing to each data set
       records_list2 <- lapply(records_list, function(X) {
         nms <- names(X)
         if (length(nms) != length(pooled_column_names)) {
-          for (i in pooled_column_names[!pooled_column_names %in% nms]) {
-            X[[i]] <- NA
+          for (i in pooled_column_names) {
+            X <-
+              data.frame(X,
+                         NA,
+                         stringsAsFactors = FALSE,
+                         check.names = FALSE)
+            names(X)[ncol(X)] <- i
           }
         }
         return(X)
       })
 
+
+      # save results in a single data frame
       query_output_df <- do.call(rbind, records_list2)
 
+
       if (as.numeric(query$numRecordings) > 0) {
+        # convert factors to characters
         indx <- sapply(query_output_df, is.factor)
         query_output_df[indx] <- lapply(query_output_df[indx], as.character)
 
-        query_output_df$species <- paste(
-          ifelse(is.na(query_output_df$gen), "", query_output_df$gen),
-          ifelse(is.na(query_output_df$sp), "", query_output_df$sp),
-          sep = " "
-        )
-        query_output_df$species <- trimws(query_output_df$species)
-        query_output_df$species[query_output_df$species == ""] <- NA_character_
+        # create species column and other missing columns
+        query_output_df$species <- paste(query_output_df$gen, query_output_df$sp, sep = " ")
 
         query_output_df$file_extension <- sub(".*\\.", "", query_output_df$`file-name`)
+
+        # fix formatting
         query_output_df$file_extension <- .fix_extension(query_output_df$file_extension)
 
+        # Add repository ID
         query_output_df$repository <- "Xeno-Canto"
 
-        # === SAFE RENAMING FIX ===
-        old_names <- c("id", "gen", "sp", "ssp", "en", "rec", "cnt", "loc", "lat", "lng", "alt",
-                       "type", "file", "lic", "url", "q", "length", "time", "date", "uploaded",
-                       "rmk", "bird.seen", "playback.used")
+        # re-write file url to use https
+        query_output_df$file <-
+          paste0("https://xeno-canto.org/", query_output_df$id, "/download")
 
-        new_names <- c("id", "genus", "specific.epithet", "subspecies",
-                       "english.name", "recordist", "country", "location", "latitude", "longitude", "altitude",
-                       "vocalization.type", "audio_file", "license", "file_url", "quality",
-                       "length", "time", "date", "uploaded", "remarks", "bird.seen", "playback.used")
+        # format output data frame column names
+        query_output_df <- .format_query_output(
+          X = query_output_df,
+          call = base::match.call(),
+          column_names = c(
+            "id" = "key",
+            "gen" = "genus",
+            "sp" = "specific_epithet",
+            "ssp" = "subspecies",
+            "en" = "english_name",
+            "rec" = "recordist",
+            "cnt" = "country",
+            "loc" = "locality",
+            "lat" = "latitude",
+            "lon" = "longitude",
+            "alt" = "altitude",
+            "type" = "vocalization_type",
+            "file" = "file_url",
+            "lic" = "license",
+            "url" = "url",
+            "q" = "quality",
+            "grp" = "taxonomic_group",
+            "file-name" = "uploaded_file",
+            "sono" = "sonogram",
+            "also" = "other_species",
+            "smp" = "sampling_rate",
+            "dvc" = "recorder",
+            "mic" = "microphone",
+            "uploaded" = "upload_date",
+            "rmk" = "comments",
+            "animal.seen" = "animal_seen",
+            "playback.used" = "playback_used"
+          ),
+          all_data = all_data,
+          format = "sound"
+        )
 
-        rename_map <- setNames(new_names, old_names)
-        rename_map <- rename_map[names(rename_map) %in% names(query_output_df)]
 
-        names(query_output_df)[match(names(rename_map), names(query_output_df))] <- rename_map
-        # === END FIX ===
+        # remove duplicates
+        query_output_df <- query_output_df[!duplicated(query_output_df$key), ]
 
-        query_output_df <- query_output_df[!duplicated(query_output_df$id), ]
+
+
 
         if (pb & verbose) {
           cat(.color_text(paste(
@@ -239,7 +304,14 @@ query_xenocanto <-
         }
       }
 
+
+      # Generate a file path by combining tempdir() with a file name
+      # file_path <- file.path(tempdir(), paste0(term, ".rds"))
+
+
+      # Save the object to the file
+      # MARCELO: I added a try function to avoid errors when saving the file, double check (why do we need to save it and how people can find the RDS)
+      # try(saveRDS(droplevels(query_output_df), file = file_path), silent = TRUE)
       return(droplevels(query_output_df))
     }
   }
-

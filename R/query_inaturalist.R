@@ -208,7 +208,7 @@ query_inaturalist <- function(term,
     query_output_df <- .format_query_output(
       X = query_output_df,
       call = base::match.call(),
-      colm_names = c(
+      column_names = c(
         "location" = "locality",
         "time_observed_at" = "time"
                      ),

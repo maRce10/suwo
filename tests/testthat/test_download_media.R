@@ -189,7 +189,7 @@ test_that("search inaturalist sp download all_data = TRUE", {
   unlink(file.path(tempdir(), fls))
 
   # expected files
-  exp_files <- c("Agalychnis_lemur-INAT303641298.jpeg", "Agalychnis_lemur-INAT303641290.jpeg")
+  exp_files <- c("Agalychnis_lemur-INAT303641290-1.jpeg", "Agalychnis_lemur-INAT303641290-2.jpeg", "Agalychnis_lemur-INAT303641298-1.jpeg", "Agalychnis_lemur-INAT303641298-2.jpeg", "Agalychnis_lemur-INAT303641298-3.jpeg")
 
   expect_true(all(exp_files %in% fls))
   expect_true(all(basename(a) %in% exp_files))

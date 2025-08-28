@@ -149,7 +149,7 @@ query_macaulay <-
 
         .message(x = normalizePath(path))
 
-        .message(x = "R is monitoring for new .csv files. Press ESC to stop the function", color = "cyan")
+        .message(x = "R is monitoring for new .csv files. Press ESC to stop the function.", color = "cyan")
 
 
         # pause 3 s so users can read message but only in the first query in a batch
@@ -222,7 +222,7 @@ query_macaulay <-
     query_output_df <- .format_query_output(
       X = query_output_df,
       call = base::match.call(),
-      colm_names = c(
+      column_names = c(
         "ML.Catalog.Number" = "key",
         "eBird.Species.Code" = "species_code",
         "Scientific.Name" = "species",

@@ -243,7 +243,7 @@ query_wikiaves <-
         query_output_df <- .format_query_output(
           X = query_output_df,
           call = base::match.call(),
-          colm_names = c(
+          column_names = c(
             "id" = "key",
             "tipo" = "format",
             "id_usuario" = "user.id",

@@ -284,16 +284,16 @@ pblapply_sw_int <- function(X,
 
 # format query output dataframe to standardize column names
 .format_query_output <- function(X,
-                                 colm_names,
+                                 column_names,
                                  all_data,
                                  format,
                                  call,
                                  input_file = NA) {
   # lower case
   names(X) <- tolower(names(X))
-  names(colm_names) <- tolower(names(colm_names))
+  names(column_names) <- tolower(names(column_names))
 
-  names_df <- data.frame(old = names(colm_names), new = colm_names)
+  names_df <- data.frame(old = names(column_names), new = column_names)
 
   for (i in seq_len(nrow(names_df))) {
     names(X)[names(X) == names_df$old[i]] <- names_df$new[i]
