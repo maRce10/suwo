@@ -19,3 +19,4 @@ LICENSE.md
 ^__MACOSX$
 ^examples$
 ^TO_DO_LIST\.Rmd$
+^suwo_testing\.ipynb$
