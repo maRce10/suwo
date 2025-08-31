@@ -98,11 +98,7 @@ query_inaturalist <- function(term,
     if (pb & verbose) {
       cat(paste(
         .color_text(
-          paste0(
-            "Obtaining metadata (",
-            total_results,
-            " matching observation(s) found)"
-          ),
+          cli_text("Obtaining metadata ({total_results} matching observation{?s} found)"),
           "success"
         ),
         .add_emoji("happy"),
@@ -203,6 +199,11 @@ query_inaturalist <- function(term,
     query_output_df$date <- substr(x = query_output_df$time_observed_at,
                                    start = 1,
                                    stop = 10)
+
+    # fix recordist name
+    query_output_df$user_name <- sapply(strsplit(query_output_df$attribution, ","), "[[", 1)
+
+    query_output_df$user_name <- sapply(strsplit(query_output_df$user_name, ") "), "[[", 2)
 
     # format output data frame column names
     query_output_df <- .format_query_output(

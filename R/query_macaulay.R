@@ -11,7 +11,7 @@
 #' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_macaulay
-#' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of birds, other wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is saved, the user must confirm that into the R console. The function then reads the .csv file and returns a data frame with the metadata. If the file is saved overwritting a pre-existing file the function will not detect it. The query term must be a species name. A maximum of 1000 records per query can be returned. Users must log in to the Macaulay Library/eBird account in order to access large batches of observations.
+#' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is saved, the user must confirm that into the R console. The function then reads the .csv file and returns a data frame with the metadata. If the file is saved overwritting a pre-existing file the function will not detect it. The query term must be a species name. A maximum of 1000 records per query can be returned. Users must log in to the Macaulay Library/eBird account in order to access large batches of observations.
 #' @examples
 #' \dontrun{
 #' # query sounds
@@ -228,7 +228,8 @@ query_macaulay <-
         "Scientific.Name" = "species",
         "Format" = "file_extension",
         "behaviors" = "behavior",
-        "state" = "state_province"
+        "state" = "state_province",
+        "recordist" = "user_name"
       ),
       all_data = all_data,
       format = org_format,

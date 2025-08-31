@@ -588,6 +588,24 @@ out <- sapply(list.files("./man", full.names = TRUE), function(x) tools::showNon
 ```
 
 ## troubleshoot suwo functions ####
+
+```{r find_duplicates}
+
+term <- "Turdus rufiventris"
+xc_adf <- query_xenocanto(term = term)
+
+wa_adf <- query_wikiaves(term = term, format = "sound")
+ 
+gb_adf <- query_gbif(term = term, format = "sound")
+
+in_adf <- query_inaturalist(term = term, format = "sound")
+ 
+ml_adf <- query_macaulay(term = term, format = "sound", path = tempdir())
+
+```
+
+
+
 ```{r query_observation, eval = FALSE}
 
 FUN <- "query_observation"
@@ -774,19 +792,20 @@ usethis::use_data(taxon_code_df, internal = TRUE, overwrite = TRUE)
 
 ```
 
+
 # Homogenize column names across repos
 ```{r, eval = FALSE}
 # all data false
 
-options(all_data = FALSE)
+options(all_data = FALSE, verbose = TRUE)
 
-xc_adf <- query_xenocanto(term = 'Phaethornis anthophilus')
+xc_adf <- query_xenocanto(term = 'Glaucis dohrnii')
 
 wa_adf <- query_wikiaves(term = 'Glaucis dohrnii', format = "sound")
  
-gb_adf <- query_gbif(term = 'Glaucis dohrnii', format = "image")
+gb_adf <- query_gbif(term = 'Glaucis dohrnii', format = "sound")
 
-in_adf <- query_inaturalist(term = 'Agalychnis lemur', format = "image")
+in_adf <- query_inaturalist(term = 'Glaucis dohrnii', format = "image")
  
 ml_adf <- query_macaulay(term = 'Glaucis dohrnii', format = "sound", path = tempdir())
 
@@ -854,6 +873,21 @@ nms_by_fun <- do.call(rbind, lapply(seq_along(adt_list), function(x) data.frame(
 nms_by_fun <- nms_by_fun[!nms_by_fun$col %in% (basic_colms),]
 
 nms_by_fun[order(nms_by_fun$col), ]
+
+
+xc_adt$recordist
+wa_adt$author
+gb_adt$recordist
+unique(in_adt$attribution)
+
+# get everything before the comma
+strsplit(unique(in_adt$attribution), ",")[[1]][1]
+
+in_adt$recordist <- sapply(strsplit(in_adt$attribution, ","), "[[", 1)
+
+in_adt$recordist <- sapply(strsplit(in_adt$recordist, ") "), "[[", 2)
+
+ml_adt$recordist
 
 ```
 

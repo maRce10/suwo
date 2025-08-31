@@ -262,7 +262,8 @@ query_gbif <-
           "orderkey" = "order_code",
           "familykey" = "family_key",
           "fieldnotes" = "comments",
-          "eventtime" = "time"
+          "eventtime" = "time",
+          "recordist" = "user_name"
         ),
         all_data = all_data,
         format = org_format

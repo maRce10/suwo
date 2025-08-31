@@ -136,7 +136,7 @@ query_wikiaves <-
                 "Obtaining metadata (",
                 sum(get_ids$total_registers),
                 " ",
-                format,
+                tolower(format),
                 "(s) found)"
               ),
               "success"
@@ -264,7 +264,8 @@ query_wikiaves <-
             "dura" = "duration",
             "scientific.name" = "species",
             "record.id" = "key",
-            "species_id" = "species_code"
+            "species_id" = "species_code",
+            "author" = "user_name"
           ),
           all_data = all_data,
           format = org_format

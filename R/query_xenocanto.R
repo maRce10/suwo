@@ -282,7 +282,8 @@ query_xenocanto <-
             "uploaded" = "upload_date",
             "rmk" = "comments",
             "animal.seen" = "animal_seen",
-            "playback.used" = "playback_used"
+            "playback.used" = "playback_used",
+            "recordist" = "user_name"
           ),
           all_data = all_data,
           format = "sound"
