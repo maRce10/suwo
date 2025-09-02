@@ -21,10 +21,12 @@ editor_options:
 * allow query_macaulay() to split search by year intervals to avoid reaching 10000 result limit ✓
 * Standardize attributes in output query data frames ✓
 * Columns keep the same name regardless of whether all.data T or F ✓
+* fix text coloring functions for messages (is a mess) ✓
+* In examples in function query_macaulay() explain how using argument "dates" work. Show how suwo:::.date_ranges() works ✓
+* Make sure all_data = TRUE returns the same info for all functions, or at least homologous columns have the same name ✓
 * check @return info so it matches the structure of the output data when all.data = TRUE and when all.data = FALSE (maybe do not list all the columns when all_data = TRUE) 
 * why do we need to tell users what is the species code in query_macaulay()?
 * make sure mention in vignette whether lat lon are returned by each function
-* Make sure all_data = TRUE returns the same info for all functions, or at least homologous columns have the same name ✓
 * Add maximum number of observations per repo to vignette table 
 * convert all dates so they are "dates" in R and with the same format 
 * How to add the country to iNaturalist output? 
@@ -32,9 +34,7 @@ editor_options:
 * check_duplicates() should suggest duplicates in data from repos that share with GBIF (this call from GBIF returns xeno-canto media. Use it as an example for removing duplicates query_gbif(term = 'Glaucis dohrnii', type = "sound", all_data = TRUE))
 * do we need sys.sleep(1) in query_wikiaves() (and other functions)?
 * make taxon_code_search() internal
-* fix text coloring functions for messages (is a mess) ✓
 * consolidate all internet access-checking functions into a single internal function
-* In examples in function query_macaulay() explain how using argument "dates" work. Show how suwo:::.date_ranges() works
 * consider removing cores argument from query_wikiaves() as the server does not seem to like parallel queries
 * make sure vignette works with new changes
 * check that all functions have examples
