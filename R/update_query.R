@@ -40,8 +40,7 @@ update_query <-
     if (length(unique(X$repository)) > 1)
       .stop(
         "All observations should belong to the same repository. ",
-        "Please provide a single repository query result to update_query().",
-        call = match.call()
+        "Please provide a single repository query result to update_query()."
       )
 
     #Set query term and format for new query search
@@ -114,12 +113,12 @@ update_query <-
     sum_new <- sum(query_output_df$new_entry)
 
     if (verbose) {
-      if (sum_new > 0)
+      if (sum_new > 0){
       cat(.color_text(paste(sum_new, "new entries found"
       ), "success"), .add_emoji("happy"), "\n")
-
-      if (sum_new == 0)
+        } else {
         cat(.color_text("No new entries found", "failure"), .add_emoji("sad"), "\n")
+        }
     }
 
     return(query_output_df)

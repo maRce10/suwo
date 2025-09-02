@@ -27,25 +27,25 @@
    skip_on_cran()
    skip_if_offline()
 
-  expect_error(query_observation(term = 'asdasdasd', format = "image"), "Species was not found in database")
+  expect_null(query_observation(term = 'asdasdasd', format = "image"))
 
 })
 
-test_that("no result", {
+test_that("no result sound", {
 
   skip_on_cran()
   skip_if_offline()
 
-  expect_error(query_observation(term = 'asdasdasd', format = "sound"), "Species was not found in database")
+  expect_null(query_observation(term = 'asdasdasd', format = "sound"))
 
 })
 
-test_that("no result", {
+test_that( "Invalid token for observation.org", {
 
   skip_on_cran()
   skip_if_offline()
 
-  expect_error(query_observation(term = 'Serinus serinus', format = "sound"), "Invalid token for observation.org")
+  expect_null(query_observation(term = 'Serinus serinus', format = "sound"))
 
 })
 #

@@ -201,7 +201,7 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  in2 <- query_inaturalist(term = 'Rattus rattus', format = "sound", all_data = FALSE)
+  in2 <- query_inaturalist(term = "Rattus rattus", format = "sound", all_data = FALSE)
 
   test_keys <- c("283643216", "281653293")
 

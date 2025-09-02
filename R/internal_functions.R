@@ -94,77 +94,9 @@ pblapply_sw_int <- function(X,
   stop(..., call. = FALSE)
 }
 
-
-# warning function that doesn't print call
-.warning <- function(x, color = "magenta") {
-  warning(.colortext_2(x, as = color), call. = FALSE)
-}
-
-# message function that changes colors
-.message <- function(x, color = "black") {
-  message(.colortext_2(x, as = color))
-}
-
-# coloring text
-.colortext_2 <-
-  function(text,
-           as = c("red",
-                  "blue",
-                  "green",
-                  "magenta",
-                  "cyan",
-                  "orange",
-                  "black",
-                  "silver")) {
-    if (.has_color()) {
-      unclass(cli::make_ansi_style(.suwo_message_style(as))(text))
-    } else {
-      text
-    }
-  }
-
+# detect if string includes color
 .has_color <- function() {
   cli::num_ansi_colors() > 1
-}
-
-.suwo_message_style <-
-  function(color = c("red",
-                     "blue",
-                     "green",
-                     "magenta",
-                     "cyan",
-                     "orange",
-                     "black",
-                     "silver")) {
-    color <- match.arg(color)
-
-    c(
-      red = "red",
-      blue = "blue",
-      green = "green",
-      magenta = "magenta",
-      cyan = "cyan",
-      orange = "orange",
-      black = "black",
-      silver = "silver"
-    )[[color]]
-  }
-
-# colored message
-.colortext <- function(text,
-                       as = c("red",
-                              "blue",
-                              "green",
-                              "magenta",
-                              "cyan",
-                              "orange",
-                              "black",
-                              "silver")) {
-  if (.has_color()) {
-    unclass(cli::make_ansi_style(.suwo_style(as))(text))
-  } else {
-    text
-  }
 }
 
 # add emojis to messages. based on praise_emoji from testthat
@@ -214,9 +146,8 @@ pblapply_sw_int <- function(X,
   }
 }
 
-#####
-
-.suwo_style <- function(type = c("success", "skip", "warning", "failure", "error")) {
+# style text with color
+.suwo_style <- function(type = c("success", "skip", "warning", "failure", "error", "message")) {
   type <- match.arg(type)
 
   c(
@@ -224,8 +155,55 @@ pblapply_sw_int <- function(X,
     skip = "blue",
     warning = "magenta",
     failure = "orange",
-    error = "orange"
+    error = "red",
+    message = "cyan"
   )[[type]]
+}
+
+.color_text <- function(text,
+                        as = c("success", "skip", "warning", "failure", "error", "message"),
+                        n = NULL) {
+  if (!is.null(n))
+    text <- cli::pluralize(text)
+
+  if (.has_color()) {
+    unclass(cli::make_ansi_style(.suwo_style(as))(text))
+  } else {
+    text
+  }
+}
+
+# info messages
+.message <- function(text) {
+  cat(.color_text(
+    text,
+    as = "message"),
+    "\n",
+    sep = ""
+  )
+}
+
+# message when files were found
+.success_message <- function(text = paste0("Obtaining metadata ({n} matching ", format, " file{?s} found)"), format, n = NULL, suffix = ":\n") {
+  cat(.color_text(
+    text,
+    as = "success",
+    n = n),
+    .add_emoji("happy"),
+    suffix,
+    sep = ""
+  )
+}
+
+
+.failure_message <- function(text = paste0(text = "No ", format, " files were found"), format) {
+  cat(.color_text(
+    text,
+    as = "failure"),
+    .add_emoji("sad"),
+    "\n",
+    sep = ""
+  )
 }
 
 # Function to download file according to repository
@@ -236,12 +214,24 @@ pblapply_sw_int <- function(X,
     quiet = TRUE,
     mode = "wb",
     cacheOK = TRUE,
-    extra = getOption("download.file.extra"),
-    Sys.sleep(0.1)
-  ),
+    extra = getOption("download.file.extra")),
   silent = TRUE)
 
+  # if failed try again after wating 0.5 seconds
+  if (is(dl_result, "try-error")) {
+    Sys.sleep(0.5)
+    dl_result <- try(download.file(
+      url = as.character(metadata$file_url[x]),
+      destfile = file.path(path, metadata$download_file_name[x]),
+      quiet = TRUE,
+      mode = "wb",
+      cacheOK = TRUE,
+      extra = getOption("download.file.extra")
+    ),
+    silent = TRUE)
+    }
 
+  # if still failed then return FALSE
   if (is(dl_result, "try-error")) {
     return(FALSE)
   } else {
@@ -249,8 +239,13 @@ pblapply_sw_int <- function(X,
   }
 }
 
-# fix extension so it is homogenuous across functions
+# fix extension so it is homogeneous across functions
 .fix_extension <- function(x) {
+
+  # if the strings contains "?" extract string before "?"
+  if (any(grepl("\\?", x)))
+    x <- gsub("\\?.*$", "", x)
+
   # jpg to jpeg
   x <- gsub("jpg$", "jpeg", x, ignore.case = TRUE)
 
@@ -258,13 +253,10 @@ pblapply_sw_int <- function(X,
   x <- gsub("tif$", "tiff", x, ignore.case = TRUE)
 
   # mpeg to mp3
-  x <- gsub("mpeg$", "mp3", x, ignore.case = TRUE)
+  x <- gsub("mpeg$|mpga$", "mp3", x, ignore.case = TRUE)
 
   # x-wav to wav
   x <- gsub("x-wav$", "wav", x, ignore.case = TRUE)
-
-  # x-m4a to m4a
-  x <- gsub("x-m4a$", "m4a", x, ignore.case = TRUE)
 
   # x-m4a to m4a
   x <- gsub("x-m4a$", "m4a", x, ignore.case = TRUE)
@@ -281,6 +273,33 @@ pblapply_sw_int <- function(X,
   return(x)
 }
 
+# rbind all data frames in a list after making them have the same columns
+# X must be a list of data frames
+.merge_data_frames <- function(X){
+  # get common names to all data frames in X
+  common_names <- unique(unlist(lapply(X, names)))
+
+  # add missing columns to all data frames in X
+  Y <- lapply(X, function(e) {
+    nms <- names(e)
+    if (length(nms) != length(common_names)) {
+      for (o in common_names[!common_names %in% nms]) {
+        e <-
+          data.frame(e,
+                     NA,
+                     stringsAsFactors = FALSE,
+                     check.names = FALSE)
+        names(e)[ncol(e)] <- o
+      }
+    }
+    return(e)
+  })
+
+  # all results in a single data frame
+  Z <- do.call(rbind, Y)
+
+  return(Z)
+}
 
 # format query output dataframe to standardize column names
 .format_query_output <- function(X,
@@ -288,7 +307,27 @@ pblapply_sw_int <- function(X,
                                  all_data,
                                  format,
                                  call,
-                                 input_file = NA) {
+                                 input_file = NA,
+                                 only_basic_columns = FALSE) {
+  basic_colums <- c(
+    "repository",
+    "format",
+    "key",
+    "species",
+    "date",
+    "time",
+    "user_name",
+    "country",
+    "locality",
+    "latitude",
+    "longitude",
+    "file_url",
+    "file_extension"
+  )
+
+  if (only_basic_columns)
+    return(basic_colums)
+
   # lower case
   names(X) <- tolower(names(X))
   names(column_names) <- tolower(names(column_names))
@@ -349,22 +388,12 @@ pblapply_sw_int <- function(X,
     X$time <- paste0(substr(X$time, 1, 2), ":", substr(X$time, 3, 4))
   }
 
+  # fix extension
+  X$file_extension <- .fix_extension(X$file_extension)
 
-  basic_colums <- c(
-    "repository",
-    "format",
-    "key",
-    "species",
-    "date",
-    "time",
-    "user_name",
-    "country",
-    "locality",
-    "latitude",
-    "longitude",
-    "file_url",
-    "file_extension"
-  )
+  # replace "" with NA
+  X$country[X$country == ""] <- NA
+  X$locality[X$locality == ""] <- NA
 
   # order so basic columns go first
   non_basic_colms <- setdiff(names(X), basic_colums)
@@ -409,7 +438,6 @@ pblapply_sw_int <- function(X,
 
 }
 
-
 # add attributes to output data frames
 .add_attributes <- function(X, term, format, all_data, input_file = NA, call) {
   term <- gsub("%20", " ", term)
@@ -425,31 +453,6 @@ pblapply_sw_int <- function(X,
   attr(X, "input_file(s)") <- input_file
   attr(X, "suwo_version") <- utils::packageVersion("suwo")
   return(X)
-}
-
-.color_text <- function(text,
-                        as = c("success", "skip", "warning", "failure", "error")) {
-  if (.has_color()) {
-    unclass(cli::make_ansi_style(.suwo_style(as))(text))
-  } else {
-    text
-  }
-}
-
-.has_color <- function() {
-  cli::num_ansi_colors() > 1
-}
-
-.suwo_style <- function(type = c("success", "skip", "warning", "failure", "error")) {
-  type <- match.arg(type)
-
-  c(
-    success = "green",
-    skip = "blue",
-    warning = "magenta",
-    failure = "orange",
-    error = "orange"
-  )[[type]]
 }
 
 ## function to split macaulay queries by year-month
@@ -704,13 +707,13 @@ pblapply_sw_int <- function(X,
   output <- "OK"
   # First check internet connection
   if (!curl::has_internet()) {
-    .message(x = "No internet connection.", color = "cyan")
+    .message("No internet connection.")
     output <- "not_OK"
   } else {
     # Then try for timeout problems
     resp <- .try_GET(url)
     if (!.is_response(resp)) {
-      .message(x = resp, color = "cyan")
+      .message(resp)
       output <- "not_OK"
     } else {
       if (httr::http_error(resp) & !skip.error) {

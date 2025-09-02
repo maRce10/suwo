@@ -31,8 +31,8 @@
 #' @seealso \code{\link{query_gbif}}
 #' @examples
 #' \dontrun{
-#' # search without downloading
-# df1 <- query_gbif(term = 'Turdus iliacus', format = "Sound", cores = 4)
+#' # search sound files
+# df1 <- query_gbif(term = 'Turdus iliacus', format = "sound")
 #' View(df1)
 #' }
 #'
@@ -64,9 +64,9 @@ query_gbif <-
     checkmate::reportAssertions(check_results)
 
     # assign a value to format
-    org_format <- format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format)
 
-    format <- switch(
+    gbif_format <- switch(
       format,
       sound = "Sound",
       `image` = "StillImage",
@@ -78,26 +78,15 @@ query_gbif <-
     response <- try(httr::GET("https://api.gbif.org/"), silent = TRUE)
     if (inherits(response, "try-error") ||
         httr::http_error(response)) {
-      .stop("No connection to GBIF API (check your internet connection!)")
+        .failure_message("No connection to GBIF API (check your internet connection!)")
+        return(invisible(NULL))
     }
 
     content <- httr::content(response, as = "text", encoding = "UTF-8")
     if (grepl("Could not connect to the database", content)) {
-      .stop("GBIF website is apparently down")
+      .failure_message("GBIF website is apparently down")
+      return(invisible(NULL))
     }
-
-
-    # If cores is not numeric
-    if (!is.numeric(cores)) {
-      .stop("'cores' must be a numeric vector of length 1")
-    }
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      .stop("'cores' should be a positive integer")
-    }
-
-    # fix term for html but keep original for attributes
-    org_term <- term
-    term <- gsub(" ", "%20", term)
 
     srch_trm <- paste0(
       "https://api.gbif.org/v1/occurrence/search?limit=300&",
@@ -107,9 +96,9 @@ query_gbif <-
         "datasetKey=",
       dataset,
       "&scientificName=",
-      term,
+      gsub(" ", "%20", term),
       "&media_type=",
-      format
+      gbif_format
     )
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
@@ -117,27 +106,15 @@ query_gbif <-
     # message if nothing found
     if (base.srch.pth$count == 0) {
       if (verbose) {
-        cat(paste(.color_text(
-          paste0("No ", tolower(org_format), "s were found"), "failure"
-        ), .add_emoji("sad")))
+        .failure_message(format = format)
       }
-    } else {
+       return(invisible(NULL))
+    }
+
       # message number of results
       if (pb & verbose) {
-        cat(paste(
-          .color_text(
-            paste0(
-              "Obtaining metadata (",
-              base.srch.pth$count,
-              " matching observation(s) found)"
-            ),
-            "success"
-          ),
-          .add_emoji("happy"),
-          ":\n"
-        ))
+        .success_message(n = base.srch.pth$count, format = format)
       }
-
 
       # get total number of pages
       offsets <- (seq_len(ceiling(
@@ -162,7 +139,7 @@ query_gbif <-
           media_df <- do.call(rbind, x$media)
 
           # select format
-          media_df <- media_df[media_df$type == format, ]
+          media_df <- media_df[media_df$type == gbif_format, ]
 
           # fix identifier column name
           names(media_df)[names(media_df) == "identifier"] <- "URL"
@@ -181,63 +158,41 @@ query_gbif <-
           return(X_df)
         })
 
-        # get common names to all data frames in X
-        common_names <- unique(unlist(lapply(query_output$results, names)))
-
-        # add missing columns to all data frames in X
-        query_output$results <- lapply(query_output$results, function(e) {
-          nms <- names(e)
-          if (length(nms) != length(common_names)) {
-            for (o in common_names[!common_names %in% nms]) {
-              e <-
-                data.frame(e,
-                           NA,
-                           stringsAsFactors = FALSE,
-                           check.names = FALSE)
-              names(e)[ncol(e)] <- o
-            }
-          }
-          return(e)
-        })
-
-        # all results in a single data frame
-        output_df <- do.call(rbind, query_output$results)
-
+        output_df <- .merge_data_frames(query_output$results)
         output_df$page <- i
 
         return(output_df)
       })
 
-      # get common names to all data frames in X
-      common_names <- unique(unlist(lapply(query_output_list, names)))
+      # combine into a single data frame
+      query_output_df <- .merge_data_frames(query_output_list)
 
-      # add missing columns to all data frames in X
-      query_output_list <- lapply(query_output_list, function(e) {
-        nms <- names(e)
-        if (length(nms) != length(common_names)) {
-          for (o in common_names[!common_names %in% nms]) {
-            e <-
-              data.frame(e,
-                         NA,
-                         stringsAsFactors = FALSE,
-                         check.names = FALSE)
-            names(e)[ncol(e)] <- o
-          }
-        }
-        return(e)
-      })
+      # stop here if nothing found
+      if (is.null(query_output_df))
+        return(query_output_df)
 
-      # all results in a single data frame
-      query_output_df <- do.call(rbind, query_output_list)
+      # remove rows with NAs in URL
+      if (anyNA(query_output_df$`media-URL`)){
+
+        # save at options
+        options("gbif_excluded_results" = query_output_df[is.na(query_output_df$`media-URL`), ])
+
+        # let users know some observations were excluded
+        cat(.color_text("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('gbif_excluded_results')`).",
+                        as = "warning",
+                        n  = sum(is.na(query_output_df$`media-URL`))
+        )
+        )
+
+        # remove those observations
+        query_output_df <- query_output_df[!is.na(query_output_df$`media-URL`), ]
+      }
 
       # add file format
       query_output_df$file_extension <- sub(".*\\.", "", query_output_df$`media-URL`)
 
-      # fix formatting
-      query_output_df$file_extension <- .fix_extension(query_output_df$file_extension)
-
-      # remove everything after the first parenthesis
-      query_output_df$species <- gsub("\\s*\\(.*?\\)", "", query_output_df$scientificName)
+      # remove everything after the second parenthesis
+      query_output_df$species <- sapply(strsplit(query_output_df$species, " "), function(x) paste(x[1], x[2]))
 
       # remove duplicated info
       query_output_df$gbifid <- query_output_df$scientificName <- NULL
@@ -266,9 +221,9 @@ query_gbif <-
           "recordist" = "user_name"
         ),
         all_data = all_data,
-        format = org_format
+        format = format
       )
 
       return(query_output_df)
-    }
+
   }

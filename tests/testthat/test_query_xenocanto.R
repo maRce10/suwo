@@ -7,7 +7,7 @@ test_that("search Phaethornis check rows", {
 
   expect_true(nrow(df1) > 15)
 
-  expect_true(ncol(df1) == 12)
+  expect_true(ncol(df1) == length(.format_query_output(only_basic_columns = T)))
 
 
   })
@@ -46,13 +46,12 @@ test_that("check messages", {
 
   msg <- capture.output(query_xenocanto(term = '000', verbose = TRUE))
 
-  expect_true(any(grepl("No audios were found", msg)))
+  expect_true(any(grepl("No sound files were found", msg)))
 
   msg <- capture.output(a <- query_xenocanto(term = '000', verbose = FALSE))
 
 
   expect_true(length(msg) == 0)
-
 
   msg <- capture.output(a <- query_xenocanto(term = 'Phaethornis anthophilus', verbose = TRUE, pb = FALSE))
 
@@ -69,7 +68,7 @@ test_that("test all_data FALSE", {
 
   df1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
 
-  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository", "file_extension", "time", "format")
+  expected_col_names <- .format_query_output(only_basic_columns = T)
 
   query_col_names <- colnames(df1)
   expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")

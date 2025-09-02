@@ -39,7 +39,7 @@ test_that("no result", {
 
   df1 <- query_inaturalist(term = 'asdasdasd', format =  "image")
 
-  expect_true(nrow(df1) == 0 && ncol(df1) == 0)
+  expect_true(is.null(df1))
 
 })
 
@@ -74,7 +74,7 @@ test_that("test all_data FALSE", {
 
   df1 <- query_inaturalist(term = 'bolitoglossa striatula', format =  "image", all_data = FALSE)
 
-  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository", "file_extension", "time", "format")
+  expected_col_names <- .format_query_output(only_basic_columns = T)
 
   query_col_names <- colnames(df1)
   expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")

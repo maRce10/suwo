@@ -46,10 +46,9 @@ query_observation <-
     checkmate::reportAssertions(check_results)
 
     # assign a value to format
-    org_format <- format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format)
 
-
-    format <- switch(
+    obs_format <- switch(
       format,
       sound = "Sound",
       `image` = "StillImage")
@@ -59,35 +58,33 @@ query_observation <-
     response <- try(httr::GET("https://observation.org"), silent = TRUE)
     if (inherits(response, "try-error") ||
         httr::http_error(response)) {
-      .stop("No connection to observation.org (check your internet connection!)")
+      cat("No connection to observation.org (check your internet connection!)")
+      return(invisible(NULL))
     }
 
     content <- httr::content(response, as = "text")
     if (grepl("Could not connect to the database", content)) {
-      .stop("observation.org website is apparently down")
+      cat("observation.org website is apparently down")
+      return(invisible(NULL))
     }
-
-
-
     # format JSON
-    org_term <- term
-    term <- gsub(" ", "%20", term)
-
     srch_trm <- paste0("https://observation.org/api/v1/species/search/?",
                        "q=",
-                       term)
+                       gsub(" ", "%20", term))
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 
     # If species not found in repository
     if (base.srch.pth$count == 0) {
-      .stop("Species was not found in database")
+      cat("Species was not found in database")
+      return(invisible(NULL))
     }
 
     # Check if token is available
     if (is.null(token)) {
-      .stop("Invalid token for observation.org")
-    }
+      cat("Invalid token for observation.org")
+      return(invisible(NULL))
+      }
 
     # Set the species ID and API endpoint URL
     species_id <- base.srch.pth$results$id
@@ -113,27 +110,16 @@ query_observation <-
 
     if (data$count == 0) {
       if (verbose) {
-        cat(paste(.color_text(
-          paste0("No ", tolower(org_format), "s were found"), "failure"
-        ), .add_emoji("sad")))
+        .failure_message(format = format)
       }
+      return(invisible(NULL))
     } else {
       # message number of results
       if (pb & verbose) {
-        cat(paste(
-          .color_text(
-            paste0(
-              "Obtaining metadata (",
-              data$count,
-              " candidate observation(s) found)"
-            ),
-            "success"
-          ),
-          .add_emoji("happy"),
-          ":\n"
-        ))
+        .success_message(n = data$count, format = format)
       }
     }
+
     # get total number of pages
     offsets <- (seq_len(ceiling(data$count / 100)) - 1) * 100
 
@@ -163,7 +149,7 @@ query_observation <-
       data$results <- lapply(seq_len(nrow(data$results)), function(u) {
         x <- data$results[u, ]
 
-        if (format == "StillImage") {
+        if (obs_format == "StillImage") {
           media_URL <- if (length(x$photos[[1]]) > 0) {
             unlist(x$photos)
           } else {
@@ -171,7 +157,7 @@ query_observation <-
           }
         }
 
-        if (format == "Sound") {
+        if (obs_format == "Sound") {
           media_URL <- if (length(x$sounds[[1]]) > 0) {
             unlist(x$sounds)
           } else {
@@ -181,9 +167,6 @@ query_observation <-
 
         # remove lists
         x <- x[!sapply(x, is.list)]
-
-        # make it data frame
-        # X_df <- data.frame(t(unlist(x)))
 
         # add media details
         X_df <- data.frame(x, media_URL, row.names = seq_len(length(media_URL)))
@@ -200,52 +183,14 @@ query_observation <-
         return(X_df)
       })
 
-      # get common names to all data frames in X
-      common_names <- unique(unlist(lapply(data$results, names)))
-
-      # add missing columns to all data frames in X
-      data$results <- lapply(data$results, function(e) {
-        nms <- names(e)
-        if (length(nms) != length(common_names)) {
-          for (o in common_names[!common_names %in% nms]) {
-            e <-
-              data.frame(e,
-                         NA,
-                         stringsAsFactors = FALSE,
-                         check.names = FALSE)
-            names(e)[ncol(e)] <- o
-          }
-        }
-        return(e)
-      })
-
-      # all results in a single data frame
-      output_df <- do.call(rbind, data$results)
+      # combine into a single data frame
+      output_df <- .merge_data_frames(data$results)
 
       return(output_df)
     })
 
-    # get common names to all data frames in X
-    common_names <- unique(unlist(lapply(query_output_list, names)))
-
-    # add missing columns to all data frames in X
-    query_output_list <- lapply(query_output_list, function(e) {
-      nms <- names(e)
-      if (length(nms) != length(common_names)) {
-        for (o in common_names[!common_names %in% nms]) {
-          e <-
-            data.frame(e,
-                       NA,
-                       stringsAsFactors = FALSE,
-                       check.names = FALSE)
-          names(e)[ncol(e)] <- o
-        }
-      }
-      return(e)
-    })
-
-    # all results in a single data frame
-    query_output_df <- do.call(rbind, query_output_list)
+    # combine into a single data frame
+    query_output_df <- .merge_data_frames(query_output_list)
 
     # format output data frame column names
     query_output_df <- .format_query_output(
@@ -258,7 +203,7 @@ query_observation <-
         "species_name" = "species"
       ),
       all_data = all_data,
-      format = org_format
+      format = format
     )
 
     return(query_output_df)

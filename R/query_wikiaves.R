@@ -43,33 +43,17 @@ query_wikiaves <-
 
     url_check <- .check_internet_resource(url = "https://www.wikiaves.com.br", skip.error = TRUE)
 
-    # Check internet connection using httr and error handling
-    # response <- try(httr::GET("https://www.wikiaves.com.br/wiki/aves"), silent = TRUE)
-    # if (inherits(response, "try-error") ||
-    #     httr::http_error(response)) {
-    #   .stop("No connection to wikiaves (check your internet connection!)")
-    # }
-    #
-    # content <- httr::content(response, as = "text")
-    # if (grepl("Could not connect to the database", content)) {
-    #   .stop("wikiaves.com website is apparently down")
-    # }
-
     if (url_check == "OK") {
     # assign a value to format
-    org_format <- format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format)
 
-    format <- switch(format, sound = "Sound", image = "photo")
-
-    # format JSON
-    org_term <- term
-    term <- gsub(" ", "%20", term)
+    wiki_format <- switch(format, sound = "s", image = "f")
 
     # initialize search with user agent
     response <- httr::GET(
       url = paste0(
         "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
-        term
+        gsub(" ", "%20", term)
       ),
       httr::user_agent("suwo (https://github.com/maRce10/suwo)")
     )
@@ -87,6 +71,7 @@ query_wikiaves <-
           .add_emoji("sad")
         ))
       }
+      return(invisible(NULL))
     } else {
       # make it a data frame
       get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
@@ -95,11 +80,7 @@ query_wikiaves <-
         response <- httr::GET(
           url = paste0(
             "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            if (format == "photo") {
-              "f"
-            } else {
-              "s"
-            },
+            wiki_format,
             "&t=s&s=",
             get_ids$id[u],
             "&o=mp&p=1"
@@ -111,9 +92,10 @@ query_wikiaves <-
       })
 
       if (sum(get_ids$total_registers) == 0) {
-        cat(paste(.color_text(
-          paste0("No ", format, "s were found"), "failure"
-        ), .add_emoji("sad")))
+        if (verbose) {
+          .failure_message(format = format)
+        }
+        return(invisible(NULL))
       } else {
         # get number of pages (20 is the default number of registers per page)
         get_ids$pages <- ceiling(get_ids$total_registers / 20)
@@ -130,20 +112,7 @@ query_wikiaves <-
 
         # search recs in wikiaves (results are returned in pages with 500 recordings each)
         if (pb & verbose) {
-          cat(paste(
-            .color_text(
-              paste0(
-                "Obtaining metadata (",
-                sum(get_ids$total_registers),
-                " ",
-                tolower(format),
-                "(s) found)"
-              ),
-              "success"
-            ),
-            .add_emoji("happy"),
-            ":\n"
-          ))
+          .success_message(n = get_ids$total_registers, format = format)
         }
 
         # set clusters for windows OS
@@ -162,11 +131,7 @@ query_wikiaves <-
             try(jsonlite::fromJSON(
               paste0(
                 "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                if (format == "photo") {
-                  "f"
-                } else {
-                  "s"
-                },
+                wiki_format,
                 "&t=",
                 "s",
                 "&s=",
@@ -184,11 +149,7 @@ query_wikiaves <-
             query_output <-jsonlite::fromJSON(
               paste0(
                 "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                if (format == "photo") {
-                  "f"
-                } else {
-                  "s"
-                },
+                wiki_format,
                 "&t=",
                 "s",
                 "&s=",
@@ -211,14 +172,14 @@ query_wikiaves <-
           return(output_df)
         })
 
-        # put in a data frame
-        query_output_df <- do.call(rbind, query_output_list)
+        # combine into a single data frame
+        query_output_df <- .merge_data_frames(query_output_list)
 
         # rename rows
         rownames(query_output_df) <- seq_len(nrow(query_output_df))
 
         # change jpg to mp3 in links
-        if (format == "Sound") {
+        if (format == "sound") {
           query_output_df$link <-
             gsub(".jpg$", ".mp3", query_output_df$link)
         }
@@ -232,11 +193,8 @@ query_wikiaves <-
         # add file format
         query_output_df$file_extension <- sub(".*\\.", "", query_output_df$link)
 
-        # fix formatting
-        query_output_df$file_extension <- .fix_extension(query_output_df$file_extension)
-
         # add missing basic columns
-        query_output_df$format <- org_format
+        query_output_df$format <- format
         query_output_df$country <- "Brazil"
 
         # rename output columns
@@ -268,7 +226,7 @@ query_wikiaves <-
             "author" = "user_name"
           ),
           all_data = all_data,
-          format = org_format
+          format = format
         )
 
         # Generate a file path by combining tempdir() with a file name

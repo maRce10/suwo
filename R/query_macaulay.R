@@ -59,9 +59,9 @@ query_macaulay <-
     checkmate::reportAssertions(check_results)
 
     # assign a value to format
-    org_format <- format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format)
 
-    format <- switch(format,
+    ml_format <- switch(format,
                    sound = "audio",
                    image = "photo",
                    `video` = "video")
@@ -88,14 +88,12 @@ query_macaulay <-
 
       # function will stop here
       if (is.null(taxon_code)) {
-        .message(
+        .failure_message(
           paste(
-            "No matching species found for '",
+            "No matching species found for ",
             user_input_species,
-            "'.\n",
             sep = ""
-          ),
-          color = "magenta"
+          )
         )
 
         return(NULL)
@@ -140,17 +138,13 @@ query_macaulay <-
               " (",
               date_range,
               "):"
-            ),
-            color = "cyan")
+            ))
           }
         }
-        .message(x =
-                   "A browser will open the macaulay library website. Save the .csv file ('export' button) to this directory:", color = "cyan")
-
-        .message(x = normalizePath(path))
-
-        .message(x = "R is monitoring for new .csv files. Press ESC to stop the function.", color = "cyan")
-
+        # let users know where to save the file
+        .message("A browser will open the macaulay library website. Save the .csv file ('export' button) to this directory:")
+        cat(normalizePath(path), "/", sep = "")
+        .message("   (R is monitoring for new .csv files. Press ESC to stop the function)")
 
         # pause 3 s so users can read message but only in the first query in a batch
         if (i == 1)
@@ -159,7 +153,7 @@ query_macaulay <-
         # construct the search URL
         search_url <- paste0(
           "https://search.macaulaylibrary.org/catalog?view=list&mediaType=",
-          format,
+          ml_format,
           "&taxonCode=",
           taxon_code
         )
@@ -192,9 +186,9 @@ query_macaulay <-
         new_csv_file_list[[length(new_csv_file_list) + 1]] <- .monitor_new_files(path  = path)
 
         # let users know the name of the csv file that was read
-        .message("The data will be read from the file:", color = "cyan")
+        .message("The data will be read from the file:")
 
-        .message(x = paste(new_csv_file_list[[length(new_csv_file_list)]], "\n"))
+        cat(paste(new_csv_file_list[[length(new_csv_file_list)]], "\n"))
       }
     } else {
       new_csv_file_list <- as.list(files)
@@ -204,7 +198,8 @@ query_macaulay <-
     query_output_list <- lapply(new_csv_file_list, function(x)
       read.csv(file.path(path, x), stringsAsFactors = FALSE))
 
-    query_output_df <- do.call(rbind, query_output_list)
+    # combine into a single data frame
+    query_output_df <- .merge_data_frames(query_output_list)
 
     query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x) {
       paste0(
@@ -213,10 +208,6 @@ query_macaulay <-
         "/"
       )
     })
-
-    # fix formatting
-    query_output_df$file_extension <- .fix_extension(query_output_df$Format)
-    query_output_df$Format <- NULL
 
     # rename output columns
     query_output_df <- .format_query_output(
@@ -232,21 +223,19 @@ query_macaulay <-
         "recordist" = "user_name"
       ),
       all_data = all_data,
-      format = org_format,
+      format = format,
       input_file = file.path(normalizePath(path), unlist(new_csv_file_list))
     )
 
     if (verbose) {
-      cat(.color_text(paste0(
-        nrow(query_output_df), " ", org_format, "(s) found "
-      ), "success"), .add_emoji("happy"), "\n")
+      .success_message(text = paste0("{n} matching ", format, " file{?s} found"), n = nrow(query_output_df), format = format, suffix = "")
     }
 
 
     if (nrow(query_output_df) == 10000) {
-      .message(
-        "The query returned 10,000 records, which is the maximum allowed. It is likely that more observations that matched the query exists but were not retrieved.",
-        color = "magenta"
+      .color_text(
+        paste("The query returned 10,000 records, which is the maximum allowed. It is likely that more", format, "files that matched the query exists but were not retrieved."),
+        as = "warning"
       )
     }
 

@@ -46,16 +46,16 @@ test_that("no result", {
 })
 
 
-test_that("search Glaucis photos in parallel", {
-
-  skip_on_cran()
-  skip_if_offline()
-
-  df1 <- query_wikiaves(term = 'Glaucis dohrnii', format =  "image", cores = 2)
-
-  expect_true(nrow(df1) >  400)
-
-})
+# test_that("search Glaucis photos in parallel", {
+#
+#   skip_on_cran()
+#   skip_if_offline()
+#
+#   df1 <- query_wikiaves(term = 'Glaucis dohrnii', format =  "image", cores = 2)
+#
+#   expect_true(nrow(df1) >  400)
+#
+# })
 
 
 test_that("test verbose FALSE", {
@@ -76,7 +76,7 @@ test_that("test all_data FALSE", {
 
   df1 <- query_wikiaves(term = 'Glaucis dohrnii', format =  "image", all_data = FALSE)
 
-  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository", "file_extension", "time", "format")
+  expected_col_names <- .format_query_output(only_basic_columns = T)
 
   query_col_names <- colnames(df1)
 

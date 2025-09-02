@@ -60,7 +60,7 @@ online repository \href{https://www.gbif.org/}{gbif}. It can return media metada
 }
 \examples{
 \dontrun{
-# search without downloading
+# search sound files
 View(df1)
 }
 

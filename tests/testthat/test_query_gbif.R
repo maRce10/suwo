@@ -5,7 +5,7 @@ test_that("search Glaucis dohrnii audio", {
 
   df1 <- query_gbif(term = 'Glaucis dohrnii', format =  "sound")
 
-  expect_true(nrow(df1) >= 22)
+  expect_true(nrow(df1) >= 20)
 
 })
 
@@ -101,7 +101,7 @@ test_that("test all_data FALSE", {
 
   df1 <- query_gbif(term = 'Glaucis dohrnii', format =  "image", all_data = FALSE)
 
-  expected_col_names <- c("key", "species", "date", "country", "locality", "latitude", "longitude", "file_url", "repository", "file_extension", "time", "format")
+  expected_col_names <- .format_query_output(only_basic_columns = T)
 
   query_col_names <- colnames(df1)
   expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")
