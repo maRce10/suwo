@@ -41,9 +41,11 @@ query_wikiaves <-
     # report errors
     checkmate::reportAssertions(check_results)
 
-    url_check <- .check_internet_resource(url = "https://www.wikiaves.com.br", skip.error = TRUE)
+    # Use the unified connection checker
+    if (is.null(.checkconnection("wikiaves"))) {
+      return(invisible(NULL))
+    }
 
-    if (url_check == "OK") {
     # assign a value to format
     format <- rlang::arg_match(format)
 
@@ -237,5 +239,4 @@ query_wikiaves <-
         return(query_output_df)
       }
     }
-  }
 }

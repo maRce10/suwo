@@ -34,7 +34,7 @@ for queries using terms with more than one word.}
 \value{
 The function returns a data frame with the following recording information: recording ID,
 Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
-Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 or .wav
+Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3
 format are downloaded into the working directory if download = \code{TRUE}.
 }
 \description{

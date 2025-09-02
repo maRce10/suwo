@@ -56,18 +56,11 @@ query_inaturalist <- function(term,
   format <- rlang::arg_match(format)
   inat_format <- switch(format, sound = "sounds", image = "photos")
 
-  response <- try(httr::GET("https://www.inaturalist.org/"), silent = TRUE)
-  if (inherits(response, "try-error") ||
-      httr::http_error(response)) {
-    .failure_message("No connection to INaturalist (check your internet connection!)")
+  # Use the unified connection checker
+  if (is.null(.checkconnection("inat"))) {
     return(invisible(NULL))
   }
 
-  content <- httr::content(response, as = "text")
-  if (grepl("Could not connect to the database", content)) {
-    .failure_message("INaturalist website is apparently down")
-    return(invisible(NULL))
-  }
 
   base_url <- paste0(
     "https://api.inaturalist.org/v1/observations?per_page=200&",

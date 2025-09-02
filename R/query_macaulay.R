@@ -67,20 +67,14 @@ query_macaulay <-
                    `video` = "video")
 
 
+    # Use the unified connection checker
+    if (is.null(.checkconnection("macaulay"))) {
+      return(invisible(NULL))
+    }
+
     new_csv_file_list <- list()
 
     if (is.null(files)) {
-      # Check internet connection using httr and error handling
-      response <- try(httr::GET("https://www.macaulaylibrary.org/"), silent = TRUE)
-      if (inherits(response, "try-error") ||
-          httr::http_error(response)) {
-        return("No connection to macaulaylibrary.org (check your internet connection!)")
-      }
-
-      content <- httr::content(response, as = "text")
-      if (grepl("Could not connect to the database", content)) {
-        return("macaulaylibrary.org website is apparently down")
-      }
 
       user_input_species <- term
 

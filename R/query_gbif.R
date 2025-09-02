@@ -74,17 +74,8 @@ query_gbif <-
       `interactive resource` = "InteractiveResource"
     )
 
-    # Check internet connection using httr and error handling
-    response <- try(httr::GET("https://api.gbif.org/"), silent = TRUE)
-    if (inherits(response, "try-error") ||
-        httr::http_error(response)) {
-        .failure_message("No connection to GBIF API (check your internet connection!)")
-        return(invisible(NULL))
-    }
-
-    content <- httr::content(response, as = "text", encoding = "UTF-8")
-    if (grepl("Could not connect to the database", content)) {
-      .failure_message("GBIF website is apparently down")
+    # Use the unified connection checker
+    if (is.null(.checkconnection("gbif"))) {
       return(invisible(NULL))
     }
 

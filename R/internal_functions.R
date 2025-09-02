@@ -725,3 +725,42 @@ pblapply_sw_int <- function(X,
 
   return(output)
 }
+
+.checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves", "xenocanto")) {
+  service <- match.arg(service)
+
+  urls <- list(
+    gbif     = "https://api.gbif.org/",
+    inat     = "https://www.inaturalist.org/",
+    macaulay = "https://www.macaulaylibrary.org/",
+    wikiaves = "https://www.wikiaves.com.br",
+    xenocanto = "https://www.xeno-canto.org"
+  )
+
+  messages <- list(
+    gbif     = "GBIF API",
+    inat     = "INaturalist",
+    macaulay = "macaulaylibrary.org",
+    wikiaves = "wikiaves.com.br",
+    xenocanto = "xeno-canto.org"
+  )
+
+  url <- urls[[service]]
+  name <- messages[[service]]
+
+  # Attempt request
+  response <- try(httr::GET(url), silent = TRUE)
+
+  if (inherits(response, "try-error") || httr::http_error(response)) {
+    .failure_message(paste("No connection to", name, "(check your internet connection!)"))
+    return(invisible(NULL))
+  }
+
+  content <- httr::content(response, as = "text", encoding = "UTF-8")
+  if (grepl("Could not connect to the database", content)) {
+    .failure_message(paste(name, "website is apparently down"))
+    return(invisible(NULL))
+  }
+
+  return(invisible(TRUE))
+}
