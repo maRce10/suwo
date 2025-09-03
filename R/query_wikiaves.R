@@ -42,7 +42,7 @@ query_wikiaves <-
     checkmate::reportAssertions(check_results)
 
     # Use the unified connection checker
-    if (is.null(.checkconnection("wikiaves"))) {
+    if (!.checkconnection("wikiaves")) {
       return(invisible(NULL))
     }
 

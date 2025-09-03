@@ -174,11 +174,11 @@ pblapply_sw_int <- function(X,
 }
 
 # info messages
-.message <- function(text) {
+.message <- function(text, suffix = "\n") {
   cat(.color_text(
     text,
     as = "message"),
-    "\n",
+    suffix,
     sep = ""
   )
 }
@@ -703,30 +703,7 @@ pblapply_sw_int <- function(X,
   class(x) == "response"
 }
 
-.check_internet_resource <- function(url, skip.error = FALSE) {
-  output <- "OK"
-  # First check internet connection
-  if (!curl::has_internet()) {
-    .message("No internet connection.")
-    output <- "not_OK"
-  } else {
-    # Then try for timeout problems
-    resp <- .try_GET(url)
-    if (!.is_response(resp)) {
-      .message(resp)
-      output <- "not_OK"
-    } else {
-      if (httr::http_error(resp) & !skip.error) {
-        httr::message_for_status(resp)
-        output <- "not_OK"
-      }
-    }
-  }
-
-  return(output)
-}
-
-.checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves", "xenocanto")) {
+.checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves", "xenocanto", "observation")) {
   service <- match.arg(service)
 
   urls <- list(
@@ -734,7 +711,8 @@ pblapply_sw_int <- function(X,
     inat     = "https://www.inaturalist.org/",
     macaulay = "https://www.macaulaylibrary.org/",
     wikiaves = "https://www.wikiaves.com.br",
-    xenocanto = "https://www.xeno-canto.org"
+    xenocanto = "https://www.xeno-canto.org",
+    observation = "https://observation.org"
   )
 
   messages <- list(
@@ -742,25 +720,26 @@ pblapply_sw_int <- function(X,
     inat     = "INaturalist",
     macaulay = "macaulaylibrary.org",
     wikiaves = "wikiaves.com.br",
-    xenocanto = "xeno-canto.org"
+    xenocanto = "xeno-canto.org",
+    observation = "https://observation.org"
   )
 
   url <- urls[[service]]
   name <- messages[[service]]
 
   # Attempt request
-  response <- try(httr::GET(url), silent = TRUE)
+  response <- try(httr::GET(url,  httr::user_agent("suwo (https://github.com/maRce10/suwo)")), silent = TRUE)
 
   if (inherits(response, "try-error") || httr::http_error(response)) {
     .failure_message(paste("No connection to", name, "(check your internet connection!)"))
-    return(invisible(NULL))
-  }
+    return(FALSE)
+    }
 
   content <- httr::content(response, as = "text", encoding = "UTF-8")
   if (grepl("Could not connect to the database", content)) {
     .failure_message(paste(name, "website is apparently down"))
-    return(invisible(NULL))
+    return(FALSE)
   }
 
-  return(invisible(TRUE))
+  return(TRUE)
 }

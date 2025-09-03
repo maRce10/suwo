@@ -63,6 +63,11 @@ query_gbif <-
     # report errors
     checkmate::reportAssertions(check_results)
 
+    # Use the unified connection checker
+    if (!.checkconnection("gbif")) {
+      return(invisible(NULL))
+    }
+
     # assign a value to format
     format <- rlang::arg_match(format)
 
@@ -74,10 +79,7 @@ query_gbif <-
       `interactive resource` = "InteractiveResource"
     )
 
-    # Use the unified connection checker
-    if (is.null(.checkconnection("gbif"))) {
-      return(invisible(NULL))
-    }
+
 
     srch_trm <- paste0(
       "https://api.gbif.org/v1/occurrence/search?limit=300&",

@@ -54,19 +54,11 @@ query_observation <-
       `image` = "StillImage")
 
 
-    # Check internet connection using httr and error handling
-    response <- try(httr::GET("https://observation.org"), silent = TRUE)
-    if (inherits(response, "try-error") ||
-        httr::http_error(response)) {
-      cat("No connection to observation.org (check your internet connection!)")
+    # Use the unified connection checker
+    if (!.checkconnection("observation")) {
       return(invisible(NULL))
     }
 
-    content <- httr::content(response, as = "text")
-    if (grepl("Could not connect to the database", content)) {
-      cat("observation.org website is apparently down")
-      return(invisible(NULL))
-    }
     # format JSON
     srch_trm <- paste0("https://observation.org/api/v1/species/search/?",
                        "q=",

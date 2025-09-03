@@ -26,7 +26,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_inaturalist(term = 'Turdus iliacus', format = "sound", cores = 4)
+# df1 <- query_inaturalist(term = 'Turdus plebejus', format = "sound")
 #' View(df1)
 #' }
 #'
@@ -57,7 +57,7 @@ query_inaturalist <- function(term,
   inat_format <- switch(format, sound = "sounds", image = "photos")
 
   # Use the unified connection checker
-  if (is.null(.checkconnection("inat"))) {
+  if (!.checkconnection("inat")) {
     return(invisible(NULL))
   }
 

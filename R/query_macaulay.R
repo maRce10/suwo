@@ -68,7 +68,7 @@ query_macaulay <-
 
 
     # Use the unified connection checker
-    if (is.null(.checkconnection("macaulay"))) {
+    if (!.checkconnection("macaulay")) {
       return(invisible(NULL))
     }
 
@@ -180,7 +180,7 @@ query_macaulay <-
         new_csv_file_list[[length(new_csv_file_list) + 1]] <- .monitor_new_files(path  = path)
 
         # let users know the name of the csv file that was read
-        .message("The data will be read from the file:")
+        .message("The data will be read from the file:", suffix = " ")
 
         cat(paste(new_csv_file_list[[length(new_csv_file_list)]], "\n"))
       }

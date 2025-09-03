@@ -317,7 +317,7 @@ The GBIF repository dataset may me consulted to filter what repositories the use
 
 ```{r}
 
-gbif_datasets <- check_gbif_datasets()
+gbif_datasets <- check_gbif_datasets(path = tempdir())
 
 ```
 

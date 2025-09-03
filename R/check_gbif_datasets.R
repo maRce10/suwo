@@ -21,18 +21,10 @@
 #'
 
 check_gbif_datasets <- function(path = ".") {
-  # Check internet connection
-  response <- try(httr::GET("https://www.gbif.org"), silent = TRUE)
 
-  if (inherits(response, "try-error") ||
-      httr::http_error(response)) {
-    stop("No connection to GBIF (check your internet connection!)")
-  }
-
-  # Check if GBIF website is down
-  content_text <- httr::content(response, "text", encoding = "UTF-8")
-  if (grepl("Could not connect to the database", content_text)) {
-    stop("GBIF website is apparently down")
+  # Use the unified connection checker
+  if (!.checkconnection("gbif")) {
+    return(invisible(NULL))
   }
 
   # Download the CSV data

@@ -527,7 +527,7 @@ unlink(list.files(pattern = "ohun\\.pdf", path = "."))
 system("R CMD Rd2pdf .")
 
 #built site
-# pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
+pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
 # pkgdown::build_articles()
 # 
 
