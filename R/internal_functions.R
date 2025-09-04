@@ -720,6 +720,10 @@ pblapply_sw_int <- function(X,
 }
 
 .checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves", "xenocanto", "observation")) {
+
+  # set user agent option globally
+  options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
+
   service <- match.arg(service)
 
   urls <- list(

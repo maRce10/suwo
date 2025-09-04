@@ -1,3 +1,38 @@
 url: https://marce10.github.io/suwo
 template:
   bootstrap: 5
+
+
+reference:
+- title: Query media metadata
+  desc: >
+    Obtain media metadata from various biodiversity repositories
+  contents:
+  - query_gbif
+  - query_inaturalist
+  - query_macaulay
+  - query_observation
+  - query_wikiaves
+  - query_xenocanto
+
+- title: Obtain media files
+  desc: >
+    Download media files from repositories
+  contents:
+  - download_media
+
+- title: Handle query metadata
+  desc: >
+    Data exploration and manipulation
+  contents:
+  - update_query
+  - map_locations
+  - merge_query_results
+
+- title: Misellaneous
+  desc: >
+    Additional functions
+  contents:
+  - check_gbif_datasets
+  - taxon_code_search
+
