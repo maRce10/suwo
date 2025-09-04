@@ -4,14 +4,18 @@
 #' @inheritParams template_params
 #' @param metadata Data frame with the output of any of the media query functions in this package ( \code{\link{query_gbif}}, \code{\link{query_observation}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_macaulay}}, \code{\link{query_xenocanto}}).
 #' @param path Directory path where the output media files will be saved. By default files are saved into the current working directory (\code{"."}).
-#' @return media files
+#' @param overwrite Logical. If TRUE, existing files (in \code{"path"}) with the same name will be overwritten. Default is FALSE.
+#' @return Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_results} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
 #' @export
 #' @name download_media
-#' @details File downloading process can be interrupted and resume later as long as the working directory is the same.
+#' @details This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_query}}) to add the new media files to the existing media pool.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_macaulay}}
 #' @examples
 #' \dontrun{
-#'   download_media(query_result, path = "./home")
+#'   phae_anth <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
+#'
+#'   # donwload the first to files
+#'   phae_anth_downl <- download_media(metadata = phae_anth[1:2, ], path = tempdir())
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -21,7 +25,8 @@ download_media <-
            path = ".",
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           cores = getOption("mc.cores", 1)) {
+           cores = getOption("mc.cores", 1),
+           overwrite = FALSE) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -72,7 +77,7 @@ download_media <-
 
     # set clusters for windows OS
     if (pb & verbose) {
-      write(file = "", x = "Downloading files...")
+      write(file = "", x = "Downloading media files:")
     }
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
@@ -80,25 +85,76 @@ download_media <-
       cl <- cores
     }
 
-    success_dwnld <-
+    metadata$download_results <-
       unlist(pblapply_sw_int(
         pbar = pb,
         X = seq_len(nrow(metadata)),
         cl = cl,
         FUN = function(x) {
-          .download(metadata, x, path)
+          .download(metadata, x, path, overwrite)
         }
       ))
 
-    if (any(!success_dwnld)) {
-      options(suwo = c(
-        .Options$suwo,
-        list(failed_downloads = metadata$download_file_name[!success_dwnld])
-      ))
+    # report results
+    if (length(unique(metadata$download_results)) > 1)
+      report_message <- c()
 
-      message("Some files couldn't be downloaded, check `.Options$suwo$failed_downloads`")
+
+    # report failed files
+    if (any(metadata$download_results == "failed")) {
+
+      if (sum(metadata$download_results == "failed") == nrow(metadata)){
+      report_message <- .color_text("All files failed to download", as = "failure")
+      } else {
+        report_message <- c(report_message, "x" = paste0(cli::pluralize("{sum(metadata$download_results == 'failed')} file{?s} failed to download")))
+      }
+      # remove file name from "download_file_name"
+      metadata$download_file_name[metadata$download_results == "failed"] <- NA
     }
 
-    # return file names without printing them
-    invisible(file.path(normalizePath(path), metadata$download_file_name[success_dwnld]))
+    # report not-overwritten files
+    if (any(metadata$download_results == "already there (not downloaded)")) {
+
+      if (sum(metadata$download_results == "already there (not downloaded)") == nrow(metadata)){
+        report_message <- .color_text("All files were already there (overwritten = FALSE)", as = "success")
+      } else {
+
+        report_message <- c(report_message, "!" = paste0(cli::pluralize("{sum(metadata$download_results == 'already there (not downloaded)')} file{?s} w{?as/ere} already there (overwritten = FALSE)")))
+      }
+    }
+
+    # report overwritten files
+    if (any(metadata$download_results == "overwritten")) {
+
+      if (sum(metadata$download_results == "overwritten") == nrow(metadata)){
+        report_message <- .color_text("All files were downloaded successfully (and all were overwritten)", as = "success")
+      } else {
+        report_message <- c(report_message, "v" = paste0(cli::pluralize("{sum(metadata$download_results == 'overwritten')} file{?s} w{?as/ere} downloaded (and overwritten)")))
+      }
+    }
+
+        # report successful files
+    if (any(metadata$download_results == "saved")) {
+
+      if (sum(metadata$download_results == "saved") == nrow(metadata)){
+        report_message <- .color_text("All files were downloaded successfully", as = "success")
+      } else {
+        report_message <- c(report_message, "v" = paste0(cli::pluralize("{sum(metadata$download_results == 'saved')} file{?s} w{?as/ere} downloaded successfully")))
+      }
+    }
+
+    if (length(unique(metadata$download_results)) > 1)
+    report_message <-  c(report_message, "i" = "check  the `download_results` column in the output data frame (invisibly returned) for details ")
+
+
+    # report download results
+    if (verbose){
+      cli::cli_bullets(report_message)
+    }
+
+    # remove extra column
+    metadata$non_dup_key <- NULL
+
+    # return data frame without printing them
+    invisible(metadata)
   }

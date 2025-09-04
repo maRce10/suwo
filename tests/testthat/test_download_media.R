@@ -22,7 +22,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(basename(a) %in% expected_files))
+  expect_true(all(a$download_file_name %in% expected_files))
 
   })
 
@@ -49,7 +49,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(basename(a) %in% c("Phaethornis_anthophilus-XC532163.mp3", "Phaethornis_anthophilus-XC568491.mp3")))
+  expect_true(all(a$download_file_name %in% c("Phaethornis_anthophilus-XC532163.mp3", "Phaethornis_anthophilus-XC568491.mp3")))
 
 })
 
@@ -79,7 +79,7 @@ test_that("wikiaves Glaucis dohrnii sp download, all.data = TRUE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(basename(a) %in% expected_files))
+  expect_true(all(a$download_file_name %in% expected_files))
 
 })
 
@@ -107,7 +107,7 @@ test_that("wikiaves Urubitinga solitaria sp download image all.data = FALSE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(basename(a) %in% expected_files))
+  expect_true(all(a$download_file_name %in% expected_files))
 
 })
 
@@ -137,7 +137,7 @@ test_that("search GBIF sp download image all_data = TRUE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(basename(a) %in% expected_files))
+  expect_true(all(a$download_file_name %in% expected_files))
 
 })
 
@@ -165,7 +165,7 @@ test_that("search GBIF sp download sound all_data = FALSE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(basename(a) %in% expected_files))
+  expect_true(all(a$download_file_name %in% expected_files))
 })
 
 ## iNaturalist
@@ -192,7 +192,7 @@ test_that("search inaturalist sp download all_data = TRUE", {
   exp_files <- c("Agalychnis_lemur-INAT303641290-1.jpeg", "Agalychnis_lemur-INAT303641290-2.jpeg", "Agalychnis_lemur-INAT303641298-1.jpeg", "Agalychnis_lemur-INAT303641298-2.jpeg", "Agalychnis_lemur-INAT303641298-3.jpeg")
 
   expect_true(all(exp_files %in% fls))
-  expect_true(all(basename(a) %in% exp_files))
+  expect_true(all(a$download_file_name %in% exp_files))
 
 })
 
@@ -217,7 +217,7 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
   expected_files <- c("Rattus_rattus-INAT281653293.m4a", "Rattus_rattus-INAT283643216.mp3")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(basename(a) %in% fls))
+  expect_true(all(a$download_file_name %in% fls))
 
 })
 
@@ -243,7 +243,7 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
 #   expected_files <- c("Glaucis_dohrnii-GBIF3863342525.mp3", "Glaucis_dohrnii-GBIF3034452575.mp3")
 #
 #   expect_true(all(expected_files %in% fls))
-#   expect_true(all(basename(a) %in% fls))
+#   expect_true(all(a$download_file_name %in% fls))
 # })
 
 
@@ -270,7 +270,7 @@ test_that("search macaulay sp download all_data = TRUE", {
   expected_files <- c("Glaucis_dohrnii-ML627919111.mp3", "Glaucis_dohrnii-ML624733750.mp3")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(basename(a) %in% fls))
+  expect_true(all(a$download_file_name %in% fls))
 
 })
 
@@ -297,7 +297,7 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
   expected_files <- c("Harpia_harpyja-ML639757637.jpeg", "Harpia_harpyja-ML639955653.jpeg")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(basename(a) %in% fls))
+  expect_true(all(a$download_file_name %in% fls))
 
 })
 
@@ -324,7 +324,7 @@ test_that("search macaulay sp download video all_data = FALSE", {
   expected_files <- c("Calypte_anna-ML639261756.mp4", "Calypte_anna-ML639255345.mp4")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(basename(a) %in% fls))
+  expect_true(all(a$download_file_name %in% fls))
 
 })
 

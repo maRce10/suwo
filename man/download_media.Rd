@@ -9,7 +9,8 @@ download_media(
   path = ".",
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  cores = getOption("mc.cores", 1)
+  cores = getOption("mc.cores", 1),
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -22,19 +23,24 @@ download_media(
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+
+\item{overwrite}{Logical. If TRUE, existing files (in \code{"path"}) with the same name will be overwritten. Default is FALSE.}
 }
 \value{
-media files
+Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_results} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
 }
 \description{
 \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.
 }
 \details{
-File downloading process can be interrupted and resume later as long as the working directory is the same.
+This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_query}}) to add the new media files to the existing media pool.
 }
 \examples{
 \dontrun{
-  download_media(query_result, path = "./home")
+  phae_anth <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
+
+  # donwload the first to files
+  phae_anth_downl <- download_media(metadata = phae_anth[1:2, ], path = tempdir())
 }
 
 }

@@ -207,12 +207,22 @@ pblapply_sw_int <- function(X,
 }
 
 # Function to download file according to repository
-.download <- function(metadata, x, path) {
+.download_basic <- function(metadata, x, path, overwrite) {
+
+  # set destination file
+  destfile <- file.path(normalizePath(path), metadata$download_file_name[x])
+
+  exists <- file.exists(destfile)
+    if (exists & !overwrite){
+    (return("already there (not downloaded)"))
+    }
+
   dl_result <- try(download.file(
     url = as.character(metadata$file_url[x]),
-    destfile = file.path(path, metadata$download_file_name[x]),
+    destfile = destfile,
     quiet = TRUE,
     mode = "wb",
+    method = "auto",
     cacheOK = TRUE,
     extra = getOption("download.file.extra")),
   silent = TRUE)
@@ -222,9 +232,10 @@ pblapply_sw_int <- function(X,
     Sys.sleep(0.5)
     dl_result <- try(download.file(
       url = as.character(metadata$file_url[x]),
-      destfile = file.path(path, metadata$download_file_name[x]),
+      destfile = destfile,
       quiet = TRUE,
       mode = "wb",
+      method = "auto",
       cacheOK = TRUE,
       extra = getOption("download.file.extra")
     ),
@@ -233,11 +244,16 @@ pblapply_sw_int <- function(X,
 
   # if still failed then return FALSE
   if (is(dl_result, "try-error")) {
-    return(FALSE)
+    return("failed")
   } else {
-    return(TRUE)
+    if (exists)
+      (return("overwritten")) else
+    return("saved")
   }
 }
+
+# suppressing warnings from download.file
+.download <- function(...) suppressWarnings(.download_basic(...))
 
 # fix extension so it is homogeneous across functions
 .fix_extension <- function(x) {
