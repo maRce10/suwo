@@ -48,7 +48,7 @@ library(suwo)
   )
   
   if (!is.null(highlight))
-    kbl <- column_spec(kbl, column = which(names(x) %in% highlight), background = "#ccebff", bold = TRUE)
+    kbl <- kableExtra::column_spec(kbl, column = which(names(x) %in% highlight), background = "#ccebff", bold = TRUE)
   
   kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
   kbl <- kableExtra::scroll_box(kbl, width = "100%", height = "300px")
@@ -160,12 +160,12 @@ check.names = FALSE
 query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
 
 query_summary[, names(query_summary) != "Additional Data"] |>
-  kbl(
+  kableExtra::kbl(
     caption = "Table 1: Summary of query functions.",
     format = "html",
     escape = FALSE
   ) |>
-  kable_styling(
+  kableExtra::kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"),
     full_width = FALSE,
     position = "left"
@@ -173,12 +173,12 @@ query_summary[, names(query_summary) != "Additional Data"] |>
 
 
 query_summary[,c("Function", "Additional Data")] |>
-  kbl(
+  kableExtra::kbl(
     caption = "Table 2: Summary of available metadata.",
     format = "html",
     escape = TRUE
   ) |>
-  kable_styling(
+  kableExtra::kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"),
     full_width = FALSE,
     position = "left"
@@ -234,20 +234,20 @@ ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", format = "image")
 # Get audio recordings from xeno-canto
 ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
 
-kable_styling(
-  kable(head(ectophylla_gbif, 2), caption = "First 2 rows from GBIF"),
+kableExtra::kable_styling(
+  kableExtra::kable(head(ectophylla_gbif, 2), caption = "First 2 rows from GBIF"),
   bootstrap_options = c("striped", "hover"),
   full_width = FALSE
 )
 
-kable_styling(
-  kable(head(ectophylla_inat, 2), caption = "First 2 rows from iNaturalist"),
+kableExtra::kable_styling(
+  kableExtra::kable(head(ectophylla_inat, 2), caption = "First 2 rows from iNaturalist"),
   bootstrap_options = c("striped", "hover"),
   full_width = FALSE
 )
 
-kable_styling(
-  kable(head(ectophylla_xc, 2), caption = "First 2 rows from Xeno-Canto"),
+kableExtra::kable_styling(
+  kableExtra::kable(head(ectophylla_xc, 2), caption = "First 2 rows from Xeno-Canto"),
   bootstrap_options = c("striped", "hover"),
   full_width = FALSE
 )

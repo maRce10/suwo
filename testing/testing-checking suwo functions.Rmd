@@ -491,7 +491,6 @@ beepr::beep(2)
 # additional checks
 ```{r}
 pkgcheck::pkgcheck(".")
-
 cyclocomp::cyclocomp_package_dir(".")
 
 pkgstats::pkgstats(".")

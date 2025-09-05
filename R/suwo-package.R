@@ -20,6 +20,7 @@
 #' @import parallel
 #' @import RCurl
 #' @import jsonlite
+#' @importFrom kableExtra cell_spec kbl kable_styling column_spec
 #' @importFrom curl has_internet
 #' @importFrom utils packageVersion
 #' @importFrom viridis viridis
