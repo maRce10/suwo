@@ -1,54 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://marce10.github.io/suwo/404.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/index.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/check_gbif_datasets.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/detect_duplicates.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/download_media.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/map_locations.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/query_gbif.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/query_inaturalist.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/query_macaulay.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/query_observation.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/query_wikiaves.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/query_xenocanto.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/suwo-package.html</loc>
-  </url>
-  <url>
-    <loc>https://marce10.github.io/suwo/reference/taxon_code_search.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://marce10.github.io/suwo/404.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/CONTRIBUTING.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/articles/index.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/articles/suwo.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/authors.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/index.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/news/index.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/check_gbif_datasets.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/download_media.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/index.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/map_locations.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/merge_query_results.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/query_gbif.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/query_inaturalist.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/query_macaulay.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/query_observation.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/query_wikiaves.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/query_xenocanto.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/suwo-package.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/taxon_code_search.html</loc></url>
+<url><loc>https://marce10.github.io/suwo/reference/update_query.html</loc></url>
 </urlset>
+

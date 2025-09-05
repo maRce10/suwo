@@ -5,82 +5,94 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="suwo is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for,obtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please open a new issue if you want to suggest a new repository.">
 <title>Access Nature Media Repositories Through R • suwo</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Access Nature Media Repositories Through R">
+<meta name="description" content="suwo is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for,obtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please open a new issue if you want to suggest a new repository.">
 <meta property="og:description" content="suwo is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for,obtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please open a new issue if you want to suggest a new repository.">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<meta property="og:image" content="https://marce10.github.io/suwo/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="index.html">suwo</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="articles/suwo.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/maRce10/suwo/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/maRce10/suwo/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="suwo-access-nature-media-repositories-through-r">suwo: access nature media repositories through R<a class="anchor" aria-label="anchor" href="#suwo-access-nature-media-repositories-through-r"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="suwo-access-nature-media-repositories-through-r">suwo: access nature media repositories through R<a class="anchor" aria-label="anchor" href="#suwo-access-nature-media-repositories-through-r"></a>
+</h1>
+</div>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
+<p><img src="reference/figures/logo.png" alt="suwo logo" align="right" width="25%" height="25%"></p>
 <p><a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories.</p>
-<p>The package offers functions for:</p>
+<p><a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> offers functions for critical steps in the acquisition of data necessary to develop methods that require a large amount of data.</p>
+<p>The main features of the package are:</p>
 <ul>
 <li>Obtaining media metadata from online repositories</li>
 <li>Downloading associated media files</li>
 <li>Updating data sets with new records</li>
 </ul>
-<p>THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are currently searching for new online repositories to be included in the package. Please <a href="https://github.com/maRce10/suwo/issues/new/choose" class="external-link">open a new issue</a> if you want to suggest a new repository.</p>
-<p>To install the latest developmental version from <a href="https://github.com/" class="external-link">github</a> you will need the R package <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a>:</p>
+<p><strong>THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE AND WILL BE MODIFIED FREQUENTLY.</strong></p>
+<p>We are currently searching for new online repositories to be included in the package. Please <a href="https://github.com/maRce10/suwo/issues/new/choose" class="external-link">open a new issue</a> if you want to suggest a new repository.</p>
+<div class="section level2">
+<h2 id="installing-suwo">Installing suwo<a class="anchor" aria-label="anchor" href="#installing-suwo"></a>
+</h2>
+<p>Install/load the package from CRAN as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># From CRAN would be</span></span>
+<span><span class="co"># install.packages("suwo")</span></span>
+<span></span>
+<span><span class="co"># load package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span></code></pre></div>
+<p>To install the latest developmental version from <a href="https://github.com/" class="external-link">github</a> you will need the R package <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"maRce10/suwo"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#load package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span></code></pre></div>
 <p>Please cite <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> as follows:</p>
 <p>Araya-Salas, M., &amp; Elizondo-Calvo, J. 2023. suwo: access nature media repositories through R. R package version 0.1.0.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
@@ -114,8 +126,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Marcelo Araya-Salas <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3594-619X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Jorge Elizondo-Calvo <br><small class="roles"> Author </small>  </li>
+<li>Marcelo Araya-Salas <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3594-619X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Jorge Elizondo-Calvo <br><small class="roles"> Author </small>   </li>
 </ul>
 </div>
 
@@ -126,7 +138,7 @@
 <li><a href="https://cran.r-project.org/package=suwo" class="external-link"><img src="https://tinyverse.netlify.com/badge/suwo" alt="Dependencies"></a></li>
 <li><a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active The project has reached a stable, usable state and is being actively developed."></a></li>
 <li><a href="https://www.gnu.org/licenses/gpl-3.0.en.html" class="external-link"><img src="https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg" alt="Licence"></a></li>
-<li><a href="/commits/master"><img src="https://img.shields.io/badge/last%20change-2023--08--07-yellowgreen.svg" alt="Last-changedate"></a></li>
+<li><a href="/commits/master"><img src="https://img.shields.io/badge/last%20change-2025--09--03-yellowgreen.svg" alt="Last-changedate"></a></li>
 <li><a href="https://app.codecov.io/gh/maRce10/suwo?branch=master" class="external-link"><img src="https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
@@ -140,15 +152,15 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
