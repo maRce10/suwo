@@ -34,5 +34,4 @@ reference:
     Additional functions
   contents:
   - check_gbif_datasets
-  - taxon_code_search
 

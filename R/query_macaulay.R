@@ -6,6 +6,7 @@
 #' @param path Directory path where the .csv file will be saved. By default it is saved into the current working directory (\code{"."}).
 #' @param files Optional character vector with the name(s) of the .csv file(s) to read. If not provided, the function will open a browser window to the search results page, where the user must download a .csv file with the metadata.
 #' @param dates Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well.
+#' @param taxon_code_info Data frame containing the taxon code information. By default the function will use the internal data frame \code{"ml_taxon_code"} included as example data in the package. This object contains the data from the Clement list from october 2024 (downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.
 #' @return If all_data is not provided the function returns a data frame with the following media
 #' information: id, scientific_name, name, group, group_name, status, rarity, photo,
 #' info_text, permalink, determination_requirements, file_url, repository
@@ -15,24 +16,29 @@
 #' @examples
 #' \dontrun{
 #' # query sounds
-#' df1 <- query_macaulay(term = 'Turdus iliacus', format = "sound",
+#' tur_ili <- query_macaulay(term = "Turdus iliacus", format = "sound",
 #' path = tempdir())
 #'
 #' # test a query with more than 10000 results paging by date
-#' df2 <- query_macaulay(term = 'Calypte costae', type = "image",
+#' cal_cos <- query_macaulay(term = "Calypte costae", type = "image",
 #' path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
 #'
-#' # this is the internal function that splits the search by year intervals
+#' # this is how the internal function that splits the search by year intervals works
 #' # it can split by entire year intervals
 #' suwo:::.date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
 #'
 #' # or by year-month intervals if dates have decimals
 #' # (note that it cannot split across years)
 #' suwo:::.date_ranges(x = seq(2020, 2026, length.out = 10))
+#'
+#' # update clement list (note that this is actually the same list used in the current 'suwo' version, just for the sake of the example)
+#' new_clements <- read.csv("https://www.birds.cornell.edu/clementschecklist/wp-content/uploads/2024/10/Clements-v2024-October-2024-rev.csv")
+#' tur_ili2 <- query_macaulay(term = "Turdus iliacus", format = "sound", taxon_code_info = new_clements, path = tempdir())
 #' }
 #'
 #' @references {
 #' Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
+#' Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, T. A. Fredericks, J. A. Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M. Smith, and C. L. Wood. 2024. The eBird/Clements checklist of Birds of the World: v2024.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
@@ -43,7 +49,8 @@ query_macaulay <-
            all_data = getOption("all_data", FALSE),
            path = ".",
            files = NULL,
-           dates = NULL) {
+           dates = NULL,
+           taxon_code_info = ml_taxon_code) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -66,6 +73,20 @@ query_macaulay <-
                    image = "photo",
                    `video` = "video")
 
+    # get species ML taxon code
+    taxon_code <- .taxon_code_search(term, ml_taxon_code = taxon_code_info)
+
+    # function will stop here
+    if (is.null(taxon_code)) {
+      .failure_message(
+        paste(
+          "No matching species found for ",
+          term,
+          sep = ""
+        )
+      )
+      return(invisible(NULL))
+    }
 
     # Use the unified connection checker
     if (!.checkconnection("macaulay")) {
@@ -75,23 +96,6 @@ query_macaulay <-
     new_csv_file_list <- list()
 
     if (is.null(files)) {
-
-      user_input_species <- term
-
-      taxon_code <- taxon_code_search(user_input_species)
-
-      # function will stop here
-      if (is.null(taxon_code)) {
-        .failure_message(
-          paste(
-            "No matching species found for ",
-            user_input_species,
-            sep = ""
-          )
-        )
-
-        return(NULL)
-      }
 
       # Apply to all elements
       if (!is.null(dates)) {

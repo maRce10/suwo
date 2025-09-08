@@ -801,9 +801,9 @@ map_locations(metadata_ob)
 
 ```{r}
 
-taxon_code_df <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.strings = "")
+ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.strings = "")
 
-usethis::use_data(taxon_code_df, internal = TRUE, overwrite = TRUE)
+usethis::use_data(ml_taxon_code, internal = TRUE, overwrite = TRUE)
 
 ```
 

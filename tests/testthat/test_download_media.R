@@ -327,4 +327,3 @@ test_that("search macaulay sp download video all_data = FALSE", {
   expect_true(all(a$download_file_name %in% fls))
 
 })
-

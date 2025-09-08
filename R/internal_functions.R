@@ -763,3 +763,15 @@ pblapply_sw_int <- function(X,
 
   return(TRUE)
 }
+
+# look up species taxon code for Macaulay queries
+.taxon_code_search <-
+  function(term, ml_taxon_code = ml_taxon_code) {
+    taxon_code <- ml_taxon_code$species_code[ml_taxon_code$scientific.name == term &
+                                               !is.na(ml_taxon_code$scientific.name)]
+    if (length(taxon_code) > 0) {
+      return(taxon_code[1])
+    } else {
+      return(NULL)
+    }
+  }
