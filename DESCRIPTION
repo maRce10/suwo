@@ -20,14 +20,14 @@ Imports:
     httr,
     RCurl,
     curl,
-    jsonlite
+    jsonlite,
+    kableExtra
 Suggests: 
     covr,
     testthat,
     leaflet,
     knitr,
-    rmarkdown,
-    kableExtra
+    rmarkdown
 Depends:
     R (>= 3.5)
 Config/testthat/edition: 3

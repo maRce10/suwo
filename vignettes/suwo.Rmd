@@ -322,17 +322,6 @@ gbif_datasets <- check_gbif_datasets(path = tempdir())
 ```
 
 
-A query search may require a taxon code to correctly display the species observation data. This information can be consulted using the taxon_code_search function that consults the Clements database
-
-```{r}
-
-taxon_code_pharomachrus <- taxon_code_search(term = "Pharomachrus mocinno")
-
-taxon_code_pharomachrus
-
-```
-
-
 <div class="alert alert-warning">
 
 <font size = "4">Saving and sharing query outputs</font>
