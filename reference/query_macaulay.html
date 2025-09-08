@@ -46,7 +46,8 @@
 <span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  files <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dates <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  dates <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  taxon_code_info <span class="op">=</span> <span class="va">ml_taxon_code</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -81,6 +82,10 @@
 <dt id="arg-dates">dates<a class="anchor" aria-label="anchor" href="#arg-dates"></a></dt>
 <dd><p>Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. &gt; 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use <code>dates = c(2010, 2020, 2025)</code>. If years contain decimals searches will be split by months within years as well.</p></dd>
 
+
+<dt id="arg-taxon-code-info">taxon_code_info<a class="anchor" aria-label="anchor" href="#arg-taxon-code-info"></a></dt>
+<dd><p>Data frame containing the taxon code information. By default the function will use the internal data frame <code>"ml_taxon_code"</code> included as example data in the package. This object contains the data from the Clement list from october 2024 (downloaded from <a href="https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/" class="external-link">https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/</a>). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -90,11 +95,17 @@ info_text, permalink, determination_requirements, file_url, repository</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function queries for species observation info in the <a href="https://https://www.macaulaylibrary.org/" class="external-link">Macaulay Library</a> online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. After the .csv file is saved, the user must confirm that into the R console. The function then reads the .csv file and returns a data frame with the metadata. If the file is saved overwritting a pre-existing file the function will not detect it. The query term must be a species name. A maximum of 1000 records per query can be returned. Users must log in to the Macaulay Library/eBird account in order to access large batches of observations.</p>
-    </div>
+    <p>This function queries for species observation info in the <a href="https://https://www.macaulaylibrary.org/" class="external-link">Macaulay Library</a> online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.</p>
+<p>Here are some instructions for using this function properly:</p><ul><li><p>After the .csv file is saved, the user must confirm that into the R console.</p></li>
+<li><p><em>If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it</em></p></li>
+<li><p>The query term must be a species name</p></li>
+<li><p>A maximum of 10000 records per query can be returned, but this can be bypassed by using the <code>dates</code> argument to split the search into smaller date ranges</p></li>
+<li><p>Users must log in to the Macaulay Library/eBird account in order to access large batches of observations</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.</p>
+    <p>Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
+Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, T. A. Fredericks, J. A. Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M. Smith, and C. L. Wood. 2024. The eBird/Clements checklist of Birds of the World: v2024.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -105,20 +116,36 @@ info_text, permalink, determination_requirements, file_url, repository</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># query sounds</span></span></span>
-<span class="r-in"><span><span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">'Turdus iliacus'</span>, format <span class="op">=</span> <span class="st">"sound"</span>,</span></span>
+<span class="r-in"><span><span class="va">tur_ili</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus iliacus"</span>, format <span class="op">=</span> <span class="st">"sound"</span>,</span></span>
 <span class="r-in"><span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># test a query with more than 10000 results paging by date</span></span></span>
-<span class="r-in"><span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">'Calypte costae'</span>, type <span class="op">=</span> <span class="st">"image"</span>,</span></span>
+<span class="r-in"><span><span class="va">cal_cos</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Calypte costae"</span>, type <span class="op">=</span> <span class="st">"image"</span>,</span></span>
 <span class="r-in"><span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1976</span>, <span class="fl">2020</span>, <span class="fl">2022</span>, <span class="fl">2024</span>, <span class="fl">2025</span>, <span class="fl">2026</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># this is the internal function that splits the search by year intervals</span></span></span>
+<span class="r-in"><span><span class="co"># this is how the internal function that splits the search by year intervals works</span></span></span>
 <span class="r-in"><span><span class="co"># it can split by entire year intervals</span></span></span>
 <span class="r-in"><span><span class="fu">suwo</span><span class="fu">:::</span><span class="fu">.date_ranges</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1976</span>, <span class="fl">2020</span>, <span class="fl">2022</span>, <span class="fl">2024</span>, <span class="fl">2025</span>, <span class="fl">2026</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># or by year-month intervals if dates have decimals</span></span></span>
 <span class="r-in"><span><span class="co"># (note that it cannot split across years)</span></span></span>
 <span class="r-in"><span><span class="fu">suwo</span><span class="fu">:::</span><span class="fu">.date_ranges</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2020</span>, <span class="fl">2026</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## update clement list (note that this is actually the same list used in the</span></span></span>
+<span class="r-in"><span><span class="co"># current 'suwo' version, just for the sake of the example)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># url to the clements list version october 2024</span></span></span>
+<span class="r-in"><span><span class="co"># (split so it is not truncaded by CRAN)</span></span></span>
+<span class="r-in"><span><span class="va">clements_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="st">"https://www.birds.cornell.edu/clementschecklist/wp-content/uploads/2024/10"</span>,</span></span>
+<span class="r-in"><span><span class="st">"/Clements-v2024-October-2024-rev.csv"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># read list from url</span></span></span>
+<span class="r-in"><span><span class="va">new_clements</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">clements_url</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># provide "updated" clements list to query_macaulay()</span></span></span>
+<span class="r-in"><span><span class="va">tur_ili2</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus iliacus"</span>, format <span class="op">=</span> <span class="st">"sound"</span>, taxon_code_info <span class="op">=</span> <span class="va">new_clements</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
