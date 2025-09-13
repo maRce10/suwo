@@ -48,7 +48,8 @@ query_gbif <-
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            dataset = NULL,
-           all_data = getOption("all_data", FALSE)) {
+           all_data = getOption("all_data", FALSE),
+           raw_data = getOption("raw_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -164,26 +165,6 @@ query_gbif <-
       if (is.null(query_output_df))
         return(query_output_df)
 
-      # remove rows with NAs in URL
-      if (anyNA(query_output_df$`media-URL`)){
-
-        # save at options
-        options("gbif_excluded_results" = query_output_df[is.na(query_output_df$`media-URL`), ])
-
-        # let users know some observations were excluded
-        cat(.color_text("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('gbif_excluded_results')`).",
-                        as = "warning",
-                        n  = sum(is.na(query_output_df$`media-URL`))
-        )
-        )
-
-        # remove those observations
-        query_output_df <- query_output_df[!is.na(query_output_df$`media-URL`), ]
-      }
-
-      # add file format
-      query_output_df$file_extension <- sub(".*\\.", "", query_output_df$`media-URL`)
-
       # remove everything after the second parenthesis
       query_output_df$species <- sapply(strsplit(query_output_df$species, " "), function(x) paste(x[1], x[2]))
 
@@ -211,12 +192,13 @@ query_gbif <-
           "familykey" = "family_key",
           "fieldnotes" = "comments",
           "eventtime" = "time",
-          "recordist" = "user_name"
+          "media-creator" = "user_name",
+          "media-format" = "file_extension"
         ),
         all_data = all_data,
-        format = format
+        format = format,
+        raw_data = raw_data
       )
 
       return(query_output_df)
-
   }

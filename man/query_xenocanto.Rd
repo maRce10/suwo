@@ -9,7 +9,8 @@ query_xenocanto(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  all_data = getOption("all_data", FALSE)
+  all_data = getOption("all_data", FALSE),
+  raw_data = getOption("raw_data", FALSE)
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ for queries using terms with more than one word.}
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
 \item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+
+\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option (see \code{\link[base]{options}}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).}
 }
 \value{
 The function returns a data frame with the following recording information: recording ID,

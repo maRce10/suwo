@@ -10,7 +10,8 @@ query_wikiaves(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  all_data = getOption("all_data", FALSE)
+  all_data = getOption("all_data", FALSE),
+  raw_data = getOption("raw_data", FALSE)
 )
 }
 \arguments{
@@ -25,9 +26,11 @@ query_wikiaves(
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
 
 \item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+
+\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option (see \code{\link[base]{options}}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).}
 }
 \value{
-A data frame with the metadata of the observations matching the query.  If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.
+A data frame with the metadata of the observations matching the query. Note that parallel downloading of media files (with the argument \code{cores} > 1) does not seem to work on this repository. If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.
 }
 \description{
 \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.

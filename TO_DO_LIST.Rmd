@@ -42,3 +42,4 @@ editor_options:
 * check that all functions have @return info
 * query_observation() search does not seem to include format
 * make "verbose" and "pb" independent
+* Make sure parallel computing works in Windows (why do we have "cl.cores" in parallel::makePSOCKcluster(getOption("cl.cores", cores))?)

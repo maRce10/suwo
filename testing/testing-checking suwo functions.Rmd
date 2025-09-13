@@ -474,6 +474,7 @@ devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE,
 
 # devtools::install()
 run.all()
+options(verbose = TRUE)
 devtools::test()
 
 beepr::beep(2)
@@ -908,21 +909,50 @@ ml_adt$recordist
 
 # find issues in metadata formatting
 ```{r}
+
+run.all()
 term <- "Turdus rufiventris"
-xc_adf <- query_xenocanto(term = term)
+load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
 
-wa_adf <- query_wikiaves(term = term, format = "sound")
- 
-gb_adf <- query_gbif(term = term, format = "sound")
+options(all_data = TRUE, verbose = TRUE, mc.cores = 1)
+basic_colms <- .format_query_output(only_basic_columns = T)
+# xc_adt <- query_xenocanto(term = term)
+# wa_adt_s <- query_wikiaves(term = term, format = "sound")
+# wa_adt_i <- query_wikiaves(term = term, format = "image")
+# gb_adt_s <- query_gbif(term = term, format = "sound")
+# gb_adt_i <- query_gbif(term = term, format = "image")
+# in_adt_s <- query_inaturalist(term = term, format = "sound")
+# in_adt_i <- query_inaturalist(term = term, format = "image")
+# ml_adt_s <- query_macaulay(term = term, format = "sound", path = tempdir())
+# ml_adt_i <- query_macaulay(term = term, format = "image", path = tempdir())
+# 
+# adt_list <- list(xc_adt = xc_adt, wa_adt_s = wa_adt_s, wa_adt_i = wa_adt_i, gb_adt_s = gb_adt_s, gb_adt_i = gb_adt_i, in_adt_s = in_adt_s, in_adt_i= in_adt_i, ml_adt_s = ml_adt_s, ml_adt_i = ml_adt_i)
+# 
+# saveRDS(adt_list, "./testing/adt_list.rds")
 
-in_adf <- query_inaturalist(term = term, format = "sound")
- 
-ml_adf <- query_macaulay(term = term, format = "sound", path = tempdir())
+adt_list <- readRDS("./testing/adt_list.rds")
 
-a <- rbind(xc_adf, wa_adf, gb_adf, in_adf, ml_adf)
+adf_list <- lapply(adt_list, function(x) x[, basic_colms])
+
+comb_adf <- do.call(rbind, adf_list)
+
+(is_num <- sapply(comb_adf, is.numeric))
+
+nmax <- 600
+lapply(comb_adf[ , !is_num], function(x) {
+  y <- unique(x)
+  if (length(y) > nmax) y <- sample(y, nmax)
+  return(y)
+  })
 
 
-unique(a$file_extension)
+comb_adf[grep("Plurinational", comb_adf$country), ]
+
+adt_list$gb_adt_i[is.na(adt_list$gb_adt_i$file_extension), ]
+
+
+View(comb_adf[is.na(comb_adf$file_extension), ])
+unique(comb_adf$file_extension)
 
 a[a$country == "Bolivia (Plurinational State of)" & !is.na(a$country), ]
 
@@ -930,9 +960,18 @@ table(a$repository)
 
 a[is.na(a$file_extension),]
 
-View(gb_adt[is.na(gb_adt$file_extension),])
+gb_adt <- query_gbif(term = term, format = "sound", all_data = TRUE)
 
-gb_adt$occurrenceid[is.na(gb_adt$file_extension)]
+W <- gb_adt[grep("museum",gb_adt$file_extension), ]
+
+
+gb_adt$file_extension
+
+gb_adt[, c("media_format", "file_extension")]
+
+table(gb_adt$media_format, gb_adt$file_extension)
+
+gb_adf$occurrenceid[is.na(gb_adf$file_extension)]
 ```
 
 

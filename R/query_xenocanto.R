@@ -54,7 +54,8 @@ query_xenocanto <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           all_data = getOption("all_data", FALSE)) {
+           all_data = getOption("all_data", FALSE),
+           raw_data = getOption("raw_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -217,6 +218,7 @@ query_xenocanto <-
       # replace "-" with "/" in dates
       query_output_df$date <- gsub("-", "/", query_output_df$date)
 
+
       # format output data frame column names
       query_output_df <- .format_query_output(
         X = query_output_df,
@@ -252,12 +254,9 @@ query_xenocanto <-
           "recordist" = "user_name"
         ),
         all_data = all_data,
-        format = "sound"
+        format = "sound",
+        raw_data = raw_data
       )
-
-
-      # remove duplicates
-      query_output_df <- query_output_df[!duplicated(query_output_df$key), ]
 
       # let user know how many records were found
       if (pb & verbose) {

@@ -30,7 +30,8 @@ query_observation <-
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            token = NULL,
-           all_data = getOption("all_data", FALSE)) {
+           all_data = getOption("all_data", FALSE),
+           raw_data = getOption("raw_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -195,7 +196,8 @@ query_observation <-
         "species_name" = "species"
       ),
       all_data = all_data,
-      format = format
+      format = format,
+      raw_data = raw_data
     )
 
     return(query_output_df)

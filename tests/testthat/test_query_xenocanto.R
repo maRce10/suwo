@@ -75,3 +75,15 @@ test_that("test all_data FALSE", {
 
 
 })
+
+test_that("test raw_data TRUE", {
+
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- query_xenocanto(term = 'Phaethornis anthophilus', raw_data = TRUE)
+
+  expect_true(ncol(df1) == 45)
+
+
+})

@@ -54,7 +54,8 @@
 #' new_clements <- read.csv(clements_url)
 #'
 #' # provide "updated" clements list to query_macaulay()
-#' tur_ili2 <- query_macaulay(term = "Turdus iliacus", format = "sound", taxon_code_info = new_clements, path = tempdir())
+#' tur_ili2 <- query_macaulay(term = "Turdus iliacus", format = "sound",
+#'  taxon_code_info = new_clements, path = tempdir())
 #' }
 #'
 #' @references {
@@ -68,6 +69,7 @@ query_macaulay <-
            format = c("sound", "image", "video"),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
+           raw_data = getOption("raw_data", FALSE),
            path = ".",
            files = NULL,
            dates = NULL,
@@ -243,8 +245,9 @@ query_macaulay <-
       ),
       all_data = all_data,
       format = format,
-      input_file = file.path(normalizePath(path), unlist(new_csv_file_list))
-    )
+      input_file = file.path(normalizePath(path), unlist(new_csv_file_list)),
+      raw_data = raw_data
+      )
 
     if (verbose) {
       .success_message(text = paste0("{n} matching ", format, " file{?s} found"), n = nrow(query_output_df), format = format, suffix = "")
@@ -252,10 +255,10 @@ query_macaulay <-
 
 
     if (nrow(query_output_df) == 10000) {
-      .color_text(
+      cat(.color_text(
         paste("The query returned 10,000 records, which is the maximum allowed. It is likely that more", format, "files that matched the query exists but were not retrieved."),
         as = "warning"
-      )
+      ))
     }
 
     return(query_output_df)

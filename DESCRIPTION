@@ -21,7 +21,9 @@ Imports:
     RCurl,
     curl,
     jsonlite,
-    kableExtra
+    kableExtra,
+    lubridate,
+    tools
 Suggests: 
     covr,
     testthat,

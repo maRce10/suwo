@@ -256,26 +256,42 @@ pblapply_sw_int <- function(X,
 .download <- function(...) suppressWarnings(.download_basic(...))
 
 # fix extension so it is homogeneous across functions
-.fix_extension <- function(x) {
+.fix_extension <- function(x, url) {
 
   # if the strings contains "?" extract string before "?"
   if (any(grepl("\\?", x)))
     x <- gsub("\\?.*$", "", x)
 
+  # if is NA then try to get from url
+  if (any(is.na(x))) {
+    url_ext <- tools::file_ext(url[is.na(x)])
+    url_ext[url_ext %in% c("", ".", " ")] <- NA
+    x[is.na(x)] <- url_ext
+  }
+
   # jpg to jpeg
-  x <- gsub("jpg$", "jpeg", x, ignore.case = TRUE)
+  x <- ifelse(grepl("jpg$|jpeg$", x, ignore.case = TRUE), "jpeg", x)
+
+  # png
+  x <- ifelse(grepl("png$", x, ignore.case = TRUE), "png", x)
+
+  # gif
+  x <- ifelse(grepl("gif$", x, ignore.case = TRUE), "gif", x)
 
   # tif to tiff
-  x <- gsub("tif$", "tiff", x, ignore.case = TRUE)
+  x <- ifelse(grepl("tif$", x, ignore.case = TRUE), "tiff", x)
 
   # mpeg to mp3
-  x <- gsub("mpeg$|mpga$", "mp3", x, ignore.case = TRUE)
+  # x <- gsub("mpeg$|mpga$", "mp3", x, ignore.case = TRUE)
+  x <- ifelse(grepl("mpeg$|mpga$|mpeg3$", x, ignore.case = TRUE), "mp3", x)
 
   # x-wav to wav
-  x <- gsub("x-wav$", "wav", x, ignore.case = TRUE)
+  # x <- gsub("x-wav$|vnd.wave$", "wav", x, ignore.case = TRUE)
+  x <- ifelse(grepl("x-wav$|vnd.wave$", x, ignore.case = TRUE), "wav", x)
 
   # x-m4a to m4a
-  x <- gsub("x-m4a$", "m4a", x, ignore.case = TRUE)
+  # x <- gsub("x-m4a$|mp4$", "m4a", x, ignore.case = TRUE)
+  x <- ifelse(grepl("x-m4a$|mp4$", x, ignore.case = TRUE), "m4a", x)
 
   # convert to lower case
   x <- tolower(x)
@@ -322,9 +338,14 @@ pblapply_sw_int <- function(X,
                                  column_names,
                                  all_data,
                                  format,
+                                 raw_data = FALSE,
                                  call,
                                  input_file = NA,
                                  only_basic_columns = FALSE) {
+
+  if (raw_data)
+    return(X)
+
   basic_colums <- c(
     "repository",
     "format",
@@ -398,14 +419,22 @@ pblapply_sw_int <- function(X,
                      stop = 16)
   }
 
+  # fix time
+  ## for Macaulay first
   if (X$repository[1] == "Macaulay Library") {
     X$time <- ifelse(nchar(X$time) == 3, paste0(0, X$time), X$time)
 
     X$time <- paste0(substr(X$time, 1, 2), ":", substr(X$time, 3, 4))
   }
 
+  # homogenize time
+  X$time <- .convert_times(X$time)
+
+  # homogenize date
+  X$date <- .homogenize_dates(X$date)
+
   # fix extension
-  X$file_extension <- .fix_extension(X$file_extension)
+  X$file_extension <- .fix_extension(X$file_extension, url = X$file_url)
 
   # replace "" with NA
   X$country[X$country == ""] <- NA
@@ -414,6 +443,28 @@ pblapply_sw_int <- function(X,
   # order so basic columns go first
   non_basic_colms <- setdiff(names(X), basic_colums)
   X <- X[, c(basic_colums, non_basic_colms)]
+
+  # remove rows with NAs in URL
+  if (anyNA(X$file_url)){
+
+    option_df_name <- tolower(paste0(X$repository[1], "_excluded_results"))
+
+    # save at options
+    options(stats::setNames(list(X[is.na(X$file_url), ]), option_df_name))
+
+
+    # let users know some observations were excluded
+    cat(.color_text(paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('",option_df_name,"')`)."),
+                    as = "warning",
+                    n  = sum(is.na(X$file_url))
+    )
+    )
+
+    # remove those observations
+    X <- X[!is.na(X$file_url), ]
+  }
+
+
 
   if (!all_data) {
     # remove columns that are not basic
@@ -544,7 +595,6 @@ pblapply_sw_int <- function(X,
   return(dates_df)
 }
 
-
 # monitor if a new file is added
 .monitor_new_files <- function(path, interval = 1) {
   # Create initial snapshot
@@ -579,6 +629,126 @@ pblapply_sw_int <- function(X,
     # Update snapshot for next comparison
     prev_snap <- current_snap
   }
+}
+
+# homogenize dates
+.homogenize_dates <- function(date_strings) {
+    vapply(date_strings, function(date_str) {
+      # If input is NA, return NA
+      if (is.na(date_str)) {
+        return(NA_character_)
+      }
+
+      # Try to parse the date
+      parsed <- lubridate::parse_date_time(date_str,
+                                orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
+                                truncated = 2,
+                                quiet = TRUE)
+
+      # If parsing succeeded, convert to Date format
+      if (!is.na(parsed)) {
+        as.character(as.Date(parsed))
+      } else {
+        # If parsing failed but input is not NA, return the input value
+        date_str
+      }
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+  }
+
+# Function to check if a string is a valid time
+.is_valid_time <- function(time_str) {
+  if (is.na(time_str)) return(FALSE)
+
+  # Remove spaces and convert to lowercase for easier matching
+  clean_str <- tolower(trimws(time_str))
+
+  # Check for invalid patterns first
+  if (grepl("^\\?|xx|morning|^[a-z]+$", clean_str) && !grepl("am|pm", clean_str)) {
+    return(FALSE)
+  }
+
+  # Check for various valid time patterns
+  # HH:MM, H:MM, HH.MM, H.MM patterns with optional AM/PM
+  if (grepl("^\\d{1,2}[:.]\\d{2}\\s*(am|pm)?$", clean_str) ||
+      grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
+    return(TRUE)
+  }
+
+  return(FALSE)
+}
+
+# Function to convert time strings to standardized format
+.convert_times <- function(time_strings) {
+  vapply(time_strings, function(time_str) {
+    if (is.na(time_str) || !.is_valid_time(time_str)) {
+      return(NA_character_)
+    }
+
+    # Clean the string
+    clean_str <- tolower(trimws(time_str))
+
+    # Handle simple am/pm without time (like "6am")
+    if (grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
+      time_num <- as.numeric(sub("\\s*(am|pm)$", "", clean_str))
+      period <- ifelse(grepl("pm$", clean_str), "pm", "am")
+
+      # Convert to 24-hour format
+      if (period == "pm" && time_num < 12) {
+        hours <- time_num + 12
+      } else if (period == "am" && time_num == 12) {
+        hours <- 0
+      } else {
+        hours <- time_num
+      }
+
+      return(sprintf("%02d:00", hours))
+    }
+
+    # Handle times with AM/PM
+    if (grepl("am|pm", clean_str)) {
+      time_part <- sub("\\s*(am|pm)$", "", clean_str)
+      period <- ifelse(grepl("pm$", clean_str), "pm", "am")
+
+      # Handle both colon and dot separators
+      if (grepl("[:.]", time_part)) {
+        parts <- strsplit(time_part, "[:.]")[[1]]
+      } else {
+        # If no separator, assume it's just hours
+        parts <- c(time_part, "00")
+      }
+
+      hours <- as.numeric(parts[1])
+      minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
+
+      # Convert to 24-hour format
+      if (period == "pm" && hours < 12) {
+        hours <- hours + 12
+      } else if (period == "am" && hours == 12) {
+        hours <- 0
+      }
+
+      return(sprintf("%02d:%02d", hours, minutes))
+    }
+
+    # Handle 24-hour times without AM/PM
+    if (grepl("[:.]", clean_str)) {
+      parts <- strsplit(clean_str, "[:.]")[[1]]
+    } else {
+      # If no separator, assume it's just hours
+      parts <- c(clean_str, "00")
+    }
+
+    hours <- as.numeric(parts[1])
+    minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
+
+    # Standardize to HH:MM format
+    sprintf("%02d:%02d", hours, minutes)
+  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+}
+
+# fix image size in INAT
+.replace_image_size <- function(file_url) {
+  gsub("square", "original", file_url)
 }
 
 ## function to check arguments
@@ -694,14 +864,30 @@ pblapply_sw_int <- function(X,
   return(check_collection)
 }
 
-# message when loading package
-.onAttach <-
-  function(libname, pkgname) {
-    packageStartupMessage("\nPlease cite 'suwo' as: \n")
-    packageStartupMessage(
-      "Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media repositories through R. R package version 0.1.0."
-    )
+.onLoad <- function(libname, pkgname) {
+  # Store original options to restore later
+  op <- options()
+
+  # Package-specific default options
+  op.yourpackage <- list(
+    mc.cores = 1,
+    pb = TRUE,
+    verbose = TRUE,
+    all_data = FALSE,
+    raw_data = FALSE
+  )
+
+  # Only set options that haven't been set by user
+  toset <- !(names(op.yourpackage) %in% names(op))
+  if(any(toset)) {
+    options(op.yourpackage[toset])
   }
+
+  # Store original state for restoration
+  assign(".original_options", op, envir = parent.env(environment()))
+
+  invisible()
+}
 
 ## check internet
 # gracefully fail if internet resource is not available
@@ -775,3 +961,28 @@ pblapply_sw_int <- function(X,
       return(NULL)
     }
   }
+
+.onUnload <- function(libpath) {
+  # Get original options
+  original_op <- get(".original_options", envir = parent.env(environment()))
+
+  # Restore only the options that were modified by our package
+  package_options <- c("mc.cores", "pb", "verbose", "all_data", "raw_data")
+
+  for(opt in package_options) {
+    if(opt %in% names(original_op)) {
+      # Restore original value
+      do.call(options, setNames(list(original_op[[opt]]), opt))
+    } else {
+      # Option didn't exist before, so remove it
+      do.call(options, setNames(list(NULL), opt))
+    }
+  }
+
+  # Clean up
+  if(exists(".original_options", envir = parent.env(environment()))) {
+    rm(".original_options", envir = parent.env(environment()))
+  }
+
+  invisible()
+}

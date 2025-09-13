@@ -11,7 +11,8 @@ query_gbif(
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
   dataset = NULL,
-  all_data = getOption("all_data", FALSE)
+  all_data = getOption("all_data", FALSE),
+  raw_data = getOption("raw_data", FALSE)
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ query_gbif(
 \item{dataset}{see \url{https://www.gbif.org/dataset/search?q=}.}
 
 \item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+
+\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option (see \code{\link[base]{options}}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).}
 }
 \value{
 If all_data is \code{FALSE} the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is \code{TRUE} the function returns a data frame with the following media

@@ -1,12 +1,9 @@
 #' Access 'inaturalist' recordings and metadata
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
+#' @inheritParams template_params
 #' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
-#' @param format Character vector with the media format to query for. Options are 'sound', 'image'. Required.
-#' @param verbose Logical argument that determines if text is shown in console. Default is \code{TRUE}.
-#' @param cores Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control progress bar. Default is \code{TRUE}.
+#' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
 #' @param identified Logical argument to define if search results are categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are categorized as verifiable by inaturalist.
 #' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
@@ -43,7 +40,8 @@ query_inaturalist <- function(term,
                               format = c("sound", "image"),
                               identified = FALSE,
                               verifiable = FALSE,
-                              all_data = getOption("all_data", FALSE)) {
+                              all_data = getOption("all_data", FALSE),
+                              raw_data = getOption("raw_data", FALSE)) {
   arguments <- as.list(base::match.call())[-1]
 
   for (i in names(arguments)) {
@@ -160,8 +158,11 @@ query_inaturalist <- function(term,
 
   query_output_df$user_name[query_output_df$user_name != "no rights reserved"] <- sapply(strsplit(query_output_df$user_name[query_output_df$user_name != "no rights reserved"], ") "), "[[", 2)
 
+  # fix image size in URL
+  query_output_df$url <- vapply(query_output_df$url, .replace_image_size, FUN.VALUE = character(1))
+
   # format output data frame column names
-  query_output_df <- .format_query_output(
+    query_output_df <- .format_query_output(
     X = query_output_df,
     call = base::match.call(),
     column_names = c(
@@ -170,15 +171,9 @@ query_inaturalist <- function(term,
       "url" = "file_url"
     ),
     all_data = all_data,
-    format = format
+    format = format,
+    raw_data = raw_data
   )
-
-  replace_image_size <- function(file_url) {
-    gsub("square", "original", file_url)
-  }
-  for (i in seq_len(nrow(query_output_df))) {
-    query_output_df$file_url[i] <- replace_image_size(query_output_df$file_url[i])
-  }
 
   query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
 
