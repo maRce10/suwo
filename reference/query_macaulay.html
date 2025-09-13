@@ -44,6 +44,7 @@
 <span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sound"</span>, <span class="st">"image"</span>, <span class="st">"video"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  files <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dates <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -69,6 +70,10 @@
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
 <dd><p>Logical argument that determines if all data available from database is shown in the results of search. Default is <code>FALSE</code>. Can be set globally for the current R session via the "all_data" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
+
+
+<dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
+<dd><p>Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is <code>FALSE</code>. Can be set globally for the current R session via the "raw_data" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>). If <code>TRUE</code>  <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
@@ -145,7 +150,8 @@ Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, T. A. Frederic
 <span class="r-in"><span><span class="va">new_clements</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">clements_url</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># provide "updated" clements list to query_macaulay()</span></span></span>
-<span class="r-in"><span><span class="va">tur_ili2</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus iliacus"</span>, format <span class="op">=</span> <span class="st">"sound"</span>, taxon_code_info <span class="op">=</span> <span class="va">new_clements</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tur_ili2</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus iliacus"</span>, format <span class="op">=</span> <span class="st">"sound"</span>,</span></span>
+<span class="r-in"><span> taxon_code_info <span class="op">=</span> <span class="va">new_clements</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -47,7 +47,8 @@
 <span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sound"</span>, <span class="st">"image"</span><span class="op">)</span>,</span>
 <span>  identified <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verifiable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -60,20 +61,19 @@
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric. Controls whether parallel computing is applied.
-It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.</p></dd>
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
-<dd><p>Logical argument to control progress bar. Default is <code>TRUE</code>.</p></dd>
+<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>. Can be set globally for the current R session via the "pb" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical argument that determines if text is shown in console. Default is <code>TRUE</code>.</p></dd>
+<dd><p>Logical argument that determines if text is shown in console. Default is <code>TRUE</code>. Can be set globally for the current R session via the "verbose" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
-<dd><p>Character vector with the media format to query for. Options are 'sound', 'image'. Required.</p></dd>
+<dd><p>Character vector with the media format to query for. Currently 'image' and 'sound' are available.</p></dd>
 
 
 <dt id="arg-identified">identified<a class="anchor" aria-label="anchor" href="#arg-identified"></a></dt>
@@ -86,6 +86,10 @@ It specifies the number of cores to be used. Default is 1 (i.e. no parallel comp
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
 <dd><p>Logical argument that determines if all data available from database is shown in the results of search. Default is <code>TRUE</code>.</p></dd>
+
+
+<dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
+<dd><p>Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is <code>FALSE</code>. Can be set globally for the current R session via the "raw_data" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>). If <code>TRUE</code>  <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -44,7 +44,8 @@
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,6 +79,10 @@ for queries using terms with more than one word.</p></dd>
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
 <dd><p>Logical argument that determines if all data available from database is shown in the results of search. Default is <code>FALSE</code>. Can be set globally for the current R session via the "all_data" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
+
+
+<dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
+<dd><p>Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is <code>FALSE</code>. Can be set globally for the current R session via the "raw_data" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>). If <code>TRUE</code>  <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).</p></dd>
 
 </dl></div>
     <div class="section level2">
