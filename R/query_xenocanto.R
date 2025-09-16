@@ -51,175 +51,123 @@
 
 query_xenocanto <-
   function(term,
+           key,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
            raw_data = getOption("raw_data", FALSE)) {
+
+    if (missing(key) || !nzchar(key)) {
+      stop("An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account.")
+    }
+
     # check arguments
     arguments <- as.list(base::match.call())[-1]
-
-
-    # add objects to argument names
     for (i in names(arguments)) {
       arguments[[i]] <- get(i)
     }
-
-
-    # check each arguments
     check_results <- .check_arguments(args = arguments)
-
-
-    # report errors
     checkmate::reportAssertions(check_results)
 
-    # Use the unified connection checker
     if (!.checkconnection("xenocanto")) {
       return(invisible(NULL))
     }
 
-
-    # search recs in xeno-canto (results are returned in pages with 500 recordings each)
     if (pb & verbose) {
-
-      cat(.color_text(
-        paste0("Obtaining metadata:\n"),
-        as = "success"))
-
+      cat(.color_text("Obtaining metadata:\n", as = "success"))
     }
 
-    # format query term
-    if (grepl("\\:", term)) {
-      # if using advanced searc
-      # replace first space with %20 when using full species name
-      first_colon_pos <- gregexpr(":", term)[[1]][1]
-      spaces_pos <- gregexpr(" ", term)[[1]]
+    # --- format query term properly ---
+    # tags where multi-word values should be quoted
+    tags_to_quote <- c("sp:", "gen:", "cnt:", "loc:")
 
-
-      if (length(spaces_pos) > 1) {
-        if (all(spaces_pos[1:2] < first_colon_pos)) {
-          term <- paste0(
-            substr(term, start = 0, stop = spaces_pos - 1),
-            "%20",
-            substr(term, start = spaces_pos + 1, stop = nchar(term))
-          )
+    for (tag in tags_to_quote) {
+      if (grepl(tag, term, ignore.case = TRUE)) {
+        # extract everything after the tag
+        value <- sub(paste0("^.*", tag), "", term, ignore.case = TRUE)
+        # only quote if more than one word and not already quoted
+        if (length(strsplit(value, "\\s+")[[1]]) > 1 &&
+            !grepl('^".*"$', value)) {
+          term <- sub(paste0(tag, value),
+                      paste0(tag, '"', value, '"'),
+                      term, ignore.case = TRUE)
         }
       }
     }
 
-    # replace remaining spaces with "&"
-    term <- gsub(" ", "+", term)
+    # finally URL encode the whole term so quotes → %22, spaces → %20, etc.
+    term <- utils::URLencode(term, reserved = TRUE)
 
     # initialize search
-    query <-
-      jsonlite::fromJSON(paste0(
-        "https://www.xeno-canto.org/api/2/recordings?query=",
-        term
-      ))
-
+    query <- jsonlite::fromJSON(paste0(
+      "https://www.xeno-canto.org/api/3/recordings?query=",
+      term, "&key=", key
+    ))
 
     if (as.numeric(query$numRecordings) == 0) {
-      if (verbose) {
-        .failure_message(format = "sound")
-      }
+      if (verbose) .failure_message(format = "sound")
       return(invisible(NULL))
     }
 
-    ### loop over pages
-    # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
-      cl <-
-        parallel::makePSOCKcluster(getOption("cl.cores", cores))
+      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
       cl <- cores
     }
 
+    records_list <- pblapply_sw_int(
+      pbar = pb,
+      X = seq_len(query$numPages),
+      cl = cl,
+      FUN = function(y) {
+        query_output <- jsonlite::fromJSON(paste0(
+          "https://www.xeno-canto.org/api/3/recordings?query=",
+          term, "&page=", y, "&key=", key
+        ))
 
-    records_list <-
-      pblapply_sw_int(
-        pbar = pb,
-        X = seq_len(query$numPages),
-        cl = cl,
-        FUN = function(y) {
-          # search for each page
-          query_output <-
-            jsonlite::fromJSON(
-              txt = paste0(
-                "https://www.xeno-canto.org/api/2/recordings?query=",
-                term,
-                "&page=",
-                y
-              )
-            )
-          query_output$recordings$also <- sapply(query_output$recordings$also, paste, collapse = "-")
+        query_output$recordings$also <-
+          sapply(query_output$recordings$also, paste, collapse = "-")
 
-          # split sonogram in 3 columns
-          sono_df <- as.data.frame(query_output$recordings$sono)
+        sono_df <- as.data.frame(query_output$recordings$sono)
+        names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
 
-          names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
+        osci_df <- as.data.frame(query_output$recordings$osci)
+        names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
 
-          # split oscillograms in 3 columns
-          osci_df <- as.data.frame(query_output$recordings$osci)
+        query_output$recordings$sono <- query_output$recordings$osci <- NULL
+        query_output <- cbind(query_output$recordings, sono_df, osci_df)
+        return(query_output)
+      }
+    )
 
-          names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
-
-          # remove raw columns
-          query_output$recordings$sono <- query_output$recordings$osci <- NULL
-
-          query_output <- cbind(query_output$recordings, sono_df, osci_df)
-
-          return(query_output)
-        }
-      )
-
-
-    # determine all column names in all pages
     pooled_column_names <- unique(unlist(lapply(records_list, names)))
-
-
-    # add columns that are missing to each data set
     records_list2 <- lapply(records_list, function(X) {
       nms <- names(X)
       if (length(nms) != length(pooled_column_names)) {
         for (i in pooled_column_names) {
-          X <-
-            data.frame(X,
-                       NA,
-                       stringsAsFactors = FALSE,
-                       check.names = FALSE)
+          X <- data.frame(
+            X, NA,
+            stringsAsFactors = FALSE,
+            check.names = FALSE
+          )
           names(X)[ncol(X)] <- i
         }
       }
       return(X)
     })
-
-
-    # save results in a single data frame
     query_output_df <- do.call(rbind, records_list2)
 
-
     if (as.numeric(query$numRecordings) > 0) {
-      # convert factors to characters
       indx <- sapply(query_output_df, is.factor)
       query_output_df[indx] <- lapply(query_output_df[indx], as.character)
 
-      # create species column and other missing columns
       query_output_df$species <- paste(query_output_df$gen, query_output_df$sp, sep = " ")
-
       query_output_df$file_extension <- sub(".*\\.", "", query_output_df$`file-name`)
-
-      # Add repository ID
       query_output_df$repository <- "Xeno-Canto"
-
-      # re-write file url to use https
-      query_output_df$file <-
-        paste0("https://xeno-canto.org/", query_output_df$id, "/download")
-
-      # replace "-" with "/" in dates
+      query_output_df$file <- paste0("https://xeno-canto.org/", query_output_df$id, "/download")
       query_output_df$date <- gsub("-", "/", query_output_df$date)
 
-
-      # format output data frame column names
       query_output_df <- .format_query_output(
         X = query_output_df,
         call = base::match.call(),
@@ -258,22 +206,14 @@ query_xenocanto <-
         raw_data = raw_data
       )
 
-      # let user know how many records were found
       if (pb & verbose) {
         cat(.color_text(
           paste0("{n} matching sound file{?s} found"),
           as = "success",
-          n = nrow(query_output_df)))
+          n = nrow(query_output_df)
+        ))
       }
-
-
-      # Generate a file path by combining tempdir() with a file name
-      # file_path <- file.path(tempdir(), paste0(term, ".rds"))
-
-
-      # Save the object to the file
-      # MARCELO: I added a try function to avoid errors when saving the file, double check (why do we need to save it and how people can find the RDS)
-      # try(saveRDS(droplevels(query_output_df), file = file_path), silent = TRUE)
       return(droplevels(query_output_df))
     }
   }
+

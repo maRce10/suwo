@@ -6,6 +6,7 @@
 \usage{
 query_xenocanto(
   term,
+  key,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
