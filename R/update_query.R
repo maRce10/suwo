@@ -90,6 +90,7 @@ update_query <-
     if (X$repository[1] == "Xeno-Canto") {
       query_output_new <- query_xenocanto(term = query_term,
                                           cores = cores,
+                                          all_data = query_all_data,
                                           verbose = verbose,
                                           pb = pb)
 
@@ -114,7 +115,7 @@ update_query <-
 
     if (verbose) {
       if (sum_new > 0){
-      cat(.color_text(paste(sum_new, "new entries found"
+      cat(.color_text(paste("\n", sum_new, "new entries found"
       ), "success"), .add_emoji("happy"), "\n")
         } else {
         cat(.color_text("No new entries found", "failure"), .add_emoji("sad"), "\n")

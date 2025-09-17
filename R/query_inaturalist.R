@@ -158,9 +158,6 @@ query_inaturalist <- function(term,
 
   query_output_df$user_name[query_output_df$user_name != "no rights reserved"] <- sapply(strsplit(query_output_df$user_name[query_output_df$user_name != "no rights reserved"], ") "), "[[", 2)
 
-  # fix image size in URL
-  query_output_df$url <- vapply(query_output_df$url, .replace_image_size, FUN.VALUE = character(1))
-
   # format output data frame column names
     query_output_df <- .format_query_output(
     X = query_output_df,

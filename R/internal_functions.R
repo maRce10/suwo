@@ -417,7 +417,10 @@ pblapply_sw_int <- function(X,
     X$time <- substr(x = X$time,
                      start = 12,
                      stop = 16)
-  }
+
+    # fix image size in URL
+    X$file_url <- gsub("square", "original", X$file_url)
+    }
 
   # fix time
   ## for Macaulay first
@@ -746,10 +749,6 @@ pblapply_sw_int <- function(X,
   }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 
-# fix image size in INAT
-.replace_image_size <- function(file_url) {
-  gsub("square", "original", file_url)
-}
 
 ## function to check arguments
 .check_arguments <- function(args) {
