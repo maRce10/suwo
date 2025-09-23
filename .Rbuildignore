@@ -20,3 +20,5 @@ LICENSE.md
 ^examples$
 ^TO_DO_LIST\.Rmd$
 ^suwo_testing\.ipynb$
+^data-raw$
+^suwo_Ectophylla\.Rmd$
