@@ -26,6 +26,34 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
 
   })
 
+## Xeno-Canto
+test_that("Xenocanto Phaethornis anthophilus download folder_by", {
+
+  skip_on_cran()
+  skip_if_offline()
+
+  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
+
+  test_keys <- c("532163", "568491")
+
+  sxc1 <- subset(xc1, key %in% test_keys)
+
+  a <- download_media(metadata = sxc1, path = tempdir(), folder_by = "date")
+
+  fls <- list.files(path = tempdir(), pattern = "mp3$", recursive = TRUE)
+
+  # remove filess
+  unlink(file.path(tempdir(), fls))
+
+  expected_files <- c("2020-03-05/Phaethornis_anthophilus-XC532163.mp3", "2020-06-14/Phaethornis_anthophilus-XC568491.mp3")
+
+  # test
+  expect_true(all(expected_files %in% fls))
+
+  expect_true(all(a$download_file_name %in% basename(expected_files)))
+
+})
+
 test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
 
   skip_on_cran()

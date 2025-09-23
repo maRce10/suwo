@@ -206,8 +206,45 @@ pblapply_sw_int <- function(X,
   )
 }
 
+# sanitize the name of a download folder
+.sanitize_folder_name <- function(name) {
+
+  if (is.na(name)){
+    name <- "unknown_folder"
+    }
+
+  # Remove or replace illegal characters
+  sanitized <- gsub('[<>:"/\\\\|?*]', '_', name)
+
+  # Remove trailing spaces and periods
+  sanitized <- gsub('[ .]+$', '', sanitized)
+
+  # Replace multiple spaces with single space
+  sanitized <- gsub(' +', ' ', sanitized)
+
+  # Trim whitespace
+  sanitized <- trimws(sanitized)
+
+  # Ensure not empty after sanitization
+  if (nchar(sanitized) == 0) {
+    sanitized <- "unknown_folder"
+  }
+
+  return(sanitized)
+}
+
 # Function to download file according to repository
-.download_basic <- function(metadata, x, path, overwrite) {
+.download_basic <- function(metadata, x, path, overwrite, folder_by = NULL) {
+
+  if (!is.null(folder_by)) {
+    folder_name <- .sanitize_folder_name(metadata[x, folder_by])
+    path <- normalizePath(file.path(path, folder_name))
+  }
+
+  # if path does not exist create it
+  if (!dir.exists(path)) {
+    dir.create(path, recursive = TRUE)
+  }
 
   # set destination file
   destfile <- file.path(normalizePath(path), metadata$download_file_name[x])
@@ -858,7 +895,18 @@ pblapply_sw_int <- function(X,
       add = check_collection,
       .var.name = "metadata"
     )
-  }
+
+    if (!is.null(args$folder_by)) {
+      checkmate::assert_multi_class(
+        x = args$metadata[, args$folder_by],
+        classes = c("character", "factor"),
+        add = check_collection,
+        .var.name = "folder_by"
+      )
+    }
+    }
+
+
 
   return(check_collection)
 }

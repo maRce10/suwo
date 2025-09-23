@@ -456,18 +456,6 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 
 # Rcpp::compileAttributes()
 
-#run document twice
-devtools::document(".")
-devtools::document(".")
-# devtools::load_all()
-
-# usethis::use_coverage()
-# pkgcheck::use_github_action_pkgcheck()
-
-#check with devtools
-
-devtools::check(".", document = FALSE, run_dont_test = FALSE, vignettes = FALSE, manual = FALSE)
-
 # devtools::run_examples( start = "rm_sil")
 
 # devtools::build_manual()
@@ -806,6 +794,8 @@ ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.s
 
 usethis::use_data(ml_taxon_code, internal = TRUE, overwrite = TRUE)
 
+usethis::use_data_raw()
+
 ```
 
 
@@ -912,7 +902,6 @@ ml_adt$recordist
 
 run.all()
 term <- "Turdus rufiventris"
-load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
 
 options(all_data = TRUE, verbose = TRUE, mc.cores = 1)
 basic_colms <- .format_query_output(only_basic_columns = T)
@@ -931,6 +920,13 @@ basic_colms <- .format_query_output(only_basic_columns = T)
 # saveRDS(adt_list, "./testing/adt_list.rds")
 
 adt_list <- readRDS("./testing/adt_list.rds")
+
+## save turdus_rufiventris results for example data
+tur_ruf_list <- lapply(adt_list, head) 
+
+names(tur_ruf_list) <- c("xeno_canto_sounds", "wiki_aves_sounds", "wiki_aves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
+
+usethis::use_data(tur_ruf_list, internal = FALSE, overwrite = TRUE)
 
 adf_list <- lapply(adt_list, function(x) x[, basic_colms])
 

@@ -5,6 +5,7 @@
 #' @param metadata Data frame with the output of any of the media query functions in this package ( \code{\link{query_gbif}}, \code{\link{query_observation}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_macaulay}}, \code{\link{query_xenocanto}}).
 #' @param path Directory path where the output media files will be saved. By default files are saved into the current working directory (\code{"."}).
 #' @param overwrite Logical. If TRUE, existing files (in \code{"path"}) with the same name will be overwritten. Default is FALSE.
+#' @param folder_by Character string with the name of a character or factor column in the metadata data frame. If supplied the function will use the unique values in that column to create subfolders within \code{"path"} and the files will be downloaded into the corresponding folder. Default is \code{NULL} which means that no subfolders are created and all files are saved in the path provided. Missing values (NAs) are saved in a folder called "unknown_value". Special characters that are not allowed in folder names will be modified or removed. If any of the folder names already exist in \code{"path"}, they will be used as is.
 #' @return Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_results} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
 #' @export
 #' @name download_media
@@ -26,7 +27,8 @@ download_media <-
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            cores = getOption("mc.cores", 1),
-           overwrite = FALSE) {
+           overwrite = FALSE,
+           folder_by = NULL) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -91,7 +93,7 @@ download_media <-
         X = seq_len(nrow(metadata)),
         cl = cl,
         FUN = function(x) {
-          .download(metadata, x, path, overwrite)
+          .download(metadata, x, path, overwrite, folder_by)
         }
       ))
 

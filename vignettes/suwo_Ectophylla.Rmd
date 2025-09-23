@@ -77,13 +77,7 @@ options(width = 100, max.print = 100)
 ```
 
 
-<div class="alert alert-info">
-
-This vignette provides an overview of the suwo package and its functionalities. For detailed information on each function, please refer to the [function reference](https://maRce10.github.io/suwo/reference/index.html) or use the help files within R (e.g., `?query_gbif`).
-
-</div>
-
-The suwo package is designed to simplify the retrieval of nature media (mostly photos, audio files and videos) across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. 
+The suwo package is designed to simplify the retrieval of nature media across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. 
 
 # Installation
 
@@ -198,12 +192,133 @@ Finding data using suwo follows a basic sequence. First a database is selected a
 
 <font size = "4">Search queries</font>
 
-A search query consists of a term, which in most functions is a species name (except for special queries in `query_xenocanto()`), and a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if only the m of the metadata is generated as the output of the query. Queries may me made to any of the six available query functions that connect to one repository.
+A search query consists of a term (species name), a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if a summary of the metadata is generated as the output of the query. Queries may me made to any of the six available query functions that connect to one repository.
 
 </div>
 
 
-# Case study: 
+# Case study: observations of the Honduran White Bat (*Ectophylla alba*)
+
+The Honduran White Bat is a rare, visually striking species found in Central America. It constructs tents from Heliconia leaves and emits distinct ultrasonic vocalizations. Using suwo, we can easily gather observational data, photos, and sound recordings of this species from various public databases.
+
+Let's say we'd like to analyze the geographic distribution of this species, as well
+as obtain information on the appearance and sound emited by the species.
+
+First, we can obtain data observational data and media from the query functions by
+searching for information on GBIF, INaturalist and Xenocanto.
+
+```{r, eval = TRUE, echo = TRUE}
+
+# Get occurrence data from GBIF
+ectophylla_gbif <- query_gbif(term = "Ectophylla alba", format = "image")
+
+# Get observations from iNaturalist
+ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", format = "image")
+
+# Get audio recordings from xeno-canto
+ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
+
+ectophylla_gbif
+```
+
+```{r, echo=FALSE}
+
+# Get occurrence data from GBIF
+ectophylla_gbif <- query_gbif(term = "Ectophylla alba", format = "image")
+
+# Get observations from iNaturalist
+ectophylla_inat <- query_inaturalist(term = "Ectophylla alba", format = "image")
+
+# Get audio recordings from xeno-canto
+ectophylla_xc <- query_xenocanto(term = "Ectophylla alba")
+
+kableExtra::kable_styling(
+  kableExtra::kable(head(ectophylla_gbif, 2), caption = "First 2 rows from GBIF"),
+  bootstrap_options = c("striped", "hover"),
+  full_width = FALSE
+)
+
+kableExtra::kable_styling(
+  kableExtra::kable(head(ectophylla_inat, 2), caption = "First 2 rows from iNaturalist"),
+  bootstrap_options = c("striped", "hover"),
+  full_width = FALSE
+)
+
+kableExtra::kable_styling(
+  kableExtra::kable(head(ectophylla_xc, 2), caption = "First 2 rows from Xeno-Canto"),
+  bootstrap_options = c("striped", "hover"),
+  full_width = FALSE
+)
+
+```
+
+## Updating queries
+
+When past searches must be checked for new information, the function update_query allows users to update previous searches from the same function to obtain new data starting from the last search. The previous search must be loaded as an rds file because it uses the attributes of the dataframe.
+
+```{r}
+
+#Remove one row from previous query
+ectohpylla_xc <- ectophylla_xc[-1, ]
+#Update the query
+updated_query_result_xenocanto  <- update_query(ectophylla_xc)
+
+```
+
+Metadata can be used to download the available files from the data stored from the query. This can be done utilizing the function download_media. This function may take a longer time to run depending on the available resources and the amount of data that needs to be downloaded. This information can be used to run computer vision analysis on the appearance of the species or to analyze the sound structure of the echolocation emitted by the Honduran White Bat. Updating queries must be done before merging metadata (see next section) as the required attributes are lost when merging.
+
+We'll subset the image dataset from iNaturalist to speed up the download process.
+
+```{r, eval = TRUE}
+
+ectophylla_gbif <- ectophylla_gbif[1:10, ]
+
+```
+
+
+```{r, eval = TRUE, echo = TRUE}
+
+#Download media for audios from the query from Xenocanto
+paths_aud <- download_media(ectophylla_xc, path = tempdir())
+
+#Download media for images from the query from GBIF
+paths_img <- download_media(ectophylla_gbif, path = tempdir())
+
+paths_aud
+
+paths_img
+```
+
+## Combining metadata from multiple repositories
+
+Users may want to combine metadata from different repositories to create a comprehensive dataset. The function `merge_metadata` combines the metadata from different repositories, ensuring that the resulting dataset contains unique observations. `merge_metadata` allows to detect possible duplicated observations from the data from different repositories, which can occur when the same observation is recorded in multiple databases. This function returns a combined data frame in which only a single copy of the duplicated observations is kept.
+
+```{r}
+
+# Merged_Dataframe <- detect_duplicates(X = ectophylla_gbif, Y = ectophylla_inat)
+
+
+```
+
+Users may display the coordinate information of the observations from a query using the map_locations function. This will allow the user to show the locations of the observations on a map.
+
+```{r}
+
+# create map
+map_locations(ectophylla_inat)
+
+```
+
+# Some notes for specific searches
+
+The GBIF repository dataset may me consulted to filter what repositories the user would like to consult specifically. This may be viewed by downloading the data using the function check_gbif_dataset. This function downloads the csv of the complete repository list available on GBIF.
+
+```{r}
+
+gbif_datasets <- check_gbif_datasets(path = tempdir())
+
+```
+
 
 <div class="alert alert-warning">
 
