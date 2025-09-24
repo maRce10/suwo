@@ -24,6 +24,6 @@ adt_list <- list(xc_adt = xc_adt, wa_adt_s = wa_adt_s, wa_adt_i = wa_adt_i, gb_a
 ## save turdus_rufiventris results for example data
 tur_ruf_list <- lapply(adt_list, head)
 
-names(tur_ruf_list) <- c("xeno_canto_sounds", "wiki_aves_sounds", "wiki_aves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
+names(tur_ruf_list) <- c("xeno-canto_sounds", "wikiaves_sounds", "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
 
 usethis::use_data(ml_taxon_code, tur_ruf_list, internal = TRUE, overwrite = TRUE)

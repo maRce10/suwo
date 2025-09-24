@@ -370,6 +370,19 @@ pblapply_sw_int <- function(X,
   return(Z)
 }
 
+# Custom function for names with particles
+.to_name_case <- function(x) {
+  result <- character(length(x))
+  for (i in seq_along(x)) {
+    if (is.na(x[i])) {
+      result[i] <- NA
+    } else {
+      result[i] <- tools::toTitleCase(tolower(x[i]))
+    }
+  }
+  return(result)
+}
+
 # format query output dataframe to standardize column names
 .format_query_output <- function(X,
                                  column_names,
@@ -479,6 +492,9 @@ pblapply_sw_int <- function(X,
   # replace "" with NA
   X$country[X$country == ""] <- NA
   X$locality[X$locality == ""] <- NA
+
+  # user name case
+  X$user_name <- .to_name_case(X$user_name)
 
   # order so basic columns go first
   non_basic_colms <- setdiff(names(X), basic_colums)
