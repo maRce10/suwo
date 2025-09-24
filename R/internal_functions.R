@@ -510,7 +510,7 @@ pblapply_sw_int <- function(X,
 
 
     # let users know some observations were excluded
-    cat(.color_text(paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('",option_df_name,"')`)."),
+    cat(.color_text(paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('",option_df_name,"')`).\n"),
                     as = "warning",
                     n  = sum(is.na(X$file_url))
     )
@@ -687,9 +687,47 @@ pblapply_sw_int <- function(X,
   }
 }
 
+
+# clean not valid date format (must be "YYYY-MM-DD"), if possible extracts year from various formats, using current year as upper bound
+.clean_dates <- function(date_strings) {
+    current_year <- as.numeric(format(Sys.Date(), "%Y"))
+
+    vapply(date_strings, function(date_str) {
+      if (is.na(date_str)) {
+        return(NA_character_)
+      }
+
+      # First check if it's valid YYYY-MM-DD format
+      if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
+        # Validate month and day ranges
+        parts <- strsplit(date_str, "-")[[1]]
+        year <- as.numeric(parts[1])
+        month <- as.numeric(parts[2])
+        day <- as.numeric(parts[3])
+
+        if (month >= 1 & month <= 12 & day >= 1 & day <= 31 & year <= current_year) {
+          return(date_str)  # Keep the full valid date
+        }
+      }
+
+      # If not valid YYYY-MM-DD, try to extract just the year
+      year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
+      if (length(year_match) > 0) {
+        year <- as.numeric(year_match[1])
+        # Return just the year if it's reasonable (between 1900 and current year)
+        if (year >= 1900 & year <= current_year) {
+          return(as.character(year))
+        }
+      }
+
+      # If we can't extract a reasonable year, return NA
+      return(NA_character_)
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+  }
+
 # homogenize dates
 .homogenize_dates <- function(date_strings) {
-    vapply(date_strings, function(date_str) {
+  date_strings <- vapply(date_strings, function(date_str) {
       # If input is NA, return NA
       if (is.na(date_str)) {
         return(NA_character_)
@@ -709,6 +747,9 @@ pblapply_sw_int <- function(X,
         date_str
       }
     }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+
+  # remove invalid dates
+  date_strings <- .clean_dates(date_strings)
   }
 
 # Function to check if a string is a valid time

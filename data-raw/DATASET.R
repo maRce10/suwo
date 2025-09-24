@@ -8,7 +8,6 @@ ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.s
 term <- "Turdus rufiventris"
 
 options(all_data = TRUE, verbose = TRUE, mc.cores = 1)
-basic_colms <- .format_query_output(only_basic_columns = T)
 xc_adt <- query_xenocanto(term = term)
 wa_adt_s <- query_wikiaves(term = term, format = "sound")
 wa_adt_i <- query_wikiaves(term = term, format = "image")
@@ -24,6 +23,18 @@ adt_list <- list(xc_adt = xc_adt, wa_adt_s = wa_adt_s, wa_adt_i = wa_adt_i, gb_a
 ## save turdus_rufiventris results for example data
 tur_ruf_list <- lapply(adt_list, head)
 
+# keep all rows for xeno-canto but only basic columns
+attrbts <- attributes(tur_ruf_list$xc_adt)
+tur_ruf_list$xc_adt <- adt_list$xc_adt
+
+# add missing attributes
+# attributes(tur_ruf_list$xc_adt) <- c(attributes(tur_ruf_list$xc_adt), attrbts[setdiff(names(attrbts), names(attributes(tur_ruf_list$xc_adt)))])
+
+# check number of rows
+sapply(tur_ruf_list, nrow)
+
 names(tur_ruf_list) <- c("xeno-canto_sounds", "wikiaves_sounds", "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
 
 usethis::use_data(ml_taxon_code, tur_ruf_list, internal = TRUE, overwrite = TRUE)
+
+

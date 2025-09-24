@@ -148,7 +148,7 @@ tur_ruf_sound_list <- tur_ruf_sound_list[order(names(tur_ruf_sound_list))]
 # split by "_" and keep the first part
 names(tur_ruf_sound_list) <- gsub("_sounds", "", names(tur_ruf_sound_list))
 
-Repository <- sapply(tur_ruf_sound_list, "[[", "repository")[1, ]
+Repository <- sapply(tur_ruf_sound_list, function(x) x[1, "repository"])
 Function <- sapply(tur_ruf_sound_list, function(x) attributes(x)$query_call[[1]])
 
 Function <- sapply(Function, as.character)
@@ -244,7 +244,7 @@ query_summary[, names(query_summary) != "Additional data"] |>
 
 ```
 
-This is an example code of a query of Turdus rufiventris sounds from Xeno-canto and Wikiaves:
+This is an example code of a query of _Turdus rufiventris_ (a bird species) sounds from Xeno-canto and Wikiaves:
 
 ```{r, eval = FALSE}
 # Load suwo package
@@ -253,12 +253,12 @@ library(suwo)
 # Query Xeno-canto for Turdus rufiventris sounds
 t_ruf_xc_data <- query_xenocanto(term = "Turdus rufiventris")
 
-head(t_ruf_xc_data)
+head(t_ruf_xc_data, 4)
 ```
 
 ```{r, echo=FALSE}
 
-head(tur_ruf_sound_list$`xeno-canto`[, suwo:::.format_query_output(only_basic_columns = TRUE)])
+head(tur_ruf_sound_list$`xeno-canto`[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
 
 ```
 
@@ -267,12 +267,12 @@ head(tur_ruf_sound_list$`xeno-canto`[, suwo:::.format_query_output(only_basic_co
 # Query Wikiaves for Turdus rufiventris sounds
 t_ruf_wa_data <- query_wikiaves(term = "Turdus rufiventris", format = "sound")
 
-head(t_ruf_wa_data)
+head(t_ruf_wa_data, 4)
 ```
 
 ```{r, echo=FALSE}
 
-head(tur_ruf_sound_list$wikiaves[, suwo:::.format_query_output(only_basic_columns = TRUE)])
+head(tur_ruf_sound_list$wikiaves[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
 
 ```
 
@@ -283,7 +283,7 @@ By default all query function return the `r length(suwo:::.format_query_output(o
  - **format**: Type of media file (e.g., sound, photo, video)
  - **key**: Unique identifier of the media file in the repository
  - **species**: Species name associated with the media file (Note taxonomic authority may vary among repositories)
- - **date***: Date when the media file was recorded/photographed (in YYYY-MM-DD format)
+ - **date***: Date when the media file was recorded/photographed (in YYYY-MM-DD format or YYYY if only year is available)
  - **time***: Time when the media file was recorded/photographed (in HH:MM format)
  - **user_name***: Name of the user who uploaded the media file
  - **country***: Country where the media file was recorded/photographed
@@ -319,13 +319,18 @@ query_summary[,c("Function", "Additional data")] |>
 
 <font size = "4">Obtaining raw data</font>
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions.
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`).
 
 </div>
 
 # Combine metadata from multiple repositories
 
 The `merge_query_results()` function allows users to combine metadata data frames obtained from multiple query functions into a single data frame. This function ensures that the combined data frame has a consistent structure, with all basic metadata fields included. The function will match the basic columns of all data frames. Data from additional columns will only be combined if the names from the different repositories match. The function will return a data frame 
+
+
+```{r}
+
+```
 
 
 # Find duplicated records
