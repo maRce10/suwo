@@ -3,9 +3,8 @@ title: "suwo"
 subtitle: Access nature media from online repositories
 pagetitle: Access nature media from online repositories
 author: 
-- Jorge Elizondo
-- <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
-date:  "r Sys.Date()"
+- Jorge Elizondo & <a href="https://marce10.github.io/">Marcelo Araya-Salas</a>
+date:  "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
     self_contained: yes
@@ -112,7 +111,27 @@ library(suwo)
 
 ```
 
-# Query functions overview
+# Basic workflow for obtaining nature media files
+
+Finding data using suwo follows a basic sequence. The following diagram illustrates this workflow and the main functions involved:
+
+<center><img src="workflow_diagram.png" alt="suwo workflow diagram" width="100%"></center>
+
+<br>
+Here is a description of each step:
+
+1. Queries regarding a specific taxonomic group (typically a species name) is submitted through one of the available query functions (`query_repo_name()`) that connect to five different online repositories. The output of these queries is a data frame containing metadata associated with the media files (e.g., species name, date, location, etc, see below). 
+
+1. If multiple repositories are queried, the resulting metadata data frames can be merged into a single data frame using the `merge_query_results()` function. 
+
+1. Users can also check for duplicate records in their datasets using the `find_duplicates()` function.
+ 
+1. Users can then download the media files associated with the metadata using the `download_media()` function. 
+
+1. Finally, users can update their datasets with new records by re-running the queries and merging the new results with their existing datasets using the `update_query()` function. 
+
+
+# Query functions
 
 The following table summarizes the available suwo query functions and the types of metadata they retrieve:
 
@@ -121,53 +140,101 @@ The following table summarizes the available suwo query functions and the types 
 library(knitr)
 library(kableExtra)
 
-query_summary <- data.frame(
-  `Function` = c("query_gbif", "query_inaturalist", "query_macaulay",
-                 "query_observation", "query_wikiaves", "query_xenocanto"),
-  `Repository` = c("GBIF", "iNaturalist", "Macaulay Library",
-                   "Observation.org", "Wikiaves", "Xeno-Canto"),
-  `URL link` = c(
-    "https://www.gbif.org/",
-    "https://www.inaturalist.org/",
-    "https://www.macaulaylibrary.org/",
-    "https://observation.org/",
-    "https://www.wikiaves.com.br/",
-    "https://www.xeno-canto.org/"
-  ),
-  `Requires Token` = c("No", "No", "No", "Yes", "No", "No"),
-  `File Types` = c("sound, image, moving image, interactive resource",
-                   "sound, image", "audio, photo, video",
-                   "sound, image", "sound, image", "sound"),
-  `Taxonomic Range` = c("species", "species", "species, subspecies",
-                        "species", "species", "species, genus, family"),
-  # `Max Results` = rep("not specified", 6),
-  `Geographic Coverage` = c("worldwide", "worldwide", "worldwide",
-                            "worldwide", "Brazil", "worldwide"),
-  `Additional Data` = c(
-    "key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey, publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus, taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey, acceptedTaxonKey, scientificName, acceptedScientificName, kingdom, phylum, order, family, genus, species, genericName, specificEpithet, taxonRank, taxonomicStatus, iucnRedListCategory, dateIdentified, decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters, continent, stateProvince, year, month, day, eventDate, modified, lastInterpreted, references, license, isInCluster, datasetName, recordedBy, identifiedBy, geodeticDatum, class, countryCode, country, rightsHolder, identifier, http...unknown.org.nick, verbatimEventDate, verbatimLocality, collectionCode, gbifID, occurrenceID, taxonID, catalogNumber, institutionCode, eventTime, occurrenceRemarks, http...unknown.org.captive, identificationID, identificationRemarks, distanceFromCentroidInMeters, informationWithheld, sex, lifeStage, preparations, nomenclaturalCode, dynamicProperties, locality, vernacularName, fieldNotes, verbatimElevation, behavior, higherClassification, associatedTaxa, infraspecificEpithet, media-type, media-format, media-references, media-created, media-creator, media-publisher, media-license, media-rightsHolder, file_url, media-description, page, elevation, elevationAccuracy, organismQuantity, organismQuantityType, georeferenceProtocol, verbatimSRS, county, verbatimCoordinateSystem, type, collectionID, individualCount, samplingProtocol, scientificNameID, georeferenceRemarks, language, georeferenceSources, media-title, repository"
-,
-    "quality_grade, time_observed_at, taxon_geoprivacy, uuid, id, cached_votes_total, identifications_most_agree, species_guess, identifications_most_disagree, positional_accuracy, comments_count, site_id, created_time_zone, license_code, observed_time_zone, public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset, observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements, map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count, obscured, num_identification_disagreements, geoprivacy, location, spam, mappable, identifications_some_agree, place_guess, file_url, attribution, page, repository"
-,
-    "id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, repository"
-,
-    "id, scientific_name, name, group, group_name, status, rarity, photo, info_text, permalink, determination_requirements, file_url, repository"
-,
-    "recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, location, location ID, comments, likes, visualizations, url, duration and repository"
-,
-    "recording ID, Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude, Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date, Sound files in .mp3"
+load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
 
-  ),
+tur_ruf_sound_list <- tur_ruf_list[grep("sound", names(tur_ruf_list))]
+tur_ruf_sound_list <- tur_ruf_sound_list[order(names(tur_ruf_sound_list))]
+
+# split by "_" and keep the first part
+names(tur_ruf_sound_list) <- gsub("_sounds", "", names(tur_ruf_sound_list))
+
+Repository <- sapply(tur_ruf_sound_list, "[[", "repository")[1, ]
+Function <- sapply(tur_ruf_sound_list, function(x) attributes(x)$query_call[[1]])
+
+Function <- sapply(Function, as.character)
+
+file_types <- sapply(Function, function(x) paste(formals(x)$format, collapse = ", "))
+file_types <- gsub("c, ", "", file_types)
+file_types[Function == "query_xenocanto"] <- "sound"
+ 
+urls = c(
+    gbif = "https://www.gbif.org/",
+    inaturalist = "https://www.inaturalist.org/",
+    macaulay = "https://www.macaulaylibrary.org/",
+    observation = "https://observation.org/",
+    wikiaves = "https://www.wikiaves.com.br/",
+    `xeno-canto` = "https://www.xeno-canto.org/"
+  )
+
+urls <- urls[match(names(tur_ruf_sound_list), names(urls))]
+
+ token <- c(
+    gbif = "No",
+    inaturalist = "No",
+    macaulay = "No",
+    observation = "Yes",
+    wikiaves = "No",
+    `xeno-canto` = "Yes"
+  )
+
+token <- token[match(names(tur_ruf_sound_list), names(token))]
+
+
+tax_level <-  c(
+    gbif = "Species",
+    inaturalist = "Species",
+    macaulay = "Species",
+    observation = "Species",
+    wikiaves = "Species",
+    `xeno-canto` = "Species, genus, family"
+  )
+
+tax_level <- tax_level[match(names(tur_ruf_sound_list), names(tax_level))]
+
+geo_cover <-  c(
+    gbif = "Worldwide",
+    inaturalist = "Worldwide",
+    macaulay = "Worldwide",
+    observation = "Worldwide",
+    wikiaves = "Brazil",
+    `xeno-canto` = "Worldwide"
+  )
+
+geo_cover <- geo_cover[match(names(tur_ruf_sound_list), names(geo_cover))]
+
+
+colnames <- lapply(tur_ruf_sound_list, names)
+
+colnames <- lapply(colnames, function(x) setdiff(x, suwo:::.format_query_output(only_basic_columns = TRUE)))
+
+additional_data <- sapply(colnames, function(x) paste(x, collapse = ", "))
+
+additional_data <- additional_data[match(names(tur_ruf_sound_list), names(additional_data))]
+
+query_summary <- data.frame(
+  Function = Function,
+  Repository = Repository,
+  `URL link` = urls,
+  `File types` = file_types,
+  `Requires token` = token,
+  `Taxonomic level` = tax_level,
+  `Geographic coverage` = geo_cover,
+  `Additional data` = additional_data,
   stringsAsFactors = FALSE, 
 check.names = FALSE
 )
 
-query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
 
-query_summary[, names(query_summary) != "Additional Data"] |>
+ query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
+
+ query_summary$Function <- kableExtra::cell_spec(query_summary$Function, "html", link = paste0("https://marce10.github.io/suwo/reference/", query_summary$Function, ".html"), new_tab = TRUE)
+ 
+query_summary[, names(query_summary) != "Additional data"] |>
   kableExtra::kbl(
     caption = "Table 1: Summary of query functions.",
     format = "html",
-    escape = FALSE
+    escape = FALSE, 
+    row.names = FALSE
   ) |>
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"),
@@ -175,46 +242,98 @@ query_summary[, names(query_summary) != "Additional Data"] |>
     position = "left"
   )
 
+```
 
-query_summary[,c("Function", "Additional Data")] |>
-  kableExtra::kbl(
-    caption = "Table 2: Summary of available metadata.",
-    format = "html",
-    escape = TRUE
-  ) |>
-  kableExtra::kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-    full_width = FALSE,
-    position = "left"
-  )
+This is an example code of a query of Turdus rufiventris sounds from Xeno-canto and Wikiaves:
 
+```{r, eval = FALSE}
+# Load suwo package
+library(suwo)
+
+# Query Xeno-canto for Turdus rufiventris sounds
+t_ruf_xc_data <- query_xenocanto(term = "Turdus rufiventris")
+
+head(t_ruf_xc_data)
+```
+
+```{r, echo=FALSE}
+
+head(tur_ruf_sound_list$`xeno-canto`[, suwo:::.format_query_output(only_basic_columns = TRUE)])
 
 ```
 
 
-Finding data using suwo follows a basic sequence. First a database is selected and the corresponding query function is used to search for the data needed.
+```{r, eval = FALSE}
+# Query Wikiaves for Turdus rufiventris sounds
+t_ruf_wa_data <- query_wikiaves(term = "Turdus rufiventris", format = "sound")
 
-<div class="alert alert-info">
+head(t_ruf_wa_data)
+```
 
-<font size = "4">Search queries</font>
+```{r, echo=FALSE}
 
-A search query consists of a term, which in most functions is a species name (except for special queries in `query_xenocanto()`), and a data type that corresponds to the type of data the user wishes to search for. Depending on the search function, this can vary from pictures, videos, sounds. The all_data parameter determines if all the data present for the search is included or if only the m of the metadata is generated as the output of the query. Queries may me made to any of the six available query functions that connect to one repository.
+head(tur_ruf_sound_list$wikiaves[, suwo:::.format_query_output(only_basic_columns = TRUE)])
 
-</div>
+```
 
 
-# Case study: 
+By default all query function return the `r length(suwo:::.format_query_output(only_basic_columns = TRUE))` most basic metadata fields associated with the media files. Here is the definition of each field:
+
+ - **repository**: Name of the repository
+ - **format**: Type of media file (e.g., sound, photo, video)
+ - **key**: Unique identifier of the media file in the repository
+ - **species**: Species name associated with the media file (Note taxonomic authority may vary among repositories)
+ - **date***: Date when the media file was recorded/photographed (in YYYY-MM-DD format)
+ - **time***: Time when the media file was recorded/photographed (in HH:MM format)
+ - **user_name***: Name of the user who uploaded the media file
+ - **country***: Country where the media file was recorded/photographed
+ - **locality***: Locality where the media file was recorded/photographed
+ - **latitude***: Latitude of the location where the media file was recorded/photographed (in decimal degrees) 
+ - **longitude***: Longitude of the location where the media file was recorded/photographed (in decimal degrees)
+ - **file_url**: URL link to the media file (used to download media files)
+ - **file_extension**: Extension of the media file (e.g., .mp3, .jpg, .mp4)
+ 
+_* Can contain missing values (NAs)_
+
+Users can also download all available metadata by setting the `all_data = TRUE`. These are the additional metadata fields, on top of the basic fields, that can be retrieved by each query function:
+
+```{r, echo=FALSE, results='asis', message=FALSE}
+
+query_summary[,c("Function", "Additional data")] |>
+  kableExtra::kbl(
+    caption = "Table 2: Additional metadata per query function.",
+    format = "html",
+    escape = FALSE,
+    row.names = FALSE
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "left"
+  )
+
+```
+
 
 <div class="alert alert-warning">
 
-<font size = "4">Saving and sharing query outputs</font>
+<font size = "4">Obtaining raw data</font>
 
-Query outputs contain additional metadata as dataframe attributes. These attributes are lost when saving the dataframe as a data file (e.g. CSV, TXT, XSLX, etc) To preserve this metadata, users must save their query results as RDS files using the `saveRDS()` function from base R. This allows for easy sharing and reloading of the data with all its attributes intact. Dataframes can be retrieved from this files using the `readRDS()`. 
- 
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions.
 
 </div>
 
+# Combine metadata from multiple repositories
 
+The `merge_query_results()` function allows users to combine metadata data frames obtained from multiple query functions into a single data frame. This function ensures that the combined data frame has a consistent structure, with all basic metadata fields included. The function will match the basic columns of all data frames. Data from additional columns will only be combined if the names from the different repositories match. The function will return a data frame 
+
+
+# Find duplicated records
+
+# Update metadata
+
+
+# Donwload media files
 
 <font size="4">Session information</font>
 
