@@ -9,7 +9,7 @@
 #' @return Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_results} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
 #' @export
 #' @name download_media
-#' @details This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_query}}) to add the new media files to the existing media pool.
+#' @details This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_metadata}}) to add the new media files to the existing media pool.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_macaulay}}
 #' @examples
 #' \dontrun{

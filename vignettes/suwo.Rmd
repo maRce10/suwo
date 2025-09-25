@@ -319,7 +319,7 @@ query_summary[,c("Function", "Additional data")] |>
 
 <font size = "4">Obtaining raw data</font>
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`).
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). But note that subsequent data manipulation functions (e.g., `merge_query_results()`, `find_duplicates()`, etc) will not work properly as the basic fields are not standardized.
 
 </div>
 

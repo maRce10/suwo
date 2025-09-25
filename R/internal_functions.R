@@ -533,6 +533,7 @@ pblapply_sw_int <- function(X,
     term = rlang::call_args(call)$term,
     format = format,
     all_data = all_data,
+    raw_data = raw_data,
     call = call,
     input_file = input_file
   )
@@ -562,7 +563,7 @@ pblapply_sw_int <- function(X,
 }
 
 # add attributes to output data frames
-.add_attributes <- function(X, term, format, all_data, input_file = NA, call) {
+.add_attributes <- function(X, term, format, all_data, raw_data, input_file = NA, call) {
   term <- gsub("%20", " ", term)
 
   # Add a timestamp attribute
@@ -572,7 +573,7 @@ pblapply_sw_int <- function(X,
   attr(X, "query_time") <- search_time
   attr(X, "query_term") <- term
   attr(X, "query_format") <- format
-  attr(X, "query_all_data") <- all_data
+  attr(X, "query_data_format") <- all_data
   attr(X, "input_file(s)") <- input_file
   attr(X, "suwo_version") <- utils::packageVersion("suwo")
   return(X)

@@ -24,7 +24,7 @@ remove.packages("suwo")
 
 remotes::install_github("ropensci-review-tools/pkgcheck")
 
-pkgs <- c("remotes", "curl", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli", "beepr")
+pkgs <- c("remotes", "curl", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli", "beepr", "RecordLinkage")
 
 # install/ load packages
 out <- lapply(pkgs, function(y) {
@@ -581,31 +581,43 @@ out <- sapply(list.files("./man", full.names = TRUE), function(x) tools::showNon
 
 ```{r find_duplicates}
 
+options(all_data = FALSE, raw_data = FALSE)
 term <- "Turdus rufiventris"
-xc_adf <- query_xenocanto(term = term)
+xc_adf <- query_xenocanto(term = term, all_data = FALSE)
 
-wa_adf <- query_wikiaves(term = term, format = "sound")
- 
 gb_adf <- query_gbif(term = term, format = "sound")
 
-in_adf <- query_inaturalist(term = term, format = "sound")
- 
-ml_adf <- query_macaulay(term = term, format = "sound", path = tempdir())
 
-a <- rbind(xc_adf, wa_adf, gb_adf, in_adf, ml_adf)
+comb_dat <- rbind(xc_adf, gb_adf)
+
+# str(comb_dat)
+# 
+# View(comb_dat)
+
+# Method 1: Using compare.linkage for detailed comparison
+pairs <- compare.dedup(
+  comb_dat, 
+  blockfld = list("country", "format"),  # Block by country and species to reduce comparisons
+  # strcmp = c("user_name"), # Use string comparison for these fields
+  strcmpfun = jarowinkler  # Use Jaro-Winkler similarity
+)
 
 
-unique(a$file_extension)
+table(pairs$pairs$is_match)
 
-a[a$country == "Bolivia (Plurinational State of)" & !is.na(a$country), ]
+pairs$frequency
 
-table(a$repository)
+mtch <- pairs$pairs[!is.na(pairs$pairs$is_match), ]
 
-a[is.na(a$file_extension),]
+data(RLdata500)
 
-View(gb_adt[is.na(gb_adt$file_extension),])
+rpairs=compare.dedup(RLdata500, identity=identity.RLdata500, strcmp=TRUE,
+  blockfld=list(1,c(5,6,7)))
 
-gb_adt$occurrenceid[is.na(gb_adt$file_extension)]
+table(rpairs$pairs$is_match)
+
+
+View(rpairs$pairs)
 ```
 
 

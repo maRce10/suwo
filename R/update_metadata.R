@@ -1,23 +1,23 @@
 #' Access 'observation' recordings and metadata
 #'
-#' \code{update_query} detects duplicate data in data frames and updates new query results.
+#' \code{update_metadata} detects duplicate data in data frames and updates new query results.
 #' @inheritParams template_params
 #' @param X data frame previously obtained from any query function (i.e. `query_reponame()`).
 #' @param path Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).
 #' @export
-#' @name update_query
+#' @name update_metadata
 #' @return returns a data frame similar to the input 'X' with new data appended.
 #' @details This function updates a previous query to add new information from the corresponding database of the original search
 #' @examples
 #' \dontrun{
 #' # compare
-# df3 <- update_query(X = df1)
+# df3 <- update_metadata(X = df1)
 #' View(df3)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-update_query <-
+update_metadata <-
   function(X, token = NULL, path = ".",
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
@@ -37,21 +37,27 @@ update_query <-
     checkmate::reportAssertions(check_results)
 
 
-    if (length(unique(X$repository)) > 1)
+    if (length(unique(X$repository)) > 1){
       .stop(
         "All observations should belong to the same repository. ",
-        "Please provide a single repository query result to update_query()."
+        "Please provide a single repository query result to update_metadata()."
       )
+}
+
+    if (is.null(attr(X, "query_term"))){
+      .stop("The input data frame does not have the required attributes. ",
+            "Please provide a data frame obtained from any of the query_x() functions with the argument `raw_data = FALSE`.")
+    }
 
     #Set query term and format for new query search
     query_term <- attr(X, "query_term")
     query_format <- attr(X, "query_format")
-    query_all_data <- attr(X, "query_all_data")
+    all_data <- attr(X, "all_data")
 
     if (X$repository[1] == "GBIF") {
       query_output_new <- query_gbif(term = query_term,
                                      format = query_format,
-                                     all_data = query_all_data,
+                                     all_data = all_data,
                                      cores = cores,
                                      verbose = verbose,
                                      pb = pb)
@@ -61,7 +67,7 @@ update_query <-
     if (X$repository[1] == "iNaturalist") {
       query_output_new <- query_inaturalist(term = query_term,
                                             format = query_format,
-                                            all_data = query_all_data,
+                                            all_data = all_data,
                                             cores = cores,
                                             verbose = verbose,
                                             pb = pb)
@@ -71,7 +77,7 @@ update_query <-
       query_output_new <- query_macaulay(
         term = query_term,
         format = query_format,
-        all_data = query_all_data,
+        all_data = all_data,
         path = path,
         dates = eval(rlang::call_args(attributes(X)$query_call)$dates),
         verbose = verbose
@@ -90,7 +96,7 @@ update_query <-
     if (X$repository[1] == "Xeno-Canto") {
       query_output_new <- query_xenocanto(term = query_term,
                                           cores = cores,
-                                          all_data = query_all_data,
+                                          all_data = all_data,
                                           verbose = verbose,
                                           pb = pb)
 
@@ -98,14 +104,14 @@ update_query <-
     if (X$repository[1] == "Wikiaves") {
       query_output_new <- query_wikiaves(term = query_term,
                                          format = query_format,
-                                         all_data = query_all_data,
+                                         all_data = all_data,
                                          cores = cores,
                                          verbose = verbose,
                                          pb = pb)
     }
 
     # Find duplicates
-    query_output_df <- merge_query_results(X = X, Y = query_output_new)
+    query_output_df <- merge_metadata(X = X, Y = query_output_new)
 
     # tag new entries
     names(query_output_df)[names(query_output_df) == "source"] <- "new_entry"

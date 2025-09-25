@@ -25,9 +25,9 @@ reference:
   desc: >
     Data exploration and manipulation
   contents:
-  - update_query
+  - update_metadata
   - map_locations
-  - merge_query_results
+  - merge_metadata
 
 - title: Misellaneous
   desc: >
