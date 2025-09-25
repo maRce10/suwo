@@ -50,7 +50,13 @@
 
 
 query_xenocanto <-
-  function(term,
+  function(sp = NULL,
+           gen = NULL,
+           ssp = NULL,
+           fam = NULL,
+           grp = NULL,
+           en = NULL,
+           term = NULL,
            key,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
@@ -62,47 +68,33 @@ query_xenocanto <-
       stop("An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account.")
     }
 
-    # check arguments
-    arguments <- as.list(base::match.call())[-1]
-    for (i in names(arguments)) {
-      arguments[[i]] <- get(i)
-    }
-    check_results <- .check_arguments(args = arguments)
-    checkmate::reportAssertions(check_results)
+    # --- build query from tags ---
+    parts <- c()
+    if (!is.null(gen)) parts <- c(parts, paste0("gen:", gen))
+    if (!is.null(sp))  parts <- c(parts, paste0("sp:", sp))
+    if (!is.null(ssp)) parts <- c(parts, paste0("ssp:", ssp))
+    if (!is.null(fam)) parts <- c(parts, paste0("fam:", fam))
+    if (!is.null(grp)) parts <- c(parts, paste0("grp:", grp))
+    if (!is.null(en))  parts <- c(parts, paste0("en:", ifelse(grepl("\\s", en), paste0('"', en, '"'), en)))
 
-    if (!.checkconnection("xenocanto")) {
-      return(invisible(NULL))
-    }
+    # allow raw term addition (for advanced searches)
+    if (!is.null(term)) parts <- c(parts, term)
+
+    # collapse into single query string
+    query_str <- paste(parts, collapse = " ")
+
+    # URL encode (spaces → %20, quotes → %22, etc.)
+    query_str <- utils::URLencode(query_str, reserved = TRUE)
 
     if (pb & verbose) {
       cat(.color_text("Obtaining metadata:\n", as = "success"))
+      cat(.color_text(paste0("Query: ", query_str, "\n"), as = "info"))
     }
 
-    # --- format query term properly ---
-    # tags where multi-word values should be quoted
-    tags_to_quote <- c("sp:", "gen:", "cnt:", "loc:")
-
-    for (tag in tags_to_quote) {
-      if (grepl(tag, term, ignore.case = TRUE)) {
-        # extract everything after the tag
-        value <- sub(paste0("^.*", tag), "", term, ignore.case = TRUE)
-        # only quote if more than one word and not already quoted
-        if (length(strsplit(value, "\\s+")[[1]]) > 1 &&
-            !grepl('^".*"$', value)) {
-          term <- sub(paste0(tag, value),
-                      paste0(tag, '"', value, '"'),
-                      term, ignore.case = TRUE)
-        }
-      }
-    }
-
-    # finally URL encode the whole term so quotes → %22, spaces → %20, etc.
-    term <- utils::URLencode(term, reserved = TRUE)
-
-    # initialize search
+    # --- API request ---
     query <- jsonlite::fromJSON(paste0(
       "https://www.xeno-canto.org/api/3/recordings?query=",
-      term, "&key=", key
+      query_str, "&key=", key
     ))
 
     if (as.numeric(query$numRecordings) == 0) {
@@ -123,7 +115,7 @@ query_xenocanto <-
       FUN = function(y) {
         query_output <- jsonlite::fromJSON(paste0(
           "https://www.xeno-canto.org/api/3/recordings?query=",
-          term, "&page=", y, "&key=", key
+          query_str, "&page=", y, "&key=", key
         ))
 
         query_output$recordings$also <-
