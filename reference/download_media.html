@@ -17,10 +17,6 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/suwo.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/suwo_Ectophylla.html">suwo</a></li>
-  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -60,7 +56,7 @@
 
 
 <dl><dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
-<dd><p>Data frame with the output of any of the media query functions in this package ( <code><a href="query_gbif.html">query_gbif</a></code>, <code><a href="query_observation.html">query_observation</a></code>, <code><a href="query_wikiaves.html">query_wikiaves</a></code>, <code><a href="query_inaturalist.html">query_inaturalist</a></code>, <code><a href="query_macaulay.html">query_macaulay</a></code>, <code><a href="query_xenocanto.html">query_xenocanto</a></code>).</p></dd>
+<dd><p>data frame previously obtained from any suwo query function (i.e. `query_reponame()`).</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
@@ -68,15 +64,15 @@
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
-<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>. Can be set globally for the current R session via the "pb" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
+<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>. Can be set globally for the current R session via the "pb" option ( <code>options(pb = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical argument that determines if text is shown in console. Default is <code>TRUE</code>. Can be set globally for the current R session via the "verbose" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
+<dd><p>Logical argument that determines if text is shown in console. Default is <code>TRUE</code>. Can be set globally for the current R session via the "verbose" option ( <code>options(verbose = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  <code>options(mc.cores = 2)</code>). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
@@ -93,7 +89,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument <code>"path"</code>). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see <code><a href="update_query.html">update_query</a></code>) to add the new media files to the existing media pool.</p>
+    <p>This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument <code>"path"</code>). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see <code><a href="update_metadata.html">update_metadata</a></code>) to add the new media files to the existing media pool.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

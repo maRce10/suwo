@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>suwo • suwo</title>
+<title>suwo: access nature media repositories • suwo</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="suwo">
+<meta property="og:title" content="suwo: access nature media repositories">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -37,12 +37,6 @@
       <ul class="navbar-nav me-auto">
 <li class="active nav-item"><a class="nav-link" href="../articles/suwo.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/suwo_Ectophylla.html">suwo</a></li>
-  </ul>
-</li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -63,15 +57,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>suwo</h1>
-            <h3 data-toc-skip class="subtitle">Access nature media from
-online repositories</h3>
-                        <h4 data-toc-skip class="author">Jorge
-Elizondo</h4>
-                        <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
-Araya-Salas, PhD</a></h4>
+      <h1>suwo: access nature media repositories</h1>
+            <h3 data-toc-skip class="subtitle">package overview</h3>
+                        <h4 data-toc-skip class="author">Jorge Elizondo
+&amp; <a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a>
+</h4>
             
-            <h4 data-toc-skip class="date">r Sys.Date()</h4>
+            <h4 data-toc-skip class="date">2025-09-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/master/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -104,10 +96,45 @@ media files, and the compilation of metadata from various sources.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="query-functions-overview">Query functions overview<a class="anchor" aria-label="anchor" href="#query-functions-overview"></a>
+<h2 id="basic-workflow-for-obtaining-nature-media-files">Basic workflow for obtaining nature media files<a class="anchor" aria-label="anchor" href="#basic-workflow-for-obtaining-nature-media-files"></a>
+</h2>
+<p>Finding data using suwo follows a basic sequence. The following
+diagram illustrates this workflow and the main functions involved:</p>
+<center>
+<img src="workflow_diagram.png" alt="suwo workflow diagram" width="100%">
+</center>
+<p><br> Here is a description of each step:</p>
+<ol style="list-style-type: decimal">
+<li><p>Queries regarding a specific taxonomic group (typically a species
+name) is submitted through one of the available query functions
+(<code>query_repo_name()</code>) that connect to five different online
+repositories. The output of these queries is a data frame containing
+metadata associated with the media files (e.g., species name, date,
+location, etc, see below).</p></li>
+<li><p>If multiple repositories are queried, the resulting metadata data
+frames can be merged into a single data frame using the
+<code><a href="../reference/merge_metadata.html">merge_metadata()</a></code> function.</p></li>
+<li><p>Check for duplicate records in their datasets using the
+<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function. Candidate duplicated entries
+are identified based on matching species name, country, date, user name,
+and geographic coordinates. User can double check the candidate
+duplicates and decide which records to keep, which can be done with
+<code>remove_duplicates()</code>.</p></li>
+<li><p>Download the media files associated with the metadata using the
+<code><a href="../reference/download_media.html">download_media()</a></code> function.</p></li>
+<li><p>Finally, users can update their datasets with new records by
+re-running the queries and merging the new results with their existing
+datasets using the <code><a href="../reference/update_metadata.html">update_metadata()</a></code> function.</p></li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="query-functions">Query functions<a class="anchor" aria-label="anchor" href="#query-functions"></a>
 </h2>
 <p>The following table summarizes the available suwo query functions and
 the types of metadata they retrieve:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load suwo package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed table-responsive" style="width: auto !important; ">
 <caption>
 Table 1: Summary of query functions.
@@ -123,22 +150,22 @@ Repository
 URL link
 </th>
 <th style="text-align:left;">
-Requires Token
+File types
 </th>
 <th style="text-align:left;">
-File Types
+Requires token
 </th>
 <th style="text-align:left;">
-Taxonomic Range
+Taxonomic level
 </th>
 <th style="text-align:left;">
-Geographic Coverage
+Geographic coverage
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-query_gbif
+<a href="https://marce10.github.io/suwo/reference/query_gbif.html" style="     " target="_blank">query_gbif</a>
 </td>
 <td style="text-align:left;">
 GBIF
@@ -147,21 +174,21 @@ GBIF
 <a href="https://www.gbif.org/" style="     " target="_blank" class="external-link">https://www.gbif.org/</a>
 </td>
 <td style="text-align:left;">
+sound, image, video, interactive resource
+</td>
+<td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-sound, image, moving image, interactive resource
+Species
 </td>
 <td style="text-align:left;">
-species
-</td>
-<td style="text-align:left;">
-worldwide
+Worldwide
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_inaturalist
+<a href="https://marce10.github.io/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a>
 </td>
 <td style="text-align:left;">
 iNaturalist
@@ -170,21 +197,21 @@ iNaturalist
 <a href="https://www.inaturalist.org/" style="     " target="_blank" class="external-link">https://www.inaturalist.org/</a>
 </td>
 <td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
 sound, image
 </td>
 <td style="text-align:left;">
-species
+No
 </td>
 <td style="text-align:left;">
-worldwide
+Species
+</td>
+<td style="text-align:left;">
+Worldwide
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_macaulay
+<a href="https://marce10.github.io/suwo/reference/query_macaulay.html" style="     " target="_blank">query_macaulay</a>
 </td>
 <td style="text-align:left;">
 Macaulay Library
@@ -193,44 +220,21 @@ Macaulay Library
 <a href="https://www.macaulaylibrary.org/" style="     " target="_blank" class="external-link">https://www.macaulaylibrary.org/</a>
 </td>
 <td style="text-align:left;">
+sound, image, video
+</td>
+<td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-audio, photo, video
+Species
 </td>
 <td style="text-align:left;">
-species, subspecies
-</td>
-<td style="text-align:left;">
-worldwide
+Worldwide
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_observation
-</td>
-<td style="text-align:left;">
-Observation.org
-</td>
-<td style="text-align:left;">
-<a href="https://observation.org/" style="     " target="_blank" class="external-link">https://observation.org/</a>
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-sound, image
-</td>
-<td style="text-align:left;">
-species
-</td>
-<td style="text-align:left;">
-worldwide
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-query_wikiaves
+<a href="https://marce10.github.io/suwo/reference/query_wikiaves.html" style="     " target="_blank">query_wikiaves</a>
 </td>
 <td style="text-align:left;">
 Wikiaves
@@ -239,13 +243,13 @@ Wikiaves
 <a href="https://www.wikiaves.com.br/" style="     " target="_blank" class="external-link">https://www.wikiaves.com.br/</a>
 </td>
 <td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
 sound, image
 </td>
 <td style="text-align:left;">
-species
+No
+</td>
+<td style="text-align:left;">
+Species
 </td>
 <td style="text-align:left;">
 Brazil
@@ -253,7 +257,7 @@ Brazil
 </tr>
 <tr>
 <td style="text-align:left;">
-query_xenocanto
+<a href="https://marce10.github.io/suwo/reference/query_xenocanto.html" style="     " target="_blank">query_xenocanto</a>
 </td>
 <td style="text-align:left;">
 Xeno-Canto
@@ -262,155 +266,1879 @@ Xeno-Canto
 <a href="https://www.xeno-canto.org/" style="     " target="_blank" class="external-link">https://www.xeno-canto.org/</a>
 </td>
 <td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
 sound
 </td>
 <td style="text-align:left;">
-species, genus, family
+Yes
 </td>
 <td style="text-align:left;">
-worldwide
+Species, genus, family
+</td>
+<td style="text-align:left;">
+Worldwide
 </td>
 </tr>
 </tbody>
 </table>
+<p>This is an example code of a query of <em>Turdus rufiventris</em> (a
+bird species) sounds from Xeno-canto and Wikiaves (we print the first 4
+rows of each output data frame):</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load suwo package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Query Xeno-canto for Turdus rufiventris sounds</span></span>
+<span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+1032061
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-07-19
+</td>
+<td style="text-align:center;">
+18:01
+</td>
+<td style="text-align:center;">
+Jacob Wijpkema
+</td>
+<td style="text-align:center;">
+Bolivia
+</td>
+<td style="text-align:center;">
+Lagunillas, Cordillera, Santa Cruz Department
+</td>
+<td style="text-align:center;">
+-19.6348
+</td>
+<td style="text-align:center;">
+-63.6711
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/1032061/download" class="external-link uri">https://xeno-canto.org/1032061/download</a>
+</td>
+<td style="text-align:center;">
+wav
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+1006659
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-06-13
+</td>
+<td style="text-align:center;">
+16:01
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+RPPN Flor das Águas - Pirenópolis, Goiás
+</td>
+<td style="text-align:center;">
+-15.8195
+</td>
+<td style="text-align:center;">
+-48.9861
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/1006659/download" class="external-link uri">https://xeno-canto.org/1006659/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+979639
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-03-12
+</td>
+<td style="text-align:center;">
+08:00
+</td>
+<td style="text-align:center;">
+Ricardo José Mitidieri
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Tijuca, Teresópolis, Rio de Janeiro
+</td>
+<td style="text-align:center;">
+-22.4212
+</td>
+<td style="text-align:center;">
+-42.9559
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/979639/download" class="external-link uri">https://xeno-canto.org/979639/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+974643
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-02-14
+</td>
+<td style="text-align:center;">
+13:11
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Fazenda Nazareth Eco, Jose de Freitas-PI, Piauí
+</td>
+<td style="text-align:center;">
+-4.7958
+</td>
+<td style="text-align:center;">
+-42.6150
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/974643/download" class="external-link uri">https://xeno-canto.org/974643/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Query Wikiaves for Turdus rufiventris sounds</span></span>
+<span><span class="va">truf_wa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_wikiaves.html">query_wikiaves</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">truf_wa</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Wikiaves
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+59269
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2015-11-20
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+Helberth Peixoto
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Brumadinho/MG
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+<a href="https://s3.amazonaws.com/media.wikiaves.com.br/recordings/95/59269_c3a95f9da82f9313c2bee7184bb3b8ff.mp3" class="external-link uri">https://s3.amazonaws.com/media.wikiaves.com.br/recordings/95/59269_c3a95f9da82f9313c2bee7184bb3b8ff.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Wikiaves
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+13978
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-01-20
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+Juliana Furlani
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Águas de Lindóia/SP
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+<a href="https://s3.amazonaws.com/media.wikiaves.com.br/recordings/31/13978_16d32f402760bf18032bc5c70e6d3e0d.mp3" class="external-link uri">https://s3.amazonaws.com/media.wikiaves.com.br/recordings/31/13978_16d32f402760bf18032bc5c70e6d3e0d.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Wikiaves
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2232065
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2006-08-20
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+Jonatas Rocha
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Brasília/DF
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+<a href="https://s3.amazonaws.com/media.wikiaves.com.br/recordings/2322/2232065_5a9fa597b59579373f6a8e77ed1dc26a.mp3" class="external-link uri">https://s3.amazonaws.com/media.wikiaves.com.br/recordings/2322/2232065_5a9fa597b59579373f6a8e77ed1dc26a.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Wikiaves
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+8458
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2023-06-20
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+Reni Santos
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Curitiba/PR
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+<a href="https://s3.amazonaws.com/media.wikiaves.com.br/recordings/8/8458_01c872302311300f7010c2afd336bf1c.mp3" class="external-link uri">https://s3.amazonaws.com/media.wikiaves.com.br/recordings/8/8458_01c872302311300f7010c2afd336bf1c.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>By default all query function return the 13 most basic metadata
+fields associated with the media files. Here is the definition of each
+field:</p>
+<ul>
+<li>
+<strong>repository</strong>: Name of the repository</li>
+<li>
+<strong>format</strong>: Type of media file (e.g., sound, photo,
+video)</li>
+<li>
+<strong>key</strong>: Unique identifier of the media file in the
+repository</li>
+<li>
+<strong>species</strong>: Species name associated with the media
+file (Note taxonomic authority may vary among repositories)</li>
+<li>
+<strong>date</strong>*: Date when the media file was
+recorded/photographed (in YYYY-MM-DD format or YYYY if only year is
+available)</li>
+<li>
+<strong>time</strong>*: Time when the media file was
+recorded/photographed (in HH:MM format)</li>
+<li>
+<strong>user_name</strong>*: Name of the user who uploaded the media
+file</li>
+<li>
+<strong>country</strong>*: Country where the media file was
+recorded/photographed</li>
+<li>
+<strong>locality</strong>*: Locality where the media file was
+recorded/photographed</li>
+<li>
+<strong>latitude</strong>*: Latitude of the location where the media
+file was recorded/photographed (in decimal degrees)</li>
+<li>
+<strong>longitude</strong>*: Longitude of the location where the
+media file was recorded/photographed (in decimal degrees)</li>
+<li>
+<strong>file_url</strong>: URL link to the media file (used to
+download media files)</li>
+<li>
+<strong>file_extension</strong>: Extension of the media file (e.g.,
+.mp3, .jpg, .mp4)</li>
+</ul>
+<p><em>* Can contain missing values (NAs)</em></p>
+<p>Users can also download all available metadata by setting the
+<code>all_data = TRUE</code>. These are the additional metadata fields,
+on top of the basic fields, that are retrieved by each query
+function:</p>
 <table class="table table table-striped table-hover table-condensed table-responsive" style="width: auto !important; ">
 <caption>
-Table 2: Summary of available metadata.
+Table 2: Additional metadata per query function.
 </caption>
 <thead><tr>
 <th style="text-align:left;">
 Function
 </th>
 <th style="text-align:left;">
-Additional Data
+Additional data
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-query_gbif
+<a href="https://marce10.github.io/suwo/reference/query_gbif.html" style="     " target="_blank">query_gbif</a>
 </td>
 <td style="text-align:left;">
-key, datasetKey, publishingOrgKey, installationKey,
-hostingOrganizationKey, publishingCountry, protocol, lastCrawled,
-lastParsed, crawlId, basisOfRecord, occurrenceStatus, taxonKey,
-kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey,
-speciesKey, acceptedTaxonKey, scientificName, acceptedScientificName,
-kingdom, phylum, order, family, genus, species, genericName,
-specificEpithet, taxonRank, taxonomicStatus, iucnRedListCategory,
-dateIdentified, decimalLatitude, decimalLongitude,
-coordinateUncertaintyInMeters, continent, stateProvince, year, month,
-day, eventDate, modified, lastInterpreted, references, license,
-isInCluster, datasetName, recordedBy, identifiedBy, geodeticDatum,
-class, countryCode, country, rightsHolder, identifier,
-http…unknown.org.nick, verbatimEventDate, verbatimLocality,
-collectionCode, gbifID, occurrenceID, taxonID, catalogNumber,
-institutionCode, eventTime, occurrenceRemarks, http…unknown.org.captive,
-identificationID, identificationRemarks, distanceFromCentroidInMeters,
-informationWithheld, sex, lifeStage, preparations, nomenclaturalCode,
-dynamicProperties, locality, vernacularName, fieldNotes,
-verbatimElevation, behavior, higherClassification, associatedTaxa,
-infraspecificEpithet, media-type, media-format, media-references,
-media-created, media-creator, media-publisher, media-license,
-media-rightsHolder, file_url, media-description, page, elevation,
-elevationAccuracy, organismQuantity, organismQuantityType,
-georeferenceProtocol, verbatimSRS, county, verbatimCoordinateSystem,
-type, collectionID, individualCount, samplingProtocol, scientificNameID,
-georeferenceRemarks, language, georeferenceSources, media-title,
-repository
+datasetkey, publishingorgkey, installationkey, hostingorganizationkey,
+publishingcountry, protocol, lastcrawled, lastparsed, crawlid,
+projectid, basisofrecord, occurrencestatus, taxonkey, kingdom_code,
+phylum_code, class_code, order_code, family_key, genus_code,
+species_code, acceptedtaxonkey, scientificnameauthorship,
+acceptedscientificname, kingdom, phylum, order, family, genus,
+genericname, specific_epithet, taxonrank, taxonomicstatus,
+iucnredlistcategory, dateidentified, coordinateuncertaintyinmeters,
+continent, state_province, year, month, day, startdayofyear,
+enddayofyear, modified, lastinterpreted, references, license,
+issequenced, isincluster, datasetname, recordist, identifiedby,
+geodeticdatum, class, countrycode, gbifregion, publishedbygbifregion,
+rightsholder, identifier, http_unknown_org_nick, verbatimeventdate,
+dynamicproperties, collectioncode, gbifid, verbatimlocality,
+occurrenceid, taxonid, http_unknown_org_captive_cultivated,
+catalognumber, institutioncode, vitality, identificationid,
+occurrenceremarks, sex, lifestage, preparations, nomenclaturalcode,
+associatedtaxa, vernacularname, comments, verbatimelevation, behavior,
+higherclassification, informationwithheld, infraspecificepithet,
+identificationremarks, media_type, media_references, media_created,
+media_publisher, media_license, media_rightsholder, media_description,
+page, individualcount, samplingprotocol, scientificnameid,
+georeferenceremarks, language, georeferencesources, media_title,
+elevation, elevationaccuracy, highergeography, georeferencedby,
+georeferenceddate, institutionid, georeferenceprotocol,
+verbatimcoordinatesystem, type, locationaccordingto,
+previousidentifications, accessrights, collectionid
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_inaturalist
+<a href="https://marce10.github.io/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a>
 </td>
 <td style="text-align:left;">
-quality_grade, time_observed_at, taxon_geoprivacy, uuid, id,
-cached_votes_total, identifications_most_agree, species_guess,
+quality_grade, taxon_geoprivacy, uuid, cached_votes_total,
+identifications_most_agree, species_guess,
 identifications_most_disagree, positional_accuracy, comments_count,
 site_id, created_time_zone, license_code, observed_time_zone,
 public_positional_accuracy, oauth_application_id, created_at,
 description, time_zone_offset, observed_on, observed_on_string,
 updated_at, captive, faves_count, num_identification_agreements,
-map_scale, uri, community_taxon_id, owners_identification_from_vision,
-identifications_count, obscured, num_identification_disagreements,
-geoprivacy, location, spam, mappable, identifications_some_agree,
-place_guess, file_url, attribution, page, repository
+identification_disagreements_count, map_scale, uri, community_taxon_id,
+owners_identification_from_vision, identifications_count, obscured,
+num_identification_disagreements, geoprivacy, spam, mappable,
+identifications_some_agree, place_guess, id, attribution,
+native_sound_id, secret_token, file_content_type, play_local, subtype,
+hidden, offset
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_macaulay
+<a href="https://marce10.github.io/suwo/reference/query_macaulay.html" style="     " target="_blank">query_macaulay</a>
 </td>
 <td style="text-align:left;">
-id, scientific_name, name, group, group_name, status, rarity, photo,
-info_text, permalink, determination_requirements, file_url, repository
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-query_observation
-</td>
-<td style="text-align:left;">
-id, scientific_name, name, group, group_name, status, rarity, photo,
-info_text, permalink, determination_requirements, file_url, repository
+common_name, background_species, caption, year, month, day,
+country_state_county, state_province, county, age_sex, behavior,
+playback, captive, collected, specimen_id, home_archive_catalog_number,
+recorder, microphone, accessory, partner_institution,
+ebird_checklist_id, unconfirmed, air_temp_<em>c</em>,
+water_temp_<em>c</em>, media_notes, observation_details, parent_species,
+species_code, taxon_category, taxonomic_sort, recordist_2,
+average_community_rating, number_of_ratings, asset_tags,
+original_image_height, original_image_width
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_wikiaves
+<a href="https://marce10.github.io/suwo/reference/query_wikiaves.html" style="     " target="_blank">query_wikiaves</a>
 </td>
 <td style="text-align:left;">
-recording ID, media type, user ID, species ID, scientific name, common
-name, repository ID, author, user name, date, verified condition,
-location, location ID, comments, likes, visualizations, url, duration
-and repository
+user_id, species_code, common_name, repository_id, verified,
+locality_id, number_of_comments, likes, visualizations, duration
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-query_xenocanto
+<a href="https://marce10.github.io/suwo/reference/query_xenocanto.html" style="     " target="_blank">query_xenocanto</a>
 </td>
 <td style="text-align:left;">
-recording ID, Genus, Specific epithet, Subspecies, English name,
-Recordist, Country, Locality, Latitude, Longitude, Vocalization type,
-Audio file, License, URL, Quality, Time, Date, Sound files in .mp3
+genus, specific_epithet, subspecies, taxonomic_group, english_name,
+altitude, vocalization_type, sex, stage, method, url, uploaded_file,
+license, quality, length, upload_date, other_species, comments,
+animal_seen, playback_used, temp, regnr, auto, recorder, microphone,
+sampling_rate, sonogram_small, sonogram_med, sonogram_large,
+sonogram_full, oscillogram_small, oscillogram_med, oscillogram_large
 </td>
 </tr>
 </tbody>
 </table>
-<p>Finding data using suwo follows a basic sequence. First a database is
-selected and the corresponding query function is used to search for the
-data needed.</p>
-<div class="alert alert-info">
-<p><font size="4">Search queries</font></p>
-<p>A search query consists of a term, which in most functions is a
-species name (except for special queries in
-<code><a href="../reference/query_xenocanto.html">query_xenocanto()</a></code>), and a data type that corresponds to the
-type of data the user wishes to search for. Depending on the search
-function, this can vary from pictures, videos, sounds. The all_data
-parameter determines if all the data present for the search is included
-or if only the m of the metadata is generated as the output of the
-query. Queries may me made to any of the six available query functions
-that connect to one repository.</p>
+<div class="alert alert-warning">
+<p><font size="4">Obtaining raw data</font></p>
+<p>By default the package standardizes the information in the basic
+fields (detailed above) in order to facilitate the compilation of
+metadata from multiple repositories. However, in some cases this may
+result in loss of information. For instance, some repositories allow
+users to provide “morning” as a valid time value, which are converted
+into NAs by suwo. In such cases, users can retrieve the original data by
+setting the <code>raw_data = TRUE</code> in the query functions and/or
+global options (<code>options(raw_data = TRUE)</code>). But note that
+subsequent data manipulation functions (e.g.,
+<code><a href="../reference/merge_metadata.html">merge_metadata()</a></code>, <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>, etc) will
+not work properly as the basic fields are not standardized.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="case-study">Case study:<a class="anchor" aria-label="anchor" href="#case-study"></a>
+<h2 id="update-metadata">Update metadata<a class="anchor" aria-label="anchor" href="#update-metadata"></a>
 </h2>
-<div class="alert alert-warning">
-<p><font size="4">Saving and sharing query outputs</font></p>
-<p>Query outputs contain additional metadata as dataframe attributes.
-These attributes are lost when saving the dataframe as a data file
-(e.g. CSV, TXT, XSLX, etc) To preserve this metadata, users must save
-their query results as RDS files using the <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code>
-function from base R. This allows for easy sharing and reloading of the
-data with all its attributes intact. Dataframes can be retrieved from
-this files using the <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code>.</p>
+<p>The <code><a href="../reference/update_metadata.html">update_metadata()</a></code> function allows users to update a
+previous query to add new information from the corresponding repository
+of the original search. This function takes as input a data frame
+previously obtained from any query function
+(i.e. <code>query_reponame()</code>) and returns a data frame similar to
+the input with new data appended.</p>
+<p>To show case the function, we will use the previous example of
+<em>Turdus rufiventris</em> sounds from Xeno-canto. Let’s assume that
+the initial query was done a while ago and we want to update it to
+include any new records that might have been added since then. So i will
+remove all observations recorded after 2024-12-31 to simulate an old
+query:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
+<span><span class="va">old_truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># update "old" data</span></span>
+<span><span class="va">updated_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_metadata.html">update_metadata</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">old_truf_xc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># compare number of records</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">truf_xc</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">updated_xc</span><span class="op">)</span></span></code></pre></div>
+<pre><code>[1] TRUE</code></pre>
+<p>Note the use of the suwo function <code><a href="../reference/subset_metadata.html">subset_metadata()</a></code> to
+filter the data frame by date. This functions make sure that the
+attributes of the data frame are preserved, which are needed by
+subsequent suwo functions working on metadata. Those attributes will be
+lost if you use <code>dplyr::filter()</code>,
+<code><a href="https://rdrr.io/r/base/subset.html" class="external-link">base::subset()</a></code> or the extract operator <code>[</code>
+(e.g. <code>metadata[1:3, ]</code>).</p>
 </div>
+<div class="section level2">
+<h2 id="combine-metadata-from-multiple-repositories">Combine metadata from multiple repositories<a class="anchor" aria-label="anchor" href="#combine-metadata-from-multiple-repositories"></a>
+</h2>
+<p>The <code><a href="../reference/merge_metadata.html">merge_metadata()</a></code> function allows users to combine
+metadata data frames obtained from multiple query functions into a
+single data frame. This function ensures that the combined data frame
+has a consistent structure, with all basic metadata fields included. The
+function will match the basic columns of all data frames. Data from
+additional columns will only be combined if the names from the different
+repositories match. The function will return a data frame that includes
+a new column called <code>source</code> indicating the name of the
+original metadata data frame:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># query multiple repositories</span></span>
+<span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span><span class="op">)</span></span>
+<span><span class="va">truf_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
+<span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># merge metadata</span></span>
+<span><span class="va">merged_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_metadata.html">merge_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">truf_gbf</span>, <span class="va">truf_ml</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">merged_metadata</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+source
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+1032061
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-07-19
+</td>
+<td style="text-align:center;">
+18:01
+</td>
+<td style="text-align:center;">
+Jacob Wijpkema
+</td>
+<td style="text-align:center;">
+Bolivia
+</td>
+<td style="text-align:center;">
+Lagunillas, Cordillera, Santa Cruz Department
+</td>
+<td style="text-align:center;">
+-19.6348
+</td>
+<td style="text-align:center;">
+-63.6711
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/1032061/download" class="external-link uri">https://xeno-canto.org/1032061/download</a>
+</td>
+<td style="text-align:center;">
+wav
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+1006659
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-06-13
+</td>
+<td style="text-align:center;">
+16:01
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+RPPN Flor das Águas - Pirenópolis, Goiás
+</td>
+<td style="text-align:center;">
+-15.8195
+</td>
+<td style="text-align:center;">
+-48.9861
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/1006659/download" class="external-link uri">https://xeno-canto.org/1006659/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+979639
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-03-12
+</td>
+<td style="text-align:center;">
+08:00
+</td>
+<td style="text-align:center;">
+Ricardo José Mitidieri
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Tijuca, Teresópolis, Rio de Janeiro
+</td>
+<td style="text-align:center;">
+-22.4212
+</td>
+<td style="text-align:center;">
+-42.9559
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/979639/download" class="external-link uri">https://xeno-canto.org/979639/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+974643
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-02-14
+</td>
+<td style="text-align:center;">
+13:11
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Fazenda Nazareth Eco, Jose de Freitas-PI, Piauí
+</td>
+<td style="text-align:center;">
+-4.7958
+</td>
+<td style="text-align:center;">
+-42.6150
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/974643/download" class="external-link uri">https://xeno-canto.org/974643/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="find-duplicated-records">Find duplicated records<a class="anchor" aria-label="anchor" href="#find-duplicated-records"></a>
+</h2>
+<p>When compiling data from multiple repositories, duplicated media
+records are a common issue. These duplicates occur both through data
+sharing between repositories like Xeno-Canto and GBIF, and when users
+upload the same file to multiple platforms. To help users efficiently
+identify these duplicate records, suwo provides the find_duplicates()
+function.</p>
+<p>The <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function helps users identify
+potential duplicate records in their metadata data frames. Duplicates
+are identified based on matching species name, country, date, user name,
+and locality. The function uses a fuzzy matching approach to account for
+minor variations in the data (e.g., typos, different location formats,
+etc).The output is a data frame with the candidate duplicate records,
+allowing users to review and decide which records to keep.</p>
+<p>In this example we look for possible duplicates in the merged
+metadata data frame from the previous section:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># find duplicates</span></span>
+<span><span class="va">dups_merged_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_duplicates.html">find_duplicates</a></span><span class="op">(</span><span class="va">merged_metadata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># look first 6 columns</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+source
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+duplicate_group
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+913487
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2024-06-07
+</td>
+<td style="text-align:center;">
+06:46
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Reserva do Setor Sítio de Recreio Caraíbas-Goiânia, Goiás
+</td>
+<td style="text-align:center;">
+-16.5631
+</td>
+<td style="text-align:center;">
+-49.2850
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/913487/download" class="external-link uri">https://xeno-canto.org/913487/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+4907346188
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2024-06-07
+</td>
+<td style="text-align:center;">
+06:46
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Reserva do Setor Sítio de Recreio Caraíbas-Goiânia, Goiás
+</td>
+<td style="text-align:center;">
+-16.5631
+</td>
+<td style="text-align:center;">
+-49.2850
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/LXKLWEDKEM/XC913487-07-06-2024-6e46-Sabia-laranjeira-CARAIBAS.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/LXKLWEDKEM/XC913487-07-06-2024-6e46-Sabia-laranjeira-CARAIBAS.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+351258
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-11
+</td>
+<td style="text-align:center;">
+17:27
+</td>
+<td style="text-align:center;">
+Jeremy Minns
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Miranda, MS. Refúgio da Ilha
+</td>
+<td style="text-align:center;">
+-20.2209
+</td>
+<td style="text-align:center;">
+-56.5751
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/351258/download" class="external-link uri">https://xeno-canto.org/351258/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243749719
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-11
+</td>
+<td style="text-align:center;">
+17:27
+</td>
+<td style="text-align:center;">
+Jeremy Minns
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Miranda, MS. Refúgio da Ilha
+</td>
+<td style="text-align:center;">
+-20.2209
+</td>
+<td style="text-align:center;">
+-56.5751
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351258-TURRUF68.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351258-TURRUF68.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+351066
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-10
+</td>
+<td style="text-align:center;">
+17:02
+</td>
+<td style="text-align:center;">
+Jeremy Minns
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Miranda, MS. Refúgio da Ilha
+</td>
+<td style="text-align:center;">
+-20.2209
+</td>
+<td style="text-align:center;">
+-56.5751
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/351066/download" class="external-link uri">https://xeno-canto.org/351066/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243747991
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-10
+</td>
+<td style="text-align:center;">
+17:02
+</td>
+<td style="text-align:center;">
+Jeremy Minns
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Miranda, MS. Refúgio da Ilha
+</td>
+<td style="text-align:center;">
+-20.2209
+</td>
+<td style="text-align:center;">
+-56.5751
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351066-TURRUF67.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351066-TURRUF67.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note that the <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function adds a new
+column called <code>duplicate_group</code> to the output data frame.
+This column assigns a unique identifier to each group of potential
+duplicates, allowing users to easily identify and review them. For
+instance, in the example above, records from duplicated group 39 belong
+to the same user, were recorded on the same date and time in the same
+country:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># look at duplicated group 39</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">39</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+source
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+duplicate_group
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+273100
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/273100/download" class="external-link uri">https://xeno-canto.org/273100/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+273098
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/273098/download" class="external-link uri">https://xeno-canto.org/273098/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243678570
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273098-Rufous-bellied%20Thrush%20QQ%20call%20A%201.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273098-Rufous-bellied%20Thrush%20QQ%20call%20A%201.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243680322
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273100-Rufous-bellied%20Thrush%20QQQ%20call%20A.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273100-Rufous-bellied%20Thrush%20QQQ%20call%20A.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+301276
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP
+</td>
+<td style="text-align:center;">
+-23.74200
+</td>
+<td style="text-align:center;">
+-64.85780
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301276/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301276/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+301275
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP
+</td>
+<td style="text-align:center;">
+-23.74200
+</td>
+<td style="text-align:center;">
+-64.85780
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301275/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301275/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Also note that the locality is not exactly the same for these
+records, but the fuzzy matching approach used by
+<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> was able to identify them as potential
+duplicates.</p>
+</div>
+<div class="section level2">
+<h2 id="donwload-media-files">Donwload media files<a class="anchor" aria-label="anchor" href="#donwload-media-files"></a>
+</h2>
+<p>The last step of the workflow is to download the media files
+associated with the metadata. This can be done using the
+<code><a href="../reference/download_media.html">download_media()</a></code> function, which takes as input a metadata
+data frame (obtained from any query function or merged data frame) and
+downloads the media files to a specified directory. For this example we
+will download images from a query on <code>Amanita zambiana</code> (a
+mushroom) on GBIF:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># query GBIF for Amanita zambiana images</span></span>
+<span><span class="va">amus_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># download media files to a temporary directory</span></span>
+<span><span class="va">amus_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">amus_gbf</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The output of the function is a data frame similar to the input
+metadata but with two additional columns indicating the file name of the
+downloaded files (‘download_file_name’) and the result of the download
+attempt (‘download_result’, with values “success”, ‘failed’, ‘already
+there (not downloaded)’ or ‘overwritten’).</p>
+<p>Here we print the first 3 rows of the output data frame:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">amus_files</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+download_file_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+download_results
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+image
+</td>
+<td style="text-align:center;">
+4430877067
+</td>
+<td style="text-align:center;">
+Amanita zambiana
+</td>
+<td style="text-align:center;">
+2023-01-25
+</td>
+<td style="text-align:center;">
+10:57
+</td>
+<td style="text-align:center;">
+Allanweideman
+</td>
+<td style="text-align:center;">
+Mozambique
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+-21.28456
+</td>
+<td style="text-align:center;">
+34.61868
+</td>
+<td style="text-align:center;">
+<a href="https://inaturalist-open-data.s3.amazonaws.com/photos/253482452/original.jpg" class="external-link uri">https://inaturalist-open-data.s3.amazonaws.com/photos/253482452/original.jpg</a>
+</td>
+<td style="text-align:center;">
+jpeg
+</td>
+<td style="text-align:center;">
+Amanita_zambiana-GBIF4430877067-1.jpeg
+</td>
+<td style="text-align:center;">
+saved
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+image
+</td>
+<td style="text-align:center;">
+4430877067
+</td>
+<td style="text-align:center;">
+Amanita zambiana
+</td>
+<td style="text-align:center;">
+2023-01-25
+</td>
+<td style="text-align:center;">
+10:57
+</td>
+<td style="text-align:center;">
+Allanweideman
+</td>
+<td style="text-align:center;">
+Mozambique
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+-21.28456
+</td>
+<td style="text-align:center;">
+34.61868
+</td>
+<td style="text-align:center;">
+<a href="https://inaturalist-open-data.s3.amazonaws.com/photos/253482473/original.jpg" class="external-link uri">https://inaturalist-open-data.s3.amazonaws.com/photos/253482473/original.jpg</a>
+</td>
+<td style="text-align:center;">
+jpeg
+</td>
+<td style="text-align:center;">
+Amanita_zambiana-GBIF4430877067-2.jpeg
+</td>
+<td style="text-align:center;">
+saved
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+image
+</td>
+<td style="text-align:center;">
+4430877067
+</td>
+<td style="text-align:center;">
+Amanita zambiana
+</td>
+<td style="text-align:center;">
+2023-01-25
+</td>
+<td style="text-align:center;">
+10:57
+</td>
+<td style="text-align:center;">
+Allanweideman
+</td>
+<td style="text-align:center;">
+Mozambique
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+-21.28456
+</td>
+<td style="text-align:center;">
+34.61868
+</td>
+<td style="text-align:center;">
+<a href="https://inaturalist-open-data.s3.amazonaws.com/photos/253484256/original.jpg" class="external-link uri">https://inaturalist-open-data.s3.amazonaws.com/photos/253484256/original.jpg</a>
+</td>
+<td style="text-align:center;">
+jpeg
+</td>
+<td style="text-align:center;">
+Amanita_zambiana-GBIF4430877067-3.jpeg
+</td>
+<td style="text-align:center;">
+saved
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here we create a 6 panel plot of 6 of the downloaded images (just for
+illustration purpose):</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create a 6 pannel plot of the downloaded images</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">amus_files</span><span class="op">$</span><span class="va">download_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>    <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'n'</span>,</span>
+<span>    axes <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/rasterImage.html" class="external-link">rasterImage</a></span><span class="op">(</span><span class="va">img</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>    <span class="va">amus_files</span><span class="op">$</span><span class="va">country</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>    <span class="va">amus_files</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>    sep <span class="op">=</span> <span class="st">" \n "</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="suwo_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;"></p>
+<p>Users can also saved the downloaded files into sub-directories with
+the argument <code>folder_by</code>. The argument <code>folder_by</code>
+takes a character of factor column with the names of two or more
+metadata fields to create sub-directories within the main download
+directory (suplied with the argument <code>path</code>). For instance,
+the following code saves the previous images into sub-directories by
+country:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># download media files to a temporary directory, creating sub-directories by country</span></span>
+<span><span class="va">amus_files2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">amus_gbf</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
+<p>In such case the name of the downloaded files will include the
+sub-directory name:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">amus_files2</span><span class="op">$</span><span class="va">download_file_name</span></span></code></pre></div>
+<pre><code>[1] "Mozambique/Amanita_zambiana-GBIF4430877067-1.jpeg"
+[2] "Mozambique/Amanita_zambiana-GBIF4430877067-2.jpeg"
+[3] "Mozambique/Amanita_zambiana-GBIF4430877067-3.jpeg"
+[4] "Zambia/Amanita_zambiana-GBIF5104283819.jpeg"      
+[5] "Zimbabwe/Amanita_zambiana-GBIF3759537817-1.jpeg"  
+[6] "Zimbabwe/Amanita_zambiana-GBIF3759537817-2.jpeg"  </code></pre>
 <p><font size="4">Session information</font></p>
 <pre><code>R version 4.5.1 (2025-06-13)
 Platform: x86_64-pc-linux-gnu
@@ -435,16 +2163,28 @@ other attached packages:
 [1] kableExtra_1.4.0  suwo_0.1.0        htmlwidgets_1.6.4 knitr_1.50       
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.1     xml2_1.4.0         stringr_1.5.2     
- [6] bitops_1.0-9       parallel_4.5.1     gridExtra_2.3      jquerylib_0.1.4    systemfonts_1.2.3 
-[11] scales_1.4.0       textshaping_1.0.3  yaml_2.3.10        fastmap_1.2.0      ggplot2_4.0.0     
-[16] R6_2.6.1           generics_0.1.4     curl_7.0.0         viridis_0.6.5      desc_1.4.3        
-[21] lubridate_1.9.4    svglite_2.2.1      bslib_0.9.0        RColorBrewer_1.1-3 rlang_1.1.6       
-[26] cachem_1.1.0       stringi_1.8.7      xfun_0.53          S7_0.2.0           fs_1.6.6          
-[31] sass_0.4.10        timechange_0.3.0   viridisLite_0.4.2  cli_3.6.5          pkgdown_2.1.3     
-[36] magrittr_2.0.4     grid_4.5.1         digest_0.6.37      rstudioapi_0.17.1  lifecycle_1.0.4   
-[41] vctrs_0.6.5        evaluate_1.0.5     glue_1.8.0         farver_2.1.2       ragg_1.5.0        
-[46] RCurl_1.98-1.17    rmarkdown_2.29     tools_4.5.1        htmltools_0.5.8.1 </code></pre>
+ [1] viridisLite_0.4.2      farver_2.1.2           blob_1.2.4             viridis_0.6.5         
+ [5] S7_0.2.0               bitops_1.0-9           fastmap_1.2.0          RCurl_1.98-1.17       
+ [9] digest_0.6.37          rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.4       
+[13] survival_3.8-3         RSQLite_2.4.3          magrittr_2.0.4         compiler_4.5.1        
+[17] rlang_1.1.6            sass_0.4.10            tools_4.5.1            yaml_2.3.10           
+[21] data.table_1.17.8      bit_4.6.0              curl_7.0.0             xml2_1.4.0            
+[25] RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20            grid_4.5.1            
+[29] xtable_1.8-4           e1071_1.7-16           future_1.67.0          ada_2.0-5             
+[33] ggplot2_4.0.0          globals_0.18.0         scales_1.4.0           MASS_7.3-65           
+[37] cli_3.6.5              rmarkdown_2.30         ragg_1.5.0             generics_0.1.4        
+[41] rstudioapi_0.17.1      RecordLinkage_0.4-12.5 future.apply_1.20.0    httr_1.4.7            
+[45] pbapply_1.7-4          DBI_1.2.3              cachem_1.1.0           proxy_0.4-27          
+[49] stringr_1.5.2          splines_4.5.1          parallel_4.5.1         vctrs_0.6.5           
+[53] Matrix_1.7-3           jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.9.1         
+[57] jpeg_0.1-11            systemfonts_1.2.3      evd_2.3-7.1            jquerylib_0.1.4       
+[61] glue_1.8.0             parallelly_1.45.1      pkgdown_2.1.3          codetools_0.2-20      
+[65] lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6           htmltools_0.5.8.1     
+[69] ipred_0.9-15           lava_1.8.1             R6_2.6.1               ff_4.5.2              
+[73] textshaping_1.0.3      evaluate_1.0.5         lattice_0.22-7         backports_1.5.0       
+[77] memoise_2.0.1          bslib_0.9.0            class_7.3-23           Rcpp_1.1.0            
+[81] svglite_2.2.1          gridExtra_2.3          prodlim_2025.04.28     checkmate_2.3.3       
+[85] xfun_0.53              fs_1.6.6              </code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
