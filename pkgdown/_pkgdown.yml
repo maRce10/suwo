@@ -29,6 +29,7 @@ reference:
   - map_locations
   - merge_metadata
   - subset_metadata
+  - find_duplicates
 
 - title: Misellaneous
   desc: >
