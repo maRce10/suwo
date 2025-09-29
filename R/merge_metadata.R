@@ -1,17 +1,19 @@
 #' Merge query results
 #'
 #' \code{merge_metadata} merges the output of suwo query results.
-#' @inheritParams template_params
-#' @param .. two or more dataframes (each one a a separate entry) referring to the metadata obtained from suwo query functions (`query_x()`).
+#' @param ... two or more data frames (each one a a separate entry) referring to the metadata obtained from suwo query functions (`query_x()`).
 #' @return A single data frame with the data from all input data frames combined and with an additional column named `source` indicating the original data frame from which each row originated.
 #' @export
 #' @name merge_metadata
 #' @details This function compares two dataframes to detect repeated data.
 #' @examples
 #' \dontrun{
-#' # compare
-# df3 <- merge_metadata(X = df1, Y = df2)
-#' View(df3)
+#'  # get metadata from 2 repos
+#'   wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
+#'   xc <- query_xenocanto(term = 'Glaucis dohrnii')
+#'
+#'   # combine metadata
+#'   merged_mt <- merge_metadata(wa, xc)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -44,7 +46,7 @@ merge_metadata <-
     # add source
     for (i in seq_along(metadata_list)) {
       metadata_list[[i]]$source <- df_names[i]
-      }
+    }
 
     # Merge the dataframes
     merged_data <- .merge_data_frames(metadata_list)
