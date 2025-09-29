@@ -135,12 +135,18 @@ Here is a description of each step:
 
 The following table summarizes the available suwo query functions and the types of metadata they retrieve:
 
+```{r, echo=TRUE}
+# Load suwo package
+library(suwo)
+```
+
+
 ```{r query_summary_table, echo=FALSE, results='asis', message=FALSE}
 
 library(knitr)
 library(kableExtra)
 
-load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
+tur_ruf_list <- suwo:::tur_ruf_list
 
 tur_ruf_sound_list <- tur_ruf_list[grep("sound", names(tur_ruf_list))]
 tur_ruf_sound_list <- tur_ruf_sound_list[order(names(tur_ruf_sound_list))]
@@ -356,6 +362,8 @@ head(merged_metadata, 4)
 ```
 
 ```{r, echo=FALSE}
+
+merged_metadata <- suwo:::merged_metadata
 
 head(merged_metadata, 4)
 
