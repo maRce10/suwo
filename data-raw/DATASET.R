@@ -28,13 +28,19 @@ attrbts <- attributes(tur_ruf_list$xc_adt)
 tur_ruf_list$xc_adt <- adt_list$xc_adt
 
 # add missing attributes
-# attributes(tur_ruf_list$xc_adt) <- c(attributes(tur_ruf_list$xc_adt), attrbts[setdiff(names(attrbts), names(attributes(tur_ruf_list$xc_adt)))])
+attributes(tur_ruf_list$xc_adt) <- c(attributes(tur_ruf_list$xc_adt), attrbts[setdiff(names(attrbts), names(attributes(tur_ruf_list$xc_adt)))])
 
 # check number of rows
 sapply(tur_ruf_list, nrow)
 
 names(tur_ruf_list) <- c("xeno-canto_sounds", "wikiaves_sounds", "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
 
-usethis::use_data(ml_taxon_code, tur_ruf_list, internal = TRUE, overwrite = TRUE)
+xc_adf <- query_xenocanto(term = term, all_data = FALSE)
+gb_adf_s <- query_gbif(term = term, format = "sound", all_data = FALSE)
+ml_adf_s <- query_macaulay(term = term, format = "sound", path = tempdir(), all_data = FALSE)
+
+merged_metadata <- merge_metadata(xc_adf, gb_adf_s, ml_adf_s)
+
+usethis::use_data(ml_taxon_code, tur_ruf_list, merged_metadata, internal = TRUE, overwrite = TRUE)
 
 
