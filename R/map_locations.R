@@ -2,7 +2,7 @@
 #'
 #' \code{map_locations} creates maps to visualize the geographic spread of suwo
 #'   recordings.
-#' @param metadata Data frame output from suwo's media query functions.
+#' @inheritParams template_params
 #' @param cluster Logical to control if icons are clustered by locality. Default is \code{FALSE}.
 #' @param palette Color palette function used for location markers.
 #' @param by Name of column to be used for coloring markers. Default is "species".

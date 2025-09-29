@@ -472,7 +472,7 @@ beepr::beep(2)
 ## run in terminal:
   # /opt/R/3.6.3/bin/R
 
-# devtools::check("~/Dropbox/R_package_testing/warbleR/warbleR", document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
+devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
 
 
 ```
@@ -581,44 +581,31 @@ out <- sapply(list.files("./man", full.names = TRUE), function(x) tools::showNon
 
 ```{r find_duplicates}
 
-options(all_data = FALSE, raw_data = FALSE)
+load("~/Dropbox/R_package_testing/suwo/R/sysdata.rda")
 term <- "Turdus rufiventris"
 xc_adf <- query_xenocanto(term = term, all_data = FALSE)
 
 gb_adf <- query_gbif(term = term, format = "sound")
+ml_adf <- query_macaulay(term = term, format = "sound", path = tempdir())
+
+metadata2 <- merge_metadata(xc_adf, gb_adf,ml_adf)
+dup_metadata <- find_duplicates(metadata = metadata2, sort = FALSE)
+
+View(dup_metadata)
+all(table(dup_metadata$duplicate_group) > 1)
+length(unique(dup_metadata$duplicate_group))
+
+View(dup_metadata[!is.na(dup_metadata$duplicate_index),])
+
+View(dup_metadata[dup_metadata$date == "1979-09-29" & !is.na(dup_metadata$date),])
+View(metadata[metadata$date == "1979-09-29" & !is.na(metadata$date),])
+
+metadata <- readRDS(file = "./testing/find_duplicates_test_data.rds")
+dup_metadata <- find_duplicates(metadata = metadata)
 
 
-comb_dat <- rbind(xc_adf, gb_adf)
-
-# str(comb_dat)
-# 
-# View(comb_dat)
-
-# Method 1: Using compare.linkage for detailed comparison
-pairs <- compare.dedup(
-  comb_dat, 
-  blockfld = list("country", "format"),  # Block by country and species to reduce comparisons
-  # strcmp = c("user_name"), # Use string comparison for these fields
-  strcmpfun = jarowinkler  # Use Jaro-Winkler similarity
-)
-
-
-table(pairs$pairs$is_match)
-
-pairs$frequency
-
-mtch <- pairs$pairs[!is.na(pairs$pairs$is_match), ]
-
-data(RLdata500)
-
-rpairs=compare.dedup(RLdata500, identity=identity.RLdata500, strcmp=TRUE,
-  blockfld=list(1,c(5,6,7)))
-
-table(rpairs$pairs$is_match)
-
-
-View(rpairs$pairs)
 ```
+
 
 
 

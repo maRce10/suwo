@@ -1,7 +1,7 @@
 ---
-title: "suwo"
-subtitle: Access nature media from online repositories
-pagetitle: Access nature media from online repositories
+title: "suwo: access nature media repositories"
+subtitle: package overview
+pagetitle: suwo package overview
 author: 
 - Jorge Elizondo & <a href="https://marce10.github.io/">Marcelo Araya-Salas</a>
 date:  "`r Sys.Date()`"
@@ -122,13 +122,13 @@ Here is a description of each step:
 
 1. Queries regarding a specific taxonomic group (typically a species name) is submitted through one of the available query functions (`query_repo_name()`) that connect to five different online repositories. The output of these queries is a data frame containing metadata associated with the media files (e.g., species name, date, location, etc, see below). 
 
-1. If multiple repositories are queried, the resulting metadata data frames can be merged into a single data frame using the `merge_query_results()` function. 
+1. If multiple repositories are queried, the resulting metadata data frames can be merged into a single data frame using the `merge_metadata()` function. 
 
-1. Users can also check for duplicate records in their datasets using the `find_duplicates()` function.
+1. Check for duplicate records in their datasets using the `find_duplicates()` function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and geographic coordinates. User can double check the candidate duplicates and decide which records to keep, which can be done with `remove_duplicates()`.
  
-1. Users can then download the media files associated with the metadata using the `download_media()` function. 
+1. Download the media files associated with the metadata using the `download_media()` function. 
 
-1. Finally, users can update their datasets with new records by re-running the queries and merging the new results with their existing datasets using the `update_query()` function. 
+1. Finally, users can update their datasets with new records by re-running the queries and merging the new results with their existing datasets using the `update_metadata()` function. 
 
 
 # Query functions
@@ -225,7 +225,7 @@ check.names = FALSE
 )
 
 
- query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
+query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
 
  query_summary$Function <- kableExtra::cell_spec(query_summary$Function, "html", link = paste0("https://marce10.github.io/suwo/reference/", query_summary$Function, ".html"), new_tab = TRUE)
  
@@ -244,30 +244,24 @@ query_summary[, names(query_summary) != "Additional data"] |>
 
 ```
 
-This is an example code of a query of _Turdus rufiventris_ (a bird species) sounds from Xeno-canto and Wikiaves:
+This is an example code of a query of _Turdus rufiventris_ (a bird species) sounds from Xeno-canto and Wikiaves (we print the first 4 rows of each output data frame):
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 # Load suwo package
 library(suwo)
 
 # Query Xeno-canto for Turdus rufiventris sounds
-t_ruf_xc_data <- query_xenocanto(term = "Turdus rufiventris")
+truf_xc <- query_xenocanto(term = "Turdus rufiventris")
 
-head(t_ruf_xc_data, 4)
-```
-
-```{r, echo=FALSE}
-
-head(tur_ruf_sound_list$`xeno-canto`[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
-
+head(truf_xc, 4)
 ```
 
 
 ```{r, eval = FALSE}
 # Query Wikiaves for Turdus rufiventris sounds
-t_ruf_wa_data <- query_wikiaves(term = "Turdus rufiventris", format = "sound")
+truf_wa <- query_wikiaves(term = "Turdus rufiventris", format = "sound")
 
-head(t_ruf_wa_data, 4)
+head(truf_wa, 4)
 ```
 
 ```{r, echo=FALSE}
@@ -295,7 +289,7 @@ By default all query function return the `r length(suwo:::.format_query_output(o
  
 _* Can contain missing values (NAs)_
 
-Users can also download all available metadata by setting the `all_data = TRUE`. These are the additional metadata fields, on top of the basic fields, that can be retrieved by each query function:
+Users can also download all available metadata by setting the `all_data = TRUE`. These are the additional metadata fields, on top of the basic fields, that are retrieved by each query function:
 
 ```{r, echo=FALSE, results='asis', message=FALSE}
 
@@ -319,26 +313,152 @@ query_summary[,c("Function", "Additional data")] |>
 
 <font size = "4">Obtaining raw data</font>
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). But note that subsequent data manipulation functions (e.g., `merge_query_results()`, `find_duplicates()`, etc) will not work properly as the basic fields are not standardized.
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). But note that subsequent data manipulation functions (e.g., `merge_metadata()`, `find_duplicates()`, etc) will not work properly as the basic fields are not standardized.
 
 </div>
 
-# Combine metadata from multiple repositories
+# Update metadata
 
-The `merge_query_results()` function allows users to combine metadata data frames obtained from multiple query functions into a single data frame. This function ensures that the combined data frame has a consistent structure, with all basic metadata fields included. The function will match the basic columns of all data frames. Data from additional columns will only be combined if the names from the different repositories match. The function will return a data frame 
+The `update_metadata()` function allows users to update a previous query to add new information from the corresponding repository of the original search. This function takes as input a data frame previously obtained from any query function (i.e. `query_reponame()`) and returns a data frame similar to the input with new data appended. 
+
+To show case the function, we will use the previous example of _Turdus rufiventris_ sounds from Xeno-canto. Let's assume that the initial query was done a while ago and we want to update it to include any new records that might have been added since then. So i will remove all observations recorded after 2024-12-31 to simulate an old query:
 
 
 ```{r}
+# exclude new observations (simulate old data)
+old_truf_xc <- subset_metadata(truf_xc, date <= "2024-12-31" | is.na(date))
+
+# update "old" data
+updated_xc <- update_metadata(metadata = old_truf_xc)
+
+# compare number of records
+nrow(truf_xc) == nrow(updated_xc)
+  
+```
+
+Note the use of the suwo function `subset_metadata()` to filter the data frame by date. This functions make sure that the attributes of the data frame are preserved, which are needed by subsequent suwo functions working on metadata. Those attributes will be lost if you use `dplyr::filter()`, `base::subset()` or the extract operator `[` (e.g. `metadata[1:3, ]`).
+
+# Combine metadata from multiple repositories
+
+The `merge_metadata()` function allows users to combine metadata data frames obtained from multiple query functions into a single data frame. This function ensures that the combined data frame has a consistent structure, with all basic metadata fields included. The function will match the basic columns of all data frames. Data from additional columns will only be combined if the names from the different repositories match. The function will return a data frame that includes a new column called `source` indicating the name of the original metadata data frame: 
+
+```{r, eval = FALSE}
+
+# query multiple repositories
+truf_xc <- query_xenocanto(term = "Turdus rufiventris")
+truf_gbf <- query_gbif(term = "Turdus rufiventris", format = "sound")
+truf_ml <- query_macaulay(term = "Turdus rufiventris", format = "sound", path = tempdir())
+
+# merge metadata
+merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
+
+head(merged_metadata, 4)
+```
+
+```{r, echo=FALSE}
+
+head(merged_metadata, 4)
+
+```
+
+# Find duplicated records
+
+When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, suwo provides the find_duplicates() function.
+
+The `find_duplicates()` function helps users identify potential duplicate records in their metadata data frames. Duplicates are identified based on matching species name, country, date, user name, and locality. The function uses a fuzzy matching approach to account for minor variations in the data (e.g., typos, different location formats, etc).The output is a data frame with the candidate duplicate records, allowing users to review and decide which records to keep.
+
+In this example we look for possible duplicates in the merged metadata data frame from the previous section:
+
+```{r, eval = TRUE}
+# find duplicates
+dups_merged_metadata <- find_duplicates(merged_metadata)
+
+# look first 6 columns
+head(dups_merged_metadata)
+```
+
+Note that the `find_duplicates()` function adds a new column called `duplicate_group` to the output data frame. This column assigns a unique identifier to each group of potential duplicates, allowing users to easily identify and review them. For instance, in the example above, records from duplicated group 39 belong to the same user, were recorded on the same date and time in the same country:
+
+```{r}
+# look at duplicated group 39
+subset(dups_merged_metadata, duplicate_group == 39)
+
+```
+
+Also note that the locality is not exactly the same for these records, but the fuzzy matching approach used by `find_duplicates()` was able to identify them as potential duplicates.
+
+# Donwload media files
+
+The last step of the workflow is to download the media files associated with the metadata. This can be done using the `download_media()` function, which takes as input a metadata data frame (obtained from any query function or merged data frame) and downloads the media files to a specified directory. For this example we will download images from a query on `Amanita zambiana` (a mushroom) on GBIF:
+
+```{r, eval = FALSE}
+# query GBIF for Amanita zambiana images
+amus_gbf <- query_gbif(term = "Amanita zambiana", format = "image")
+
+# download media files to a temporary directory
+amus_files <- download_media(metadata = amus_gbf, path = tempdir())
+
+```
+
+```{r, eval = TRUE, echo = FALSE}
+
+# query GBIF for Amanita zambiana images
+amus_gbf <- query_gbif(term = "Amanita zambiana", format = "image")
+
+amus_gbf <- subset_metadata(amus_gbf, 1:6)
+
+# download media files to a temporary directory
+amus_files <- download_media(metadata = amus_gbf, path = tempdir())
+
+```
+
+The output of the function is a data frame similar to the input metadata but with two additional columns indicating the file name of the downloaded files ('download_file_name') and the result of the download attempt ('download_result', with values "success", 'failed', 'already there (not downloaded)' or 'overwritten').
+
+Here we print the first 3 rows of the output data frame:
+
+```{r, eval = TRUE}
+
+head(amus_files, 3)
+
+```
+
+Here we create a 6 panel plot of 6 of the downloaded images (just for illustration purpose):
+```{r}
+# create a 6 pannel plot of the downloaded images
+par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+
+for (i in 1:6) {
+  img <- jpeg::readJPEG(file.path(tempdir(), amus_files$download_file_name[i]))
+  plot(
+    1:2,
+    type = 'n',
+    axes = FALSE
+  )
+  rasterImage(img, 1, 1, 2, 2)
+  title(main = paste(
+    amus_files$country[i],
+    amus_files$date[i],
+    sep = " \n "
+  ))
+}
+
+```
+
+Users can also saved the downloaded files into sub-directories with the argument `folder_by`. The argument `folder_by` takes a character of factor column with the names of two or more metadata fields to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code saves the previous images into sub-directories by country:
+
+```{r}
+# download media files to a temporary directory, creating sub-directories by country
+amus_files2 <- download_media(metadata = amus_gbf, path = tempdir(), folder_by = "country")
+```
+
+In such case the name of the downloaded files will include the sub-directory name:
+```{r}
+
+amus_files2$download_file_name
 
 ```
 
 
-# Find duplicated records
-
-# Update metadata
-
-
-# Donwload media files
 
 <font size="4">Session information</font>
 

@@ -12,7 +12,7 @@ map_locations(
 )
 }
 \arguments{
-\item{metadata}{Data frame output from suwo's media query functions.}
+\item{metadata}{data frame previously obtained from any suwo query function (i.e. `query_reponame()`).}
 
 \item{cluster}{Logical to control if icons are clustered by locality. Default is \code{FALSE}.}
 

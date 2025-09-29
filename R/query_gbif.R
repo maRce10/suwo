@@ -42,7 +42,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-
-  function(term,
+  function(term = getOption("term", NULL),
            format = c("sound", "image", "video", "interactive resource"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),

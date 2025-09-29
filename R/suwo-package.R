@@ -20,6 +20,7 @@
 #' @import parallel
 #' @import RCurl
 #' @import jsonlite
+#' @importFrom RecordLinkage compare.dedup
 #' @importFrom kableExtra cell_spec kbl kable_styling column_spec
 #' @importFrom lubridate parse_date_time
 #' @importFrom tools file_ext
@@ -27,7 +28,7 @@
 #' @importFrom utils packageVersion
 #' @importFrom viridis viridis
 #' @importFrom rlang arg_match
-#' @importFrom stats setNames
+#' @importFrom stats setNames complete.cases
 #' @importFrom utils download.file read.csv write.csv
 #' @importFrom methods is
 #' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors cli_text

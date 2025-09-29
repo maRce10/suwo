@@ -3,9 +3,9 @@
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 #' @inheritParams template_params
 #' @param term Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
-#'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}.
+#'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Phaethornis longirostris")}).
 #'  More complex queries can be done by using search terms that follow the
-#'  xeno-canto advance query syntax. This syntax uses tags to search within a particular aspect of the recordings
+#'  xeno-canto advance query syntax (only valid for this function). This syntax uses tags to search within a particular aspect of the recordings
 #'  (e.g. country, location, sound type). Tags are of the form tag:searchterm'. For instance, 'type:song'
 #'  will search for all recordings in which the sound type description contains the word 'song'.
 #'  Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
@@ -50,7 +50,7 @@
 
 
 query_xenocanto <-
-  function(term,
+  function(term = getOption("term", NULL),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
@@ -59,16 +59,13 @@ query_xenocanto <-
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
-
     # add objects to argument names
     for (i in names(arguments)) {
       arguments[[i]] <- get(i)
     }
 
-
     # check each arguments
     check_results <- .check_arguments(args = arguments)
-
 
     # report errors
     checkmate::reportAssertions(check_results)

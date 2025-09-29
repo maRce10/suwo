@@ -8,7 +8,7 @@ test_that("update query_wikiaves", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1)- 3), ]
 
-  up_df <- update_metadata(X = sub_df)
+  up_df <- update_metadata(metadata = sub_df)
 
   expect_true(nrow(up_df) == nrow(df1))
 
@@ -24,7 +24,7 @@ test_that("update query_inaturalist", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1)- 3), ]
 
-  up_df <- update_metadata(X = sub_df)
+  up_df <- update_metadata(metadata = sub_df)
 
   expect_true(nrow(up_df) == nrow(df1))
 })
@@ -40,7 +40,7 @@ test_that("update query_gbif", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1)- 3), ]
 
-  up_df <- update_metadata(X = sub_df)
+  up_df <- update_metadata(metadata = sub_df)
 
   expect_true(nrow(up_df) == nrow(df1))
 
@@ -56,7 +56,7 @@ test_that("update query_xenocanto", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1)- 3), ]
 
-  up_df <- update_metadata(X = sub_df)
+  up_df <- update_metadata(metadata = sub_df)
 
   expect_true(nrow(up_df) == nrow(df1))
 
@@ -73,7 +73,7 @@ test_that("update query_macaulay", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1)- 3), ]
 
-  up_df <- update_metadata(X = sub_df, path = tempdir())
+  up_df <- update_metadata(metadata = sub_df, path = tempdir())
 
   expect_true(nrow(up_df) == nrow(df1))
 
@@ -91,7 +91,7 @@ test_that("update query_macaulay with paging", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1)- 3), ]
 
-  up_df <- update_metadata(X = sub_df, path = tempdir())
+  up_df <- update_metadata(metadata = sub_df, path = tempdir())
 
   expect_true(nrow(up_df) == nrow(df1))
 

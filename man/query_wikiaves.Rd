@@ -5,7 +5,7 @@
 \title{Access 'Wikiaves' recordings and metadata}
 \usage{
 query_wikiaves(
-  term,
+  term = getOption("term", NULL),
   format = c("sound", "image"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
@@ -15,19 +15,19 @@ query_wikiaves(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required.}
+\item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Zonotrichia capensis")}).}
 
 \item{format}{Character vector with the media format to query for. Options are 'sound' or 'image'. Required.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 
-\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option (see \code{\link[base]{options}}).}
+\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option ( \code{options(all_data = TRUE)}).}
 
-\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option (see \code{\link[base]{options}}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost).}
+\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
 \value{
 A data frame with the metadata of the observations matching the query. Note that parallel downloading of media files (with the argument \code{cores} > 1) does not seem to work on this repository. If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.

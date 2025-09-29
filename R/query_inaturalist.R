@@ -2,7 +2,7 @@
 #'
 #' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating species, to query 'inaturalist' database. For example, \emph{Phaethornis longirostris}.
+#' @param term Character vector of length one indicating species, to query 'inaturalist' database. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Phaethornis longirostris")}).
 #' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
 #' @param identified Logical argument to define if search results are categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are categorized as verifiable by inaturalist.
@@ -33,7 +33,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-query_inaturalist <- function(term,
+query_inaturalist <- function(term = getOption("term", NULL),
                               cores = getOption("mc.cores", 1),
                               pb = getOption("pb", TRUE),
                               verbose = getOption("verbose", TRUE),

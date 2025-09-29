@@ -23,7 +23,8 @@ Imports:
     jsonlite,
     kableExtra,
     lubridate,
-    tools
+    tools,
+    RecordLinkage
 Suggests: 
     covr,
     testthat,

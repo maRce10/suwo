@@ -15,15 +15,15 @@ download_media(
 )
 }
 \arguments{
-\item{metadata}{Data frame with the output of any of the media query functions in this package ( \code{\link{query_gbif}}, \code{\link{query_observation}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_macaulay}}, \code{\link{query_xenocanto}}).}
+\item{metadata}{data frame previously obtained from any suwo query function (i.e. `query_reponame()`).}
 
 \item{path}{Directory path where the output media files will be saved. By default files are saved into the current working directory (\code{"."}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 
-\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option (see \code{\link[base]{options}}).}
+\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
 \item{overwrite}{Logical. If TRUE, existing files (in \code{"path"}) with the same name will be overwritten. Default is FALSE.}
 
@@ -36,7 +36,7 @@ Downloads media files into the supplied directory path (\code{"path"}) and retur
 \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.
 }
 \details{
-This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_query}}) to add the new media files to the existing media pool.
+This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_metadata}}) to add the new media files to the existing media pool.
 }
 \examples{
 \dontrun{

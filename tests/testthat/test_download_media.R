@@ -50,7 +50,7 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(a$download_file_name %in% basename(expected_files)))
+  expect_true(all(a$download_file_name %in% expected_files))
 
 })
 
@@ -284,7 +284,7 @@ test_that("search macaulay sp download all_data = TRUE", {
 
   ml1 <- query_macaulay(term = 'Glaucis dohrnii', format = "sound", all_data = TRUE, path = tempdir())
 
-  test_keys <- c("627919111", "624733750")
+  test_keys <- c(627919111, 624733750)
 
   sml1 <- subset(ml1, key %in% test_keys)
 

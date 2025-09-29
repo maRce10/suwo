@@ -2,7 +2,6 @@
 #'
 #' \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.
 #' @inheritParams template_params
-#' @param metadata Data frame with the output of any of the media query functions in this package ( \code{\link{query_gbif}}, \code{\link{query_observation}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_macaulay}}, \code{\link{query_xenocanto}}).
 #' @param path Directory path where the output media files will be saved. By default files are saved into the current working directory (\code{"."}).
 #' @param overwrite Logical. If TRUE, existing files (in \code{"path"}) with the same name will be overwritten. Default is FALSE.
 #' @param folder_by Character string with the name of a character or factor column in the metadata data frame. If supplied the function will use the unique values in that column to create subfolders within \code{"path"} and the files will be downloaded into the corresponding folder. Default is \code{NULL} which means that no subfolders are created and all files are saved in the path provided. Missing values (NAs) are saved in a folder called "unknown_value". Special characters that are not allowed in folder names will be modified or removed. If any of the folder names already exist in \code{"path"}, they will be used as is.
@@ -96,6 +95,12 @@ download_media <-
           .download(metadata, x, path, overwrite, folder_by)
         }
       ))
+
+    # add folder to file name
+    if (!is.null(folder_by)){
+      metadata$download_file_name <-
+        file.path(metadata[, folder_by], metadata$download_file_name)
+    }
 
     # report results
     if (length(unique(metadata$download_results)) > 1)
