@@ -455,8 +455,10 @@ for (i in 1:6) {
 Users can also saved the downloaded files into sub-directories with the argument `folder_by`. The argument `folder_by` takes a character of factor column with the names of two or more metadata fields to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code saves the previous images into sub-directories by country:
 
 ```{r}
+
 # download media files to a temporary directory, creating sub-directories by country
 amus_files2 <- download_media(metadata = amus_gbf, path = tempdir(), folder_by = "country")
+
 ```
 
 In such case the name of the downloaded files will include the sub-directory name:

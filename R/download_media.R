@@ -111,7 +111,7 @@ download_media <-
     if (any(metadata$download_results == "failed")) {
 
       if (sum(metadata$download_results == "failed") == nrow(metadata)){
-      report_message <- .color_text("All files failed to download", as = "failure")
+        report_message <- .color_text("All files failed to download", as = "failure")
       } else {
         report_message <- c(report_message, "x" = paste0(cli::pluralize("{sum(metadata$download_results == 'failed')} file{?s} failed to download")))
       }

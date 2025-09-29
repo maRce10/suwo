@@ -20,6 +20,8 @@
 #' @import parallel
 #' @import RCurl
 #' @import jsonlite
+#' @importFrom jpeg readJPEG
+#' @importFrom graphics rasterImage
 #' @importFrom RecordLinkage compare.dedup
 #' @importFrom kableExtra cell_spec kbl kable_styling column_spec
 #' @importFrom lubridate parse_date_time

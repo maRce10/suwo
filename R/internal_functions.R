@@ -211,7 +211,7 @@ pblapply_sw_int <- function(X,
 
   if (is.na(name)){
     name <- "unknown_folder"
-    }
+  }
 
   # Remove or replace illegal characters
   sanitized <- gsub('[<>:"/\\\\|?*]', '_', name)
@@ -250,7 +250,7 @@ pblapply_sw_int <- function(X,
   destfile <- file.path(normalizePath(path), metadata$download_file_name[x])
 
   exists <- file.exists(destfile)
-    if (exists & !overwrite){
+  if (exists & !overwrite){
     (return("already there (not downloaded)"))
     }
 

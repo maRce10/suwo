@@ -30,7 +30,9 @@ Suggests:
     testthat,
     leaflet,
     knitr,
-    rmarkdown
+    rmarkdown,
+    jpeg,
+    graphics
 Depends:
     R (>= 3.5)
 Config/testthat/edition: 3
