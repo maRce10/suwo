@@ -874,18 +874,30 @@ sonogram_full, oscillogram_small, oscillogram_med, oscillogram_large
 </tr>
 </tbody>
 </table>
-<p><code><a href="../reference/query_macaulay.html">query_macaulay()</a></code> is the only interactive function. When
-users run a query the function opens a browser window to the Macaulay
-Library’s search page, where the users must download a .csv file with
-the metadata:</p>
+<div class="section level3">
+<h3 id="query-macaulay-library-interactively">Query Macaulay Library interactively<a class="anchor" aria-label="anchor" href="#query-macaulay-library-interactively"></a>
+</h3>
+<p><code><a href="../reference/query_macaulay.html">query_macaulay()</a></code> is the only interactive function. This
+means that when users run a query the function opens a browser window to
+the Macaulay Library’s search page, where the users must download a .csv
+file with the metadata:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Query Wikiaves for Turdus rufiventris sounds</span></span>
 <span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span></code></pre></div>
 <p>Users must click on the “Export” button to save the .csv file with
-the metadata. The file must be saved in the directory specified by the
-<code>path</code> argument of the function (default is the current
-working directory). The function will not proceed until the file is
-saved.</p>
+the metadata (see image below). The file must be saved in the directory
+specified by the <code>path</code> argument of the function (default is
+the current working directory). The function will not proceed until the
+file is saved. Here are some additional instructions for using this
+function properly:</p>
+<ul>
+<li>Users must save the save the .csv file manually</li>
+<li>If the file is saved overwritting a pre-existing file (i.e. same
+file name) the function will not detect it</li>
+<li>The query term must be a species name</li>
+<li>Users must log in to the Macaulay Library/eBird account in order to
+access large batches of observations</li>
+</ul>
 <center>
 <img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%">
 </center>
@@ -1107,6 +1119,31 @@ mp3
 </tbody>
 </table>
 </div>
+<p>Even if logged in, a maximum of 10000 records per query can be
+returned. This can be bypassed by using the ‘dates’ argument to split
+the search into a sequence of shorter date ranges. Of course users must
+download the csv for each data range. The rationale is that by splitting
+the search into date ranges, users can download multiple .csv files,
+which are then combined by the function into a single metadata data
+frame. The following code looks for photos of the hummingbird
+<em>Calypte costae</em>. As Macaulay Library hosts more than 30000
+<em>Calypte costae</em> records, we need to split the query into
+multiple date ranges:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># test a query with more than 10000 results paging by date</span></span>
+<span><span class="va">cal_cos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span></span>
+<span>  term <span class="op">=</span> <span class="st">"Calypte costae"</span>,</span>
+<span>  format <span class="op">=</span> <span class="st">"image"</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1976</span>, <span class="fl">2020</span>, <span class="fl">2022</span>, <span class="fl">2024</span>, <span class="fl">2025</span>, <span class="fl">2026</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Users can check at the Macaulay Library website how many records are
+available for their species of interest (see image below) and then
+decide how to split the search by date ranges accordingly so each
+sub-query has less than 10000 records.</p>
+<center>
+<img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%">
+</center>
 <div class="alert alert-warning">
 <p><font size="4">Obtaining raw data</font></p>
 <p>By default the package standardizes the information in the basic
@@ -1120,6 +1157,7 @@ global options (<code>options(raw_data = TRUE)</code>). Note that
 subsequent data manipulation functions (e.g.,
 <code><a href="../reference/merge_metadata.html">merge_metadata()</a></code>, <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>, etc) will
 not work properly as the basic fields are not standardized.</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -1137,9 +1175,10 @@ assume that the initial query was done a while ago and we want to update
 it to include any new records that might have been added since then. The
 following code removes all observations recorded after 2024-12-31 to
 simulate an old query:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
-<span><span class="va">old_truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">old_truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span></span>
+<span>                                 <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># update "old" data</span></span>
 <span><span class="va">updated_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_metadata.html">update_metadata</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">old_truf_xc</span><span class="op">)</span></span>
@@ -1166,11 +1205,13 @@ frames. Data from additional columns (for instance when using ‘all_data
 different repositories match. The function will return a data frame that
 includes a new column called <code>source</code> indicating the name of
 the original metadata data frame:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query multiple repositories</span></span>
 <span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span><span class="op">)</span></span>
 <span><span class="va">truf_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
-<span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>,</span>
+<span>                          format <span class="op">=</span> <span class="st">"sound"</span>,</span>
+<span>                          path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># merge metadata</span></span>
 <span><span class="va">merged_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_metadata.html">merge_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">truf_gbf</span>, <span class="va">truf_ml</span><span class="op">)</span></span>
@@ -1421,7 +1462,7 @@ etc).The output is a data frame with the candidate duplicate records,
 allowing users to review and decide which records to keep.</p>
 <p>In this example we look for possible duplicates in the merged
 metadata data frame from the previous section:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># find duplicates</span></span>
 <span><span class="va">dups_merged_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_duplicates.html">find_duplicates</a></span><span class="op">(</span><span class="va">merged_metadata</span><span class="op">)</span></span>
 <span></span>
@@ -1769,7 +1810,7 @@ duplicates, allowing users to easily identify and review them. For
 instance, in the example above, records from duplicated group 39 belong
 to the same user, were recorded on the same date and time in the same
 country:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># look at duplicated group 39</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">39</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -2023,12 +2064,12 @@ duplicates from their metadata data frames. This function takes as input
 a metadata data frame (either the original or the output of
 <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>) and a vector of row numbers indicating
 which records to remove:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># remove duplicates (for illustration we remove the first record of each duplicate group)</span></span>
 <span><span class="va">dedup_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_duplicates.html">remove_duplicates</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span><span class="op">)</span></span></code></pre></div>
 <p>The output is a data frame similar to the input but without the
 specified duplicate records:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># look at first 4 columns of deduplicated metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dedup_metadata</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -2297,7 +2338,7 @@ data frame (obtained from any query function or any of the other
 metadata managing functions) and downloads the media files to a
 specified directory. For this example we will download images from a
 query on <code>Amanita zambiana</code> (a mushroom) on GBIF:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query GBIF for Amanita zambiana images</span></span>
 <span><span class="va">amus_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
 <span></span>
@@ -2309,7 +2350,7 @@ downloaded files (‘download_file_name’) and the result of the download
 attempt (‘download_status’, with values “success”, ‘failed’, ‘already
 there (not downloaded)’ or ‘overwritten’).</p>
 <p>Here we print the first 3 rows of the output data frame:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">amus_files</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
@@ -2507,7 +2548,7 @@ saved
 </div>
 <p>Here we create a 6 panel plot of 6 of the downloaded images (just for
 illustration purpose):</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a 6 pannel plot of the downloaded images</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -2525,7 +2566,7 @@ illustration purpose):</p>
 <span>    sep <span class="op">=</span> <span class="st">" \n "</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="suwo_files/figure-html/unnamed-chunk-21-1.png" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="suwo_files/figure-html/unnamed-chunk-22-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Users can also save the downloaded files into sub-directories with
 the argument <code>folder_by</code>. The argument <code>folder_by</code>
 takes a character of factor column with the names of two or more
@@ -2533,12 +2574,14 @@ metadata fields to create sub-directories within the main download
 directory (suplied with the argument <code>path</code>). For instance,
 the following code saves the previous images into sub-directories by
 country:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># download media files to a temporary directory, creating sub-directories by country</span></span>
-<span><span class="va">amus_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">amus_gbf</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">amus_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">amus_gbf</span>,</span>
+<span>                             path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                             folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <p>In such case the name of the downloaded files will include the
 sub-directory name:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">amus_files</span><span class="op">$</span><span class="va">download_file_name</span></span></code></pre></div>
 <pre><code>[1] "Mozambique/Amanita_zambiana-GBIF4430877067-1.jpeg"
 [2] "Mozambique/Amanita_zambiana-GBIF4430877067-2.jpeg"
