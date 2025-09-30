@@ -122,9 +122,8 @@ duplicates and decide which records to keep, which can be done with
 <code><a href="../reference/remove_duplicates.html">remove_duplicates()</a></code>.</p></li>
 <li><p>Download the media files associated with the metadata using the
 <code><a href="../reference/download_media.html">download_media()</a></code> function.</p></li>
-<li><p>Finally, users can update their datasets with new records by
-re-running the queries and merging the new results with their existing
-datasets using the <code><a href="../reference/update_metadata.html">update_metadata()</a></code> function.</p></li>
+<li><p>Users can update their datasets with new records using the
+<code><a href="../reference/update_metadata.html">update_metadata()</a></code> function.</p></li>
 </ol>
 </div>
 <div class="section level2">
@@ -2569,9 +2568,9 @@ illustration purpose):</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="suwo_files/figure-html/unnamed-chunk-22-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Users can also save the downloaded files into sub-directories with
-the argument <code>folder_by</code>. The argument <code>folder_by</code>
-takes a character of factor column with the names of two or more
-metadata fields to create sub-directories within the main download
+the argument <code>folder_by</code>. This argument takes a character of
+factor column with the names of a metadata field (a column in the
+metadata data frame) to create sub-directories within the main download
 directory (suplied with the argument <code>path</code>). For instance,
 the following code saves the previous images into sub-directories by
 country:</p>
