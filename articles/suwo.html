@@ -885,11 +885,15 @@ file with the metadata:</p>
 <code class="sourceCode R"><span><span class="co"># Query Wikiaves for Turdus rufiventris sounds</span></span>
 <span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span></code></pre></div>
 <p>Users must click on the “Export” button to save the .csv file with
-the metadata (see image below). The file must be saved in the directory
-specified by the <code>path</code> argument of the function (default is
-the current working directory). The function will not proceed until the
-file is saved. Here are some additional instructions for using this
-function properly:</p>
+the metadata:</p>
+<center>
+<img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%">
+</center>
+<p>The file must be saved in the directory specified by the
+<code>path</code> argument of the function (default is the current
+working directory). The function will not proceed until the file is
+saved. Here are some additional instructions for using this function
+properly:</p>
 <ul>
 <li>Users must save the save the .csv file manually</li>
 <li>If the file is saved overwritting a pre-existing file (i.e. same
@@ -898,9 +902,6 @@ file name) the function will not detect it</li>
 <li>Users must log in to the Macaulay Library/eBird account in order to
 access large batches of observations</li>
 </ul>
-<center>
-<img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%">
-</center>
 <p>After saving the file, the function will read the file and return a
 data frame with the metadata. Here we print the first 4 rows of the
 output data frame:</p>
@@ -1121,11 +1122,11 @@ mp3
 </div>
 <p>Even if logged in, a maximum of 10000 records per query can be
 returned. This can be bypassed by using the ‘dates’ argument to split
-the search into a sequence of shorter date ranges. Of course users must
-download the csv for each data range. The rationale is that by splitting
-the search into date ranges, users can download multiple .csv files,
-which are then combined by the function into a single metadata data
-frame. The following code looks for photos of the hummingbird
+the search into a sequence of shorter date ranges. The rationale is that
+by splitting the search into date ranges, users can download multiple
+.csv files, which are then combined by the function into a single
+metadata data frame. Of course users must download the csv for each data
+range. The following code looks for photos of the hummingbird
 <em>Calypte costae</em>. As Macaulay Library hosts more than 30000
 <em>Calypte costae</em> records, we need to split the query into
 multiple date ranges:</p>
