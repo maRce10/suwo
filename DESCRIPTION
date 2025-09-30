@@ -24,14 +24,14 @@ Imports:
     kableExtra,
     lubridate,
     tools,
-    RecordLinkage
+    RecordLinkage,
+    jpeg
 Suggests: 
     covr,
     testthat,
     leaflet,
     knitr,
     rmarkdown,
-    jpeg,
     graphics
 Depends:
     R (>= 3.5)

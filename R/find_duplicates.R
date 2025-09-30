@@ -3,7 +3,6 @@
 #' \code{find_duplicates} detect possible duplicated entries from merged metadata from several repositories.
 #' @param metadata data frame obtained from combining the output metadata of two or more suwo query function using the `merge_metadata()` function. Data frames obtained from a single suwo query function can also be used but duplicates are not really expected within the same repository. The data frame must have the following columns: `user_name`, `locality`, `repository`, `country`, `format`, `time`, and `date`.
 #' @param sort Logical argument indicating if the output data frame should be sorted by the `duplicate_group` column. This will group all potential duplicates together in the output data frame. Default is `TRUE`.
-#' @param same_repo Logical argument indicating if potential duplicates from the same repository should be considered. If `FALSE`, only potential duplicates from different repositories will be labeled (with the exception of entries from the same repository that also match entries from other repositories). Default is `FALSE`. It will be set to `TRUE` if the input `metadata` data frame has entries from only one repository.
 #' @return A single data frame with the data from all input data frames combined and with an additional column named `duplicate_group` indicating potential duplicates with a common index. Entries without potential duplicates are labeled as `NA` in this new column.
 #' @export
 #' @name find_duplicates
@@ -11,11 +10,11 @@
 #' @examples
 #' \dontrun{
 #' # get metadata from 2 repos
-#' wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
-#' xc <- query_xenocanto(term = 'Glaucis dohrnii')
+#' gb <- query_gbif(term = "Turdus rufiventris", format =  "sound")
+#' xc <- query_xenocanto(term = "Turdus rufiventris")
 #'
 #' # combine metadata
-#' merged_metadata <- merge_metadata(wa, xc)
+#' merged_metadata <- merge_metadata(xc, gb)
 #'
 #' # find duplicates
 #' label_dup_metadata <- find_duplicates(metadata = merged_metadata)
@@ -23,7 +22,7 @@
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-find_duplicates <- function(metadata, sort = TRUE, same_repo = FALSE) {
+find_duplicates <- function(metadata, sort = TRUE) {
   # check arguments
   arguments <- as.list(base::match.call())[-1]
 
@@ -42,11 +41,6 @@ find_duplicates <- function(metadata, sort = TRUE, same_repo = FALSE) {
     .stop("The input data frame should have at least two rows to compare.")
   }
 
-  if (length(unique(metadata$repository)) < 2 & !same_repo) {
-    cat(.color_text("The input data frame has only data from one repository so `same_repo` will be set to TRUE.\n",
-                    as = "warning"))
-    same_repo <- TRUE
-  }
 
   # index to order back
   metadata$..original_order <- seq_len(nrow(metadata))
@@ -97,11 +91,6 @@ find_duplicates <- function(metadata, sort = TRUE, same_repo = FALSE) {
   # make does with only 1 value a NA
   matching_list <- sapply(matching_list, function(x) if(length(x) == 1) NA else paste(x, collapse = "-"))
   repo_count <- sapply(repo_list, length)
-
-  # exclude those from the same repository
-  if (!same_repo){
-    matching_list[repo_count == 1] <- NA
-  }
 
   # convert to unique values and add duplicate index to metadata
   metadata$duplicate_group <- as.numeric(as.factor(matching_list))

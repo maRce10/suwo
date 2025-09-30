@@ -26,10 +26,11 @@ reference:
     Data exploration and manipulation
   contents:
   - update_metadata
-  - map_locations
   - merge_metadata
   - subset_metadata
   - find_duplicates
+  - remove_duplicates
+  - map_locations
 
 - title: Misellaneous
   desc: >

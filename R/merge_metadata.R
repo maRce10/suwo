@@ -1,6 +1,6 @@
-#' Merge query results
+#' Merge metadata data frames
 #'
-#' \code{merge_metadata} merges the output of suwo query results.
+#' \code{merge_metadata} merges metadata data frames from suwo queries.
 #' @param ... two or more data frames (each one a a separate entry) referring to the metadata obtained from suwo query functions (`query_x()`).
 #' @return A single data frame with the data from all input data frames combined and with an additional column named `source` indicating the original data frame from which each row originated.
 #' @export

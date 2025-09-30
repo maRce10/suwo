@@ -12,7 +12,7 @@
 #' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_macaulay
-#' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.
+#' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the Macaulay Library's search page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.
 #'
 #' Here are some instructions for using this function properly:
 #' \itemize{

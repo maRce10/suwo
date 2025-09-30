@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge_metadata.R
 \name{merge_metadata}
 \alias{merge_metadata}
-\title{Merge query results}
+\title{Merge metadata data frames}
 \usage{
 merge_metadata(...)
 }
@@ -13,7 +13,7 @@ merge_metadata(...)
 A single data frame with the data from all input data frames combined and with an additional column named `source` indicating the original data frame from which each row originated.
 }
 \description{
-\code{merge_metadata} merges the output of suwo query results.
+\code{merge_metadata} merges metadata data frames from suwo queries.
 }
 \details{
 This function compares two dataframes to detect repeated data.

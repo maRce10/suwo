@@ -461,11 +461,11 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 # devtools::build_manual()
 
 # devtools::install()
-run.all()
-options(verbose = TRUE)
-devtools::test()
-
-beepr::beep(2)
+  run.all()
+  options(verbose = TRUE)
+  devtools::test()
+  
+  beepr::beep(2)
 
 # check in R version 3.X.X
 

@@ -4,14 +4,12 @@
 \alias{find_duplicates}
 \title{Find duplicated entries in metadata}
 \usage{
-find_duplicates(metadata, sort = TRUE, same_repo = FALSE)
+find_duplicates(metadata, sort = TRUE)
 }
 \arguments{
 \item{metadata}{data frame obtained from combining the output metadata of two or more suwo query function using the `merge_metadata()` function. Data frames obtained from a single suwo query function can also be used but duplicates are not really expected within the same repository. The data frame must have the following columns: `user_name`, `locality`, `repository`, `country`, `format`, `time`, and `date`.}
 
 \item{sort}{Logical argument indicating if the output data frame should be sorted by the `duplicate_group` column. This will group all potential duplicates together in the output data frame. Default is `TRUE`.}
-
-\item{same_repo}{Logical argument indicating if potential duplicates from the same repository should be considered. If `FALSE`, only potential duplicates from different repositories will be labeled (with the exception of entries from the same repository that also match entries from other repositories). Default is `FALSE`. It will be set to `TRUE` if the input `metadata` data frame has entries from only one repository.}
 }
 \value{
 A single data frame with the data from all input data frames combined and with an additional column named `duplicate_group` indicating potential duplicates with a common index. Entries without potential duplicates are labeled as `NA` in this new column.
@@ -25,11 +23,11 @@ This function compares the information in the entries of a combined metadata dat
 \examples{
 \dontrun{
 # get metadata from 2 repos
-wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
-xc <- query_xenocanto(term = 'Glaucis dohrnii')
+gb <- query_gbif(term = "Turdus rufiventris", format =  "sound")
+xc <- query_xenocanto(term = "Turdus rufiventris")
 
 # combine metadata
-merged_metadata <- merge_metadata(wa, xc)
+merged_metadata <- merge_metadata(xc, gb)
 
 # find duplicates
 label_dup_metadata <- find_duplicates(metadata = merged_metadata)
