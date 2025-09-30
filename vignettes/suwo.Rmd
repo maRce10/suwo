@@ -345,14 +345,16 @@ query_summary[, c("Function", "Additional data")] |>
 truf_ml <- query_macaulay(term = "Turdus rufiventris", format = "sound")
 ```
 
-Users must click on the "Export" button to save the .csv file with the metadata (see image below). The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory). The function will not proceed until the file is saved. Here are some additional instructions for using this function properly:
+Users must click on the "Export" button to save the .csv file with the metadata: 
+
+<center><img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%"></center>
+
+The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory). The function will not proceed until the file is saved. Here are some additional instructions for using this function properly:
 
 * Users must save the save the .csv file manually
 * If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it
 * The query term must be a species name
 * Users must log in to the Macaulay Library/eBird account in order to access large batches of observations
-
-<center><img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%"></center>
 
 After saving the file, the function will read the file and return a data frame with the metadata. Here we print the first 4 rows of the output data frame:
 
@@ -365,7 +367,7 @@ head(tur_ruf_sound_list$macaulay[, suwo:::.format_query_output(only_basic_column
 
 ```
 
-Even if logged in, a maximum of 10000 records per query can be returned. This can be bypassed by using the 'dates' argument to split the search into a sequence of shorter date ranges. Of course users must download the csv for each data range. The rationale is that by splitting the search into date ranges, users can download multiple .csv files, which are then combined by the function into a single metadata data frame. The following code looks for photos of the hummingbird _Calypte costae_. As Macaulay Library hosts more than 30000 _Calypte costae_ records, we need to split the query into multiple date ranges:
+Even if logged in, a maximum of 10000 records per query can be returned. This can be bypassed by using the 'dates' argument to split the search into a sequence of shorter date ranges. The rationale is that by splitting the search into date ranges, users can download multiple .csv files, which are then combined by the function into a single metadata data frame. Of course users must download the csv for each data range.  The following code looks for photos of the hummingbird _Calypte costae_. As Macaulay Library hosts more than 30000 _Calypte costae_ records, we need to split the query into multiple date ranges:
 
 ```{r, eval = FALSE}
 # test a query with more than 10000 results paging by date
