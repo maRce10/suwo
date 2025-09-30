@@ -295,7 +295,7 @@ By default all query function return the `r length(suwo:::.format_query_output(o
  
 _* Can contain missing values (NAs)_
 
-Users can also download all available metadata by setting the `all_data = TRUE`. These are the additional metadata fields, on top of the basic fields, that are retrieved by each query function:
+Users can also download all available metadata by setting the argument `all_data = TRUE`. These are the additional metadata fields, on top of the basic fields, that are retrieved by each query function:
 
 ```{r, echo=FALSE, results='asis', message=FALSE}
 
@@ -314,12 +314,35 @@ query_summary[,c("Function", "Additional data")] |>
 
 ```
 
+`query_macaulay()` is the only interactive function. When users run a query the function opens a browser window to the Macaulay Library's search page, where the user must download a .csv file with the metadata:
+
+```{r, eval = FALSE}
+# Query Wikiaves for Turdus rufiventris sounds
+truf_ml <- query_macaulay(term = "Turdus rufiventris", format = "sound")
+```
+
+User must click on the "Export" button to save the .csv file with the metadata. The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory). The function will not proceed until the file is saved.
+
+<center><img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%"></center>
+
+After saving the file, the function will read the file and return a data frame with the metadata. Here we print the first 4 rows of the output data frame:
+
+```{r, eval=FALSE}
+head(truf_ml, 4)
+```
+
+```{r, echo=FALSE}
+head(tur_ruf_sound_list$macaulay[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
+
+```
+
+
 
 <div class="alert alert-warning">
 
 <font size = "4">Obtaining raw data</font>
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). But note that subsequent data manipulation functions (e.g., `merge_metadata()`, `find_duplicates()`, etc) will not work properly as the basic fields are not standardized.
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by suwo. In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., `merge_metadata()`, `find_duplicates()`, etc) will not work properly as the basic fields are not standardized.
 
 </div>
 
@@ -369,7 +392,7 @@ head(merged_metadata, 4)
 
 ```
 
-# Find duplicated records
+# Find and remove duplicated records
 
 When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, suwo provides the find_duplicates() function.
 
@@ -394,6 +417,23 @@ subset(dups_merged_metadata, duplicate_group == 39)
 ```
 
 Also note that the locality is not exactly the same for these records, but the fuzzy matching approach used by `find_duplicates()` was able to identify them as potential duplicates.
+
+Once users have reviewed the candidate duplicates, they can use the `remove_duplicates()` function to eliminate unwanted duplicates from their metadata data frames. This function takes as input a metadata data frame (either the original or the output of `find_duplicates()`) and a vector of row numbers indicating which records to remove:
+
+
+```{r}
+# remove duplicates (for illustration we remove the first record of each duplicate group)
+dedup_metadata <- remove_duplicates(dups_merged_metadata)
+```
+
+
+The output is a data frame similar to the input but without the specified duplicate records:
+```{r}
+# look at first 4 columns of deduplicated metadata
+head(dedup_metadata, 4)
+```
+
+When duplicates are found, one observation from each group of duplicates is retained in the output data frame. However, if multiple observations from the same repository are labeled as duplicates, by default (`same_repo = FALSE`) all of them are retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart. This behavior can be modified. If `same_repo = TRUE`, only one of the duplicated observations from the same repository will be retained in the output data frame. The function will give priority to repositories in which media downloading is more straightforward (i.e. Xeno-Canto and GBIF), but this can be modified with the argument 'repo_priority'.
 
 # Donwload media files
 
@@ -452,7 +492,7 @@ for (i in 1:6) {
 
 ```
 
-Users can also saved the downloaded files into sub-directories with the argument `folder_by`. The argument `folder_by` takes a character of factor column with the names of two or more metadata fields to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code saves the previous images into sub-directories by country:
+Users can also save the downloaded files into sub-directories with the argument `folder_by`. The argument `folder_by` takes a character of factor column with the names of two or more metadata fields to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code saves the previous images into sub-directories by country:
 
 ```{r}
 
@@ -467,8 +507,6 @@ In such case the name of the downloaded files will include the sub-directory nam
 amus_files2$download_file_name
 
 ```
-
-
 
 <font size="4">Session information</font>
 
