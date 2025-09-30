@@ -119,7 +119,7 @@ frames can be merged into a single data frame using the
 are identified based on matching species name, country, date, user name,
 and geographic coordinates. User can double check the candidate
 duplicates and decide which records to keep, which can be done with
-<code>remove_duplicates()</code>.</p></li>
+<code><a href="../reference/remove_duplicates.html">remove_duplicates()</a></code>.</p></li>
 <li><p>Download the media files associated with the metadata using the
 <code><a href="../reference/download_media.html">download_media()</a></code> function.</p></li>
 <li><p>Finally, users can update their datasets with new records by
@@ -764,8 +764,8 @@ download media files)</li>
 </ul>
 <p><em>* Can contain missing values (NAs)</em></p>
 <p>Users can also download all available metadata by setting the
-<code>all_data = TRUE</code>. These are the additional metadata fields,
-on top of the basic fields, that are retrieved by each query
+argument <code>all_data = TRUE</code>. These are the additional metadata
+fields, on top of the basic fields, that are retrieved by each query
 function:</p>
 <table class="table table table-striped table-hover table-condensed table-responsive" style="width: auto !important; ">
 <caption>
@@ -874,6 +874,239 @@ sonogram_full, oscillogram_small, oscillogram_med, oscillogram_large
 </tr>
 </tbody>
 </table>
+<p><code><a href="../reference/query_macaulay.html">query_macaulay()</a></code> is the only interactive function. When
+users run a query the function opens a browser window to the Macaulay
+Library’s search page, where the user must download a .csv file with the
+metadata:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Query Wikiaves for Turdus rufiventris sounds</span></span>
+<span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span></code></pre></div>
+<p>User must click on the “Export” button to save the .csv file with the
+metadata. The file must be saved in the directory specified by the
+<code>path</code> argument of the function (default is the current
+working directory). The function will not proceed until the file is
+saved.</p>
+<center>
+<img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%">
+</center>
+<p>After saving the file, the function will read the file and return a
+data frame with the metadata. Here we print the first 4 rows of the
+output data frame:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">truf_ml</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+642450609
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-09-25
+</td>
+<td style="text-align:center;">
+09:25
+</td>
+<td style="text-align:center;">
+Diego Bastías Birding Guide
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Plaza Arenales
+</td>
+<td style="text-align:center;">
+-34.59951
+</td>
+<td style="text-align:center;">
+-58.51224
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642450609/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642450609/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+642446789
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-09-25
+</td>
+<td style="text-align:center;">
+17:31
+</td>
+<td style="text-align:center;">
+Marcelo Schmidt Roberti
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Rua José Papp, Jaraguá do Sul, Santa Catarina, BR (-26.513156,
+-49.117704)
+</td>
+<td style="text-align:center;">
+-26.51316
+</td>
+<td style="text-align:center;">
+-49.11774
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642446789/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642446789/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+642399870
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-09-23
+</td>
+<td style="text-align:center;">
+08:10
+</td>
+<td style="text-align:center;">
+Fernanda Fernandex
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Brasília–Pompílio Marques, Faz. Grotão
+</td>
+<td style="text-align:center;">
+-15.56331
+</td>
+<td style="text-align:center;">
+-47.77156
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642399870/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642399870/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+642370771
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2025-09-24
+</td>
+<td style="text-align:center;">
+04:11
+</td>
+<td style="text-align:center;">
+Marcelo Schmidt Roberti
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Rua José Papp, Jaraguá do Sul, Santa Catarina, BR (-26.513156,
+-49.117704)
+</td>
+<td style="text-align:center;">
+-26.51316
+</td>
+<td style="text-align:center;">
+-49.11774
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642370771/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/642370771/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="alert alert-warning">
 <p><font size="4">Obtaining raw data</font></p>
 <p>By default the package standardizes the information in the basic
@@ -883,7 +1116,7 @@ result in loss of information. For instance, some repositories allow
 users to provide “morning” as a valid time value, which are converted
 into NAs by suwo. In such cases, users can retrieve the original data by
 setting the <code>raw_data = TRUE</code> in the query functions and/or
-global options (<code>options(raw_data = TRUE)</code>). But note that
+global options (<code>options(raw_data = TRUE)</code>). Note that
 subsequent data manipulation functions (e.g.,
 <code><a href="../reference/merge_metadata.html">merge_metadata()</a></code>, <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>, etc) will
 not work properly as the basic fields are not standardized.</p>
@@ -904,7 +1137,7 @@ the initial query was done a while ago and we want to update it to
 include any new records that might have been added since then. So i will
 remove all observations recorded after 2024-12-31 to simulate an old
 query:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
 <span><span class="va">old_truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -934,7 +1167,7 @@ additional columns will only be combined if the names from the different
 repositories match. The function will return a data frame that includes
 a new column called <code>source</code> indicating the name of the
 original metadata data frame:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query multiple repositories</span></span>
 <span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span><span class="op">)</span></span>
 <span><span class="va">truf_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
@@ -1172,7 +1405,7 @@ xc_adf
 </div>
 </div>
 <div class="section level2">
-<h2 id="find-duplicated-records">Find duplicated records<a class="anchor" aria-label="anchor" href="#find-duplicated-records"></a>
+<h2 id="find-and-remove-duplicated-records">Find and remove duplicated records<a class="anchor" aria-label="anchor" href="#find-and-remove-duplicated-records"></a>
 </h2>
 <p>When compiling data from multiple repositories, duplicated media
 records are a common issue. These duplicates occur both through data
@@ -1189,12 +1422,616 @@ etc).The output is a data frame with the candidate duplicate records,
 allowing users to review and decide which records to keep.</p>
 <p>In this example we look for possible duplicates in the merged
 metadata data frame from the previous section:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># find duplicates</span></span>
 <span><span class="va">dups_merged_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_duplicates.html">find_duplicates</a></span><span class="op">(</span><span class="va">merged_metadata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># look first 6 columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+source
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+duplicate_group
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+913487
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2024-06-07
+</td>
+<td style="text-align:center;">
+06:46
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Reserva do Setor Sítio de Recreio Caraíbas-Goiânia, Goiás
+</td>
+<td style="text-align:center;">
+-16.56310
+</td>
+<td style="text-align:center;">
+-49.28500
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/913487/download" class="external-link uri">https://xeno-canto.org/913487/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+4907346188
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2024-06-07
+</td>
+<td style="text-align:center;">
+06:46
+</td>
+<td style="text-align:center;">
+Jayrson Araujo De Oliveira
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Reserva do Setor Sítio de Recreio Caraíbas-Goiânia, Goiás
+</td>
+<td style="text-align:center;">
+-16.56310
+</td>
+<td style="text-align:center;">
+-49.28500
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/LXKLWEDKEM/XC913487-07-06-2024-6e46-Sabia-laranjeira-CARAIBAS.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/LXKLWEDKEM/XC913487-07-06-2024-6e46-Sabia-laranjeira-CARAIBAS.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+351258
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-11
+</td>
+<td style="text-align:center;">
+17:27
+</td>
+<td style="text-align:center;">
+Jeremy Minns
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Miranda, MS. Refúgio da Ilha
+</td>
+<td style="text-align:center;">
+-20.22090
+</td>
+<td style="text-align:center;">
+-56.57510
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/351258/download" class="external-link uri">https://xeno-canto.org/351258/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243749719
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-11
+</td>
+<td style="text-align:center;">
+17:27
+</td>
+<td style="text-align:center;">
+Jeremy Minns
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Miranda, MS. Refúgio da Ilha
+</td>
+<td style="text-align:center;">
+-20.22090
+</td>
+<td style="text-align:center;">
+-56.57510
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351258-TURRUF68.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351258-TURRUF68.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+626030752
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2024-10-31
+</td>
+<td style="text-align:center;">
+08:50
+</td>
+<td style="text-align:center;">
+Simón Pla García
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Reserva Natural de Villa Gobernador Gálvez
+</td>
+<td style="text-align:center;">
+-33.00869
+</td>
+<td style="text-align:center;">
+-60.62765
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/626030752/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/626030752/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+626025481
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2024-10-31
+</td>
+<td style="text-align:center;">
+08:50
+</td>
+<td style="text-align:center;">
+Simón Pla García
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Reserva Natural de Villa Gobernador Gálvez
+</td>
+<td style="text-align:center;">
+-33.00869
+</td>
+<td style="text-align:center;">
+-60.62765
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/626025481/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/626025481/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note that the <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function adds a new
+column called <code>duplicate_group</code> to the output data frame.
+This column assigns a unique identifier to each group of potential
+duplicates, allowing users to easily identify and review them. For
+instance, in the example above, records from duplicated group 39 belong
+to the same user, were recorded on the same date and time in the same
+country:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># look at duplicated group 39</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">39</span><span class="op">)</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+repository
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+format
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+key
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+species
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+time
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+user_name
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+locality
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+latitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+longitude
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_url
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+file_extension
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+source
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+duplicate_group
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+611573698
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2023-11-21
+</td>
+<td style="text-align:center;">
+08:08
+</td>
+<td style="text-align:center;">
+Luis Weymar Junior
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Capão do Leão–Estrada da Eclusa
+</td>
+<td style="text-align:center;">
+-31.80667
+</td>
+<td style="text-align:center;">
+-52.39833
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573698/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573698/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+611573700
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2023-11-21
+</td>
+<td style="text-align:center;">
+08:08
+</td>
+<td style="text-align:center;">
+Luis Weymar Junior
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Capão do Leão–Estrada da Eclusa
+</td>
+<td style="text-align:center;">
+-31.80667
+</td>
+<td style="text-align:center;">
+-52.39833
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573700/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573700/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+611573699
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2023-11-21
+</td>
+<td style="text-align:center;">
+08:08
+</td>
+<td style="text-align:center;">
+Luis Weymar Junior
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Capão do Leão–Estrada da Eclusa
+</td>
+<td style="text-align:center;">
+-31.80667
+</td>
+<td style="text-align:center;">
+-52.39833
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573699/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573699/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Macaulay Library
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+611573697
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2023-11-21
+</td>
+<td style="text-align:center;">
+08:08
+</td>
+<td style="text-align:center;">
+Luis Weymar Junior
+</td>
+<td style="text-align:center;">
+Brazil
+</td>
+<td style="text-align:center;">
+Capão do Leão–Estrada da Eclusa
+</td>
+<td style="text-align:center;">
+-31.80667
+</td>
+<td style="text-align:center;">
+-52.39833
+</td>
+<td style="text-align:center;">
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573697/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573697/</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+ml_adf_s
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Also note that the locality is not exactly the same for these
+records, but the fuzzy matching approach used by
+<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> was able to identify them as potential
+duplicates.</p>
+<p>Once users have reviewed the candidate duplicates, they can use the
+<code><a href="../reference/remove_duplicates.html">remove_duplicates()</a></code> function to eliminate unwanted
+duplicates from their metadata data frames. This function takes as input
+a metadata data frame (either the original or the output of
+<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>) and a vector of row numbers indicating
+which records to remove:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># remove duplicates (for illustration we remove the first record of each duplicate group)</span></span>
+<span><span class="va">dedup_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_duplicates.html">remove_duplicates</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span><span class="op">)</span></span></code></pre></div>
+<p>The output is a data frame similar to the input but without the
+specified duplicate records:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># look at first 4 columns of deduplicated metadata</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dedup_metadata</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1433,452 +2270,23 @@ gb_adf_s
 2
 </td>
 </tr>
-<tr>
-<td style="text-align:center;">
-Xeno-Canto
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-351066
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-10
-</td>
-<td style="text-align:center;">
-17:02
-</td>
-<td style="text-align:center;">
-Jeremy Minns
-</td>
-<td style="text-align:center;">
-Brazil
-</td>
-<td style="text-align:center;">
-Miranda, MS. Refúgio da Ilha
-</td>
-<td style="text-align:center;">
--20.2209
-</td>
-<td style="text-align:center;">
--56.5751
-</td>
-<td style="text-align:center;">
-<a href="https://xeno-canto.org/351066/download" class="external-link uri">https://xeno-canto.org/351066/download</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-xc_adf
-</td>
-<td style="text-align:center;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-GBIF
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-2243747991
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-10
-</td>
-<td style="text-align:center;">
-17:02
-</td>
-<td style="text-align:center;">
-Jeremy Minns
-</td>
-<td style="text-align:center;">
-Brazil
-</td>
-<td style="text-align:center;">
-Miranda, MS. Refúgio da Ilha
-</td>
-<td style="text-align:center;">
--20.2209
-</td>
-<td style="text-align:center;">
--56.5751
-</td>
-<td style="text-align:center;">
-<a href="https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351066-TURRUF67.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/DGVLLRYDXS/XC351066-TURRUF67.mp3</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-gb_adf_s
-</td>
-<td style="text-align:center;">
-3
-</td>
-</tr>
 </tbody>
 </table>
 </div>
-<p>Note that the <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function adds a new
-column called <code>duplicate_group</code> to the output data frame.
-This column assigns a unique identifier to each group of potential
-duplicates, allowing users to easily identify and review them. For
-instance, in the example above, records from duplicated group 39 belong
-to the same user, were recorded on the same date and time in the same
-country:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># look at duplicated group 39</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">39</span><span class="op">)</span></span></code></pre></div>
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
-<table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-repository
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-format
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-key
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-species
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-date
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-time
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-user_name
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-country
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-locality
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-latitude
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-longitude
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-file_url
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-file_extension
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-source
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-duplicate_group
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:center;">
-Xeno-Canto
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-273100
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-19
-</td>
-<td style="text-align:center;">
-18:00
-</td>
-<td style="text-align:center;">
-Peter Boesman
-</td>
-<td style="text-align:center;">
-Argentina
-</td>
-<td style="text-align:center;">
-Calilegua NP, Jujuy
-</td>
-<td style="text-align:center;">
--23.74195
-</td>
-<td style="text-align:center;">
--64.85777
-</td>
-<td style="text-align:center;">
-<a href="https://xeno-canto.org/273100/download" class="external-link uri">https://xeno-canto.org/273100/download</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-xc_adf
-</td>
-<td style="text-align:center;">
-39
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-Xeno-Canto
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-273098
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-19
-</td>
-<td style="text-align:center;">
-18:00
-</td>
-<td style="text-align:center;">
-Peter Boesman
-</td>
-<td style="text-align:center;">
-Argentina
-</td>
-<td style="text-align:center;">
-Calilegua NP, Jujuy
-</td>
-<td style="text-align:center;">
--23.74195
-</td>
-<td style="text-align:center;">
--64.85777
-</td>
-<td style="text-align:center;">
-<a href="https://xeno-canto.org/273098/download" class="external-link uri">https://xeno-canto.org/273098/download</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-xc_adf
-</td>
-<td style="text-align:center;">
-39
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-GBIF
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-2243678570
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-19
-</td>
-<td style="text-align:center;">
-18:00
-</td>
-<td style="text-align:center;">
-Peter Boesman
-</td>
-<td style="text-align:center;">
-Argentina
-</td>
-<td style="text-align:center;">
-Calilegua NP, Jujuy
-</td>
-<td style="text-align:center;">
--23.74195
-</td>
-<td style="text-align:center;">
--64.85777
-</td>
-<td style="text-align:center;">
-<a href="https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273098-Rufous-bellied%20Thrush%20QQ%20call%20A%201.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273098-Rufous-bellied%20Thrush%20QQ%20call%20A%201.mp3</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-gb_adf_s
-</td>
-<td style="text-align:center;">
-39
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-GBIF
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-2243680322
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-19
-</td>
-<td style="text-align:center;">
-18:00
-</td>
-<td style="text-align:center;">
-Peter Boesman
-</td>
-<td style="text-align:center;">
-Argentina
-</td>
-<td style="text-align:center;">
-Calilegua NP, Jujuy
-</td>
-<td style="text-align:center;">
--23.74195
-</td>
-<td style="text-align:center;">
--64.85777
-</td>
-<td style="text-align:center;">
-<a href="https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273100-Rufous-bellied%20Thrush%20QQQ%20call%20A.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273100-Rufous-bellied%20Thrush%20QQQ%20call%20A.mp3</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-gb_adf_s
-</td>
-<td style="text-align:center;">
-39
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-Macaulay Library
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-301276
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-19
-</td>
-<td style="text-align:center;">
-18:00
-</td>
-<td style="text-align:center;">
-Peter Boesman
-</td>
-<td style="text-align:center;">
-Argentina
-</td>
-<td style="text-align:center;">
-Calilegua NP
-</td>
-<td style="text-align:center;">
--23.74200
-</td>
-<td style="text-align:center;">
--64.85780
-</td>
-<td style="text-align:center;">
-<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301276/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301276/</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-ml_adf_s
-</td>
-<td style="text-align:center;">
-39
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-Macaulay Library
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-301275
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2013-10-19
-</td>
-<td style="text-align:center;">
-18:00
-</td>
-<td style="text-align:center;">
-Peter Boesman
-</td>
-<td style="text-align:center;">
-Argentina
-</td>
-<td style="text-align:center;">
-Calilegua NP
-</td>
-<td style="text-align:center;">
--23.74200
-</td>
-<td style="text-align:center;">
--64.85780
-</td>
-<td style="text-align:center;">
-<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301275/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301275/</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-ml_adf_s
-</td>
-<td style="text-align:center;">
-39
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Also note that the locality is not exactly the same for these
-records, but the fuzzy matching approach used by
-<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> was able to identify them as potential
-duplicates.</p>
+<p>When duplicates are found, one observation from each group of
+duplicates is retained in the output data frame. However, if multiple
+observations from the same repository are labeled as duplicates, by
+default (<code>same_repo = FALSE</code>) all of them are retained in the
+output data frame. This is useful as it can be expected that
+observations from the same repository are not true duplicates
+(e.g. different recordings uploaded to Xeno-Canto with the same date,
+time and location by the same user), but rather have not been documented
+with enough precision to be told apart. This behavior can be modified.
+If <code>same_repo = TRUE</code>, only one of the duplicated
+observations from the same repository will be retained in the output
+data frame. The function will give priority to repositories in which
+media downloading is more straightforward (i.e. Xeno-Canto and GBIF),
+but this can be modified with the argument ‘repo_priority’.</p>
 </div>
 <div class="section level2">
 <h2 id="donwload-media-files">Donwload media files<a class="anchor" aria-label="anchor" href="#donwload-media-files"></a>
@@ -1890,7 +2298,7 @@ data frame (obtained from any query function or merged data frame) and
 downloads the media files to a specified directory. For this example we
 will download images from a query on <code>Amanita zambiana</code> (a
 mushroom) on GBIF:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query GBIF for Amanita zambiana images</span></span>
 <span><span class="va">amus_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
 <span></span>
@@ -1902,7 +2310,7 @@ downloaded files (‘download_file_name’) and the result of the download
 attempt (‘download_result’, with values “success”, ‘failed’, ‘already
 there (not downloaded)’ or ‘overwritten’).</p>
 <p>Here we print the first 3 rows of the output data frame:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">amus_files</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
@@ -2100,7 +2508,7 @@ saved
 </div>
 <p>Here we create a 6 panel plot of 6 of the downloaded images (just for
 illustration purpose):</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a 6 pannel plot of the downloaded images</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -2118,20 +2526,20 @@ illustration purpose):</p>
 <span>    sep <span class="op">=</span> <span class="st">" \n "</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="suwo_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;"></p>
-<p>Users can also saved the downloaded files into sub-directories with
+<p><img src="suwo_files/figure-html/unnamed-chunk-21-1.png" width="80%" style="display: block; margin: auto;"></p>
+<p>Users can also save the downloaded files into sub-directories with
 the argument <code>folder_by</code>. The argument <code>folder_by</code>
 takes a character of factor column with the names of two or more
 metadata fields to create sub-directories within the main download
 directory (suplied with the argument <code>path</code>). For instance,
 the following code saves the previous images into sub-directories by
 country:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># download media files to a temporary directory, creating sub-directories by country</span></span>
 <span><span class="va">amus_files2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">amus_gbf</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <p>In such case the name of the downloaded files will include the
 sub-directory name:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">amus_files2</span><span class="op">$</span><span class="va">download_file_name</span></span></code></pre></div>
 <pre><code>[1] "Mozambique/Amanita_zambiana-GBIF4430877067-1.jpeg"
 [2] "Mozambique/Amanita_zambiana-GBIF4430877067-2.jpeg"
@@ -2177,13 +2585,13 @@ loaded via a namespace (and not attached):
 [45] pbapply_1.7-4          DBI_1.2.3              cachem_1.1.0           proxy_0.4-27          
 [49] stringr_1.5.2          splines_4.5.1          parallel_4.5.1         vctrs_0.6.5           
 [53] Matrix_1.7-3           jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.9.1         
-[57] jpeg_0.1-11            systemfonts_1.2.3      evd_2.3-7.1            jquerylib_0.1.4       
+[57] systemfonts_1.2.3      jpeg_0.1-11            evd_2.3-7.1            jquerylib_0.1.4       
 [61] glue_1.8.0             parallelly_1.45.1      pkgdown_2.1.3          codetools_0.2-20      
 [65] lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6           htmltools_0.5.8.1     
 [69] ipred_0.9-15           lava_1.8.1             R6_2.6.1               ff_4.5.2              
 [73] textshaping_1.0.3      evaluate_1.0.5         lattice_0.22-7         backports_1.5.0       
 [77] memoise_2.0.1          bslib_0.9.0            class_7.3-23           Rcpp_1.1.0            
-[81] svglite_2.2.1          gridExtra_2.3          prodlim_2025.04.28     checkmate_2.3.3       
+[81] checkmate_2.3.3        svglite_2.2.1          gridExtra_2.3          prodlim_2025.04.28    
 [85] xfun_0.53              fs_1.6.6              </code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
