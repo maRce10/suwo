@@ -47,7 +47,12 @@ library(suwo)
   )
   
   if (!is.null(highlight))
-    kbl <- kableExtra::column_spec(kbl, column = which(names(x) %in% highlight), background = "#ccebff", bold = TRUE)
+    kbl <- kableExtra::column_spec(
+      kbl,
+      column = which(names(x) %in% highlight),
+      background = "#ccebff",
+      bold = TRUE
+    )
   
   kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
   kbl <- kableExtra::scroll_box(kbl, width = "100%", height = "300px")
@@ -60,7 +65,7 @@ registerS3method("knit_print", "data.frame", .print_df)
 
 # Global chunk options
 knitr::opts_chunk$set(
-  fig.width = 5, 
+  fig.width = 5,
   fig.height = 3.5,
   dpi = 70,
   comment = "",
@@ -154,66 +159,71 @@ tur_ruf_sound_list <- tur_ruf_sound_list[order(names(tur_ruf_sound_list))]
 # split by "_" and keep the first part
 names(tur_ruf_sound_list) <- gsub("_sounds", "", names(tur_ruf_sound_list))
 
-Repository <- sapply(tur_ruf_sound_list, function(x) x[1, "repository"])
-Function <- sapply(tur_ruf_sound_list, function(x) attributes(x)$query_call[[1]])
+Repository <- sapply(tur_ruf_sound_list, function(x)
+  x[1, "repository"])
+Function <- sapply(tur_ruf_sound_list, function(x)
+  attributes(x)$query_call[[1]])
 
 Function <- sapply(Function, as.character)
 
-file_types <- sapply(Function, function(x) paste(formals(x)$format, collapse = ", "))
+file_types <- sapply(Function, function(x)
+  paste(formals(x)$format, collapse = ", "))
 file_types <- gsub("c, ", "", file_types)
 file_types[Function == "query_xenocanto"] <- "sound"
- 
+
 urls = c(
-    gbif = "https://www.gbif.org/",
-    inaturalist = "https://www.inaturalist.org/",
-    macaulay = "https://www.macaulaylibrary.org/",
-    observation = "https://observation.org/",
-    wikiaves = "https://www.wikiaves.com.br/",
-    `xeno-canto` = "https://www.xeno-canto.org/"
-  )
+  gbif = "https://www.gbif.org/",
+  inaturalist = "https://www.inaturalist.org/",
+  macaulay = "https://www.macaulaylibrary.org/",
+  observation = "https://observation.org/",
+  wikiaves = "https://www.wikiaves.com.br/",
+  `xeno-canto` = "https://www.xeno-canto.org/"
+)
 
 urls <- urls[match(names(tur_ruf_sound_list), names(urls))]
 
- token <- c(
-    gbif = "No",
-    inaturalist = "No",
-    macaulay = "No",
-    observation = "Yes",
-    wikiaves = "No",
-    `xeno-canto` = "Yes"
-  )
+token <- c(
+  gbif = "No",
+  inaturalist = "No",
+  macaulay = "No",
+  observation = "Yes",
+  wikiaves = "No",
+  `xeno-canto` = "Yes"
+)
 
 token <- token[match(names(tur_ruf_sound_list), names(token))]
 
 
 tax_level <-  c(
-    gbif = "Species",
-    inaturalist = "Species",
-    macaulay = "Species",
-    observation = "Species",
-    wikiaves = "Species",
-    `xeno-canto` = "Species, genus, family"
-  )
+  gbif = "Species",
+  inaturalist = "Species",
+  macaulay = "Species",
+  observation = "Species",
+  wikiaves = "Species",
+  `xeno-canto` = "Species, genus, family"
+)
 
 tax_level <- tax_level[match(names(tur_ruf_sound_list), names(tax_level))]
 
 geo_cover <-  c(
-    gbif = "Worldwide",
-    inaturalist = "Worldwide",
-    macaulay = "Worldwide",
-    observation = "Worldwide",
-    wikiaves = "Brazil",
-    `xeno-canto` = "Worldwide"
-  )
+  gbif = "Worldwide",
+  inaturalist = "Worldwide",
+  macaulay = "Worldwide",
+  observation = "Worldwide",
+  wikiaves = "Brazil",
+  `xeno-canto` = "Worldwide"
+)
 
 geo_cover <- geo_cover[match(names(tur_ruf_sound_list), names(geo_cover))]
 
 
 colnames <- lapply(tur_ruf_sound_list, names)
 
-colnames <- lapply(colnames, function(x) setdiff(x, suwo:::.format_query_output(only_basic_columns = TRUE)))
+colnames <- lapply(colnames, function(x)
+  setdiff(x, suwo:::.format_query_output(only_basic_columns = TRUE)))
 
-additional_data <- sapply(colnames, function(x) paste(x, collapse = ", "))
+additional_data <- sapply(colnames, function(x)
+  paste(x, collapse = ", "))
 
 additional_data <- additional_data[match(names(tur_ruf_sound_list), names(additional_data))]
 
@@ -226,20 +236,32 @@ query_summary <- data.frame(
   `Taxonomic level` = tax_level,
   `Geographic coverage` = geo_cover,
   `Additional data` = additional_data,
-  stringsAsFactors = FALSE, 
-check.names = FALSE
+  stringsAsFactors = FALSE,
+  check.names = FALSE
 )
 
 
-query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`, "html", link = query_summary$`URL link`, new_tab = TRUE)
+query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`,
+                                                  "html",
+                                                  link = query_summary$`URL link`,
+                                                  new_tab = TRUE)
 
- query_summary$Function <- kableExtra::cell_spec(query_summary$Function, "html", link = paste0("https://marce10.github.io/suwo/reference/", query_summary$Function, ".html"), new_tab = TRUE)
- 
+query_summary$Function <- kableExtra::cell_spec(
+  query_summary$Function,
+  "html",
+  link = paste0(
+    "https://marce10.github.io/suwo/reference/",
+    query_summary$Function,
+    ".html"
+  ),
+  new_tab = TRUE
+)
+
 query_summary[, names(query_summary) != "Additional data"] |>
   kableExtra::kbl(
     caption = "Table 1: Summary of query functions.",
     format = "html",
-    escape = FALSE, 
+    escape = FALSE,
     row.names = FALSE
   ) |>
   kableExtra::kable_styling(
@@ -299,7 +321,7 @@ Users can also download all available metadata by setting the argument `all_data
 
 ```{r, echo=FALSE, results='asis', message=FALSE}
 
-query_summary[,c("Function", "Additional data")] |>
+query_summary[, c("Function", "Additional data")] |>
   kableExtra::kbl(
     caption = "Table 2: Additional metadata per query function.",
     format = "html",
@@ -314,14 +336,21 @@ query_summary[,c("Function", "Additional data")] |>
 
 ```
 
-`query_macaulay()` is the only interactive function. When users run a query the function opens a browser window to the Macaulay Library's search page, where the users must download a .csv file with the metadata:
+## Query Macaulay Library interactively
+
+`query_macaulay()` is the only interactive function. This means that when users run a query the function opens a browser window to the Macaulay Library's search page, where the users must download a .csv file with the metadata:
 
 ```{r, eval = FALSE}
 # Query Wikiaves for Turdus rufiventris sounds
 truf_ml <- query_macaulay(term = "Turdus rufiventris", format = "sound")
 ```
 
-Users must click on the "Export" button to save the .csv file with the metadata. The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory). The function will not proceed until the file is saved.
+Users must click on the "Export" button to save the .csv file with the metadata (see image below). The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory). The function will not proceed until the file is saved. Here are some additional instructions for using this function properly:
+
+* Users must save the save the .csv file manually
+* If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it
+* The query term must be a species name
+* Users must log in to the Macaulay Library/eBird account in order to access large batches of observations
 
 <center><img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%"></center>
 
@@ -336,6 +365,21 @@ head(tur_ruf_sound_list$macaulay[, suwo:::.format_query_output(only_basic_column
 
 ```
 
+Even if logged in, a maximum of 10000 records per query can be returned. This can be bypassed by using the 'dates' argument to split the search into a sequence of shorter date ranges. Of course users must download the csv for each data range. The rationale is that by splitting the search into date ranges, users can download multiple .csv files, which are then combined by the function into a single metadata data frame. The following code looks for photos of the hummingbird _Calypte costae_. As Macaulay Library hosts more than 30000 _Calypte costae_ records, we need to split the query into multiple date ranges:
+
+```{r, eval = FALSE}
+# test a query with more than 10000 results paging by date
+cal_cos <- query_macaulay(
+  term = "Calypte costae",
+  format = "image",
+  path = tempdir(),
+  dates = c(1976, 2020, 2022, 2024, 2025, 2026)
+)
+```
+
+Users can check at the Macaulay Library website how many records are available for their species of interest (see image below) and then decide how to split the search by date ranges accordingly so each sub-query has less than 10000 records. 
+
+<center><img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%"></center>
 
 
 <div class="alert alert-warning">
@@ -355,14 +399,15 @@ To show case the function, we will use the metadata from the previous example of
 
 ```{r}
 # exclude new observations (simulate old data)
-old_truf_xc <- subset_metadata(truf_xc, date <= "2024-12-31" | is.na(date))
+old_truf_xc <- subset_metadata(truf_xc, date <= "2024-12-31" |
+                                 is.na(date))
 
 # update "old" data
 updated_xc <- update_metadata(metadata = old_truf_xc)
 
 # compare number of records
 nrow(truf_xc) == nrow(updated_xc)
-  
+
 ```
 
 Note the use of the suwo function `subset_metadata()` to filter the data frame by date. This is a modified version of `base::subset()` that makes sure that the attributes of the data frame are preserved, which are needed by subsequent suwo functions working on metadata. Those attributes will be lost if you use `dplyr::filter()`, `base::subset()` or the extract operator `[` (e.g. `metadata[1:3, ]`).
@@ -376,7 +421,9 @@ The `merge_metadata()` function allows users to combine metadata data frames obt
 # query multiple repositories
 truf_xc <- query_xenocanto(term = "Turdus rufiventris")
 truf_gbf <- query_gbif(term = "Turdus rufiventris", format = "sound")
-truf_ml <- query_macaulay(term = "Turdus rufiventris", format = "sound", path = tempdir())
+truf_ml <- query_macaulay(term = "Turdus rufiventris",
+                          format = "sound",
+                          path = tempdir())
 
 # merge metadata
 merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
@@ -497,7 +544,9 @@ Users can also save the downloaded files into sub-directories with the argument 
 ```{r}
 
 # download media files to a temporary directory, creating sub-directories by country
-amus_files <- download_media(metadata = amus_gbf, path = tempdir(), folder_by = "country")
+amus_files <- download_media(metadata = amus_gbf,
+                             path = tempdir(),
+                             folder_by = "country")
 
 ```
 

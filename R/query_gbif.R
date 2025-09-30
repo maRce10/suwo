@@ -102,57 +102,57 @@ query_gbif <-
       if (verbose) {
         .failure_message(format = format)
       }
-       return(invisible(NULL))
+      return(invisible(NULL))
     }
 
-      # message number of results
-      if (pb & verbose) {
-        .success_message(n = base.srch.pth$count, format = format)
-      }
+    # message number of results
+    if (pb & verbose) {
+      .success_message(n = base.srch.pth$count, format = format)
+    }
 
-      # get total number of pages
-      offsets <- (seq_len(ceiling(
-        base.srch.pth$count / base.srch.pth$limit
-      )) - 1) * 300
+    # get total number of pages
+    offsets <- (seq_len(ceiling(
+      base.srch.pth$count / base.srch.pth$limit
+    )) - 1) * 300
 
-      # set clusters for windows OS
-      if (Sys.info()[1] == "Windows" & cores > 1) {
-        cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
-      } else {
-        cl <- cores
-      }
+    # set clusters for windows OS
+    if (Sys.info()[1] == "Windows" & cores > 1) {
+      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+    } else {
+      cl <- cores
+    }
 
-      query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i) {
-        query_output <- jsonlite::fromJSON(paste0(srch_trm, "&offset=", i))
+    query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i) {
+      query_output <- jsonlite::fromJSON(paste0(srch_trm, "&offset=", i))
 
-        # format as list of data frame
-        query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
-          x <- query_output$results[u, ]
+      # format as list of data frame
+      query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
+        x <- query_output$results[u, ]
 
-          # media_df <- do.call(rbind, media_list)
-          media_df <- do.call(rbind, x$media)
+        # media_df <- do.call(rbind, media_list)
+        media_df <- do.call(rbind, x$media)
 
-          # select format
-          media_df <- media_df[media_df$type == gbif_format, ]
+        # select format
+        media_df <- media_df[media_df$type == gbif_format, ]
 
-          # fix identifier column name
-          names(media_df)[names(media_df) == "identifier"] <- "URL"
-          names(media_df) <- paste0("media-", names(media_df))
+        # fix identifier column name
+        names(media_df)[names(media_df) == "identifier"] <- "URL"
+        names(media_df) <- paste0("media-", names(media_df))
 
 
-          # remove lists
-          x <- x[!sapply(x, is.list)]
+        # remove lists
+        x <- x[!sapply(x, is.list)]
 
-          # make it data frame
-          X_df <- data.frame(t(unlist(x)))
+        # make it data frame
+        X_df <- data.frame(t(unlist(x)))
 
-          # add media details
-          X_df <- cbind(X_df, media_df)
+        # add media details
+        X_df <- cbind(X_df, media_df)
 
-          return(X_df)
-        })
+        return(X_df)
+      })
 
-        output_df <- .merge_data_frames(query_output$results)
+      output_df <- .merge_data_frames(query_output$results)
         output_df$page <- i
 
         return(output_df)

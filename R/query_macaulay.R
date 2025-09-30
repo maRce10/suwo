@@ -16,7 +16,7 @@
 #'
 #' Here are some instructions for using this function properly:
 #' \itemize{
-#'    \item After the .csv file is saved, the user must confirm that into the R console.
+#'    \item Users must save the save the .csv file manually
 #'    \item \emph{If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it}
 #'    \item The query term must be a species name
 #'    \item A maximum of 10000 records per query can be returned, but this can be bypassed by using the \code{dates} argument to split the search into smaller date ranges
@@ -29,8 +29,8 @@
 #' path = tempdir())
 #'
 #' # test a query with more than 10000 results paging by date
-#' cal_cos <- query_macaulay(term = "Calypte costae", type = "image",
-#' path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
+#' cal_cos <- query_macaulay(term = "Calypte costae", format = "image",
+#' path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
 #'
 #' # this is how the internal function that splits the search by year intervals works
 #' # it can split by entire year intervals

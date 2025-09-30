@@ -41,6 +41,17 @@ ml_adf_s <- query_macaulay(term = term, format = "sound", path = tempdir(), all_
 
 merged_metadata <- merge_metadata(xc_adf, gb_adf_s, ml_adf_s)
 
+# get example macaulay data for calypte coste to show spliting by range
+cal_cos <- query_macaulay(
+  term = "Calypte costae",
+  format = "image",
+  path = tempdir(),
+  dates = c(1976, 2019)
+)
+
+cal_cos <- query_macaulay(term = "Calypte costae", format = "image",
+                          #' path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
+
 usethis::use_data(ml_taxon_code, tur_ruf_list, merged_metadata, internal = TRUE, overwrite = TRUE)
 
 
