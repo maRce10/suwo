@@ -90,31 +90,12 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>If all_data is <code>FALSE</code> the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is <code>TRUE</code> the function returns a data frame with the following media
-information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
-publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
-taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,
-acceptedTaxonKey, scientificName, acceptedScientificName, kingdom, phylum, order, family, genus,
-species, genericName, specificEpithet, taxonRank, taxonomicStatus, iucnRedListCategory,
-dateIdentified, decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters, continent,
-stateProvince, year, month, day, eventDate, modified, lastInterpreted, references, license,
-isInCluster, datasetName, recordedBy, identifiedBy, geodeticDatum, class, countryCode, country,
-rightsHolder, identifier, http...unknown.org.nick, verbatimEventDate, verbatimLocality,
-collectionCode, gbifID, occurrenceID, taxonID, catalogNumber, institutionCode, eventTime,
-occurrenceRemarks, http...unknown.org.captive, identificationID, identificationRemarks,
-distanceFromCentroidInMeters, informationWithheld, sex, lifeStage, preparations,
-nomenclaturalCode, dynamicProperties, locality, vernacularName, fieldNotes, verbatimElevation,
-behavior, higherClassification, associatedTaxa, infraspecificEpithet, media-type, media-format,
-media-references, media-created, media-creator, media-publisher, media-license,
-media-rightsHolder, file_url, media-description, page, elevation, elevationAccuracy,
-organismQuantity, organismQuantityType, georeferenceProtocol, verbatimSRS, county,
-verbatimCoordinateSystem, type, collectionID, individualCount, samplingProtocol,
-scientificNameID, georeferenceRemarks, language, georeferenceSources, media-title, repository.</p>
+    <p>If all_data is <code>FALSE</code> the function returns a data frame with the metadata of media files matching the search term. If <code>all_data = TRUE</code>, all metadata fields are returned. If <code>raw_data = TRUE</code>, the raw data as obtained from the repository is returned (without any formatting).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function queries for species observation info in the open-access
-online repository <a href="https://www.gbif.org/" class="external-link">gbif</a>. It can return media metadata.</p>
+online repository <a href="https://www.gbif.org/" class="external-link">gbif</a>. GBIF (the Global Biodiversity Information Facility) is an international network and data infrastructure funded by the world's governments and aimed at providing open access to data about all types of life on Earth. Note that some of the records returned by this function could be duplicates of records returned by other suwo functions (e.g., <code><a href="query_inaturalist.html">query_inaturalist</a></code>).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
