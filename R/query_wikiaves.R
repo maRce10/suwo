@@ -3,11 +3,11 @@
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options are 'sound' or 'image'. Required.
-#' @return A data frame with the metadata of the observations matching the query. Note that parallel downloading of media files (with the argument \code{cores} > 1) does not seem to work on this repository. If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.
+#' @return A data frame with the metadata of the observations matching the query.
 #' @export
 #' @name query_wikiaves
-#' @details This function queries for avian vocalization recordings in the open-access
-#' online repository \href{https://www.wikiaves.com/}{wikiaves}. It can return recordings metadata.
+#' @details This function queries for avian digital media in the open-access
+#' online repository \href{https://www.wikiaves.com/}{wikiaves} and returns its metadata. WikiAves is a Brazilian online platform and citizen science project that serves as the largest community for birdwatchers in Brazil. It functions as a collaborative, interactive encyclopedia of Brazilian birds, where users contribute georeferenced photographs and sound recordings, which are then used to build a vast database for research and conservation.
 #' @examples
 #' \dontrun{
 #' # search

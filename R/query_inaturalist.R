@@ -7,19 +7,11 @@
 #' @param identified Logical argument to define if search results are categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are categorized as verifiable by inaturalist.
 #' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
-#' @return If all_data is not provided the function returns a data frame with the following media
-#' information: quality_grade, time_observed_at, taxon_geoprivacy, uuid, id, cached_votes_total,
-#' identifications_most_agree, species_guess, identifications_most_disagree, positional_accuracy,
-#' comments_count, site_id, created_time_zone, license_code, observed_time_zone,
-#' public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset,
-#' observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements,
-#' map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count,
-#' obscured, num_identification_disagreements, geoprivacy, locality, spam, mappable,
-#' identifications_some_agree, place_guess, file_url, attribution, page, repository
+#' @return The function returns a data frame with the metadata of the media files matching the search criteria.
 #' @export
 #' @name query_inaturalist
 #' @details This function queries for species observation info in the open-access
-#' online repository \href{https://www.inaturalist.org/}{inaturalist}. It can return media metadata.
+#' online repository \href{https://www.inaturalist.org/}{inaturalist}. iNaturalist is a free, crowdsourced online platform for nature enthusiasts to document and identify plants, animals, fungi, and other organisms in the wild.
 #' @examples
 #' \dontrun{
 #' # search without downloading

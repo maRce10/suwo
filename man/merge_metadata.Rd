@@ -7,7 +7,7 @@
 merge_metadata(...)
 }
 \arguments{
-\item{...}{two or more data frames (each one a a separate entry) referring to the metadata obtained from suwo query functions (`query_x()`).}
+\item{...}{two or more data frames (each one as a separate entry) referring to the metadata obtained from suwo query functions (`query_x()`).}
 }
 \value{
 A single data frame with the data from all input data frames combined and with an additional column named `source` indicating the original data frame from which each row originated.
@@ -16,7 +16,7 @@ A single data frame with the data from all input data frames combined and with a
 \code{merge_metadata} merges metadata data frames from suwo queries.
 }
 \details{
-This function compares two dataframes to detect repeated data.
+This function combines metadata from multiple sources (e.g. WikiAves and xeno-canto) into a single data frame for easier analysis and comparison. Each input data frame must be obtained from one of the suwo query functions (e.g., `query_wikiaves()`, `query_xenocanto()`, etc.) with `raw_data = FALSE`.
 }
 \examples{
 \dontrun{

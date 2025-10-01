@@ -30,14 +30,14 @@ query_wikiaves(
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
 \value{
-A data frame with the metadata of the observations matching the query. Note that parallel downloading of media files (with the argument \code{cores} > 1) does not seem to work on this repository. If all_data is \code{FALSE} (default) the data frame contains the following columns: key, species, date, country, locality, latitude, longitude, file_url, repository, format. If all_data is \code{TRUE} the data frame contains the following information: recording ID, media type, user ID, species ID, scientific name, common name, repository ID, author, user name, date, verified condition, locality, locality ID, comments, likes, visualizations, url, duration and repository.
+A data frame with the metadata of the observations matching the query.
 }
 \description{
 \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 }
 \details{
-This function queries for avian vocalization recordings in the open-access
-online repository \href{https://www.wikiaves.com/}{wikiaves}. It can return recordings metadata.
+This function queries for avian digital media in the open-access
+online repository \href{https://www.wikiaves.com/}{wikiaves} and returns its metadata. WikiAves is a Brazilian online platform and citizen science project that serves as the largest community for birdwatchers in Brazil. It functions as a collaborative, interactive encyclopedia of Brazilian birds, where users contribute georeferenced photographs and sound recordings, which are then used to build a vast database for research and conservation.
 }
 \examples{
 \dontrun{

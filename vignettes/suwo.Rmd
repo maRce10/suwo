@@ -351,8 +351,7 @@ Users must click on the "Export" button to save the .csv file with the metadata:
 
 The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory). The function will not proceed until the file is saved. Here are some additional instructions for using this function properly:
 
-* Users must save the save the .csv file manually
-* If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it
+* If the file is saved overwriting a pre-existing file (i.e. same file name) the function will not detect it
 * The query term must be a species name
 * Users must log in to the Macaulay Library/eBird account in order to access large batches of observations
 
@@ -542,7 +541,7 @@ for (i in 1:6) {
 ```
 
 Users can also save the downloaded files into sub-directories with the argument `folder_by`. This argument takes a character of factor column with the names of a metadata field (a column in the metadata data frame) to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code saves the previous images into sub-directories by country:
-
+    
 ```{r}
 
 # download media files to a temporary directory, creating sub-directories by country

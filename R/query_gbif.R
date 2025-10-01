@@ -4,30 +4,11 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
-#' @return If all_data is \code{FALSE} the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is \code{TRUE} the function returns a data frame with the following media
-#' information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
-#' publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
-#' taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,
-#' acceptedTaxonKey, scientificName, acceptedScientificName, kingdom, phylum, order, family, genus,
-#' species, genericName, specificEpithet, taxonRank, taxonomicStatus, iucnRedListCategory,
-#' dateIdentified, decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters, continent,
-#' stateProvince, year, month, day, eventDate, modified, lastInterpreted, references, license,
-#' isInCluster, datasetName, recordedBy, identifiedBy, geodeticDatum, class, countryCode, country,
-#' rightsHolder, identifier, http...unknown.org.nick, verbatimEventDate, verbatimLocality,
-#' collectionCode, gbifID, occurrenceID, taxonID, catalogNumber, institutionCode, eventTime,
-#' occurrenceRemarks, http...unknown.org.captive, identificationID, identificationRemarks,
-#' distanceFromCentroidInMeters, informationWithheld, sex, lifeStage, preparations,
-#' nomenclaturalCode, dynamicProperties, locality, vernacularName, fieldNotes, verbatimElevation,
-#' behavior, higherClassification, associatedTaxa, infraspecificEpithet, media-type, media-format,
-#' media-references, media-created, media-creator, media-publisher, media-license,
-#' media-rightsHolder, file_url, media-description, page, elevation, elevationAccuracy,
-#' organismQuantity, organismQuantityType, georeferenceProtocol, verbatimSRS, county,
-#' verbatimCoordinateSystem, type, collectionID, individualCount, samplingProtocol,
-#' scientificNameID, georeferenceRemarks, language, georeferenceSources, media-title, repository.
+#' @return If all_data is \code{FALSE} the function returns a data frame with the metadata of media files matching the search term. If \code{all_data = TRUE}, all metadata fields are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
 #' @export
 #' @name query_gbif
 #' @details This function queries for species observation info in the open-access
-#' online repository \href{https://www.gbif.org/}{gbif}. It can return media metadata.
+#' online repository \href{https://www.gbif.org/}{gbif}. GBIF (the Global Biodiversity Information Facility) is an international network and data infrastructure funded by the world's governments and aimed at providing open access to data about all types of life on Earth. Note that some of the records returned by this function could be duplicates of records returned by other suwo functions (e.g., \code{\link{query_inaturalist}}).
 #' @seealso \code{\link{query_gbif}}
 #' @examples
 #' \dontrun{

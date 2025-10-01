@@ -30,7 +30,7 @@ download_media(
 \item{folder_by}{Character string with the name of a character or factor column in the metadata data frame. If supplied the function will use the unique values in that column to create subfolders within \code{"path"} and the files will be downloaded into the corresponding folder. Default is \code{NULL} which means that no subfolders are created and all files are saved in the path provided. Missing values (NAs) are saved in a folder called "unknown_value". Special characters that are not allowed in folder names will be modified or removed. If any of the folder names already exist in \code{"path"}, they will be used as is.}
 }
 \value{
-Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_results} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
+Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_status} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
 }
 \description{
 \code{download_media} downloads recordings and metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}, \href{https://www.wikiaves.com/}{wikiaves} or \href{https://www.gbif.org/}{gbif}.

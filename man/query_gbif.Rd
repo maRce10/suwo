@@ -33,33 +33,14 @@ query_gbif(
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
 \value{
-If all_data is \code{FALSE} the function returns a data frame with the following media information: id, species, date, country, location, latitude, longitude, file_url, repository. If all_data is \code{TRUE} the function returns a data frame with the following media
-information: key, datasetKey, publishingOrgKey, installationKey, hostingOrganizationKey,
-publishingCountry, protocol, lastCrawled, lastParsed, crawlId, basisOfRecord, occurrenceStatus,
-taxonKey, kingdomKey, phylumKey, classKey, orderKey, familyKey, genusKey, speciesKey,
-acceptedTaxonKey, scientificName, acceptedScientificName, kingdom, phylum, order, family, genus,
-species, genericName, specificEpithet, taxonRank, taxonomicStatus, iucnRedListCategory,
-dateIdentified, decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters, continent,
-stateProvince, year, month, day, eventDate, modified, lastInterpreted, references, license,
-isInCluster, datasetName, recordedBy, identifiedBy, geodeticDatum, class, countryCode, country,
-rightsHolder, identifier, http...unknown.org.nick, verbatimEventDate, verbatimLocality,
-collectionCode, gbifID, occurrenceID, taxonID, catalogNumber, institutionCode, eventTime,
-occurrenceRemarks, http...unknown.org.captive, identificationID, identificationRemarks,
-distanceFromCentroidInMeters, informationWithheld, sex, lifeStage, preparations,
-nomenclaturalCode, dynamicProperties, locality, vernacularName, fieldNotes, verbatimElevation,
-behavior, higherClassification, associatedTaxa, infraspecificEpithet, media-type, media-format,
-media-references, media-created, media-creator, media-publisher, media-license,
-media-rightsHolder, file_url, media-description, page, elevation, elevationAccuracy,
-organismQuantity, organismQuantityType, georeferenceProtocol, verbatimSRS, county,
-verbatimCoordinateSystem, type, collectionID, individualCount, samplingProtocol,
-scientificNameID, georeferenceRemarks, language, georeferenceSources, media-title, repository.
+If all_data is \code{FALSE} the function returns a data frame with the metadata of media files matching the search term. If \code{all_data = TRUE}, all metadata fields are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
 }
 \description{
 \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
 }
 \details{
 This function queries for species observation info in the open-access
-online repository \href{https://www.gbif.org/}{gbif}. It can return media metadata.
+online repository \href{https://www.gbif.org/}{gbif}. GBIF (the Global Biodiversity Information Facility) is an international network and data infrastructure funded by the world's governments and aimed at providing open access to data about all types of life on Earth. Note that some of the records returned by this function could be duplicates of records returned by other suwo functions (e.g., \code{\link{query_inaturalist}}).
 }
 \examples{
 \dontrun{

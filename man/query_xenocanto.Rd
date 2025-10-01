@@ -44,12 +44,11 @@ format are downloaded into the working directory if download = \code{TRUE}.
 \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 }
 \details{
-This function queries for avian vocalization recordings in the open-access
-online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
-or download the associated sound files. Complex queries can be done by using search terms that follow the
- xeno-canto advance query syntax (check "term" argument description).
- Files are double-checked after downloading and "empty" files are re-downloaded.
- File downloading process can be interrupted and resume later as long as the working directory is the same.
+This function queries for animal vocalization recordings in the open-access
+online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. \href{https://www.xeno-canto.org/}{Xeno-Canto} is an online database that provides access to sound recordings of wildlife from around the world. The recordings are shared by a growing community of thousands of recordists from around the world.
+
+ Complex queries can be done by using search terms that follow the
+  \href{https://www.xeno-canto.org/}{Xeno-Canto} advance query syntax (check "term" argument description).
 }
 \examples{
 \dontrun{
@@ -76,7 +75,6 @@ Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way to a
 }
 \seealso{
 \code{\link{query_gbif}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_observation}}
-\href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

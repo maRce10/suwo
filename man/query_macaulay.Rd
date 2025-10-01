@@ -44,11 +44,11 @@ info_text, permalink, determination_requirements, file_url, repository
 \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 }
 \details{
-This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the search results page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.
+This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the Macaulay Library's search page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.
 
 Here are some instructions for using this function properly:
 \itemize{
-   \item After the .csv file is saved, the user must confirm that into the R console.
+   \item Users must save the save the .csv file manually
    \item \emph{If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it}
    \item The query term must be a species name
    \item A maximum of 10000 records per query can be returned, but this can be bypassed by using the \code{dates} argument to split the search into smaller date ranges
@@ -62,8 +62,8 @@ tur_ili <- query_macaulay(term = "Turdus iliacus", format = "sound",
 path = tempdir())
 
 # test a query with more than 10000 results paging by date
-cal_cos <- query_macaulay(term = "Calypte costae", type = "image",
-path = tempdir(), dates = c(1976, 2020, 2022, 2024, 2025, 2026))
+cal_cos <- query_macaulay(term = "Calypte costae", format = "image",
+path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
 
 # this is how the internal function that splits the search by year intervals works
 # it can split by entire year intervals
