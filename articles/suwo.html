@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>suwo: access nature media repositories • suwo</title>
+<title>package overview • suwo</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="suwo: access nature media repositories">
+<meta property="og:title" content="package overview">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -57,13 +57,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>suwo: access nature media repositories</h1>
-            <h3 data-toc-skip class="subtitle">package overview</h3>
+      <h1>package overview</h1>
+            <h3 data-toc-skip class="subtitle">suwo: access nature media
+repositories</h3>
                         <h4 data-toc-skip class="author">Jorge Elizondo
 &amp; <a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a>
 </h4>
             
-            <h4 data-toc-skip class="date">2025-10-01</h4>
+            <h4 data-toc-skip class="date">2025-10-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/master/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -72,18 +73,31 @@
     
     
 <p> </p>
-<div class="alert alert-info">
-<p>This vignette provides an overview of the suwo package and its
-functionalities. For detailed information on each function, please refer
-to the <a href="https://maRce10.github.io/suwo/reference/index.html" class="external-link">function
-reference</a> or use the help files within R (e.g.,
-<code><a href="../reference/query_gbif.html">?query_gbif</a></code>).</p>
+<div class="section level5">
+<h5 class="unnumbered unlisted" id="intended-use-and-responsible-practices">Intended use and responsible
+practices<a class="anchor" aria-label="anchor" href="#intended-use-and-responsible-practices"></a>
+</h5>
+<p>The suwo package package is designed exclusively for non-commercial,
+scientific purposes, including research, education, and conservation.
+Any <strong>commercial use of the data or media retrieved through this
+package is strictly prohibited</strong> unless explicit, separate
+permission is granted directly from the original source platforms and
+content creators. Users are obligated to comply with the specific terms
+of service and data use policies of each source database, which often
+mandate attribution and similarly restrict commercial application. The
+package developers assume no liability for misuse of the retrieved data
+or violations of third-party terms of service.</p>
 </div>
+<div class="alert alert-info">
 <p>The suwo package is designed to simplify the retrieval of nature
 media (mostly photos, audio files and videos) across multiple online
 biodiversity databases. This vignette provides an overview of the
 package’s core querying functions, the searching and downloading of
-media files, and the compilation of metadata from various sources.</p>
+media files, and the compilation of metadata from various sources. For
+detailed information on each function, please refer to the <a href="https://maRce10.github.io/suwo/reference/index.html" class="external-link">function
+reference</a> or use the help files within R (e.g.,
+<code><a href="../reference/query_gbif.html">?query_gbif</a></code>).</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -2588,8 +2602,14 @@ sub-directory name:</p>
 [4] "Zambia/Amanita_zambiana-GBIF5104283819.jpeg"      
 [5] "Zimbabwe/Amanita_zambiana-GBIF3759537817-1.jpeg"  
 [6] "Zimbabwe/Amanita_zambiana-GBIF3759537817-2.jpeg"  </code></pre>
-<p><font size="4">Session information</font></p>
-<pre><code>R version 4.5.1 (2025-06-13)
+<!-- add packages used, system details and versions  -->
+</div>
+<div class="section level2">
+<h2 class="unnumbered unlisted" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
+</h2>
+<details><summary>
+Click to see
+</summary><pre><code>R version 4.5.1 (2025-06-13)
 Platform: x86_64-pc-linux-gnu
 Running under: Ubuntu 24.04.3 LTS
 
@@ -2626,7 +2646,7 @@ loaded via a namespace (and not attached):
 [45] pbapply_1.7-4          DBI_1.2.3              cachem_1.1.0           proxy_0.4-27          
 [49] stringr_1.5.2          splines_4.5.1          parallel_4.5.1         vctrs_0.6.5           
 [53] Matrix_1.7-3           jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.9.1         
-[57] systemfonts_1.3.0      jpeg_0.1-11            evd_2.3-7.1            jquerylib_0.1.4       
+[57] systemfonts_1.3.1      jpeg_0.1-11            evd_2.3-7.1            jquerylib_0.1.4       
 [61] glue_1.8.0             parallelly_1.45.1      pkgdown_2.1.3          codetools_0.2-20      
 [65] lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6           htmltools_0.5.8.1     
 [69] ipred_0.9-15           lava_1.8.1             R6_2.6.1               ff_4.5.2              
@@ -2634,6 +2654,7 @@ loaded via a namespace (and not attached):
 [77] memoise_2.0.1          bslib_0.9.0            class_7.3-23           Rcpp_1.1.0            
 [81] checkmate_2.3.3        svglite_2.2.1          gridExtra_2.3          prodlim_2025.04.28    
 [85] xfun_0.53              fs_1.6.6              </code></pre>
+</details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
