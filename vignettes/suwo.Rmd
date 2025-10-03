@@ -1,6 +1,6 @@
 ---
-title: "suwo: access nature media repositories"
-subtitle: package overview
+title: package overview
+subtitle: "suwo: access nature media repositories"
 pagetitle: suwo package overview
 author: 
 - Jorge Elizondo & <a href="https://marce10.github.io/">Marcelo Araya-Salas</a>
@@ -81,13 +81,21 @@ options(width = 100, max.print = 100)
 ```
 
 
-<div class="alert alert-info">
+::: {.alert .alert-warning}
 
-This vignette provides an overview of the suwo package and its functionalities. For detailed information on each function, please refer to the [function reference](https://maRce10.github.io/suwo/reference/index.html) or use the help files within R (e.g., `?query_gbif`).
+#### Intended use and responsible practices {.unnumbered .unlisted}
 
-</div>
+The suwo package package is designed exclusively for non-commercial, scientific purposes, including research, education, and conservation. Any **commercial use of the data or media retrieved through this package is strictly prohibited** unless explicit, separate permission is granted directly from the original source platforms and content creators. Users are obligated to comply with the specific terms of service and data use policies of each source database, which often mandate attribution and similarly restrict commercial application. The package developers assume no liability for misuse of the retrieved data or violations of third-party terms of service.
 
-The suwo package is designed to simplify the retrieval of nature media (mostly photos, audio files and videos) across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. 
+:::
+
+::: {.alert .alert-info}
+
+The suwo package is designed to simplify the retrieval of nature media (mostly photos, audio files and videos) across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. For detailed information on each function, please refer to the [function reference](https://maRce10.github.io/suwo/reference/index.html) or use the help files within R (e.g., `?query_gbif`).
+
+:::
+
+
 
 # Installation
 
@@ -558,11 +566,21 @@ amus_files$download_file_name
 
 ```
 
-<font size="4">Session information</font>
+<!-- add packages used, system details and versions  -->
 
-```{r session info, echo=F}
+# Session information {.unnumbered .unlisted}
 
-sessionInfo()
+<details>
+  <summary>Click to see</summary>
+```{r session info}
+#| echo: false
+
+# if devtools is installed use devtools::session_info()
+if (requireNamespace("devtools", quietly = TRUE)) {
+  devtools::session_info()
+} else {
+  sessionInfo()
+}
 
 ```
-
+</details>

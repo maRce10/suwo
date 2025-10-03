@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--09--18-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--10--03-yellowgreen.svg)](/commits/master)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=master)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
@@ -37,8 +37,8 @@ The main features of the package are:
 - Downloading associated media files
 - Updating data sets with new records
 
-**THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE AND WILL BE MODIFIED
-FREQUENTLY.**
+:warning:**THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE AND WILL BE
+MODIFIED FREQUENTLY.**:warning:
 
 We are currently searching for new online repositories to be included in
 the package. Please [open a new
@@ -67,6 +67,21 @@ remotes::install_github("maRce10/suwo")
 #load package
 library(suwo)
 ```
+
+## Intended use and responsible practices
+
+The [suwo](https://github.com/maRce10/suwo) package package is designed
+exclusively for non-commercial, scientific purposes, including research,
+education, and conservation. **Any commercial use of the data or media
+retrieved through this package is strictly prohibited** unless explicit,
+separate permission is granted directly from the original source
+platforms and content creators. Users are obligated to comply with the
+specific terms of service and data use policies of each source database,
+which often mandate attribution and similarly restrict commercial
+application. The package developers assume no liability for misuse of
+the retrieved data or violations of third-party terms of service.
+
+## Citation
 
 Please cite [suwo](https://github.com/maRce10/suwo) as follows:
 
