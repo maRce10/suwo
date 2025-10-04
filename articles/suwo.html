@@ -64,7 +64,7 @@ repositories</h3>
 &amp; <a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a>
 </h4>
             
-            <h4 data-toc-skip class="date">2025-10-03</h4>
+            <h4 data-toc-skip class="date">2025-10-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/master/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -77,24 +77,26 @@ repositories</h3>
 <h5 class="unnumbered unlisted" id="intended-use-and-responsible-practices">Intended use and responsible
 practices<a class="anchor" aria-label="anchor" href="#intended-use-and-responsible-practices"></a>
 </h5>
-<p>The suwo package package is designed exclusively for non-commercial,
-scientific purposes, including research, education, and conservation.
-Any <strong>commercial use of the data or media retrieved through this
-package is strictly prohibited</strong> unless explicit, separate
-permission is granted directly from the original source platforms and
-content creators. Users are obligated to comply with the specific terms
-of service and data use policies of each source database, which often
-mandate attribution and similarly restrict commercial application. The
-package developers assume no liability for misuse of the retrieved data
-or violations of third-party terms of service.</p>
+<p>The <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> package is
+designed exclusively for non-commercial, scientific purposes, including
+research, education, and conservation. Any <strong>commercial use of the
+data or media retrieved through this package is strictly
+prohibited</strong> unless explicit, separate permission is granted
+directly from the original source platforms and content creators. Users
+are obligated to comply with the specific terms of service and data use
+policies of each source database, which often mandate attribution and
+similarly restrict commercial application. The package developers assume
+no liability for misuse of the retrieved data or violations of
+third-party terms of service.</p>
 </div>
 <div class="alert alert-info">
-<p>The suwo package is designed to simplify the retrieval of nature
-media (mostly photos, audio files and videos) across multiple online
-biodiversity databases. This vignette provides an overview of the
-package’s core querying functions, the searching and downloading of
-media files, and the compilation of metadata from various sources. For
-detailed information on each function, please refer to the <a href="https://maRce10.github.io/suwo/reference/index.html" class="external-link">function
+<p>The <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> package is
+designed to simplify the retrieval of nature media (mostly photos, audio
+files and videos) across multiple online biodiversity databases. This
+vignette provides an overview of the package’s core querying functions,
+the searching and downloading of media files, and the compilation of
+metadata from various sources. For detailed information on each
+function, please refer to the <a href="https://maRce10.github.io/suwo/reference/index.html" class="external-link">function
 reference</a> or use the help files within R (e.g.,
 <code><a href="../reference/query_gbif.html">?query_gbif</a></code>).</p>
 </div>
@@ -112,8 +114,9 @@ reference</a> or use the help files within R (e.g.,
 <div class="section level2">
 <h2 id="basic-workflow-for-obtaining-nature-media-files">Basic workflow for obtaining nature media files<a class="anchor" aria-label="anchor" href="#basic-workflow-for-obtaining-nature-media-files"></a>
 </h2>
-<p>Finding data using suwo follows a basic sequence. The following
-diagram illustrates this workflow and the main functions involved:</p>
+<p>Finding data using <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a>
+follows a basic sequence. The following diagram illustrates this
+workflow and the main functions involved:</p>
 <center>
 <img src="workflow_diagram.png" alt="suwo workflow diagram" width="100%">
 </center>
@@ -126,25 +129,25 @@ repositories. The output of these queries is a data frame containing
 metadata associated with the media files (e.g., species name, date,
 location, etc, see below).</p></li>
 <li><p>If multiple repositories are queried, the resulting metadata data
-frames can be merged into a single data frame using the
-<code><a href="../reference/merge_metadata.html">merge_metadata()</a></code> function.</p></li>
-<li><p>Check for duplicate records in their datasets using the
-<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function. Candidate duplicated entries
-are identified based on matching species name, country, date, user name,
-and geographic coordinates. User can double check the candidate
-duplicates and decide which records to keep, which can be done with
-<code><a href="../reference/remove_duplicates.html">remove_duplicates()</a></code>.</p></li>
+frames can be merged into a single data frame using the <a href="https://marce10.github.io/suwo/reference/merge_metadata.html">merge_metadata()</a>
+function.</p></li>
+<li><p>Check for duplicate records in their datasets using the <a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>
+function. Candidate duplicated entries are identified based on matching
+species name, country, date, user name, and geographic coordinates. User
+can double check the candidate duplicates and decide which records to
+keep, which can be done with <a href="https://marce10.github.io/suwo/reference/remove_duplicates.html">remove_duplicates()</a>.</p></li>
 <li><p>Download the media files associated with the metadata using the
-<code><a href="../reference/download_media.html">download_media()</a></code> function.</p></li>
-<li><p>Users can update their datasets with new records using the
-<code><a href="../reference/update_metadata.html">update_metadata()</a></code> function.</p></li>
+<a href="https://marce10.github.io/suwo/reference/download_media.html">download_media()</a>
+function.</p></li>
+<li><p>Users can update their datasets with new records using the <a href="https://marce10.github.io/suwo/reference/update_metadata.html">update_metadata()</a>
+function.</p></li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="query-functions">Query functions<a class="anchor" aria-label="anchor" href="#query-functions"></a>
 </h2>
-<p>The following table summarizes the available suwo query functions and
-the types of metadata they retrieve:</p>
+<p>The following table summarizes the available <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> query functions and the
+types of metadata they retrieve:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load suwo package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span></code></pre></div>
@@ -887,13 +890,30 @@ sonogram_full, oscillogram_small, oscillogram_med, oscillogram_large
 </tr>
 </tbody>
 </table>
+<div class="alert alert-warning">
+<p><font size="4">Obtaining raw data</font></p>
+<p>By default the package standardizes the information in the basic
+fields (detailed above) in order to facilitate the compilation of
+metadata from multiple repositories. However, in some cases this may
+result in loss of information. For instance, some repositories allow
+users to provide “morning” as a valid time value, which are converted
+into NAs by <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a>. In such
+cases, users can retrieve the original data by setting the
+<code>raw_data = TRUE</code> in the query functions and/or global
+options (<code>options(raw_data = TRUE)</code>). Note that subsequent
+data manipulation functions (e.g., <a href="https://marce10.github.io/suwo/reference/merge_metadata.html">merge_metadata()</a>,
+<a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>,
+etc) will not work properly as the basic fields are not
+standardized.</p>
+</div>
 <div class="section level3">
 <h3 id="query-macaulay-library-interactively">Query Macaulay Library interactively<a class="anchor" aria-label="anchor" href="#query-macaulay-library-interactively"></a>
 </h3>
-<p><code><a href="../reference/query_macaulay.html">query_macaulay()</a></code> is the only interactive function. This
-means that when users run a query the function opens a browser window to
-the Macaulay Library’s search page, where the users must download a .csv
-file with the metadata:</p>
+<p><a href="https://marce10.github.io/suwo/reference/query_macaulay.html">query_macaulay()</a>
+is the only interactive function. This means that when users run a query
+the function opens a browser window to the <a href="https://search.macaulaylibrary.org/catalog" class="external-link">Macaulay Library’s
+search page</a>, where the users must download a .csv file with the
+metadata:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Query Wikiaves for Turdus rufiventris sounds</span></span>
 <span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span></code></pre></div>
@@ -902,12 +922,12 @@ the metadata:</p>
 <center>
 <img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%">
 </center>
-<p>The file must be saved in the directory specified by the
-<code>path</code> argument of the function (default is the current
-working directory). The function will not proceed until the file is
-saved. Here are some additional instructions for using this function
-properly:</p>
+<p>Here are some instructions for using this function properly:</p>
 <ul>
+<li>The file must be saved in the directory specified by the
+<code>path</code> argument of the function (default is the current
+working directory)</li>
+<li>The function will not proceed until the file is saved</li>
 <li>If the file is saved overwriting a pre-existing file (i.e. same file
 name) the function will not detect it</li>
 <li>The query term must be a species name</li>
@@ -1157,29 +1177,15 @@ sub-query has less than 10000 records.</p>
 <center>
 <img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%">
 </center>
-<div class="alert alert-warning">
-<p><font size="4">Obtaining raw data</font></p>
-<p>By default the package standardizes the information in the basic
-fields (detailed above) in order to facilitate the compilation of
-metadata from multiple repositories. However, in some cases this may
-result in loss of information. For instance, some repositories allow
-users to provide “morning” as a valid time value, which are converted
-into NAs by suwo. In such cases, users can retrieve the original data by
-setting the <code>raw_data = TRUE</code> in the query functions and/or
-global options (<code>options(raw_data = TRUE)</code>). Note that
-subsequent data manipulation functions (e.g.,
-<code><a href="../reference/merge_metadata.html">merge_metadata()</a></code>, <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>, etc) will
-not work properly as the basic fields are not standardized.</p>
-</div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="update-metadata">Update metadata<a class="anchor" aria-label="anchor" href="#update-metadata"></a>
 </h2>
-<p>The <code><a href="../reference/update_metadata.html">update_metadata()</a></code> function allows users to update a
-previous query to add new information from the corresponding repository
-of the original search. This function takes as input a data frame
-previously obtained from any query function
+<p>The <a href="https://marce10.github.io/suwo/reference/update_metadata.html">update_metadata()</a>
+function allows users to update a previous query to add new information
+from the corresponding repository of the original search. This function
+takes as input a data frame previously obtained from any query function
 (i.e. <code>query_reponame()</code>) and returns a data frame similar to
 the input with new data appended.</p>
 <p>To show case the function, we will use the metadata from the previous
@@ -1190,8 +1196,7 @@ following code removes all observations recorded after 2024-12-31 to
 simulate an old query:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
-<span><span class="va">old_truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span></span>
-<span>                                 <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">old_truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">truf_xc</span>, subset <span class="op">=</span> <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># update "old" data</span></span>
 <span><span class="va">updated_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_metadata.html">update_metadata</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">old_truf_xc</span><span class="op">)</span></span>
@@ -1199,25 +1204,26 @@ simulate an old query:</p>
 <span><span class="co"># compare number of records</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">truf_xc</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">updated_xc</span><span class="op">)</span></span></code></pre></div>
 <pre><code>[1] TRUE</code></pre>
-<p>Note the use of the suwo function <code><a href="../reference/subset_metadata.html">subset_metadata()</a></code> to
-filter the data frame by date. This is a modified version of
+<p>Note the use of the <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> function <a href="https://marce10.github.io/suwo/reference/subset_metadata.html">subset_metadata()</a>
+to filter the data frame by date. This is a modified version of
 <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">base::subset()</a></code> that makes sure that the attributes of the
-data frame are preserved, which are needed by subsequent suwo functions
-working on metadata. Those attributes will be lost if you use
+data frame are preserved, which are needed by subsequent <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> functions working on
+metadata. Those attributes will be lost if you use
 <code>dplyr::filter()</code>, <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">base::subset()</a></code> or the extract
 operator <code>[</code> (e.g. <code>metadata[1:3, ]</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="combine-metadata-from-multiple-repositories">Combine metadata from multiple repositories<a class="anchor" aria-label="anchor" href="#combine-metadata-from-multiple-repositories"></a>
 </h2>
-<p>The <code><a href="../reference/merge_metadata.html">merge_metadata()</a></code> function allows users to combine
-metadata data frames obtained from multiple query functions into a
-single data frame. The function will match the basic columns of all data
-frames. Data from additional columns (for instance when using ‘all_data
-= TRUE’ in the query) will only be combined if the column names from
-different repositories match. The function will return a data frame that
-includes a new column called <code>source</code> indicating the name of
-the original metadata data frame:</p>
+<p>The <a href="https://marce10.github.io/suwo/reference/merge_metadata.html">merge_metadata()</a>
+function allows users to combine metadata data frames obtained from
+multiple query functions into a single data frame. The function will
+match the basic columns of all data frames. Data from additional columns
+(for instance when using <code>all_data = TRUE</code> in the query) will
+only be combined if the column names from different repositories match.
+The function will return a data frame that includes a new column called
+<code>source</code> indicating the name of the original metadata data
+frame:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query multiple repositories</span></span>
 <span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Turdus rufiventris"</span><span class="op">)</span></span>
@@ -1464,15 +1470,16 @@ xc_adf
 records are a common issue. These duplicates occur both through data
 sharing between repositories like Xeno-Canto and GBIF, and when users
 upload the same file to multiple platforms. To help users efficiently
-identify these duplicate records, suwo provides the find_duplicates()
-function.</p>
-<p>The <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function helps users identify
-potential duplicate records in their metadata data frames. Duplicates
-are identified based on matching species name, country, date, user name,
-and locality. The function uses a fuzzy matching approach to account for
-minor variations in the data (e.g., typos, different location formats,
-etc).The output is a data frame with the candidate duplicate records,
-allowing users to review and decide which records to keep.</p>
+identify these duplicate records, <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> provides the
+find_duplicates() function.</p>
+<p>The <a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>
+function helps users identify potential duplicate records in their
+metadata data frames. Duplicates are identified based on matching
+species name, country, date, user name, and locality. The function uses
+a fuzzy matching approach to account for minor variations in the data
+(e.g., typos, different location formats, etc).The output is a data
+frame with the candidate duplicate records, allowing users to review and
+decide which records to keep.</p>
 <p>In this example we look for possible duplicates in the merged
 metadata data frame from the previous section:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -1816,16 +1823,15 @@ ml_adf_s
 </tbody>
 </table>
 </div>
-<p>Note that the <code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> function adds a new
-column called <code>duplicate_group</code> to the output data frame.
-This column assigns a unique identifier to each group of potential
-duplicates, allowing users to easily identify and review them. For
-instance, in the example above, records from duplicated group 39 belong
-to the same user, were recorded on the same date and time in the same
-country:</p>
+<p>Note that the <a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>
+function adds a new column called “duplicate_group” to the output data
+frame. This column assigns a unique identifier to each group of
+potential duplicates, allowing users to easily identify and review them.
+For instance, in the example above, records from duplicated group 77
+belong to the same user, were recorded on the same date and time and in
+the same country:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># look at duplicated group 39</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">39</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">77</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1878,49 +1884,190 @@ duplicate_group
 <tbody>
 <tr>
 <td style="text-align:center;">
-Macaulay Library
+Xeno-Canto
 </td>
 <td style="text-align:center;">
 sound
 </td>
 <td style="text-align:center;">
-611573698
+273100
 </td>
 <td style="text-align:center;">
 Turdus rufiventris
 </td>
 <td style="text-align:center;">
-2023-11-21
+2013-10-19
 </td>
 <td style="text-align:center;">
-08:08
+18:00
 </td>
 <td style="text-align:center;">
-Luis Weymar Junior
+Peter Boesman
 </td>
 <td style="text-align:center;">
-Brazil
+Argentina
 </td>
 <td style="text-align:center;">
-Capão do Leão–Estrada da Eclusa
+Calilegua NP, Jujuy
 </td>
 <td style="text-align:center;">
--31.80667
+-23.74195
 </td>
 <td style="text-align:center;">
--52.39833
+-64.85777
 </td>
 <td style="text-align:center;">
-<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573698/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573698/</a>
+<a href="https://xeno-canto.org/273100/download" class="external-link uri">https://xeno-canto.org/273100/download</a>
 </td>
 <td style="text-align:center;">
 mp3
 </td>
 <td style="text-align:center;">
-ml_adf_s
+xc_adf
 </td>
 <td style="text-align:center;">
-39
+77
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Xeno-Canto
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+273098
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/273098/download" class="external-link uri">https://xeno-canto.org/273098/download</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+xc_adf
+</td>
+<td style="text-align:center;">
+77
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243678570
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273098-Rufous-bellied%20Thrush%20QQ%20call%20A%201.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273098-Rufous-bellied%20Thrush%20QQ%20call%20A%201.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+77
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+sound
+</td>
+<td style="text-align:center;">
+2243680322
+</td>
+<td style="text-align:center;">
+Turdus rufiventris
+</td>
+<td style="text-align:center;">
+2013-10-19
+</td>
+<td style="text-align:center;">
+18:00
+</td>
+<td style="text-align:center;">
+Peter Boesman
+</td>
+<td style="text-align:center;">
+Argentina
+</td>
+<td style="text-align:center;">
+Calilegua NP, Jujuy
+</td>
+<td style="text-align:center;">
+-23.74195
+</td>
+<td style="text-align:center;">
+-64.85777
+</td>
+<td style="text-align:center;">
+<a href="https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273100-Rufous-bellied%20Thrush%20QQQ%20call%20A.mp3" class="external-link uri">https://xeno-canto.org/sounds/uploaded/OOECIWCSWV/XC273100-Rufous-bellied%20Thrush%20QQQ%20call%20A.mp3</a>
+</td>
+<td style="text-align:center;">
+mp3
+</td>
+<td style="text-align:center;">
+gb_adf_s
+</td>
+<td style="text-align:center;">
+77
 </td>
 </tr>
 <tr>
@@ -1931,34 +2078,34 @@ Macaulay Library
 sound
 </td>
 <td style="text-align:center;">
-611573700
+301276
 </td>
 <td style="text-align:center;">
 Turdus rufiventris
 </td>
 <td style="text-align:center;">
-2023-11-21
+2013-10-19
 </td>
 <td style="text-align:center;">
-08:08
+18:00
 </td>
 <td style="text-align:center;">
-Luis Weymar Junior
+Peter Boesman
 </td>
 <td style="text-align:center;">
-Brazil
+Argentina
 </td>
 <td style="text-align:center;">
-Capão do Leão–Estrada da Eclusa
+Calilegua NP
 </td>
 <td style="text-align:center;">
--31.80667
+-23.74200
 </td>
 <td style="text-align:center;">
--52.39833
+-64.85780
 </td>
 <td style="text-align:center;">
-<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573700/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573700/</a>
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301276/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301276/</a>
 </td>
 <td style="text-align:center;">
 mp3
@@ -1967,7 +2114,7 @@ mp3
 ml_adf_s
 </td>
 <td style="text-align:center;">
-39
+77
 </td>
 </tr>
 <tr>
@@ -1978,34 +2125,34 @@ Macaulay Library
 sound
 </td>
 <td style="text-align:center;">
-611573699
+301275
 </td>
 <td style="text-align:center;">
 Turdus rufiventris
 </td>
 <td style="text-align:center;">
-2023-11-21
+2013-10-19
 </td>
 <td style="text-align:center;">
-08:08
+18:00
 </td>
 <td style="text-align:center;">
-Luis Weymar Junior
+Peter Boesman
 </td>
 <td style="text-align:center;">
-Brazil
+Argentina
 </td>
 <td style="text-align:center;">
-Capão do Leão–Estrada da Eclusa
+Calilegua NP
 </td>
 <td style="text-align:center;">
--31.80667
+-23.74200
 </td>
 <td style="text-align:center;">
--52.39833
+-64.85780
 </td>
 <td style="text-align:center;">
-<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573699/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573699/</a>
+<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301275/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/301275/</a>
 </td>
 <td style="text-align:center;">
 mp3
@@ -2014,69 +2161,21 @@ mp3
 ml_adf_s
 </td>
 <td style="text-align:center;">
-39
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-Macaulay Library
-</td>
-<td style="text-align:center;">
-sound
-</td>
-<td style="text-align:center;">
-611573697
-</td>
-<td style="text-align:center;">
-Turdus rufiventris
-</td>
-<td style="text-align:center;">
-2023-11-21
-</td>
-<td style="text-align:center;">
-08:08
-</td>
-<td style="text-align:center;">
-Luis Weymar Junior
-</td>
-<td style="text-align:center;">
-Brazil
-</td>
-<td style="text-align:center;">
-Capão do Leão–Estrada da Eclusa
-</td>
-<td style="text-align:center;">
--31.80667
-</td>
-<td style="text-align:center;">
--52.39833
-</td>
-<td style="text-align:center;">
-<a href="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573697/" class="external-link uri">https://cdn.download.ams.birds.cornell.edu/api/v1/asset/611573697/</a>
-</td>
-<td style="text-align:center;">
-mp3
-</td>
-<td style="text-align:center;">
-ml_adf_s
-</td>
-<td style="text-align:center;">
-39
+77
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>Also note that the locality is not exactly the same for these
-records, but the fuzzy matching approach used by
-<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code> was able to identify them as potential
-duplicates.</p>
+records, but the fuzzy matching approach used by <a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>
+was able to identify them as potential duplicates.</p>
 <p>Once users have reviewed the candidate duplicates, they can use the
-<code><a href="../reference/remove_duplicates.html">remove_duplicates()</a></code> function to eliminate unwanted
-duplicates from their metadata data frames. This function takes as input
-a metadata data frame (either the original or the output of
-<code><a href="../reference/find_duplicates.html">find_duplicates()</a></code>) and a vector of row numbers indicating
-which records to remove:</p>
+<a href="https://marce10.github.io/suwo/reference/remove_duplicates.html">remove_duplicates()</a>
+function to eliminate unwanted duplicates from their metadata data
+frames. This function takes as input a metadata data frame (either the
+original query results or the output of <a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>)
+and a vector of row numbers indicating which records to remove:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># remove duplicates (for illustration we remove the first record of each duplicate group)</span></span>
 <span><span class="va">dedup_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_duplicates.html">remove_duplicates</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span><span class="op">)</span></span></code></pre></div>
@@ -2345,12 +2444,12 @@ but this can be modified with the argument ‘repo_priority’.</p>
 <h2 id="donwload-media-files">Donwload media files<a class="anchor" aria-label="anchor" href="#donwload-media-files"></a>
 </h2>
 <p>The last step of the workflow is to download the media files
-associated with the metadata. This can be done using the
-<code><a href="../reference/download_media.html">download_media()</a></code> function, which takes as input a metadata
-data frame (obtained from any query function or any of the other
-metadata managing functions) and downloads the media files to a
-specified directory. For this example we will download images from a
-query on <code>Amanita zambiana</code> (a mushroom) on GBIF:</p>
+associated with the metadata. This can be done using the <a href="https://marce10.github.io/suwo/reference/download_media.html">download_media()</a>
+function, which takes as input a metadata data frame (obtained from any
+query function or any of the other metadata managing functions) and
+downloads the media files to a specified directory. For this example we
+will download images from a query on <code>Amanita zambiana</code> (a
+mushroom) on GBIF:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query GBIF for Amanita zambiana images</span></span>
 <span><span class="va">amus_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
@@ -2576,10 +2675,10 @@ illustration purpose):</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>    <span class="va">amus_files</span><span class="op">$</span><span class="va">country</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
 <span>    <span class="va">amus_files</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
-<span>    sep <span class="op">=</span> <span class="st">" \n "</span></span>
+<span>    sep <span class="op">=</span> <span class="st">"\n"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="suwo_files/figure-html/unnamed-chunk-22-1.png" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="suwo_files/figure-html/unnamed-chunk-23-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Users can also save the downloaded files into sub-directories with
 the argument <code>folder_by</code>. This argument takes a character of
 factor column with the names of a metadata field (a column in the
@@ -2603,10 +2702,9 @@ sub-directory name:</p>
 [5] "Zimbabwe/Amanita_zambiana-GBIF3759537817-1.jpeg"  
 [6] "Zimbabwe/Amanita_zambiana-GBIF3759537817-2.jpeg"  </code></pre>
 <!-- add packages used, system details and versions  -->
-</div>
-<div class="section level2">
-<h2 class="unnumbered unlisted" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
-</h2>
+<div class="section level3">
+<h3 class="unnumbered unlisted" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
+</h3>
 <details><summary>
 Click to see
 </summary><pre><code>R version 4.5.1 (2025-06-13)
@@ -2655,6 +2753,7 @@ loaded via a namespace (and not attached):
 [81] checkmate_2.3.3        svglite_2.2.1          gridExtra_2.3          prodlim_2025.04.28    
 [85] xfun_0.53              fs_1.6.6              </code></pre>
 </details>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
