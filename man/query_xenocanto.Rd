@@ -35,10 +35,7 @@ for queries using terms with more than one word.}
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
 \value{
-The function returns a data frame with the following recording information: recording ID,
-Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
-Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 or .wav
-format are downloaded into the working directory if download = \code{TRUE}.
+The function returns a data frame with the metadata of the matching observations. A description of the available fields from  Xeno-Canto can be found \href{https://xeno-canto.org/explore/api}{here}.
 }
 \description{
 \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.

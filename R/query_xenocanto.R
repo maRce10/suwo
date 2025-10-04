@@ -11,10 +11,7 @@
 #'  Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
 #'  results for birds in the genus \emph{Phaethornis} that were recorded in Belize. Queries are case insensitive. Make sure taxonomy related tags (Genus or scientific name) are found first in multi-tag queries. See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
 #'  for queries using terms with more than one word.
-#' @return The function returns a data frame with the following recording information: recording ID,
-#' Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
-#' Longitude, Vocalization type, Audio file, License, URL, Quality, Time, Date. Sound files in .mp3 or .wav
-#' format are downloaded into the working directory if download = \code{TRUE}.
+#' @return The function returns a data frame with the metadata of the matching observations. A description of the available fields from  Xeno-Canto can be found \href{https://xeno-canto.org/explore/api}{here}.
 #' @export
 #' @name query_xenocanto
 #' @details This function queries for animal vocalization recordings in the open-access

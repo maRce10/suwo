@@ -49,8 +49,16 @@ cal_cos <- query_macaulay(
   dates = c(1976, 2019)
 )
 
-cal_cos <- query_macaulay(term = "Calypte costae", format = "image",
+# cal_cos <- query_macaulay(term = "Calypte costae", format = "image",
                           #' path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
+
+tur_ruf_list <- lapply(tur_ruf_list, function(x){
+  attributes(x)$all_data <- FALSE
+  attributes(x)$query_data_format <- NULL
+  return(x)
+})
+
+
 
 usethis::use_data(ml_taxon_code, tur_ruf_list, merged_metadata, internal = TRUE, overwrite = TRUE)
 

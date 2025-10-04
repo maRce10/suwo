@@ -4,12 +4,14 @@
 \alias{subset_metadata}
 \title{Subset data frames while preserving attributes}
 \usage{
-subset_metadata(metadata, condition)
+subset_metadata(metadata, subset, select)
 }
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query function (i.e. `query_reponame()`).}
 
-\item{condition}{An expression indicating the rows to keep or the indices of the rows to keep.}
+\item{subset}{logical expression or numeric vector (with row numbers) indicating rows to keep.}
+
+\item{select}{logical expression, numeric vector (with column numbers) or character vector (with column names) indicating columns to keep.}
 }
 \value{
 returns a data frame which is a subset of the input 'metadata'.
@@ -26,7 +28,13 @@ This function subsets a data frame while preserving its attributes. This is impo
  pant_xc <- query_xenocanto(term = "Phaethornis anthophilus")
 
 # Subset metadata to include only those from Panama
-subset_metadata(pant_xc, country == "Panama")
+subset_metadata(pant_xc, subset = country == "Panama")
+
+# get first two rows
+subset_metadata(pant_xc, subset = 1:2)
+
+# select only specific columns
+subset_metadata(pant_xc, select = c("species", "date", "country", "file_url"))
 }
 
 }

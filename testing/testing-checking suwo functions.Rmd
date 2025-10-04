@@ -447,6 +447,10 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 # check
 ```{r check, eval = FALSE}
 
+#run document twice
+devtools::document(".")
+devtools::document(".")
+
 # styler::style_dir("./R")
 # system("autoconf  ")
 
