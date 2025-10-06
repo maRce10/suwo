@@ -91,7 +91,7 @@ The [suwo](https://github.com/maRce10/suwo) package is designed exclusively for 
 
 ::: {.alert .alert-info}
 
-The [suwo](https://github.com/maRce10/suwo) package is designed to simplify the retrieval of nature media (mostly photos, audio files and videos) across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. For detailed information on each function, please refer to the [function reference](https://maRce10.github.io/suwo/reference/index.html) or use the help files within R (e.g., `?query_gbif`).
+The [suwo](https://github.com/maRce10/suwo) package aims to simplify the retrieval of nature media (mostly photos, audio files and videos) across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. For detailed information on each function, please refer to the [function reference](https://maRce10.github.io/suwo/reference/index.html) or use the help files within R (e.g., `?query_gbif`).
 
 :::
 
