@@ -20,6 +20,7 @@
 #' @import parallel
 #' @import RCurl
 #' @import jsonlite
+#' @importFrom fs dir_tree
 #' @importFrom jpeg readJPEG
 #' @importFrom graphics rasterImage
 #' @importFrom RecordLinkage compare.dedup

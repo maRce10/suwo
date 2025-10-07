@@ -25,7 +25,8 @@ Imports:
     lubridate,
     tools,
     RecordLinkage,
-    jpeg
+    jpeg,
+    fs
 Suggests: 
     covr,
     testthat,
