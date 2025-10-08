@@ -2,41 +2,42 @@
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
-#'  to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Phaethornis longirostris")}).
-#'  More complex queries can be done by using search terms that follow the
-#'  xeno-canto advance query syntax (only valid for this function). This syntax uses tags to search within a particular aspect of the recordings
-#'  (e.g. country, location, sound type). Tags are of the form tag:searchterm'. For instance, 'type:song'
-#'  will search for all recordings in which the sound type description contains the word 'song'.
-#'  Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
-#'  results for birds in the genus \emph{Phaethornis} that were recorded in Belize. Queries are case insensitive. Make sure taxonomy related tags (Genus or scientific name) are found first in multi-tag queries. See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
-#'  for queries using terms with more than one word.
-#' @return The function returns a data frame with the metadata of the matching observations. A description of the available fields from  Xeno-Canto can be found \href{https://xeno-canto.org/explore/api}{here}.
+#' @param species Character vector of length one indicating the scientific species name
+#'  (e.g., "Phaethornis longirostris"). The function will automatically format this as 'sp:Phaethornis longirostris'
+#'  in the query.
+#' @param other_tags Optional. A character vector containing additional tags to refine the search,
+#'  following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
+#'  For instance, 'type:song' will search for recordings where the sound type contains 'song'.
+#'  Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
+#'  See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.
+#' @return The function returns a data frame with the following recording information: recording ID,
+#'  Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
+#'  Longitude, Vocalization type, Audio file, License, URL, Quality, Time, and Date.
 #' @export
 #' @name query_xenocanto
-#' @details This function queries for animal vocalization recordings in the open-access
-#' online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. \href{https://www.xeno-canto.org/}{Xeno-Canto} is an online database that provides access to sound recordings of wildlife from around the world. The recordings are shared by a growing community of thousands of recordists from around the world.
-#'
-#'  Complex queries can be done by using search terms that follow the
-#'   \href{https://www.xeno-canto.org/}{Xeno-Canto} advance query syntax (check "term" argument description).
-
+#' @details This function queries for avian vocalization recordings in the open-access
+#'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
+#'  or download the associated sound files. Complex queries can be constructed by combining the
+#'  \code{species} and \code{other_tags} arguments.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_observation}}
+#' \href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
 #' @examples
 #' \dontrun{
-#' # search without downloading
-# df1 <- query_xenocanto(term = "Phaethornis anthophilus")
+#' # An API key is required. Get yours at https://xeno-canto.org/account.
+#' XC_API_KEY <- "YOUR_API_KEY_HERE"
 #'
-#' ## search using xeno-canto advance query ###
-#' orth.pap <- query_xenocanto(term = "gen:orthonyx cnt:papua loc:tari")
+#' # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
+#' df1 <- query_xenocanto(species = "Phaethornis anthophilus", key = XC_API_KEY)
 #'
-#' # use quotes for queries with more than 1 word (e.g. Costa Rica),note that the
-#' # single quotes are used for the whole 'term' and double quotes for the 2-word term inside
-#' # Phaeochroa genus in Costa Rica
-#' phae.cr <- query_xenocanto(term = 'gen:phaeochroa cnt:"costa rica"')
+#' # Search for a species and add other tags for country and quality grade
+#' pany.cr <- query_xenocanto(species = "Panyptila cayennensis",
+#'                            other_tags = c('cnt:"costa rica"', "q:A"),
+#'                            key = XC_API_KEY)
 #'
-#' # several terms can be searched for in the same field
-#' # search for all female songs in sound type
-#' femsong <- query_xenocanto(term = "type:song type:female")
+#' # Search for female songs of a species
+#' femsong <- query_xenocanto(species = "Thryothorus ludovicianus",
+#'                            other_tags = c("type:song", "type:female"),
+#'                            key = XC_API_KEY)
 #' }
 #'
 #' @references {
@@ -44,82 +45,62 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
-
 query_xenocanto <-
-  function(term = getOption("term", NULL),
+  function(species,
+           other_tags = NULL,
+           key,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
            raw_data = getOption("raw_data", FALSE)) {
-    # check arguments
-    arguments <- as.list(base::match.call())[-1]
-
-    # add objects to argument names
-    for (i in names(arguments)) {
-      arguments[[i]] <- get(i)
+    # Check for API key
+    if (missing(key) || !nzchar(key)) {
+      stop(
+        "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
+      )
     }
 
-    # check each arguments
-    check_results <- .check_arguments(args = arguments)
+    # --- build query from tags ---
+    # Handle species names with spaces by wrapping them in quotes for the query
+    species_name <- ifelse(grepl("\\s", species), paste0('"', species, '"'), species)
 
-    # report errors
-    checkmate::reportAssertions(check_results)
+    # Prepend the required 'sp:' tag to the species name
+    species_query <- paste0("sp:", species_name)
 
-    # Use the unified connection checker
-    if (!.checkconnection("xenocanto")) {
-      return(invisible(NULL))
+    # Start the query parts with the formatted species query
+    parts <- c(species_query)
+
+    # Add any other tags provided by the user
+    if (!is.null(other_tags)) {
+      parts <- c(parts, other_tags)
     }
 
+    # Collapse into a single query string
+    query_str <- paste(parts, collapse = " ")
 
-    # search recs in xeno-canto (results are returned in pages with 500 recordings each)
+    # URL encode (spaces -> %20, quotes -> %22, etc.)
+    query_str <- utils::URLencode(query_str, reserved = TRUE)
+
     if (pb & verbose) {
-
-      cat(.color_text(
-        paste0("Obtaining metadata:\n"),
-        as = "success"))
-
+      cat(.color_text("Obtaining metadata:\n", as = "success"))
+      cat(.color_text(paste0("Query: ", query_str, "\n"), as = "info"))
     }
 
-    # format query term
-    if (grepl("\\:", term)) {
-      # if using advanced searc
-      # replace first space with %20 when using full species name
-      first_colon_pos <- gregexpr(":", term)[[1]][1]
-      spaces_pos <- gregexpr(" ", term)[[1]]
-
-
-      if (length(spaces_pos) > 1) {
-        if (all(spaces_pos[1:2] < first_colon_pos)) {
-          term <- paste0(
-            substr(term, start = 0, stop = spaces_pos - 1),
-            "%20",
-            substr(term, start = spaces_pos + 1, stop = nchar(term))
-          )
-        }
-      }
-    }
-
-    # replace remaining spaces with "&"
-    term <- gsub(" ", "+", term)
-
-    # initialize search
-    query <-
-      jsonlite::fromJSON(paste0(
-        "https://www.xeno-canto.org/api/2/recordings?query=",
-        term
-      ))
-
+    # --- API request ---
+    query <- jsonlite::fromJSON(paste0(
+      "https://www.xeno-canto.org/api/3/recordings?query=",
+      query_str,
+      "&key=",
+      key
+    ))
 
     if (as.numeric(query$numRecordings) == 0) {
-      if (verbose) {
+      if (verbose)
         .failure_message(format = "sound")
-      }
       return(invisible(NULL))
     }
 
-    ### loop over pages
-    # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
         parallel::makePSOCKcluster(getOption("cl.cores", cores))
@@ -127,92 +108,73 @@ query_xenocanto <-
       cl <- cores
     }
 
+    records_list <- pblapply_sw_int(
+      pbar = pb,
+      X = seq_len(query$numPages),
+      cl = cl,
+      FUN = function(y) {
+        query_output <- jsonlite::fromJSON(paste0(
+          "https://www.xeno-canto.org/api/3/recordings?query=",
+          query_str,
+          "&page=",
+          y,
+          "&key=",
+          key
+        ))
 
-    records_list <-
-      pblapply_sw_int(
-        pbar = pb,
-        X = seq_len(query$numPages),
-        cl = cl,
-        FUN = function(y) {
-          # search for each page
-          query_output <-
-            jsonlite::fromJSON(
-              txt = paste0(
-                "https://www.xeno-canto.org/api/2/recordings?query=",
-                term,
-                "&page=",
-                y
-              )
-            )
-          query_output$recordings$also <- sapply(query_output$recordings$also, paste, collapse = "-")
+        query_output$recordings$also <-
+          sapply(query_output$recordings$also, paste, collapse = "-")
 
-          # split sonogram in 3 columns
-          sono_df <- as.data.frame(query_output$recordings$sono)
+        sono_df <- as.data.frame(query_output$recordings$sono)
+        names(sono_df) <-
+          paste("sonogram", names(sono_df), sep = "_")
 
-          names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
+        osci_df <- as.data.frame(query_output$recordings$osci)
+        names(osci_df) <-
+          paste("oscillogram", names(osci_df), sep = "_")
 
-          # split oscillograms in 3 columns
-          osci_df <- as.data.frame(query_output$recordings$osci)
+        query_output$recordings$sono <-
+          query_output$recordings$osci <- NULL
+        query_output <-
+          cbind(query_output$recordings, sono_df, osci_df)
+        return(query_output)
+      }
+    )
 
-          names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
-
-          # remove raw columns
-          query_output$recordings$sono <- query_output$recordings$osci <- NULL
-
-          query_output <- cbind(query_output$recordings, sono_df, osci_df)
-
-          return(query_output)
-        }
-      )
-
-
-    # determine all column names in all pages
-    pooled_column_names <- unique(unlist(lapply(records_list, names)))
-
-
-    # add columns that are missing to each data set
+    pooled_column_names <-
+      unique(unlist(lapply(records_list, names)))
     records_list2 <- lapply(records_list, function(X) {
       nms <- names(X)
       if (length(nms) != length(pooled_column_names)) {
         for (i in pooled_column_names) {
-          X <-
-            data.frame(X,
-                       NA,
-                       stringsAsFactors = FALSE,
-                       check.names = FALSE)
+          X <- data.frame(
+            X,
+            NA,
+            stringsAsFactors = FALSE,
+            check.names = FALSE
+          )
           names(X)[ncol(X)] <- i
         }
       }
       return(X)
     })
-
-
-    # save results in a single data frame
     query_output_df <- do.call(rbind, records_list2)
 
-
     if (as.numeric(query$numRecordings) > 0) {
-      # convert factors to characters
       indx <- sapply(query_output_df, is.factor)
-      query_output_df[indx] <- lapply(query_output_df[indx], as.character)
+      query_output_df[indx] <-
+        lapply(query_output_df[indx], as.character)
 
-      # create species column and other missing columns
-      query_output_df$species <- paste(query_output_df$gen, query_output_df$sp, sep = " ")
-
-      query_output_df$file_extension <- sub(".*\\.", "", query_output_df$`file-name`)
-
-      # Add repository ID
+      query_output_df$species <-
+        paste(query_output_df$gen, query_output_df$sp, sep = " ")
+      query_output_df$file_extension <-
+        sub(".*\\.", "", query_output_df$`file-name`)
       query_output_df$repository <- "Xeno-Canto"
-
-      # re-write file url to use https
       query_output_df$file <-
         paste0("https://xeno-canto.org/", query_output_df$id, "/download")
+      query_output_df$date <-
+        gsub("-", "/", query_output_df$date)
 
-      # replace "-" with "/" in dates
-      query_output_df$date <- gsub("-", "/", query_output_df$date)
-
-
-      # format output data frame column names
       query_output_df <- .format_query_output(
         X = query_output_df,
         call = base::match.call(),
@@ -251,22 +213,13 @@ query_xenocanto <-
         raw_data = raw_data
       )
 
-      # let user know how many records were found
       if (pb & verbose) {
         cat(.color_text(
           paste0("{n} matching sound file{?s} found"),
           as = "success",
-          n = nrow(query_output_df)))
+          n = nrow(query_output_df)
+        ))
       }
-
-
-      # Generate a file path by combining tempdir() with a file name
-      # file_path <- file.path(tempdir(), paste0(term, ".rds"))
-
-
-      # Save the object to the file
-      # MARCELO: I added a try function to avoid errors when saving the file, double check (why do we need to save it and how people can find the RDS)
-      # try(saveRDS(droplevels(query_output_df), file = file_path), silent = TRUE)
       return(droplevels(query_output_df))
     }
   }
