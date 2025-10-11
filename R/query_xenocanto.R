@@ -2,7 +2,7 @@
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 #' @inheritParams template_params
-#' @param species Character vector of length one indicating the scientific species name
+#' @param term Character vector of length one indicating the scientific species name
 #'  (e.g., "Phaethornis longirostris"). The function will automatically format this as 'sp:Phaethornis longirostris'
 #'  in the query.
 #' @param other_tags Optional. A character vector containing additional tags to refine the search,
@@ -18,7 +18,7 @@
 #' @details This function queries for avian vocalization recordings in the open-access
 #'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
 #'  or download the associated sound files. Complex queries can be constructed by combining the
-#'  \code{species} and \code{other_tags} arguments.
+#'  \code{term} and \code{other_tags} arguments.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_observation}}
 #' \href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
 #' @examples
@@ -27,15 +27,15 @@
 #' XC_API_KEY <- "YOUR_API_KEY_HERE"
 #'
 #' # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-#' df1 <- query_xenocanto(species = "Phaethornis anthophilus", key = XC_API_KEY)
+#' df1 <- query_xenocanto(term = "Phaethornis anthophilus", key = XC_API_KEY)
 #'
-#' # Search for a species and add other tags for country and quality grade
-#' pany.cr <- query_xenocanto(species = "Panyptila cayennensis",
+#' # Search for a term and add other tags for country and quality grade
+#' pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
 #'                            other_tags = c('cnt:"costa rica"', "q:A"),
 #'                            key = XC_API_KEY)
 #'
 #' # Search for female songs of a species
-#' femsong <- query_xenocanto(species = "Thryothorus ludovicianus",
+#' femsong <- query_xenocanto(term = "Thryothorus ludovicianus",
 #'                            other_tags = c("type:song", "type:female"),
 #'                            key = XC_API_KEY)
 #' }
@@ -46,7 +46,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_xenocanto <-
-  function(species,
+  function(term,
            other_tags = NULL,
            key,
            cores = getOption("mc.cores", 1),
@@ -63,7 +63,7 @@ query_xenocanto <-
 
     # --- build query from tags ---
     # Handle species names with spaces by wrapping them in quotes for the query
-    species_name <- ifelse(grepl("\\s", species), paste0('"', species, '"'), species)
+    species_name <- ifelse(grepl("\\s", term), paste0('"', term, '"'), term)
 
     # Prepend the required 'sp:' tag to the species name
     species_query <- paste0("sp:", species_name)

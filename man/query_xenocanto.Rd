@@ -5,7 +5,9 @@
 \title{Access 'Xeno-Canto' recordings and metadata}
 \usage{
 query_xenocanto(
-  term = getOption("term", NULL),
+  term,
+  other_tags = NULL,
+  key,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -14,15 +16,15 @@ query_xenocanto(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
-to query for in the 'Xeno-Canto' database. For example, \emph{Phaethornis} or \emph{Phaethornis longirostris}. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Phaethornis longirostris")}).
-More complex queries can be done by using search terms that follow the
-xeno-canto advance query syntax (only valid for this function). This syntax uses tags to search within a particular aspect of the recordings
-(e.g. country, location, sound type). Tags are of the form tag:searchterm'. For instance, 'type:song'
-will search for all recordings in which the sound type description contains the word 'song'.
-Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
-results for birds in the genus \emph{Phaethornis} that were recorded in Belize. Queries are case insensitive. Make sure taxonomy related tags (Genus or scientific name) are found first in multi-tag queries. See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description and see examples below
-for queries using terms with more than one word.}
+\item{term}{Character vector of length one indicating the scientific species name
+(e.g., "Phaethornis longirostris"). The function will automatically format this as 'sp:Phaethornis longirostris'
+in the query.}
+
+\item{other_tags}{Optional. A character vector containing additional tags to refine the search,
+following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
+For instance, 'type:song' will search for recordings where the sound type contains 'song'.
+Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
+See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
@@ -35,33 +37,36 @@ for queries using terms with more than one word.}
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
 \value{
-The function returns a data frame with the metadata of the matching observations. A description of the available fields from  Xeno-Canto can be found \href{https://xeno-canto.org/explore/api}{here}.
+The function returns a data frame with the following recording information: recording ID,
+ Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
+ Longitude, Vocalization type, Audio file, License, URL, Quality, Time, and Date.
 }
 \description{
 \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 }
 \details{
-This function queries for animal vocalization recordings in the open-access
-online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. \href{https://www.xeno-canto.org/}{Xeno-Canto} is an online database that provides access to sound recordings of wildlife from around the world. The recordings are shared by a growing community of thousands of recordists from around the world.
-
- Complex queries can be done by using search terms that follow the
-  \href{https://www.xeno-canto.org/}{Xeno-Canto} advance query syntax (check "term" argument description).
+This function queries for avian vocalization recordings in the open-access
+ online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
+ or download the associated sound files. Complex queries can be constructed by combining the
+ \code{term} and \code{other_tags} arguments.
 }
 \examples{
 \dontrun{
-# search without downloading
+# An API key is required. Get yours at https://xeno-canto.org/account.
+XC_API_KEY <- "YOUR_API_KEY_HERE"
 
-## search using xeno-canto advance query ###
-orth.pap <- query_xenocanto(term = "gen:orthonyx cnt:papua loc:tari")
+# Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
+df1 <- query_xenocanto(term = "Phaethornis anthophilus", key = XC_API_KEY)
 
-# use quotes for queries with more than 1 word (e.g. Costa Rica),note that the
-# single quotes are used for the whole 'term' and double quotes for the 2-word term inside
-# Phaeochroa genus in Costa Rica
-phae.cr <- query_xenocanto(term = 'gen:phaeochroa cnt:"costa rica"')
+# Search for a term and add other tags for country and quality grade
+pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
+                           other_tags = c('cnt:"costa rica"', "q:A"),
+                           key = XC_API_KEY)
 
-# several terms can be searched for in the same field
-# search for all female songs in sound type
-femsong <- query_xenocanto(term = "type:song type:female")
+# Search for female songs of a species
+femsong <- query_xenocanto(term = "Thryothorus ludovicianus",
+                           other_tags = c("type:song", "type:female"),
+                           key = XC_API_KEY)
 }
 
 }
@@ -72,6 +77,7 @@ Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way to a
 }
 \seealso{
 \code{\link{query_gbif}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_observation}}
+\href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
