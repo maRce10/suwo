@@ -2,9 +2,10 @@ test_that("merge query_wikiaves and xc", {
 
   skip_on_cran()
   skip_if_offline()
+  skip_if_not(interactive())
 
   wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
-  xc <- query_xenocanto(term = 'Glaucis dohrnii')
+  xc <- query_xenocanto(term = 'Glaucis dohrnii', key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   merged_mt <- merge_metadata(wa, xc)
 

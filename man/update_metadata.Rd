@@ -6,17 +6,18 @@
 \usage{
 update_metadata(
   metadata,
-  token = NULL,
+  token,
   path = ".",
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  verbose = getOption("verbose", TRUE)
+  verbose = getOption("verbose", TRUE),
+  key
 )
 }
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query function (i.e. `query_reponame()`).}
 
-\item{token}{Character referring to the token assigned by Observation.org as authorization for searches.}
+\item{token}{A valid token for the \href{https://observation.org/}{Observation.org} API. Only needed if the input metadata comes from \code{\link{query_observation}}.}
 
 \item{path}{Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).}
 
@@ -25,6 +26,8 @@ update_metadata(
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+
+\item{key}{Character referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.}
 }
 \value{
 returns a data frame similar to the input 'metadata' with new data appended.

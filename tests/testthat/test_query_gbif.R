@@ -43,7 +43,7 @@ test_that("search Glaucis dohrnii photos", {
 
 })
 
-test_that("search Glaucis dohrnii photos", {
+test_that("search Glaucis dohrnii photos specific data set", {
 
   skip_on_cran()
   skip_if_offline()

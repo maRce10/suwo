@@ -17,14 +17,15 @@ query_xenocanto(
 }
 \arguments{
 \item{term}{Character vector of length one indicating the scientific species name
-(e.g., "Phaethornis longirostris"). The function will automatically format this as 'sp:Phaethornis longirostris'
-in the query.}
+(e.g., "Phaethornis longirostris").}
 
 \item{other_tags}{Optional. A character vector containing additional tags to refine the search,
 following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
 For instance, 'type:song' will search for recordings where the sound type contains 'song'.
 Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
 See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.}
+
+\item{key}{Character refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
 
@@ -48,7 +49,7 @@ The function returns a data frame with the following recording information: reco
 This function queries for avian vocalization recordings in the open-access
  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
  or download the associated sound files. Complex queries can be constructed by combining the
- \code{term} and \code{other_tags} arguments.
+ \code{species} and \code{other_tags} arguments.
 }
 \examples{
 \dontrun{
@@ -56,9 +57,9 @@ This function queries for avian vocalization recordings in the open-access
 XC_API_KEY <- "YOUR_API_KEY_HERE"
 
 # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-df1 <- query_xenocanto(term = "Phaethornis anthophilus", key = XC_API_KEY)
+df1 <- query_xenocanto(species = "Phaethornis anthophilus", key = XC_API_KEY)
 
-# Search for a term and add other tags for country and quality grade
+# Search for a species and add other tags for country and quality grade
 pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
                            other_tags = c('cnt:"costa rica"', "q:A"),
                            key = XC_API_KEY)

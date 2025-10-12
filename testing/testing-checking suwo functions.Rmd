@@ -24,7 +24,7 @@ remove.packages("suwo")
 
 remotes::install_github("ropensci-review-tools/pkgcheck")
 
-pkgs <- c("remotes", "curl", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli", "beepr", "RecordLinkage")
+pkgs <- c("remotes", "curl", "RCurl", "jsonlite", "crayon", "devtools", "leaflet", "maps", "pkgcheck", "pkgstats", "testthat", "styler", "cli", "beepr", "RecordLinkage", "getPass")
 
 # install/ load packages
 out <- lapply(pkgs, function(y) {
@@ -442,6 +442,7 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
   return(sims)
   }
 
+
 ```
 
 # check
@@ -450,6 +451,9 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 #run document twice
 devtools::document(".")
 devtools::document(".")
+
+
+devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
 
 # styler::style_dir("./R")
 # system("autoconf  ")
@@ -465,6 +469,10 @@ devtools::document(".")
 # devtools::build_manual()
 
 # devtools::install()
+
+## set XC Key
+Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
+
   run.all()
   options(verbose = TRUE)
   devtools::test()
@@ -475,8 +483,6 @@ devtools::document(".")
 
 ## run in terminal:
   # /opt/R/3.6.3/bin/R
-
-devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
 
 
 ```

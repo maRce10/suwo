@@ -2,14 +2,12 @@
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 #' @inheritParams template_params
-#' @param term Character vector of length one indicating the scientific species name
-#'  (e.g., "Phaethornis longirostris"). The function will automatically format this as 'sp:Phaethornis longirostris'
-#'  in the query.
 #' @param other_tags Optional. A character vector containing additional tags to refine the search,
 #'  following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
 #'  For instance, 'type:song' will search for recordings where the sound type contains 'song'.
 #'  Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
 #'  See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.
+#' @param key Character refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
 #' @return The function returns a data frame with the following recording information: recording ID,
 #'  Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
 #'  Longitude, Vocalization type, Audio file, License, URL, Quality, Time, and Date.
@@ -18,7 +16,7 @@
 #' @details This function queries for avian vocalization recordings in the open-access
 #'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
 #'  or download the associated sound files. Complex queries can be constructed by combining the
-#'  \code{term} and \code{other_tags} arguments.
+#'  \code{species} and \code{other_tags} arguments.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_observation}}
 #' \href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
 #' @examples
@@ -27,9 +25,9 @@
 #' XC_API_KEY <- "YOUR_API_KEY_HERE"
 #'
 #' # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-#' df1 <- query_xenocanto(term = "Phaethornis anthophilus", key = XC_API_KEY)
+#' df1 <- query_xenocanto(species = "Phaethornis anthophilus", key = XC_API_KEY)
 #'
-#' # Search for a term and add other tags for country and quality grade
+#' # Search for a species and add other tags for country and quality grade
 #' pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
 #'                            other_tags = c('cnt:"costa rica"', "q:A"),
 #'                            key = XC_API_KEY)
@@ -56,7 +54,7 @@ query_xenocanto <-
            raw_data = getOption("raw_data", FALSE)) {
     # Check for API key
     if (missing(key) || !nzchar(key)) {
-      stop(
+      .stop(
         "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
       )
     }
@@ -84,7 +82,7 @@ query_xenocanto <-
 
     if (pb & verbose) {
       cat(.color_text("Obtaining metadata:\n", as = "success"))
-      cat(.color_text(paste0("Query: ", query_str, "\n"), as = "info"))
+      # cat(.color_text(paste0("Query: ", query_str, "\n"), as = "info"))
     }
 
     # --- API request ---

@@ -3,6 +3,8 @@
 #' \code{update_metadata} update metadata from previous queries.
 #' @inheritParams template_params
 #' @param path Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).
+#' @param token A valid token for the \href{https://observation.org/}{Observation.org} API. Only needed if the input metadata comes from \code{\link{query_observation}}.
+#' @param key Character referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.
 #' @export
 #' @name update_metadata
 #' @return returns a data frame similar to the input 'metadata' with new data appended.
@@ -25,10 +27,13 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 update_metadata <-
-  function(metadata, token = NULL, path = ".",
+  function(metadata,
+           token,
+           path = ".",
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE)) {
+           verbose = getOption("verbose", TRUE),
+           key) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -44,16 +49,18 @@ update_metadata <-
     checkmate::reportAssertions(check_results)
 
 
-    if (length(unique(metadata$repository)) > 1){
+    if (length(unique(metadata$repository)) > 1) {
       .stop(
         "All observations must belong to the same repository. ",
         "Please provide a single repository query result to update_metadata()."
       )
     }
 
-    if (is.null(attr(metadata, "query_term"))){
-      .stop("The input data frame does not have the required attributes. ",
-            "Please provide a data frame obtained from any of the query_x() functions setting the argument `raw_data = FALSE`.")
+    if (is.null(attr(metadata, "query_term"))) {
+      .stop(
+        "The input data frame does not have the required attributes. ",
+        "Please provide a data frame obtained from any of the query_x() functions setting the argument `raw_data = FALSE`."
+      )
     }
 
     #Set query term and format for new query search
@@ -62,22 +69,26 @@ update_metadata <-
     all_data <- attr(metadata, "all_data")
 
     if (metadata$repository[1] == "GBIF") {
-      query_output_new <- query_gbif(term = query_term,
-                                     format = query_format,
-                                     all_data = all_data,
-                                     cores = cores,
-                                     verbose = verbose,
-                                     pb = pb)
+      query_output_new <- query_gbif(
+        term = query_term,
+        format = query_format,
+        all_data = all_data,
+        cores = cores,
+        verbose = verbose,
+        pb = pb
+      )
 
     }
 
     if (metadata$repository[1] == "iNaturalist") {
-      query_output_new <- query_inaturalist(term = query_term,
-                                            format = query_format,
-                                            all_data = all_data,
-                                            cores = cores,
-                                            verbose = verbose,
-                                            pb = pb)
+      query_output_new <- query_inaturalist(
+        term = query_term,
+        format = query_format,
+        all_data = all_data,
+        cores = cores,
+        verbose = verbose,
+        pb = pb
+      )
 
     }
     if (metadata$repository[1] == "Macaulay Library") {
@@ -92,37 +103,55 @@ update_metadata <-
 
     }
     if (metadata$repository[1] == "Observation") {
-      query_output_new <- query_observation(term = query_term,
-                                            format = query_format,
-                                            token = token,
-                                            cores = cores,
-                                            verbose = verbose,
-                                            pb = pb)
+      if (missing(token)) {
+        .stop("A valid token is required for Observation.org API")
+      }
+
+      query_output_new <- query_observation(
+        term = query_term,
+        format = query_format,
+        token = token,
+        cores = cores,
+        verbose = verbose,
+        pb = pb
+      )
     }
 
     if (metadata$repository[1] == "Xeno-Canto") {
-      query_output_new <- query_xenocanto(term = query_term,
-                                          cores = cores,
-                                          all_data = all_data,
-                                          verbose = verbose,
-                                          pb = pb)
+      if (missing(key)) {
+        .stop(
+          "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
+        )
+      }
+      query_output_new <- query_xenocanto(
+        term = query_term,
+        cores = cores,
+        all_data = all_data,
+        verbose = verbose,
+        pb = pb,
+        key = key
+      )
 
     }
     if (metadata$repository[1] == "Wikiaves") {
-      query_output_new <- query_wikiaves(term = query_term,
-                                         format = query_format,
-                                         all_data = all_data,
-                                         cores = cores,
-                                         verbose = verbose,
-                                         pb = pb)
+      query_output_new <- query_wikiaves(
+        term = query_term,
+        format = query_format,
+        all_data = all_data,
+        cores = cores,
+        verbose = verbose,
+        pb = pb
+      )
     }
 
     # Find duplicates
-    query_output_new <- query_output_new[!query_output_new$key %in% metadata$key,]
+    query_output_new <- query_output_new[!query_output_new$key %in% metadata$key, ]
 
-    if (nrow(query_output_new) == 0){
+    if (nrow(query_output_new) == 0) {
       if (verbose) {
-        cat(.color_text("No new entries found", "failure"), .add_emoji("sad"), "\n")
+        cat(.color_text("No new entries found", "failure"),
+            .add_emoji("sad"),
+            "\n")
       }
       return(metadata)
     }
@@ -139,9 +168,10 @@ update_metadata <-
     sum_new <- sum(query_output_df$new_entry)
 
     if (verbose) {
-      if (sum_new > 0){
-        cat(.color_text(paste("\n", sum_new, "new entries found"
-        ), "success"), .add_emoji("happy"), "\n")
+      if (sum_new > 0) {
+        cat(.color_text(paste("\n", sum_new, "new entries found"), "success"),
+            .add_emoji("happy"),
+            "\n")
       }
     }
 
