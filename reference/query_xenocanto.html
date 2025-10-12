@@ -41,7 +41,9 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_xenocanto</span><span class="op">(</span></span>
-<span>  term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"term"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"term"</span><span class="op">)</span>,</span>
+<span>  <span class="va">other_tags</span>,</span>
+<span>  <span class="va">api_key</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -55,19 +57,23 @@
 
 
 <dl><dt id="arg-term">term<a class="anchor" aria-label="anchor" href="#arg-term"></a></dt>
-<dd><p>Character vector of length one indicating the scientific of the taxonomic group (species, genus, or family)
-to query for in the 'Xeno-Canto' database. For example, <em>Phaethornis</em> or <em>Phaethornis longirostris</em>. Can be set globally for the current R session via the "term" option (e.g. <code>options(term = "Phaethornis longirostris")</code>).
-More complex queries can be done by using search terms that follow the
-xeno-canto advance query syntax (only valid for this function). This syntax uses tags to search within a particular aspect of the recordings
-(e.g. country, location, sound type). Tags are of the form tag:searchterm'. For instance, 'type:song'
-will search for all recordings in which the sound type description contains the word 'song'.
-Several tags can be included in the same query. The query "phaethornis cnt:belize' will only return
-results for birds in the genus <em>Phaethornis</em> that were recorded in Belize. Queries are case insensitive. Make sure taxonomy related tags (Genus or scientific name) are found first in multi-tag queries. See <a href="https://www.xeno-canto.org/help/search" class="external-link">Xeno-Canto's search help</a> for a full description and see examples below
-for queries using terms with more than one word.</p></dd>
+<dd><p>Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. <code>options(term = "Hypsiboas rufitelus")</code>).</p></dd>
+
+
+<dt id="arg-other-tags">other_tags<a class="anchor" aria-label="anchor" href="#arg-other-tags"></a></dt>
+<dd><p>Optional. A character vector containing additional tags to refine the search,
+following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
+For instance, 'type:song' will search for recordings where the sound type contains 'song'.
+Multiple tags can be provided (e.g., <code>c("cnt:belize", "type:song")</code>).
+See <a href="https://www.xeno-canto.org/help/search" class="external-link">Xeno-Canto's search help</a> for a full description.</p></dd>
+
+
+<dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
+<dd><p>Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at <a href="https://xeno-canto.org/account" class="external-link">https://xeno-canto.org/account</a>.</p></dd>
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  <code>options(mc.cores = 2)</code>). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  <code>options(mc.cores = 2)</code>). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.</p></dd>
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
@@ -88,14 +94,16 @@ for queries using terms with more than one word.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The function returns a data frame with the metadata of the matching observations. A description of the available fields from  Xeno-Canto can be found <a href="https://xeno-canto.org/explore/api" class="external-link">here</a>.</p>
+    <p>The function returns a data frame with the following recording information: recording ID,
+ Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
+ Longitude, Vocalization type, Audio file, License, URL, Quality, Time, and Date.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function queries for animal vocalization recordings in the open-access
-online repository <a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a>. <a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a> is an online database that provides access to sound recordings of wildlife from around the world. The recordings are shared by a growing community of thousands of recordists from around the world.</p>
-<p>Complex queries can be done by using search terms that follow the
-  <a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a> advance query syntax (check "term" argument description).</p>
+    <p>This function queries for avian vocalization recordings in the open-access
+ online repository <a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a>. It can return recordings metadata
+ or download the associated sound files. Complex queries can be constructed by combining the
+ <code>species</code> and <code>other_tags</code> arguments.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -103,7 +111,8 @@ online repository <a href="https://www.xeno-canto.org/" class="external-link">Xe
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="query_gbif.html">query_gbif</a></code>, <code><a href="query_wikiaves.html">query_wikiaves</a></code>, <code><a href="query_inaturalist.html">query_inaturalist</a></code>, <code><a href="query_observation.html">query_observation</a></code></p></div>
+    <div class="dont-index"><p><code><a href="query_gbif.html">query_gbif</a></code>, <code><a href="query_wikiaves.html">query_wikiaves</a></code>, <code><a href="query_inaturalist.html">query_inaturalist</a></code>, <code><a href="query_observation.html">query_observation</a></code>
+<a href="https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html" class="external-link">blog post on accessing Xeno-Canto recordings</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -113,19 +122,21 @@ online repository <a href="https://www.xeno-canto.org/" class="external-link">Xe
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># search without downloading</span></span></span>
+<span class="r-in"><span><span class="co"># An API key is required. Get yours at https://xeno-canto.org/account.</span></span></span>
+<span class="r-in"><span><span class="va">XC_API_KEY</span> <span class="op">&lt;-</span> <span class="st">"YOUR_API_KEY_HERE"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## search using xeno-canto advance query ###</span></span></span>
-<span class="r-in"><span><span class="va">orth.pap</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"gen:orthonyx cnt:papua loc:tari"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Simple search for a species (will be converted to sp:"Phaethornis anthophilus")</span></span></span>
+<span class="r-in"><span><span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Phaethornis anthophilus"</span>, api_key <span class="op">=</span> <span class="va">XC_API_KEY</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># use quotes for queries with more than 1 word (e.g. Costa Rica),note that the</span></span></span>
-<span class="r-in"><span><span class="co"># single quotes are used for the whole 'term' and double quotes for the 2-word term inside</span></span></span>
-<span class="r-in"><span><span class="co"># Phaeochroa genus in Costa Rica</span></span></span>
-<span class="r-in"><span><span class="va">phae.cr</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>term <span class="op">=</span> <span class="st">'gen:phaeochroa cnt:"costa rica"'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Search for a species and add other tags for country and quality grade</span></span></span>
+<span class="r-in"><span><span class="va">pany.cr</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Panyptila cayennensis"</span>,</span></span>
+<span class="r-in"><span>                           other_tags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'cnt:"costa rica"'</span>, <span class="st">"q:A"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                           api_key <span class="op">=</span> <span class="va">XC_API_KEY</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># several terms can be searched for in the same field</span></span></span>
-<span class="r-in"><span><span class="co"># search for all female songs in sound type</span></span></span>
-<span class="r-in"><span><span class="va">femsong</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"type:song type:female"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Search for female songs of a species</span></span></span>
+<span class="r-in"><span><span class="va">femsong</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>term <span class="op">=</span> <span class="st">"Thryothorus ludovicianus"</span>,</span></span>
+<span class="r-in"><span>                           other_tags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"type:song"</span>, <span class="st">"type:female"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                           api_key <span class="op">=</span> <span class="va">XC_API_KEY</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
