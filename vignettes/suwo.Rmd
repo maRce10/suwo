@@ -280,16 +280,16 @@ query_summary[, names(query_summary) != "Additional data"] |>
 
 ```
 
-This is an example code of a query of _Turdus rufiventris_ (a bird species) sounds from Xeno-canto and Wikiaves (we print the first 4 rows of each output data frame):
+This is an example code of a query of _Turdus rufiventris_ (a bird species) sounds from iNaturalist and Wikiaves (we print the first 4 rows of each output data frame):
 
 ```{r, eval = TRUE}
 # Load suwo package
 library(suwo)
 
 # Query Xeno-canto for Turdus rufiventris sounds
-truf_xc <- query_xenocanto(term = "Turdus rufiventris")
+truf_inat <- query_inaturalist(term = "Turdus rufiventris")
 
-head(truf_xc, 4)
+head(truf_inat, 4)
 ```
 
 
@@ -352,6 +352,8 @@ By default the package standardizes the information in the basic fields (detaile
 
 </div>
 
+The code above examplifies the most common use of query functions, which applies also to the function [query_gbif()](https://marce10.github.io/suwo/reference/query_gbif.html). The following sections provide more details on the two query functions that require special considerations.    
+
 ## Query Macaulay Library interactively
 
 [query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) is the only interactive function. This means that when users run a query the function opens a browser window to the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog), where the users must download a .csv file with the metadata:
@@ -400,22 +402,41 @@ Users can check at the Macaulay Library website how many records are available f
 
 <center><img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%"></center>
 
+## API key to query Xeno-Canto
+
+[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use their API v3. Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can use it in the [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) function by providing it as the `key` argument. Here is an example of a query for _Turdus rufiventris_ sounds:
+
+```{r, eval = FALSE}
+
+# Query Xeno-canto for Phaethornis anthophilus sounds
+# replace "YOUR_XC_API_KEY" with your key
+tur_ruf_xc <- query_xenocanto(term = "Turdus rufiventris", key = "YOUR_XC_API_KEY")
+
+head(tur_ruf_xc, 4)
+```
+
+```{r, echo=FALSE}
+
+head(tur_ruf_sound_list$xenocanto[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
+
+```
+
 # Update metadata
 
 The [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function allows users to update a previous query to add new information from the corresponding repository of the original search. This function takes as input a data frame previously obtained from any query function (i.e. `query_reponame()`) and returns a data frame similar to the input with new data appended. 
 
-To show case the function, we will use the metadata from the previous example of _Turdus rufiventris_ sounds from Xeno-canto. Let's assume that the initial query was done a while ago and we want to update it to include any new records that might have been added since then. The following code removes all observations recorded after 2024-12-31 to simulate an old query:
+To show case the function, we will use the metadata from the previous example of _Turdus rufiventris_ sounds from iNaturalist. Let's assume that the initial query was done a while ago and we want to update it to include any new records that might have been added since then. The following code removes all observations recorded after 2024-12-31 to simulate an old query:
 
 
 ```{r}
 # exclude new observations (simulate old data)
-old_truf_xc <- subset_metadata(truf_xc, subset = date <= "2024-12-31" | is.na(date))
+old_truf_inat <- subset_metadata(truf_inat, subset = date <= "2024-12-31" | is.na(date))
 
 # update "old" data
-updated_xc <- update_metadata(metadata = old_truf_xc)
+updated_truf_inat <- update_metadata(metadata = old_truf_inat)
 
 # compare number of records
-nrow(truf_xc) == nrow(updated_xc)
+nrow(truf_inat) == nrow(updated_truf_inat)
 
 ```
 
@@ -427,15 +448,14 @@ The [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.h
 
 ```{r, eval = FALSE}
 
-# query multiple repositories
-truf_xc <- query_xenocanto(term = "Turdus rufiventris")
+truf_inat <- query_inaturalist(term = "Turdus rufiventris", format = "sound")
 truf_gbf <- query_gbif(term = "Turdus rufiventris", format = "sound")
 truf_ml <- query_macaulay(term = "Turdus rufiventris",
                           format = "sound",
                           path = tempdir())
 
 # merge metadata
-merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
+merged_metadata <- merge_metadata(truf_inat, truf_gbf, truf_ml)
 
 head(merged_metadata, 4)
 ```
@@ -447,6 +467,21 @@ merged_metadata <- suwo:::merged_metadata
 head(merged_metadata, 4)
 
 ```
+
+Note that in such a multi-repository query, all query functions use the same search term (i.e. species name) and media format (e.g., sound, image, video). To facilitate this, users can set the global options `term` and `format` so they do not need to specify them in each query function:
+
+```{r, eval = FALSE}
+
+options(term = "Turdus rufiventris", format = "sound")
+truf_inat <- query_inaturalist()
+truf_gbf <- query_gbif()
+truf_ml <- query_macaulay(path = tempdir())
+
+# merge metadata
+merged_metadata <- merge_metadata(truf_inat, truf_gbf, truf_ml)
+
+```
+
 
 # Find and remove duplicated records
 
