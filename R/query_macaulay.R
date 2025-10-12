@@ -65,7 +65,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_macaulay <-
-  function(term = getOption("term", NULL),
+  function(term = getOption("term"),
            format = c("sound", "image", "video"),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),

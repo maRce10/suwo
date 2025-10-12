@@ -144,7 +144,7 @@ Here is a description of each step:
 1. Users can update their datasets with new records using the [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function. 
 
 
-# Query functions
+# Obtaining metadata: the query functions
 
 The following table summarizes the available [suwo](https://github.com/maRce10/suwo) query functions and the types of metadata they retrieve:
 
@@ -448,14 +448,16 @@ The [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.h
 
 ```{r, eval = FALSE}
 
-truf_inat <- query_inaturalist(term = "Turdus rufiventris", format = "sound")
+truf_xc <- query_xenocanto(term = "Turdus rufiventris",
+                             format = "sound",
+                             api_key = "YOUR_XC_API_KEY")
 truf_gbf <- query_gbif(term = "Turdus rufiventris", format = "sound")
 truf_ml <- query_macaulay(term = "Turdus rufiventris",
                           format = "sound",
                           path = tempdir())
 
 # merge metadata
-merged_metadata <- merge_metadata(truf_inat, truf_gbf, truf_ml)
+merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 
 head(merged_metadata, 4)
 ```
@@ -473,12 +475,12 @@ Note that in such a multi-repository query, all query functions use the same sea
 ```{r, eval = FALSE}
 
 options(term = "Turdus rufiventris", format = "sound")
-truf_inat <- query_inaturalist()
+truf_xc <- query_xenocanto(api_key = "YOUR_XC_API_KEY")
 truf_gbf <- query_gbif()
 truf_ml <- query_macaulay(path = tempdir())
 
 # merge metadata
-merged_metadata <- merge_metadata(truf_inat, truf_gbf, truf_ml)
+merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 
 ```
 

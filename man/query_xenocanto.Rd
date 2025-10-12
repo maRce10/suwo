@@ -5,9 +5,9 @@
 \title{Access 'Xeno-Canto' recordings and metadata}
 \usage{
 query_xenocanto(
-  term,
-  other_tags = NULL,
-  key,
+  term = getOption("term"),
+  other_tags,
+  api_key,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -16,8 +16,7 @@ query_xenocanto(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating the scientific species name
-(e.g., "Phaethornis longirostris").}
+\item{term}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
 \item{other_tags}{Optional. A character vector containing additional tags to refine the search,
 following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
@@ -25,9 +24,9 @@ For instance, 'type:song' will search for recordings where the sound type contai
 Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
 See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.}
 
-\item{key}{Character refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.}
+\item{api_key}{Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 
@@ -57,17 +56,17 @@ This function queries for avian vocalization recordings in the open-access
 XC_API_KEY <- "YOUR_API_KEY_HERE"
 
 # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-df1 <- query_xenocanto(species = "Phaethornis anthophilus", key = XC_API_KEY)
+df1 <- query_xenocanto(species = "Phaethornis anthophilus", api_key = XC_API_KEY)
 
 # Search for a species and add other tags for country and quality grade
 pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
                            other_tags = c('cnt:"costa rica"', "q:A"),
-                           key = XC_API_KEY)
+                           api_key = XC_API_KEY)
 
 # Search for female songs of a species
 femsong <- query_xenocanto(term = "Thryothorus ludovicianus",
                            other_tags = c("type:song", "type:female"),
-                           key = XC_API_KEY)
+                           api_key = XC_API_KEY)
 }
 
 }

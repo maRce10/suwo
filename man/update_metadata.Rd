@@ -11,7 +11,7 @@ update_metadata(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  key
+  api_key
 )
 }
 \arguments{
@@ -21,13 +21,13 @@ update_metadata(
 
 \item{path}{Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{key}{Character referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.}
+\item{api_key}{Character string referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.}
 }
 \value{
 returns a data frame similar to the input 'metadata' with new data appended.

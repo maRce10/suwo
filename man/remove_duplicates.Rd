@@ -18,7 +18,7 @@ remove_duplicates(
 
 \item{same_repo}{Logical argument indicating if observations labeled as duplicates that belong to the same repository should be removed. Default is \code{FALSE}. If \code{TRUE}, only one of the duplicated observations from the same repository will be retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 

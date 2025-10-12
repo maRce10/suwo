@@ -5,7 +5,7 @@
 \title{Searches for media files in the Macaulay Library}
 \usage{
 query_macaulay(
-  term = getOption("term", NULL),
+  term = getOption("term"),
   format = c("sound", "image", "video"),
   verbose = getOption("verbose", TRUE),
   all_data = getOption("all_data", FALSE),
@@ -17,7 +17,7 @@ query_macaulay(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating species, to query the database. For example, \emph{Phaethornis longirostris}. Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Zonotrichia capensis")}).}
+\item{term}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
 \item{format}{Character vector with the media format to query for. Options are 'sound', 'image' of 'video'. Required.}
 

@@ -7,7 +7,7 @@
 #'  For instance, 'type:song' will search for recordings where the sound type contains 'song'.
 #'  Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
 #'  See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.
-#' @param key Character refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
+#' @param api_key Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
 #' @return The function returns a data frame with the following recording information: recording ID,
 #'  Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
 #'  Longitude, Vocalization type, Audio file, License, URL, Quality, Time, and Date.
@@ -25,17 +25,17 @@
 #' XC_API_KEY <- "YOUR_API_KEY_HERE"
 #'
 #' # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-#' df1 <- query_xenocanto(species = "Phaethornis anthophilus", key = XC_API_KEY)
+#' df1 <- query_xenocanto(species = "Phaethornis anthophilus", api_key = XC_API_KEY)
 #'
 #' # Search for a species and add other tags for country and quality grade
 #' pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
 #'                            other_tags = c('cnt:"costa rica"', "q:A"),
-#'                            key = XC_API_KEY)
+#'                            api_key = XC_API_KEY)
 #'
 #' # Search for female songs of a species
 #' femsong <- query_xenocanto(term = "Thryothorus ludovicianus",
 #'                            other_tags = c("type:song", "type:female"),
-#'                            key = XC_API_KEY)
+#'                            api_key = XC_API_KEY)
 #' }
 #'
 #' @references {
@@ -44,16 +44,16 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_xenocanto <-
-  function(term,
-           other_tags = NULL,
-           key,
+  function(term = getOption("term"),
+           other_tags,
+           api_key,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
            raw_data = getOption("raw_data", FALSE)) {
     # Check for API key
-    if (missing(key) || !nzchar(key)) {
+    if (missing(api_key) || !nzchar(api_key)) {
       .stop(
         "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
       )
@@ -70,7 +70,7 @@ query_xenocanto <-
     parts <- c(species_query)
 
     # Add any other tags provided by the user
-    if (!is.null(other_tags)) {
+    if (!missing(other_tags)) {
       parts <- c(parts, other_tags)
     }
 
@@ -82,7 +82,6 @@ query_xenocanto <-
 
     if (pb & verbose) {
       cat(.color_text("Obtaining metadata:\n", as = "success"))
-      # cat(.color_text(paste0("Query: ", query_str, "\n"), as = "info"))
     }
 
     # --- API request ---
@@ -90,7 +89,7 @@ query_xenocanto <-
       "https://www.xeno-canto.org/api/3/recordings?query=",
       query_str,
       "&key=",
-      key
+      api_key
     ))
 
     if (as.numeric(query$numRecordings) == 0) {
@@ -117,7 +116,7 @@ query_xenocanto <-
           "&page=",
           y,
           "&key=",
-          key
+          api_key
         ))
 
         query_output$recordings$also <-

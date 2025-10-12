@@ -24,7 +24,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-query_inaturalist <- function(term = getOption("term", NULL),
+query_inaturalist <- function(term = getOption("term"),
                               cores = getOption("mc.cores", 1),
                               pb = getOption("pb", TRUE),
                               verbose = getOption("verbose", TRUE),

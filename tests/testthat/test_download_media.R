@@ -5,7 +5,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE, key = Sys.getenv("XENO_CANTO_API_KEY"))
+  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   test_keys <- c("532163", "568491")
 
@@ -34,7 +34,7 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE, key = Sys.getenv("XENO_CANTO_API_KEY"))
+  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   test_keys <- c("532163", "568491")
 
@@ -62,7 +62,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  xc2 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = TRUE, key = Sys.getenv("XENO_CANTO_API_KEY"))
+  xc2 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = TRUE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   test_keys <- c("532163", "568491")
 

@@ -5,7 +5,7 @@
 \title{Access 'inaturalist' recordings and metadata}
 \usage{
 query_inaturalist(
-  term = getOption("term", NULL),
+  term = getOption("term"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -17,9 +17,9 @@ query_inaturalist(
 )
 }
 \arguments{
-\item{term}{Character vector of length one indicating species, to query 'inaturalist' database. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Phaethornis longirostris")}).}
+\item{term}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address and errors might occur during the search.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
 

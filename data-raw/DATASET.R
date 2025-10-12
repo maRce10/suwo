@@ -5,9 +5,7 @@
 ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv", na.strings = "")
 
 # example data for Turdus rufiventris
-term <- "Turdus rufiventris"
-
-options(all_data = TRUE, verbose = TRUE, mc.cores = 1)
+options(term = "Turdus rufiventris", all_data = TRUE, verbose = TRUE, mc.cores = 1)
 xc_adt <- query_xenocanto(term = term, key = Sys.getenv("XENO_CANTO_API_KEY"))
 wa_adt_s <- query_wikiaves(term = term, format = "sound")
 wa_adt_i <- query_wikiaves(term = term, format = "image")
@@ -35,11 +33,11 @@ sapply(tur_ruf_list, nrow)
 
 names(tur_ruf_list) <- c("xeno-canto_sounds", "wikiaves_sounds", "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
 
-in_adf <- query_inaturalist(term = term, all_data = FALSE)
+xc_adf <-  query_xenocanto(all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 gb_adf_s <- query_gbif(term = term, format = "sound", all_data = FALSE)
 ml_adf_s <- query_macaulay(term = term, format = "sound", path = tempdir(), all_data = FALSE)
 
-merged_metadata <- merge_metadata(in_adf, gb_adf_s, ml_adf_s)
+merged_metadata <- merge_metadata(xc_adf, gb_adf_s, ml_adf_s)
 
 # get example macaulay data for calypte coste to show spliting by range
 cal_cos <- query_macaulay(

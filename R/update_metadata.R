@@ -4,7 +4,7 @@
 #' @inheritParams template_params
 #' @param path Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).
 #' @param token A valid token for the \href{https://observation.org/}{Observation.org} API. Only needed if the input metadata comes from \code{\link{query_observation}}.
-#' @param key Character referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.
+#' @param api_key Character string referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.
 #' @export
 #' @name update_metadata
 #' @return returns a data frame similar to the input 'metadata' with new data appended.
@@ -33,7 +33,7 @@ update_metadata <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           key) {
+           api_key) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -118,7 +118,7 @@ update_metadata <-
     }
 
     if (metadata$repository[1] == "Xeno-Canto") {
-      if (missing(key)) {
+      if (missing(api_key)) {
         .stop(
           "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
         )
@@ -129,7 +129,7 @@ update_metadata <-
         all_data = all_data,
         verbose = verbose,
         pb = pb,
-        key = key
+        api_key = api_key
       )
 
     }

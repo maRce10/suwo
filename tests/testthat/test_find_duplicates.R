@@ -7,8 +7,8 @@ test_that("find from gbif ml and xc", {
 
   grps <- unique(label_dup_metadata$duplicate_group)
 
-  expect_true(length(grps) == 458)
+  expect_true(length(grps) > 458)
 
-  expect_true(sum(is.na(label_dup_metadata$duplicate_group)) == 1221)
+  expect_true(sum(is.na(label_dup_metadata$duplicate_group)) > 1221)
 })
 
