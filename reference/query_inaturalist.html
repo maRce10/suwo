@@ -41,7 +41,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_inaturalist</span><span class="op">(</span></span>
-<span>  term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"term"</span><span class="op">)</span>,</span>
+<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"species"</span><span class="op">)</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -57,7 +57,7 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-term">term<a class="anchor" aria-label="anchor" href="#arg-term"></a></dt>
+<dl><dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
 <dd><p>Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. <code>options(term = "Hypsiboas rufitelus")</code>).</p></dd>
 
 
@@ -93,10 +93,6 @@
 <dd><p>Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is <code>FALSE</code>. Can be set globally for the current R session via the "raw_data" option ( <code>options(raw_data = TRUE)</code>). If <code>TRUE</code>  <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when <code>raw_data = TRUE</code> is not standardized, so most suwo functions for downstream steps will not work on them.</p></dd>
 
 </dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The function returns a data frame with the metadata of the media files matching the search criteria.</p>
-    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function queries for species observation info in the open-access

@@ -89,7 +89,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query term and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.</p>
+    <p>This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query species and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -100,7 +100,7 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># query metadata</span></span></span>
-<span class="r-in"><span><span class="va">wa</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_wikiaves.html">query_wikiaves</a></span><span class="op">(</span>term <span class="op">=</span> <span class="st">'Glaucis dohrnii'</span>, format <span class="op">=</span>  <span class="st">"sound"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wa</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_wikiaves.html">query_wikiaves</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Glaucis dohrnii'</span>, format <span class="op">=</span>  <span class="st">"sound"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># remove last 3 rows to test update_metadata</span></span></span>
 <span class="r-in"><span><span class="va">sub_wa</span> <span class="op">&lt;-</span> <span class="va">wa</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">wa</span><span class="op">)</span><span class="op">-</span> <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></span></span>
