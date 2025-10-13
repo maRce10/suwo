@@ -10,8 +10,8 @@
 #' @examples
 #' \dontrun{
 #' # get metadata from 2 repos
-#' gb <- query_gbif(term = "Turdus rufiventris", format =  "sound")
-#' xc <- query_xenocanto(term = "Turdus rufiventris")
+#' gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
+#' xc <- query_xenocanto(species = "Turdus rufiventris")
 #'
 #' # combine metadata
 #' merged_metadata <- merge_metadata(xc, gb)

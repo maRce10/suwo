@@ -4,7 +4,6 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
-#' @return If all_data is \code{FALSE} the function returns a data frame with the metadata of media files matching the search term. If \code{all_data = TRUE}, all metadata fields are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
 #' @export
 #' @name query_gbif
 #' @details This function queries for species observation info in the open-access
@@ -13,7 +12,7 @@
 #' @examples
 #' \dontrun{
 #' # search sound files
-# df1 <- query_gbif(term = 'Turdus iliacus', format = "sound")
+# df1 <- query_gbif(species = 'Turdus iliacus', format = "sound")
 #' View(df1)
 #' }
 #'
@@ -23,7 +22,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-
-  function(term = getOption("term"),
+  function(species = getOption("species"),
            format = c("sound", "image", "video", "interactive resource"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
@@ -71,7 +70,7 @@ query_gbif <-
         "datasetKey=",
       dataset,
       "&scientificName=",
-      gsub(" ", "%20", term),
+      gsub(" ", "%20", species),
       "&media_type=",
       gbif_format
     )

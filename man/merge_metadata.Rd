@@ -21,8 +21,8 @@ This function combines metadata from multiple sources (e.g. WikiAves and xeno-ca
 \examples{
 \dontrun{
  # get metadata from 2 repos
-  wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
-  xc <- query_xenocanto(term = 'Glaucis dohrnii')
+  wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
+  xc <- query_xenocanto(species = 'Glaucis dohrnii')
 
   # combine metadata
   merged_mt <- merge_metadata(wa, xc)

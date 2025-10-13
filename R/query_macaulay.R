@@ -7,9 +7,6 @@
 #' @param files Optional character vector with the name(s) of the .csv file(s) to read. If not provided, the function will open a browser window to the search results page, where the user must download a .csv file with the metadata.
 #' @param dates Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well.
 #' @param taxon_code_info Data frame containing the taxon code information. By default the function will use the internal data frame \code{"ml_taxon_code"} included as example data in the package. This object contains the data from the Clement list from october 2024 (downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.
-#' @return If all_data is not provided the function returns a data frame with the following media
-#' information: id, scientific_name, name, group, group_name, status, rarity, photo,
-#' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_macaulay
 #' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the Macaulay Library's search page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.
@@ -18,18 +15,17 @@
 #' \itemize{
 #'    \item Users must save the save the .csv file manually
 #'    \item \emph{If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it}
-#'    \item The query term must be a species name
 #'    \item A maximum of 10000 records per query can be returned, but this can be bypassed by using the \code{dates} argument to split the search into smaller date ranges
 #'    \item Users must log in to the Macaulay Library/eBird account in order to access large batches of observations
 #'    }
 #' @examples
 #' \dontrun{
 #' # query sounds
-#' tur_ili <- query_macaulay(term = "Turdus iliacus", format = "sound",
+#' tur_ili <- query_macaulay(species = "Turdus iliacus", format = "sound",
 #' path = tempdir())
 #'
 #' # test a query with more than 10000 results paging by date
-#' cal_cos <- query_macaulay(term = "Calypte costae", format = "image",
+#' cal_cos <- query_macaulay(species = "Calypte costae", format = "image",
 #' path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
 #'
 #' # this is how the internal function that splits the search by year intervals works
@@ -54,7 +50,7 @@
 #' new_clements <- read.csv(clements_url)
 #'
 #' # provide "updated" clements list to query_macaulay()
-#' tur_ili2 <- query_macaulay(term = "Turdus iliacus", format = "sound",
+#' tur_ili2 <- query_macaulay(species = "Turdus iliacus", format = "sound",
 #'  taxon_code_info = new_clements, path = tempdir())
 #' }
 #'
@@ -65,7 +61,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_macaulay <-
-  function(term = getOption("term"),
+  function(species = getOption("species"),
            format = c("sound", "image", "video"),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
@@ -97,14 +93,14 @@ query_macaulay <-
                    `video` = "video")
 
     # get species ML taxon code
-    taxon_code <- .taxon_code_search(term, ml_taxon_code = taxon_code_info)
+    taxon_code <- .taxon_code_search(species, ml_taxon_code = taxon_code_info)
 
     # function will stop here
     if (is.null(taxon_code)) {
       .failure_message(
         paste(
           "No matching species found for ",
-          term,
+          species,
           sep = ""
         )
       )

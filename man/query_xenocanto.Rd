@@ -5,9 +5,8 @@
 \title{Access 'Xeno-Canto' recordings and metadata}
 \usage{
 query_xenocanto(
-  term = getOption("term"),
-  other_tags,
-  api_key,
+  species = getOption("species"),
+  api_key = getOption("xc_api_key"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -16,13 +15,8 @@ query_xenocanto(
 )
 }
 \arguments{
-\item{term}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
-
-\item{other_tags}{Optional. A character vector containing additional tags to refine the search,
-following the Xeno-Canto advanced query syntax. Tags are of the form 'tag:searchterm'.
-For instance, 'type:song' will search for recordings where the sound type contains 'song'.
-Multiple tags can be provided (e.g., \code{c("cnt:belize", "type:song")}).
-See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.}
+\item{species}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}). Alternatively, a character string containing additional tags that follows the Xeno-Canto advanced query syntax can be provided. Tags are of the form 'tag:searchterm'. For instance, 'type:song' will search for recordings where the sound type contains 'song'. Multiple tags can be provided (e.g., \code{'"cnt:"belize" type:"song"'}).
+See examples down below and check \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.}
 
 \item{api_key}{Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.}
 
@@ -36,19 +30,13 @@ See \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for 
 
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
-\value{
-The function returns a data frame with the following recording information: recording ID,
- Genus, Specific epithet, Subspecies, English name, Recordist, Country, Locality, Latitude,
- Longitude, Vocalization type, Audio file, License, URL, Quality, Time, and Date.
-}
 \description{
 \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 }
 \details{
 This function queries for avian vocalization recordings in the open-access
  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
- or download the associated sound files. Complex queries can be constructed by combining the
- \code{species} and \code{other_tags} arguments.
+ or download the associated sound files. Complex queries can be constructed usin the Xeno-Canto advanced query syntax.
 }
 \examples{
 \dontrun{
@@ -56,17 +44,16 @@ This function queries for avian vocalization recordings in the open-access
 XC_API_KEY <- "YOUR_API_KEY_HERE"
 
 # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-df1 <- query_xenocanto(species = "Phaethornis anthophilus", api_key = XC_API_KEY)
+p_anth <- query_xenocanto(species = "Phaethornis anthophilus", api_key = XC_API_KEY)
 
-# Search for a species and add other tags for country and quality grade
-pany.cr <- query_xenocanto(term = "Panyptila cayennensis",
-                           other_tags = c('cnt:"costa rica"', "q:A"),
-                           api_key = XC_API_KEY)
+# Search for same species and add specify country
+p_anth_cr <- query_xenocanto(species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
+raw_data = TRUE, api_key = XC_API_KEY)
 
 # Search for female songs of a species
-femsong <- query_xenocanto(term = "Thryothorus ludovicianus",
-                           other_tags = c("type:song", "type:female"),
-                           api_key = XC_API_KEY)
+femsong <-  query_xenocanto(
+species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"',
+api_key = XC_API_KEY)
 }
 
 }

@@ -25,7 +25,7 @@ This function subsets a data frame while preserving its attributes. This is impo
 \examples{
 \dontrun{
 # Download metadata
- pant_xc <- query_xenocanto(term = "Phaethornis anthophilus")
+ pant_xc <- query_xenocanto(species = "Phaethornis anthophilus")
 
 # Subset metadata to include only those from Panama
 subset_metadata(pant_xc, subset = country == "Panama")

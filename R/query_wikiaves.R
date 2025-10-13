@@ -3,7 +3,6 @@
 #' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options are 'sound' or 'image'. Required.
-#' @return A data frame with the metadata of the observations matching the query.
 #' @export
 #' @name query_wikiaves
 #' @details This function queries for avian digital media in the open-access
@@ -11,7 +10,7 @@
 #' @examples
 #' \dontrun{
 #' # search
-#' df1 <- query_wikiaves(term = "Phaethornis nattereri", format = "image")
+#' df1 <- query_wikiaves(species = "Phaethornis nattereri", format = "image")
 #' View(df1)
 #' }
 #'
@@ -21,7 +20,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_wikiaves <-
-  function(term = getOption("term"),
+  function(species = getOption("species"),
            format = c("sound", "image"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
@@ -56,7 +55,7 @@ query_wikiaves <-
     response <- httr::GET(
       url = paste0(
         "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
-        gsub(" ", "%20", term)
+        gsub(" ", "%20", species)
       ),
       httr::user_agent("suwo (https://github.com/maRce10/suwo)")
     )
@@ -70,7 +69,7 @@ query_wikiaves <-
     if (length(get_ids) == 0) {
       if (verbose) {
         cat(paste(
-          .color_text("Search term not found", "failure"),
+          .color_text("Search species not found", "failure"),
           .add_emoji("sad")
         ))
       }
@@ -233,7 +232,7 @@ query_wikiaves <-
           raw_data = raw_data
           )
         # Generate a file path by combining tempdir() with a file name
-        # file_path <- file.path(tempdir(), paste0(term, ".rds"))
+        # file_path <- file.path(tempdir(), paste0(species, ".rds"))
         #
         # # Save the object to the file
         # saveRDS(query_output_df, file = file_path)

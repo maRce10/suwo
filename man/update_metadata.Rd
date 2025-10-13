@@ -36,12 +36,12 @@ returns a data frame similar to the input 'metadata' with new data appended.
 \code{update_metadata} update metadata from previous queries.
 }
 \details{
-This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query term and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.
+This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query species and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.
 }
 \examples{
 \dontrun{
 # query metadata
-wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
+wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
 
 # remove last 3 rows to test update_metadata
 sub_wa <- wa[1:(nrow(wa)- 3), ]

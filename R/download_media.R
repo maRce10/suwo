@@ -12,7 +12,7 @@
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_macaulay}}
 #' @examples
 #' \dontrun{
-#'   phae_anth <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
+#'   phae_anth <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE)
 #'
 #'   # donwload the first to files
 #'   phae_anth_downl <- download_media(metadata = phae_anth[1:2, ], path = tempdir())

@@ -5,7 +5,7 @@
 \title{Access 'observation' recordings and metadata}
 \usage{
 query_observation(
-  term = getOption("term"),
+  species = getOption("species"),
   format = c("sound", "image"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
@@ -16,7 +16,7 @@ query_observation(
 )
 }
 \arguments{
-\item{term}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
+\item{species}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
 \item{format}{Character vector with the media format to query for. Currently 'image' and 'sound' are available.}
 
@@ -31,11 +31,6 @@ query_observation(
 \item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option ( \code{options(all_data = TRUE)}).}
 
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
-}
-\value{
-If all_data is not provided the function returns a data frame with the following media
-information: id, scientific_name, name, group, group_name, status, rarity, photo,
-info_text, permalink, determination_requirements, file_url, repository
 }
 \description{
 \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.

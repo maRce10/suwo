@@ -130,10 +130,10 @@ Finding data using [suwo](https://github.com/maRce10/suwo) follows a basic seque
 
 <center><img src="workflow_diagram.png" alt="suwo workflow diagram" width="100%"></center>
 
-<br>
+</br>
 Here is a description of each step:
 
-1. Queries regarding a specific taxonomic group (typically a species name) is submitted through one of the available query functions (`query_repo_name()`) that connect to five different online repositories. The output of these queries is a data frame containing metadata associated with the media files (e.g., species name, date, location, etc, see below). 
+1. Queries regarding a species are submitted through one of the available query functions (`query_repo_name()`) that connect to five different online repositories. The output of these queries is a data frame containing metadata associated with the media files (e.g., species name, date, location, etc, see below). 
 
 1. If multiple repositories are queried, the resulting metadata data frames can be merged into a single data frame using the [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html) function. 
 
@@ -159,17 +159,15 @@ library(suwo)
 library(knitr)
 library(kableExtra)
 
-tur_ruf_list <- suwo:::tur_ruf_list
+metadata_list <-  vignette_metadata <- suwo:::vignette_metadata
 
-tur_ruf_sound_list <- tur_ruf_list[grep("sound", names(tur_ruf_list))]
-tur_ruf_sound_list <- tur_ruf_sound_list[order(names(tur_ruf_sound_list))]
+metadata_list$t_rufiventris <- metadata_list$t_tricolor <- NULL
 
-# split by "_" and keep the first part
-names(tur_ruf_sound_list) <- gsub("_sounds", "", names(tur_ruf_sound_list))
-
-Repository <- sapply(tur_ruf_sound_list, function(x)
+Repository <- sapply(metadata_list, function(x)
   x[1, "repository"])
-Function <- sapply(tur_ruf_sound_list, function(x)
+
+names(metadata_list) <- tolower(Repository)
+Function <- sapply(metadata_list, function(x)
   attributes(x)$query_call[[1]])
 
 Function <- sapply(Function, as.character)
@@ -182,50 +180,62 @@ file_types[Function == "query_xenocanto"] <- "sound"
 urls = c(
   gbif = "https://www.gbif.org/",
   inaturalist = "https://www.inaturalist.org/",
-  macaulay = "https://www.macaulaylibrary.org/",
+  `macaulay library` =  "https://www.macaulaylibrary.org/",
   observation = "https://observation.org/",
   wikiaves = "https://www.wikiaves.com.br/",
   `xeno-canto` = "https://www.xeno-canto.org/"
 )
 
-urls <- urls[match(names(tur_ruf_sound_list), names(urls))]
+urls <- urls[match(names(metadata_list), names(urls))]
 
 token <- c(
   gbif = "No",
   inaturalist = "No",
-  macaulay = "No",
+  `macaulay library` =  "No",
   observation = "Yes",
   wikiaves = "No",
   `xeno-canto` = "Yes"
 )
 
-token <- token[match(names(tur_ruf_sound_list), names(token))]
+token <- token[match(names(metadata_list), names(token))]
 
 
 tax_level <-  c(
   gbif = "Species",
   inaturalist = "Species",
-  macaulay = "Species",
+  `macaulay library` =  "Species",
   observation = "Species",
   wikiaves = "Species",
-  `xeno-canto` = "Species, genus, family"
+  `xeno-canto` = "Species, subspecies, genus, family, group"
 )
 
-tax_level <- tax_level[match(names(tur_ruf_sound_list), names(tax_level))]
+tax_level <- tax_level[match(names(metadata_list), names(tax_level))]
 
 geo_cover <-  c(
   gbif = "Worldwide",
   inaturalist = "Worldwide",
-  macaulay = "Worldwide",
+  `macaulay library` =  "Worldwide",
   observation = "Worldwide",
   wikiaves = "Brazil",
   `xeno-canto` = "Worldwide"
 )
 
-geo_cover <- geo_cover[match(names(tur_ruf_sound_list), names(geo_cover))]
+geo_cover <- geo_cover[match(names(metadata_list), names(geo_cover))]
+
+other <-  c(
+  gbif = "Specify query by data base",
+  inaturalist = NA,
+  `macaulay library` =  "Interactive",
+  observation = NA,
+  wikiaves = NA,
+  `xeno-canto` = "Specify query by taxonomy, geographic range and dates"
+)
+
+other <- other[match(names(metadata_list), names(other))]
 
 
-colnames <- lapply(tur_ruf_sound_list, names)
+
+colnames <- lapply(metadata_list, names)
 
 colnames <- lapply(colnames, function(x)
   setdiff(x, suwo:::.format_query_output(only_basic_columns = TRUE)))
@@ -233,21 +243,23 @@ colnames <- lapply(colnames, function(x)
 additional_data <- sapply(colnames, function(x)
   paste(x, collapse = ", "))
 
-additional_data <- additional_data[match(names(tur_ruf_sound_list), names(additional_data))]
+additional_data <- additional_data[match(names(metadata_list), names(additional_data))]
 
 query_summary <- data.frame(
   Function = Function,
   Repository = Repository,
   `URL link` = urls,
   `File types` = file_types,
-  `Requires token` = token,
+  `Requires api key` = token,
   `Taxonomic level` = tax_level,
   `Geographic coverage` = geo_cover,
   `Additional data` = additional_data,
+  `Other features` = other,
   stringsAsFactors = FALSE,
   check.names = FALSE
 )
 
+query_summary <- query_summary[order(query_summary$Repository),]
 
 query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`,
                                                   "html",
@@ -280,32 +292,56 @@ query_summary[, names(query_summary) != "Additional data"] |>
 
 ```
 
-This is an example code of a query of _Turdus rufiventris_ (a bird species) sounds from iNaturalist and Wikiaves (we print the first 4 rows of each output data frame):
+These are some example queries: 
+
+1. Images of Sarapiqui Heliconia (_Heliconia sarapiquensis_) from iNaturalist (we print the first 4 rows of each output data frame):
 
 ```{r, eval = TRUE}
 # Load suwo package
 library(suwo)
 
-# Query Xeno-canto for Turdus rufiventris sounds
-truf_inat <- query_inaturalist(term = "Turdus rufiventris")
+h_sarapiquensis <- query_inaturalist(species = "Heliconia sarapiquensis", format = "image")
 
-head(truf_inat, 4)
+head(h_sarapiquensis, 4)
 ```
 
+</br>
+
+2.  Harpy eagles (_Harpia harpyja_) audio recordings from Wikiaves:
 
 ```{r, eval = FALSE}
-# Query Wikiaves for Turdus rufiventris sounds
-truf_wa <- query_wikiaves(term = "Turdus rufiventris", format = "sound")
 
-head(truf_wa, 4)
+h_harpyja <- query_wikiaves(species = "Harpia harpyja", format = "sound")
+
+head(h_harpyja, 4)
 ```
 
 ```{r, echo=FALSE}
 
-head(tur_ruf_sound_list$wikiaves[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
+subset_metadata(vignette_metadata$h_harpyja, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
+</br>
+
+3. Common raccoon (_Procyon lotor_) videos from GBIF:
+
+```{r, eval = FALSE}
+
+p_lotor <- query_gbif(species = "Procyon lotor", format = "video")
+
+head(p_lotor, 4)
+```
+
+```{r, echo=FALSE}
+
+subset_metadata(vignette_metadata$p_lotor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+
+```
+
+</br>
+
+--- 
 
 By default all query function return the `r length(suwo:::.format_query_output(only_basic_columns = TRUE))` most basic metadata fields associated with the media files. Here is the definition of each field:
 
@@ -352,46 +388,51 @@ By default the package standardizes the information in the basic fields (detaile
 
 </div>
 
-The code above examplifies the most common use of query functions, which applies also to the function [query_gbif()](https://marce10.github.io/suwo/reference/query_gbif.html). The following sections provide more details on the two query functions that require special considerations.    
+The code above examplifies the most common use of query functions, which applies also to the function [query_gbif()](https://marce10.github.io/suwo/reference/query_gbif.html). The following sections provide more details on the two query functions that require special considerations: [query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) and [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html).    
 
-## Query Macaulay Library interactively
+## query_macaulay()
 
-[query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) is the only interactive function. This means that when users run a query the function opens a browser window to the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog), where the users must download a .csv file with the metadata:
+### Interactive retrieval of metadata
+
+[query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) is the only interactive function. This means that when users run a query the function opens a browser window to the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog), where the users must download a .csv file with the metadata. Here is a example of a query for strip-throated hermit (_Phaethornis striigularis_) videos:
 
 ```{r, eval = FALSE}
-# Query Wikiaves for Turdus rufiventris sounds
-truf_ml <- query_macaulay(term = "Turdus rufiventris", format = "sound")
+p_striigularis <- query_macaulay(species = "Phaethornis striigularis", format = "video")
 ```
 
 Users must click on the "Export" button to save the .csv file with the metadata: 
 
-<center><img src="ml_browser.jpeg" alt="suwo workflow diagram" width="100%"></center>
+<center><img src="ml_browser.jpeg" alt="Macaulay library search site" width="100%"></center>
 
-Here are some instructions for using this function properly:
+</br>
+
+Here are some tips for using this function properly:
 
 * The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory)
-* The function will not proceed until the file is saved 
 * If the file is saved overwriting a pre-existing file (i.e. same file name) the function will not detect it
-* The query term must be a species name
+* The function will not proceed until the file is saved 
 * Users must log in to the Macaulay Library/eBird account in order to access large batches of observations
 
 After saving the file, the function will read the file and return a data frame with the metadata. Here we print the first 4 rows of the output data frame:
 
 ```{r, eval=FALSE}
-head(truf_ml, 4)
+head(p_striigularis, 4)
 ```
 
 ```{r, echo=FALSE}
-head(tur_ruf_sound_list$macaulay[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
+
+subset_metadata(vignette_metadata$p_striigularis, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
+
+### Bypassing record limit
 
 Even if logged in, a maximum of 10000 records per query can be returned. This can be bypassed by using the 'dates' argument to split the search into a sequence of shorter date ranges. The rationale is that by splitting the search into date ranges, users can download multiple .csv files, which are then combined by the function into a single metadata data frame. Of course users must download the csv for each data range.  The following code looks for photos of the hummingbird _Calypte costae_. As Macaulay Library hosts more than 30000 _Calypte costae_ records, we need to split the query into multiple date ranges:
 
 ```{r, eval = FALSE}
 # test a query with more than 10000 results paging by date
 cal_cos <- query_macaulay(
-  term = "Calypte costae",
+  species = "Calypte costae",
   format = "image",
   path = tempdir(),
   dates = c(1976, 2019, 2022, 2024, 2025, 2026)
@@ -402,41 +443,64 @@ Users can check at the Macaulay Library website how many records are available f
 
 <center><img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%"></center>
 
-## API key to query Xeno-Canto
+## query_xenocanto()
 
-[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use their API v3. Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can use it in the [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) function by providing it as the `key` argument. Here is an example of a query for _Turdus rufiventris_ sounds:
+### API key
+
+[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use [their API v3](https://xeno-canto.org/admin.php/explore/api). Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can use it in the [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) function by providing it as the `api_key` argument. Here is an example of a query for Spix's disc-winged bat (_Thyroptera tricolor_) audio recordings:
 
 ```{r, eval = FALSE}
 
-# Query Xeno-canto for Phaethornis anthophilus sounds
 # replace "YOUR_XC_API_KEY" with your key
-tur_ruf_xc <- query_xenocanto(term = "Turdus rufiventris", key = "YOUR_XC_API_KEY")
+t_tricolor <- query_xenocanto(species = "Thyroptera tricolor", api_key = "YOUR_XC_API_KEY")
 
-head(tur_ruf_xc, 4)
+head(t_tricolor, 4)
 ```
 
 ```{r, echo=FALSE}
 
-head(tur_ruf_sound_list$xenocanto[, suwo:::.format_query_output(only_basic_columns = TRUE)], 4)
+subset_metadata(vignette_metadata$t_tricolor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+```
 
+## Special queries
+
+[query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) allows users to perform special queries by specifying additional query tags. Users can also search by country, taxonomy (taxonomic group, family, genus, subspecies), geography (country, location, geographic coordinates)  date, sound type (e.g. female song, calls) and recording properties (quality, length, sampling rate) ([see list of available tags here](https://xeno-canto.org/admin.php/explore/api#examples)). Here is an example of a query for audio recordings of pale-striped poison frog (_Ameerega hahneli_, 'sp:"Ameerega hahneli") from French Guiana (cnt:"French Guiana") and with the highest recording quality (q:"A"):
+
+
+```{r, eval = FALSE}
+
+# replace "YOUR_XC_API_KEY" with your key
+a_hahneli <- query_xenocanto(species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"', api_key = "YOUR_XC_API_KEY")
+
+head(a_hahneli, 4)
+```
+
+```{r, echo=FALSE}
+
+subset_metadata(vignette_metadata$a_hahneli, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 ```
 
 # Update metadata
 
 The [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function allows users to update a previous query to add new information from the corresponding repository of the original search. This function takes as input a data frame previously obtained from any query function (i.e. `query_reponame()`) and returns a data frame similar to the input with new data appended. 
 
-To show case the function, we will use the metadata from the previous example of _Turdus rufiventris_ sounds from iNaturalist. Let's assume that the initial query was done a while ago and we want to update it to include any new records that might have been added since then. The following code removes all observations recorded after 2024-12-31 to simulate an old query:
+To show case the function, we first query metadata of Eisentraut's Bow-winged Grasshopper sounds from iNaturalist. Let's assume that the initial query was done a while ago and we want to update it to include any new records that might have been added since then. The following code removes all observations recorded after 2024-12-31 to simulate an old query:
 
 
 ```{r}
+# initial query
+c_eisentrauti <- query_inaturalist(species = "Chorthippus eisentrauti")
+
+head(c_eisentrauti, 4)
+
 # exclude new observations (simulate old data)
-old_truf_inat <- subset_metadata(truf_inat, subset = date <= "2024-12-31" | is.na(date))
+old_c_eisentrauti <- subset_metadata(c_eisentrauti, subset = date <= "2024-12-31" | is.na(date))
 
 # update "old" data
-updated_truf_inat <- update_metadata(metadata = old_truf_inat)
+upd_c_eisentrauti <- update_metadata(metadata = old_c_eisentrauti)
 
 # compare number of records
-nrow(truf_inat) == nrow(updated_truf_inat)
+nrow(old_c_eisentrauti) == nrow(upd_c_eisentrauti)
 
 ```
 
@@ -448,11 +512,11 @@ The [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.h
 
 ```{r, eval = FALSE}
 
-truf_xc <- query_xenocanto(term = "Turdus rufiventris",
+truf_xc <- query_xenocanto(species = "Turdus rufiventris",
                              format = "sound",
                              api_key = "YOUR_XC_API_KEY")
-truf_gbf <- query_gbif(term = "Turdus rufiventris", format = "sound")
-truf_ml <- query_macaulay(term = "Turdus rufiventris",
+truf_gbf <- query_gbif(species = "Turdus rufiventris", format = "sound")
+truf_ml <- query_macaulay(species = "Turdus rufiventris",
                           format = "sound",
                           path = tempdir())
 
@@ -470,11 +534,11 @@ head(merged_metadata, 4)
 
 ```
 
-Note that in such a multi-repository query, all query functions use the same search term (i.e. species name) and media format (e.g., sound, image, video). To facilitate this, users can set the global options `term` and `format` so they do not need to specify them in each query function:
+Note that in such a multi-repository query, all query functions use the same search species (i.e. species name) and media format (e.g., sound, image, video). To facilitate this, users can set the global options `species` and `format` so they do not need to specify them in each query function:
 
 ```{r, eval = FALSE}
 
-options(term = "Turdus rufiventris", format = "sound")
+options(species = "Turdus rufiventris", format = "sound")
 truf_xc <- query_xenocanto(api_key = "YOUR_XC_API_KEY")
 truf_gbf <- query_gbif()
 truf_ml <- query_macaulay(path = tempdir())
@@ -544,7 +608,7 @@ The last step of the workflow is to download the media files associated with the
 
 ```{r, eval = TRUE}
 # query GBIF for Amanita zambiana images
-azam_gbf <- query_gbif(term = "Amanita zambiana", format = "image")
+azam_gbf <- query_gbif(species = "Amanita zambiana", format = "image")
 
 # create folder for images
 out_folder <- file.path(tempdir(), "amanita_zambiana")

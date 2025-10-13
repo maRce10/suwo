@@ -3,7 +3,7 @@ test_that("Test gbif dataset csv download", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(term = 'Glaucis dohrnii', format = "sound")
+  df1 <- query_gbif(species = 'Glaucis dohrnii', format = "sound")
 
   test_keys <- c("3863342525", "3863345521")
 

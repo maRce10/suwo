@@ -40,7 +40,7 @@ This function will take the output data frame of any of the "query_x()" function
 }
 \examples{
 \dontrun{
-  phae_anth <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE)
+  phae_anth <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE)
 
   # donwload the first to files
   phae_anth_downl <- download_media(metadata = phae_anth[1:2, ], path = tempdir())

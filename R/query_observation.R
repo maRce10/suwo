@@ -4,9 +4,6 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
 #' @param token Character refering to the token assigned by Observation.org as authorization for searches.
-#' @return If all_data is not provided the function returns a data frame with the following media
-#' information: id, scientific_name, name, group, group_name, status, rarity, photo,
-#' info_text, permalink, determination_requirements, file_url, repository
 #' @export
 #' @name query_observation
 #' @details This function queries for species observation info in the open-access
@@ -14,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_observation(term = 'Turdus iliacus', format = "Sound", cores = 4, token = ".....")
+# df1 <- query_observation(species = 'Turdus iliacus', format = "Sound", cores = 4, token = ".....")
 #' View(df1)
 #' }
 #'
@@ -24,7 +21,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_observation <-
-  function(term = getOption("term"),
+  function(species = getOption("species"),
            format = c("sound", "image"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
@@ -63,7 +60,7 @@ query_observation <-
     # format JSON
     srch_trm <- paste0("https://observation.org/api/v1/species/search/?",
                        "q=",
-                       gsub(" ", "%20", term))
+                       gsub(" ", "%20", species))
 
     base.srch.pth <- jsonlite::fromJSON(srch_trm)
 

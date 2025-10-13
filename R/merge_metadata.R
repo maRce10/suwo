@@ -9,8 +9,8 @@
 #' @examples
 #' \dontrun{
 #'  # get metadata from 2 repos
-#'   wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
-#'   xc <- query_xenocanto(term = 'Glaucis dohrnii')
+#'   wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
+#'   xc <- query_xenocanto(species = 'Glaucis dohrnii')
 #'
 #'   # combine metadata
 #'   merged_mt <- merge_metadata(wa, xc)
@@ -27,7 +27,7 @@ merge_metadata <-
         .stop("All inputs must be data frames obtained from suwo query functions (query_x()).")
       }
 
-      if (is.null(attr(metadata_list[[i]], "query_term"))) {
+      if (is.null(attr(metadata_list[[i]], "query_species"))) {
         .stop(
           "The input data frame '",
           deparse(substitute(metadata_list[[i]])),

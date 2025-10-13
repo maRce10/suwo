@@ -5,7 +5,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  xc1 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   test_keys <- c("532163", "568491")
 
@@ -34,7 +34,7 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  xc1 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  xc1 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   test_keys <- c("532163", "568491")
 
@@ -62,7 +62,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  xc2 <- query_xenocanto(term = 'Phaethornis anthophilus', all_data = TRUE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  xc2 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = TRUE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   test_keys <- c("532163", "568491")
 
@@ -92,7 +92,7 @@ test_that("wikiaves Glaucis dohrnii sp download, all.data = TRUE", {
   skip_if_offline()
   skip_if_not(interactive())
 
-  wa1 <- query_wikiaves(term = 'Glaucis dohrnii', format = "sound", all_data = TRUE)
+  wa1 <- query_wikiaves(species = 'Glaucis dohrnii', format = "sound", all_data = TRUE)
 
   test_keys <- c("2286824", "4522545")
 
@@ -120,7 +120,7 @@ test_that("wikiaves Urubitinga solitaria sp download image all.data = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  wa2 <- query_wikiaves(term = 'Urubitinga solitaria', format = "image", all_data = FALSE)
+  wa2 <- query_wikiaves(species = 'Urubitinga solitaria', format = "image", all_data = FALSE)
 
   test_keys <- c("3227223", "5415237")
 
@@ -150,7 +150,7 @@ test_that("search GBIF sp download image all_data = TRUE", {
   skip_on_cran()
   skip_if_offline()
 
-  gb1 <- query_gbif(term = 'Glaucis dohrnii', format = "image", all_data = TRUE)
+  gb1 <- query_gbif(species = 'Glaucis dohrnii', format = "image", all_data = TRUE)
 
   test_keys <- c("5154503342", "4525343483")
 
@@ -178,7 +178,7 @@ test_that("search GBIF sp download sound all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  gb2 <- query_gbif(term = 'Glaucis dohrnii', format = "sound", all_data = FALSE)
+  gb2 <- query_gbif(species = 'Glaucis dohrnii', format = "sound", all_data = FALSE)
 
   test_keys <- c("3863342525", "2243728561")
 
@@ -207,7 +207,7 @@ test_that("search inaturalist sp download all_data = TRUE", {
   skip_on_cran()
   skip_if_offline()
 
-  in1 <- query_inaturalist(term = 'Agalychnis lemur', format = "image", all_data = TRUE)
+  in1 <- query_inaturalist(species = 'Agalychnis lemur', format = "image", all_data = TRUE)
 
   test_keys <- c("303641298", "303641290")
 
@@ -233,7 +233,7 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  in2 <- query_inaturalist(term = "Rattus rattus", format = "sound", all_data = FALSE)
+  in2 <- query_inaturalist(species = "Rattus rattus", format = "sound", all_data = FALSE)
 
   test_keys <- c("283643216", "281653293")
 
@@ -259,7 +259,7 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
 #
 #   token <- scan(n = 1, what = "character")
 #
-#   df1 <- query_observation(term = 'Glaucis dohrnii', format = "sound", all_data = TRUE, token = token)
+#   df1 <- query_observation(species = 'Glaucis dohrnii', format = "sound", all_data = TRUE, token = token)
 #
 #   test_keys <- c("3863342525", "3034452575")
 #
@@ -286,7 +286,7 @@ test_that("search macaulay sp download all_data = TRUE", {
   skip_on_cran()
   skip_if_offline()
 
-  ml1 <- query_macaulay(term = 'Glaucis dohrnii', format = "sound", all_data = TRUE, path = tempdir())
+  ml1 <- query_macaulay(species = 'Glaucis dohrnii', format = "sound", all_data = TRUE, path = tempdir())
 
   test_keys <- c(627919111, 624733750)
 
@@ -313,7 +313,7 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  ml2 <- query_macaulay(term = 'Harpia harpyja', format = "image", all_data = FALSE, path = tempdir())
+  ml2 <- query_macaulay(species = 'Harpia harpyja', format = "image", all_data = FALSE, path = tempdir())
 
   test_keys <- c("639757637", "639955653")
 
@@ -340,7 +340,7 @@ test_that("search macaulay sp download video all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  ml3 <- query_macaulay(term = 'Calypte anna', format = "video", all_data = FALSE, path = tempdir())
+  ml3 <- query_macaulay(species = 'Calypte anna', format = "video", all_data = FALSE, path = tempdir())
 
   test_keys <- c("639261756", "639255345")
 

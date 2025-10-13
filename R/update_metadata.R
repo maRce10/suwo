@@ -8,11 +8,11 @@
 #' @export
 #' @name update_metadata
 #' @return returns a data frame similar to the input 'metadata' with new data appended.
-#' @details This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query term and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.
+#' @details This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query species and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.
 #' @examples
 #' \dontrun{
 #' # query metadata
-#' wa <- query_wikiaves(term = 'Glaucis dohrnii', format =  "sound")
+#' wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
 #'
 #' # remove last 3 rows to test update_metadata
 #' sub_wa <- wa[1:(nrow(wa)- 3), ]
@@ -56,21 +56,21 @@ update_metadata <-
       )
     }
 
-    if (is.null(attr(metadata, "query_term"))) {
+    if (is.null(attr(metadata, "query_species"))) {
       .stop(
         "The input data frame does not have the required attributes. ",
         "Please provide a data frame obtained from any of the query_x() functions setting the argument `raw_data = FALSE`."
       )
     }
 
-    #Set query term and format for new query search
-    query_term <- attr(metadata, "query_term")
+    #Set query species and format for new query search
+    query_species <- attr(metadata, "query_species")
     query_format <- attr(metadata, "query_format")
     all_data <- attr(metadata, "all_data")
 
     if (metadata$repository[1] == "GBIF") {
       query_output_new <- query_gbif(
-        term = query_term,
+        species = query_species,
         format = query_format,
         all_data = all_data,
         cores = cores,
@@ -82,7 +82,7 @@ update_metadata <-
 
     if (metadata$repository[1] == "iNaturalist") {
       query_output_new <- query_inaturalist(
-        term = query_term,
+        species = query_species,
         format = query_format,
         all_data = all_data,
         cores = cores,
@@ -93,7 +93,7 @@ update_metadata <-
     }
     if (metadata$repository[1] == "Macaulay Library") {
       query_output_new <- query_macaulay(
-        term = query_term,
+        species = query_species,
         format = query_format,
         all_data = all_data,
         path = path,
@@ -108,7 +108,7 @@ update_metadata <-
       }
 
       query_output_new <- query_observation(
-        term = query_term,
+        species = query_species,
         format = query_format,
         token = token,
         cores = cores,
@@ -124,7 +124,7 @@ update_metadata <-
         )
       }
       query_output_new <- query_xenocanto(
-        term = query_term,
+        species = query_species,
         cores = cores,
         all_data = all_data,
         verbose = verbose,
@@ -135,7 +135,7 @@ update_metadata <-
     }
     if (metadata$repository[1] == "Wikiaves") {
       query_output_new <- query_wikiaves(
-        term = query_term,
+        species = query_species,
         format = query_format,
         all_data = all_data,
         cores = cores,

@@ -6,7 +6,6 @@
 #' @param identified Logical argument to define if search results are categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are categorized as verifiable by inaturalist.
 #' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
-#' @return The function returns a data frame with the metadata of the media files matching the search criteria.
 #' @export
 #' @name query_inaturalist
 #' @details This function queries for species observation info in the open-access
@@ -14,7 +13,7 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_inaturalist(term = 'Turdus plebejus', format = "sound")
+# df1 <- query_inaturalist(species = 'Turdus plebejus', format = "sound")
 #' View(df1)
 #' }
 #'
@@ -24,7 +23,7 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-query_inaturalist <- function(term = getOption("term"),
+query_inaturalist <- function(species = getOption("species"),
                               cores = getOption("mc.cores", 1),
                               pb = getOption("pb", TRUE),
                               verbose = getOption("verbose", TRUE),
@@ -54,7 +53,7 @@ query_inaturalist <- function(term = getOption("term"),
   base_url <- paste0(
     "https://api.inaturalist.org/v1/observations?per_page=200&",
     "taxon_name=",
-    gsub(" ", "%20", term),
+    gsub(" ", "%20", species),
     "&",
     inat_format,
     "=true",
@@ -133,7 +132,7 @@ query_inaturalist <- function(term = getOption("term"),
     names(query_output_df)[first_id_index] <- "key"
   }
 
-  query_output_df$species <- term
+  query_output_df$species <- species
 
   # add format
   query_output_df$file_extension <- sub(".*\\.", "", sub("\\?.*", "", query_output_df[, grep("url", names(query_output_df), value = TRUE)]))
@@ -165,7 +164,7 @@ query_inaturalist <- function(term = getOption("term"),
 
   query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
 
-  # file_path <- file.path(tempdir(), paste0(term, ".rds"))
+  # file_path <- file.path(tempdir(), paste0(species, ".rds"))
   return(query_output_df)
 
 }

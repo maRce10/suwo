@@ -4,7 +4,7 @@ test_that("search Phaethornis check rows", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   df1 <- query_xenocanto(
-    term = 'Phaethornis anthophilus',
+    species = 'Phaethornis anthophilus',
     all_data = FALSE,
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
@@ -19,7 +19,7 @@ test_that("all data TRUE", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   df1 <- query_xenocanto(
-    term = 'Phaethornis anthophilus',
+    species = 'Phaethornis anthophilus',
     all_data = TRUE,
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
@@ -33,7 +33,7 @@ test_that("no recs found", {
   skip_if_offline()
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
-  df1 <- query_xenocanto(term = '000', api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  df1 <- query_xenocanto(species = '000', api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   expect_true(is.null(df1))
 })
@@ -44,18 +44,18 @@ test_that("check messages", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   msg <- capture.output(
-    query_xenocanto(term = '000', verbose = TRUE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+    query_xenocanto(species = '000', verbose = TRUE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
   )
   expect_true(any(grepl("No sound files were found", msg)))
 
   msg <- capture.output(
-    a <- query_xenocanto(term = '000', verbose = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+    a <- query_xenocanto(species = '000', verbose = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
   )
   expect_true(length(msg) == 0)
 
   msg <- capture.output(
     a <- query_xenocanto(
-      term = 'Phaethornis anthophilus',
+      species = 'Phaethornis anthophilus',
       verbose = TRUE,
       pb = FALSE,
       api_key = Sys.getenv("XENO_CANTO_API_KEY")
@@ -70,7 +70,7 @@ test_that("test all_data FALSE", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   df1 <- query_xenocanto(
-    term = 'Phaethornis anthophilus',
+    species = 'Phaethornis anthophilus',
     all_data = FALSE,
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
@@ -86,10 +86,31 @@ test_that("test raw_data TRUE", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   df1 <- query_xenocanto(
-    term = 'Phaethornis anthophilus',
+    species = 'Phaethornis anthophilus',
     raw_data = TRUE,
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
 
   expect_true(ncol(df1) == 45)
 })
+
+
+test_that("test tags", {
+  skip_on_cran()
+  skip_if_offline()
+  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
+
+  df1 <- query_xenocanto(
+    species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
+    raw_data = TRUE,
+    api_key = Sys.getenv("XENO_CANTO_API_KEY")
+  )
+
+  expect_true(nrow(df1) > 1)
+
+  femsong <- query_xenocanto(species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"', api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+
+  expect_true(nrow(femsong) > 490)
+  })
+
+

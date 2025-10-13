@@ -33,7 +33,7 @@ This function creates maps for visualizing the geographic spread of observations
 \examples{
 \dontrun{
 # search in xeno-canto
-metadata <- query_xenocanto(term = "Phaethornis anthophilus")
+metadata <- query_xenocanto(species = "Phaethornis anthophilus")
 
 # create map
 map_locations(metadata)

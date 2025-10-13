@@ -411,9 +411,15 @@ pblapply_sw_int <- function(X,
     "file_url",
     "file_extension"
   )
-
   if (only_basic_columns)
     return(basic_colums)
+
+  # if missing any basic column add it with NAs
+  for (i in basic_colums) {
+    if (is.null(X[[i]])) {
+      X[[i]] <- NA
+    }
+  }
 
   # lower case
   names(X) <- tolower(names(X))
@@ -422,7 +428,17 @@ pblapply_sw_int <- function(X,
   names_df <- data.frame(old = names(column_names), new = column_names)
 
   for (i in seq_len(nrow(names_df))) {
-    names(X)[names(X) == names_df$old[i]] <- names_df$new[i]
+    # if old name exists
+    if (any(names(X) == names_df$old[i])) {
+      names(X)[names(X) == names_df$old[i]] <- names_df$new[i]
+    } else {
+      # if expected (old) name does not exist add new column with NAs
+      X <- data.frame(X,
+                      NA,
+                      stringsAsFactors = FALSE,
+                      check.names = FALSE)
+      names(X)[ncol(X)] <- names_df$new[i]
+    }
   }
 
 
@@ -530,7 +546,7 @@ pblapply_sw_int <- function(X,
   ## add attributes
   X <- .add_attributes(
     X = X,
-    term = rlang::call_args(call)$term,
+    species = rlang::call_args(call)$species,
     format = format,
     all_data = all_data,
     raw_data = raw_data,
@@ -563,15 +579,15 @@ pblapply_sw_int <- function(X,
 }
 
 # add attributes to output data frames
-.add_attributes <- function(X, term, format, all_data, raw_data, input_file = NA, call) {
-  term <- gsub("%20", " ", term)
+.add_attributes <- function(X, species, format, all_data, raw_data, input_file = NA, call) {
+  species <- gsub("%20", " ", species)
 
   # Add a timestamp attribute
   search_time <- Sys.time()
   attr(X, "query_call") <- call
   attr(X, "repository") <- .repo_from_call(call)
   attr(X, "query_time") <- search_time
-  attr(X, "query_term") <- term
+  attr(X, "query_species") <- species
   attr(X, "query_format") <- format
   attr(X, "all_data") <- all_data
   attr(X, "input_file(s)") <- input_file
@@ -851,12 +867,12 @@ pblapply_sw_int <- function(X,
   check_collection <- checkmate::makeAssertCollection()
 
   ### check arguments
-  if (!is.null(args$term)) {
+  if (!is.null(args$species)) {
     checkmate::assert_multi_class(
-      x = args$term,
+      x = args$species,
       classes = c("character"),
       add = check_collection,
-      .var.name = "term"
+      .var.name = "species"
     )
   }
 
@@ -1063,8 +1079,8 @@ pblapply_sw_int <- function(X,
 
 # look up species taxon code for Macaulay queries
 .taxon_code_search <-
-  function(term = getOption("term"), ml_taxon_code = ml_taxon_code) {
-    taxon_code <- ml_taxon_code$species_code[ml_taxon_code$scientific.name == term &
+  function(species = getOption("species"), ml_taxon_code = ml_taxon_code) {
+    taxon_code <- ml_taxon_code$species_code[ml_taxon_code$scientific.name == species &
                                                !is.na(ml_taxon_code$scientific.name)]
     if (length(taxon_code) > 0) {
       return(taxon_code[1])

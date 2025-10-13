@@ -4,7 +4,7 @@
 # skip_on_cran()
 # skip_if_offline()
 #
-#   df1 <- query_observation(term = 'Aristolochia baetica', format = "image", token = token)
+#   df1 <- query_observation(species = 'Aristolochia baetica', format = "image", token = token)
 #
 #   expect_true(nrow(df1) >= 1)
 #
@@ -16,7 +16,7 @@
 ## skip_on_cran()
 # skip_if_offline()
 #
-#  df1 <- query_observation(term = 'Floractus heimi', format = "image", token = token)
+#  df1 <- query_observation(species = 'Floractus heimi', format = "image", token = token)
 #
 #   expect_true(is.null(df1))
 #
@@ -27,7 +27,7 @@
    skip_on_cran()
    skip_if_offline()
 
-  expect_null(query_observation(term = 'asdasdasd', format = "image"))
+  expect_null(query_observation(species = 'asdasdasd', format = "image"))
 
 })
 
@@ -36,7 +36,7 @@ test_that("no result sound", {
   skip_on_cran()
   skip_if_offline()
 
-  expect_null(query_observation(term = 'asdasdasd', format = "sound"))
+  expect_null(query_observation(species = 'asdasdasd', format = "sound"))
 
 })
 
@@ -45,7 +45,7 @@ test_that( "Invalid token for observation.org", {
   skip_on_cran()
   skip_if_offline()
 
-  expect_null(query_observation(term = 'Serinus serinus', format = "sound"))
+  expect_null(query_observation(species = 'Serinus serinus', format = "sound"))
 
 })
 #
@@ -55,7 +55,7 @@ test_that( "Invalid token for observation.org", {
 # skip_on_cran()
 # skip_if_offline()
 
-#     df1 <- query_observation(term = 'Serinus serinus', format = "sound", token = token, cores = 2)
+#     df1 <- query_observation(species = 'Serinus serinus', format = "sound", token = token, cores = 2)
 #
 #   expect_true(nrow(df1) >= 177)
 #
@@ -66,7 +66,7 @@ test_that( "Invalid token for observation.org", {
 # skip_on_cran()
 # skip_if_offline()
 #
-#   df1 <- capture_output(query_observation(term = 'a3', verbose = FALSE, pb = FALSE))
+#   df1 <- capture_output(query_observation(species = 'a3', verbose = FALSE, pb = FALSE))
 #
 #   expect_true(df1 == "")
 #

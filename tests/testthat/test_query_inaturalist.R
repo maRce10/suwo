@@ -3,7 +3,7 @@ test_that("search Glaucis dohrnii sound", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(term = "Helicobacter pylori", format =  "image")
+  df1 <- query_inaturalist(species = "Helicobacter pylori", format =  "image")
 
   expect_true(nrow(df1) >= 1)
 
@@ -15,7 +15,7 @@ test_that("search Spatula discors sound (no sounds)", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(term = 'Spatula discors', format =  "sound")
+  df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound")
 
   expect_true(nrow(df1) >= 20)
 
@@ -26,7 +26,7 @@ test_that("search Glaucis dohrnii photos", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(term = 'Glaucis dohrnii', format =  "image")
+  df1 <- query_inaturalist(species = 'Glaucis dohrnii', format =  "image")
 
   expect_true(nrow(df1) >=  10)
 
@@ -37,7 +37,7 @@ test_that("no result", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(term = 'asdasdasd', format =  "image")
+  df1 <- query_inaturalist(species = 'asdasdasd', format =  "image")
 
   expect_true(is.null(df1))
 
@@ -49,7 +49,7 @@ test_that("search in parallel", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(term = 'bolitoglossa striatula', format =  "image", cores = 2)
+  df1 <- query_inaturalist(species = 'bolitoglossa striatula', format =  "image", cores = 2)
 
   expect_true(nrow(df1) >=  52)
 
@@ -61,7 +61,7 @@ test_that("test verbose FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- capture_output(query_inaturalist(term = 'Glaucis dohrnii', format =  "sound", verbose = FALSE))
+  df1 <- capture_output(query_inaturalist(species = 'Glaucis dohrnii', format =  "sound", verbose = FALSE))
 
   expect_true(df1 == "")
 
@@ -72,7 +72,7 @@ test_that("test all_data FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(term = 'bolitoglossa striatula', format =  "image", all_data = FALSE)
+  df1 <- query_inaturalist(species = 'bolitoglossa striatula', format =  "image", all_data = FALSE)
 
   expected_col_names <- .format_query_output(only_basic_columns = T)
 
