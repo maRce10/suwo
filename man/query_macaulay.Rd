@@ -35,6 +35,9 @@ query_macaulay(
 
 \item{taxon_code_info}{Data frame containing the taxon code information. By default the function will use the internal data frame \code{"ml_taxon_code"} included as example data in the package. This object contains the data from the Clement list from october 2024 (downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.}
 }
+\value{
+The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
+}
 \description{
 \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 }

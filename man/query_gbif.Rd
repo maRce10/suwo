@@ -32,6 +32,9 @@ query_gbif(
 
 \item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
 }
+\value{
+The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
+}
 \description{
 \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
 }

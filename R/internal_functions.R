@@ -247,7 +247,7 @@ pblapply_sw_int <- function(X,
   }
 
   # set destination file
-  destfile <- file.path(normalizePath(path), metadata$download_file_name[x])
+  destfile <- file.path(normalizePath(path), metadata$downloaded_file_name[x])
 
   exists <- file.exists(destfile)
   if (exists & !overwrite){

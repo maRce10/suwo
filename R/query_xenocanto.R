@@ -2,16 +2,15 @@
 #'
 #' \code{query_xenocanto} searches for metadata from \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 #' @inheritParams template_params
-#' @param species Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}). Alternatively, a character string containing additional tags that follows the Xeno-Canto advanced query syntax can be provided. Tags are of the form 'tag:searchterm'. For instance, 'type:song' will search for recordings where the sound type contains 'song'. Multiple tags can be provided (e.g., \code{'"cnt:"belize" type:"song"'}).
+#' @param species Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}). Alternatively, a character string containing additional tags that follows the Xeno-Canto advanced query syntax can be provided. Tags are of the form 'tag:searchterm'. For instance, \code{'type:"song"'} will search for recordings where the sound type contains 'song'. Multiple tags can be provided (e.g., \code{'"cnt:"belize" type:"song"'}).
 #'  See examples down below and check \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.
 #' @param api_key Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
 #' @export
 #' @name query_xenocanto
-#' @details This function queries for avian vocalization recordings in the open-access
-#'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. It can return recordings metadata
-#'  or download the associated sound files. Complex queries can be constructed usin the Xeno-Canto advanced query syntax.
+#' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
+#' @details This function queries metadata for animal sound recordings in the open-access
+#'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. Complex queries can be constructed usin the Xeno-Canto advanced query syntax.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}}, \code{\link{query_observation}}
-#' \href{https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html}{blog post on accessing Xeno-Canto recordings}
 #' @examples
 #' \dontrun{
 #' # An API key is required. Get yours at https://xeno-canto.org/account.

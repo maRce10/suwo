@@ -5,7 +5,7 @@
 #' @param path Directory path where the output media files will be saved. By default files are saved into the current working directory (\code{"."}).
 #' @param overwrite Logical. If TRUE, existing files (in \code{"path"}) with the same name will be overwritten. Default is FALSE.
 #' @param folder_by Character string with the name of a character or factor column in the metadata data frame. If supplied the function will use the unique values in that column to create subfolders within \code{"path"} and the files will be downloaded into the corresponding folder. Default is \code{NULL} which means that no subfolders are created and all files are saved in the path provided. Missing values (NAs) are saved in a folder called "unknown_value". Special characters that are not allowed in folder names will be modified or removed. If any of the folder names already exist in \code{"path"}, they will be used as is.
-#' @return Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{download_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_status} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
+#' @return Downloads media files into the supplied directory path (\code{"path"}) and returns (invisibly) the input data frame with two additional columns: \code{downloaded_file_name} with the name of the downloaded file (if downloaded or already in the directory), and \code{download_status} with the result of the download process for each file (either "saved", "overwritten", "already there (not downloaded)", or "failed").
 #' @export
 #' @name download_media
 #' @details This function will take the output data frame of any of the "query_x()" functions and download the associated media files. The function will download all files into a single directory (argument \code{"path"}). File downloading process can be interrupted and resume later as long as the working directory is the same. By default only the missing files will be downloaded when resuming. Users only need to rerun the same function call. Can also be used on a updated query output (see \code{\link{update_metadata}}) to add the new media files to the existing media pool.
@@ -66,7 +66,7 @@ download_media <-
     }))
 
     # create file name
-    metadata$download_file_name <-
+    metadata$downloaded_file_name <-
       paste0(
         gsub(pattern = " ", "_", x = metadata$species),
         "-",
@@ -98,8 +98,8 @@ download_media <-
 
     # add folder to file name
     if (!is.null(folder_by)){
-      metadata$download_file_name <-
-        file.path(metadata[, folder_by], metadata$download_file_name)
+      metadata$downloaded_file_name <-
+        file.path(metadata[, folder_by], metadata$downloaded_file_name)
     }
 
     # report results
@@ -115,8 +115,8 @@ download_media <-
       } else {
         report_message <- c(report_message, "x" = paste0(cli::pluralize("{sum(metadata$download_status == 'failed')} file{?s} failed to download")))
       }
-      # remove file name from "download_file_name"
-      metadata$download_file_name[metadata$download_status == "failed"] <- NA
+      # remove file name from "downloaded_file_name"
+      metadata$downloaded_file_name[metadata$download_status == "failed"] <- NA
     }
 
     # report not-overwritten files

@@ -161,8 +161,6 @@ library(kableExtra)
 
 metadata_list <-  vignette_metadata <- suwo:::vignette_metadata
 
-metadata_list$t_rufiventris <- metadata_list$t_tricolor <- NULL
-
 Repository <- sapply(metadata_list, function(x)
   x[1, "repository"])
 
@@ -258,6 +256,9 @@ query_summary <- data.frame(
   stringsAsFactors = FALSE,
   check.names = FALSE
 )
+
+# remove duplicates
+query_summary <- query_summary[!duplicated(query_summary$Repository), ]
 
 query_summary <- query_summary[order(query_summary$Repository),]
 
@@ -619,7 +620,7 @@ azam_files <- download_media(metadata = azam_gbf, path = out_folder)
 
 ```
 
-The output of the function is a data frame similar to the input metadata but with two additional columns indicating the file name of the downloaded files ('download_file_name') and the result of the download attempt ('download_status', with values "success", 'failed', 'already there (not downloaded)' or 'overwritten').
+The output of the function is a data frame similar to the input metadata but with two additional columns indicating the file name of the downloaded files ('downloaded_file_name') and the result of the download attempt ('download_status', with values "success", 'failed', 'already there (not downloaded)' or 'overwritten').
 
 Here we print the first 3 rows of the output data frame:
 
@@ -642,7 +643,7 @@ This is a multipanel plot of 6 of the downloaded images (just for illustration p
 par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
-  img <- jpeg::readJPEG(file.path(out_folder, azam_files$download_file_name[i]))
+  img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
   plot(
     1:2,
     type = 'n',
@@ -690,7 +691,7 @@ unlink(out_folder, recursive = TRUE)
 In such case the name of the downloaded files will include the sub-directory name:
 ```{r}
 
-azam_files$download_file_name
+azam_files$downloaded_file_name
 
 ```
 
