@@ -3359,9 +3359,9 @@ metadata but with two additional columns indicating the file name of the
 downloaded files (‘downloaded_file_name’) and the result of the download
 attempt (‘download_status’, with values “success”, ‘failed’, ‘already
 there (not downloaded)’ or ‘overwritten’).</p>
-<p>Here we print the first 3 rows of the output data frame:</p>
+<p>Here we print the first 4 rows of the output data frame:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">azam_files</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">azam_files</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -3553,25 +3553,76 @@ Amanita_zambiana-GBIF4430877067-3.jpeg
 saved
 </td>
 </tr>
+<tr>
+<td style="text-align:center;">
+GBIF
+</td>
+<td style="text-align:center;">
+image
+</td>
+<td style="text-align:center;">
+5104283819
+</td>
+<td style="text-align:center;">
+Amanita zambiana
+</td>
+<td style="text-align:center;">
+2023-03-31
+</td>
+<td style="text-align:center;">
+13:41
+</td>
+<td style="text-align:center;">
+Nick Helme
+</td>
+<td style="text-align:center;">
+Zambia
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+-12.44276
+</td>
+<td style="text-align:center;">
+31.28535
+</td>
+<td style="text-align:center;">
+<a href="https://inaturalist-open-data.s3.amazonaws.com/photos/268158445/original.jpeg" class="external-link uri">https://inaturalist-open-data.s3.amazonaws.com/photos/268158445/original.jpeg</a>
+</td>
+<td style="text-align:center;">
+jpeg
+</td>
+<td style="text-align:center;">
+Amanita_zambiana-GBIF5104283819.jpeg
+</td>
+<td style="text-align:center;">
+saved
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [01;34m/tmp/RtmpzGLjtF/amanita_zambiana [0m
-├──  [01;35mAmanita_zambiana-GBIF3759537817-1.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF3759537817-2.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF4430877067-1.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF4430877067-2.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF4430877067-3.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF5069132689-1.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF5069132689-2.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF5069132691.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF5069132696-1.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF5069132696-2.jpeg [0m
-├──  [01;35mAmanita_zambiana-GBIF5069132732.jpeg [0m
-└──  [01;35mAmanita_zambiana-GBIF5104283819.jpeg [0m</code></pre>
+<pre><code> /tmp/RtmpCHxJJ6/amanita_zambiana 
+├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
+├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
+├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
+├──  Amanita_zambiana-GBIF4430877067-2.jpeg 
+├──  Amanita_zambiana-GBIF4430877067-3.jpeg 
+├──  Amanita_zambiana-GBIF5069132689-1.jpeg 
+├──  Amanita_zambiana-GBIF5069132689-2.jpeg 
+├──  Amanita_zambiana-GBIF5069132691.jpeg 
+├──  Amanita_zambiana-GBIF5069132696-1.jpeg 
+├──  Amanita_zambiana-GBIF5069132696-2.jpeg 
+├──  Amanita_zambiana-GBIF5069132732.jpeg 
+└──  Amanita_zambiana-GBIF5104283819.jpeg </code></pre>
+<p>Note that the name of the downloaded files includes the species name,
+an abbreviation of the repository name and the unique record key. If
+more than one media file is associated with a record, a sequential
+number is added at the end of the file name.</p>
 <p>This is a multipanel plot of 6 of the downloaded images (just for
 illustration purpose):</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -3592,7 +3643,7 @@ illustration purpose):</p>
 <span>    sep <span class="op">=</span> <span class="st">"\n"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="suwo_files/figure-html/unnamed-chunk-30-1.png" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="suwo_files/figure-html/unnamed-chunk-31-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Users can also save the downloaded files into sub-directories with
 the argument <code>folder_by</code>. This argument takes a character of
 factor column with the names of a metadata field (a column in the
@@ -3611,24 +3662,24 @@ country:</p>
 <span>                             folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [01;34m/tmp/RtmpzGLjtF/amanita_zambiana2 [0m
-├──  [01;34mCambodia [0m
-│   └──  [01;35mAmanita_zambiana-GBIF5069132691.jpeg [0m
-├──  [01;34mMozambique [0m
-│   ├──  [01;35mAmanita_zambiana-GBIF4430877067-1.jpeg [0m
-│   ├──  [01;35mAmanita_zambiana-GBIF4430877067-2.jpeg [0m
-│   └──  [01;35mAmanita_zambiana-GBIF4430877067-3.jpeg [0m
-├──  [01;34mThailand [0m
-│   ├──  [01;35mAmanita_zambiana-GBIF5069132689-1.jpeg [0m
-│   └──  [01;35mAmanita_zambiana-GBIF5069132689-2.jpeg [0m
-├──  [01;34mZambia [0m
-│   ├──  [01;35mAmanita_zambiana-GBIF5069132732.jpeg [0m
-│   └──  [01;35mAmanita_zambiana-GBIF5104283819.jpeg [0m
-└──  [01;34mZimbabwe [0m
-    ├──  [01;35mAmanita_zambiana-GBIF3759537817-1.jpeg [0m
-    ├──  [01;35mAmanita_zambiana-GBIF3759537817-2.jpeg [0m
-    ├──  [01;35mAmanita_zambiana-GBIF5069132696-1.jpeg [0m
-    └──  [01;35mAmanita_zambiana-GBIF5069132696-2.jpeg [0m</code></pre>
+<pre><code> /tmp/RtmpCHxJJ6/amanita_zambiana2 
+├──  Cambodia 
+│   └──  Amanita_zambiana-GBIF5069132691.jpeg 
+├──  Mozambique 
+│   ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
+│   ├──  Amanita_zambiana-GBIF4430877067-2.jpeg 
+│   └──  Amanita_zambiana-GBIF4430877067-3.jpeg 
+├──  Thailand 
+│   ├──  Amanita_zambiana-GBIF5069132689-1.jpeg 
+│   └──  Amanita_zambiana-GBIF5069132689-2.jpeg 
+├──  Zambia 
+│   ├──  Amanita_zambiana-GBIF5069132732.jpeg 
+│   └──  Amanita_zambiana-GBIF5104283819.jpeg 
+└──  Zimbabwe 
+    ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
+    ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132696-1.jpeg 
+    └──  Amanita_zambiana-GBIF5069132696-2.jpeg </code></pre>
 <p>In such case the name of the downloaded files will include the
 sub-directory name:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
