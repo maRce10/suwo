@@ -56,7 +56,7 @@
 
 
 <dl><dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
-<dd><p>Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. <code>options(term = "Hypsiboas rufitelus")</code>). Alternatively, a character string containing additional tags that follows the Xeno-Canto advanced query syntax can be provided. Tags are of the form 'tag:searchterm'. For instance, 'type:song' will search for recordings where the sound type contains 'song'. Multiple tags can be provided (e.g., <code>'"cnt:"belize" type:"song"'</code>).
+<dd><p>Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. <code>options(term = "Hypsiboas rufitelus")</code>). Alternatively, a character string containing additional tags that follows the Xeno-Canto advanced query syntax can be provided. Tags are of the form 'tag:searchterm'. For instance, <code>'type:"song"'</code> will search for recordings where the sound type contains 'song'. Multiple tags can be provided (e.g., <code>'"cnt:"belize" type:"song"'</code>).
 See examples down below and check <a href="https://www.xeno-canto.org/help/search" class="external-link">Xeno-Canto's search help</a> for a full description.</p></dd>
 
 
@@ -85,10 +85,13 @@ See examples down below and check <a href="https://www.xeno-canto.org/help/searc
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>The function returns a data frame with the metadata of the media files matching the search criteria. If <code>all_data = TRUE</code>, all metadata fields (columns) are returned. If <code>raw_data = TRUE</code>, the raw data as obtained from the repository is returned (without any formatting).</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function queries for avian vocalization recordings in the open-access
- online repository <a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a>. It can return recordings metadata
- or download the associated sound files. Complex queries can be constructed usin the Xeno-Canto advanced query syntax.</p>
+    <p>This function queries metadata for animal sound recordings in the open-access
+ online repository <a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a>. Complex queries can be constructed usin the Xeno-Canto advanced query syntax.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -96,8 +99,7 @@ See examples down below and check <a href="https://www.xeno-canto.org/help/searc
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="query_gbif.html">query_gbif</a></code>, <code><a href="query_wikiaves.html">query_wikiaves</a></code>, <code><a href="query_inaturalist.html">query_inaturalist</a></code>, <code><a href="query_observation.html">query_observation</a></code>
-<a href="https://marce10.github.io/2016/12/22/Download_a_single_recording_for_each_species_in_a_site_from_Xeno-Canto.html" class="external-link">blog post on accessing Xeno-Canto recordings</a></p></div>
+    <div class="dont-index"><p><code><a href="query_gbif.html">query_gbif</a></code>, <code><a href="query_wikiaves.html">query_wikiaves</a></code>, <code><a href="query_inaturalist.html">query_inaturalist</a></code>, <code><a href="query_observation.html">query_observation</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

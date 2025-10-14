@@ -94,6 +94,10 @@
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>The function returns a data frame with the metadata of the media files matching the search criteria. If <code>all_data = TRUE</code>, all metadata fields (columns) are returned. If <code>raw_data = TRUE</code>, the raw data as obtained from the repository is returned (without any formatting).</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function queries for species observation info in the <a href="https://https://www.macaulaylibrary.org/" class="external-link">Macaulay Library</a> online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the Macaulay Library's search page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.</p>
 <p>Here are some instructions for using this function properly:</p><ul><li><p>Users must save the save the .csv file manually</p></li>

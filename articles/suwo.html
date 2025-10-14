@@ -64,7 +64,7 @@ repositories</h3>
 &amp; <a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a>
 </h4>
             
-            <h4 data-toc-skip class="date">2025-10-13</h4>
+            <h4 data-toc-skip class="date">2025-10-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/master/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -205,32 +205,6 @@ Worldwide
 </td>
 <td style="text-align:left;">
 Specify query by data base
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://marce10.github.io/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a>
-</td>
-<td style="text-align:left;">
-iNaturalist
-</td>
-<td style="text-align:left;">
-<a href="https://www.inaturalist.org/" style="     " target="_blank" class="external-link">https://www.inaturalist.org/</a>
-</td>
-<td style="text-align:left;">
-sound, image
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Species
-</td>
-<td style="text-align:left;">
-Worldwide
-</td>
-<td style="text-align:left;">
-NA
 </td>
 </tr>
 <tr>
@@ -1086,25 +1060,6 @@ identifier, habitat, verbatimeventdate, institutionid,
 dynamicproperties, verbatimcoordinatesystem, eventremarks,
 collectioncode, gbifid, occurrenceid, institutioncode,
 identificationqualifier, media_type, page, state_province, comments
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://marce10.github.io/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a>
-</td>
-<td style="text-align:left;">
-quality_grade, taxon_geoprivacy, uuid, cached_votes_total,
-identifications_most_agree, species_guess,
-identifications_most_disagree, positional_accuracy, comments_count,
-site_id, created_time_zone, license_code, observed_time_zone,
-public_positional_accuracy, oauth_application_id, created_at,
-description, time_zone_offset, observed_on, observed_on_string,
-updated_at, captive, faves_count, num_identification_agreements,
-identification_disagreements_count, map_scale, uri, community_taxon_id,
-owners_identification_from_vision, identifications_count, obscured,
-num_identification_disagreements, geoprivacy, spam, mappable,
-identifications_some_agree, place_guess, id, license_code_1,
-attribution, hidden, offset
 </td>
 </tr>
 <tr>
@@ -3401,7 +3356,7 @@ mushroom) on GBIF:</p>
 <span><span class="va">azam_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">azam_gbf</span>, path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
 <p>The output of the function is a data frame similar to the input
 metadata but with two additional columns indicating the file name of the
-downloaded files (‘download_file_name’) and the result of the download
+downloaded files (‘downloaded_file_name’) and the result of the download
 attempt (‘download_status’, with values “success”, ‘failed’, ‘already
 there (not downloaded)’ or ‘overwritten’).</p>
 <p>Here we print the first 3 rows of the output data frame:</p>
@@ -3450,7 +3405,7 @@ file_url
 file_extension
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-download_file_name
+downloaded_file_name
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 download_status
@@ -3604,7 +3559,7 @@ saved
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [01;34m/tmp/RtmpPSWJiy/amanita_zambiana [0m
+<pre><code> [01;34m/tmp/RtmpzGLjtF/amanita_zambiana [0m
 ├──  [01;35mAmanita_zambiana-GBIF3759537817-1.jpeg [0m
 ├──  [01;35mAmanita_zambiana-GBIF3759537817-2.jpeg [0m
 ├──  [01;35mAmanita_zambiana-GBIF4430877067-1.jpeg [0m
@@ -3624,7 +3579,7 @@ illustration purpose):</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">azam_files</span><span class="op">$</span><span class="va">download_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">azam_files</span><span class="op">$</span><span class="va">downloaded_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>    <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">'n'</span>,</span>
@@ -3656,7 +3611,7 @@ country:</p>
 <span>                             folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [01;34m/tmp/RtmpPSWJiy/amanita_zambiana2 [0m
+<pre><code> [01;34m/tmp/RtmpzGLjtF/amanita_zambiana2 [0m
 ├──  [01;34mCambodia [0m
 │   └──  [01;35mAmanita_zambiana-GBIF5069132691.jpeg [0m
 ├──  [01;34mMozambique [0m
@@ -3677,7 +3632,7 @@ country:</p>
 <p>In such case the name of the downloaded files will include the
 sub-directory name:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">azam_files</span><span class="op">$</span><span class="va">download_file_name</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">azam_files</span><span class="op">$</span><span class="va">downloaded_file_name</span></span></code></pre></div>
 <pre><code> [1] "Mozambique/Amanita_zambiana-GBIF4430877067-1.jpeg"
  [2] "Mozambique/Amanita_zambiana-GBIF4430877067-2.jpeg"
  [3] "Mozambique/Amanita_zambiana-GBIF4430877067-3.jpeg"
