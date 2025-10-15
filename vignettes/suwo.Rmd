@@ -77,7 +77,9 @@ knitr::opts_chunk$set(
 
 options(width = 100, max.print = 100)
 
-
+dir_tree <- function(path) {
+  cat(gsub("\\[[0-9;]*[mK]", "", capture.output(fs::dir_tree(path))), sep = "\n")
+}
 ```
 
 
@@ -622,20 +624,29 @@ azam_files <- download_media(metadata = azam_gbf, path = out_folder)
 
 The output of the function is a data frame similar to the input metadata but with two additional columns indicating the file name of the downloaded files ('downloaded_file_name') and the result of the download attempt ('download_status', with values "success", 'failed', 'already there (not downloaded)' or 'overwritten').
 
-Here we print the first 3 rows of the output data frame:
+Here we print the first 4 rows of the output data frame:
 
 ```{r, eval = TRUE}
 
-head(azam_files, 3)
+head(azam_files, 4)
 
 ```
 
 ... and check that the files were saved in the path supplied:
-```{r, echo=TRUE}
+```{r, eval=FALSE}
 
 fs::dir_tree(path = out_folder)
 
 ```
+
+```{r, echo=FALSE}
+
+dir_tree(path = out_folder)
+
+```
+
+Note that the name of the downloaded files includes the species name, an abbreviation of the repository name and the unique record key. If more than one media file is associated with a record, a sequential number is added at the end of the file name.
+
 
 This is a multipanel plot of 6 of the downloaded images (just for illustration purpose):
 ```{r}
@@ -678,9 +689,15 @@ azam_files <- download_media(metadata = azam_gbf,
 
 ```
 
-```{r, echo=TRUE}
+```{r, eval=FALSE}
 
 fs::dir_tree(path = out_folder)
+
+```
+
+```{r, echo=FALSE}
+
+dir_tree(path = out_folder)
 
 ```
 
