@@ -438,7 +438,7 @@ subset(vignette_metadata$p_striigularis, select = suwo:::.format_query_output(on
 
 ### Bypassing record limit
 
-Even if logged in, a maximum of 10000 records per query can be returned. This can be bypassed by using the 'dates' argument to split the search into a sequence of shorter date ranges. The rationale is that by splitting the search into date ranges, users can download multiple .csv files, which are then combined by the function into a single metadata data frame. Of course users must download the csv for each data range.  The following code looks for photos of the hummingbird _Calypte costae_. As Macaulay Library hosts more than 30000 _Calypte costae_ records, we need to split the query into multiple date ranges:
+Even if logged in, a maximum of 10000 records per query can be returned. This can be bypassed by using the 'dates' argument to split the search into a sequence of shorter date ranges. The rationale is that by splitting the search into date ranges, users can download multiple .csv files, which are then combined by the function into a single metadata data frame. Of course users must download the csv for each data range.  The following code looks for photos of costa's hummingbird (_Calypte costae_). As Macaulay Library hosts more than 30000 costa's hummingbird records, we need to split the query into multiple date ranges:
 
 ```{r, eval = FALSE}
 # test a query with more than 10000 results paging by date
@@ -613,11 +613,16 @@ When duplicates are found, one observation from each group of duplicates is reta
 
 # Donwload media files
 
-The last step of the workflow is to download the media files associated with the metadata. This can be done using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function, which takes as input a metadata data frame (obtained from any query function or any of the other metadata managing functions) and downloads the media files to a specified directory. For this example we will download images from a query on `Amanita zambiana` (a mushroom) on GBIF:
+The last step of the workflow is to download the media files associated with the metadata. This can be done using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function, which takes as input a metadata data frame (obtained from any query function or any of the other metadata managing functions) and downloads the media files to a specified directory. For this example we will download images from a query on zambian slender Caesar (_Amanita zambiana_) (a mushroom) on GBIF:
 
 ```{r, eval = TRUE}
+<<<<<<< HEAD
 # query GBIF for Amanita zambiana images
 a_zam <- query_gbif(species = "Amanita zambiana", format = "image")
+=======
+# query GBIF for zambian slender Caesar
+azam_gbf <- query_gbif(species = "Amanita zambiana", format = "image")
+>>>>>>> 7608d53c2e9e65e1faa3b89d1b0a5116f4e8db79
 
 # create folder for images
 out_folder <- file.path(tempdir(), "amanita_zambiana")
@@ -731,7 +736,15 @@ dir_tree(path = out_folder)
 
 ```
 
+<<<<<<< HEAD
 In such case the name of the downloaded files will include the sub-directory name:
+=======
+```{r, echo=FALSE}
+unlink(out_folder, recursive = TRUE)
+```
+
+In such case the 'downloaded_file_name' column will include the sub-directory name:
+>>>>>>> 7608d53c2e9e65e1faa3b89d1b0a5116f4e8db79
 ```{r}
 
 dhol_files$downloaded_file_name
