@@ -42,12 +42,13 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">update_metadata</span><span class="op">(</span></span>
 <span>  <span class="va">metadata</span>,</span>
-<span>  <span class="va">token</span>,</span>
+<span>  token <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  <span class="va">api_key</span></span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dates <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -81,6 +82,10 @@
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
 <dd><p>Character string referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at <a href="https://xeno-canto.org/account" class="external-link">https://xeno-canto.org/account</a>. Only needed if the input metadata comes from <code><a href="query_xenocanto.html">query_xenocanto</a></code>.</p></dd>
+
+
+<dt id="arg-dates">dates<a class="anchor" aria-label="anchor" href="#arg-dates"></a></dt>
+<dd><p>Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. &gt; 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use <code>dates = c(2010, 2020, 2025)</code>. If years contain decimals searches will be split by months within years as well. Only needed if the input metadata comes from <code><a href="query_macaulay.html">query_macaulay</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

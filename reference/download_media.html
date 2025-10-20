@@ -80,7 +80,7 @@
 
 
 <dt id="arg-folder-by">folder_by<a class="anchor" aria-label="anchor" href="#arg-folder-by"></a></dt>
-<dd><p>Character string with the name of a character or factor column in the metadata data frame. If supplied the function will use the unique values in that column to create subfolders within <code>"path"</code> and the files will be downloaded into the corresponding folder. Default is <code>NULL</code> which means that no subfolders are created and all files are saved in the path provided. Missing values (NAs) are saved in a folder called "unknown_value". Special characters that are not allowed in folder names will be modified or removed. If any of the folder names already exist in <code>"path"</code>, they will be used as is.</p></dd>
+<dd><p>Character string with the name of a character or factor column in the metadata data frame. If supplied the function will use the unique values in that column to create subfolders within <code>"path"</code> and the files will be downloaded into the corresponding folder. By default no subfolders are created and all files are saved in the path provided. Missing values (NAs) are saved in a folder called <code>paste0("unknown_", folder_by)</code>. Special characters that are not allowed in folder names will be modified or removed. If any of the folder names already exist in <code>"path"</code>, they will be used as is.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -64,7 +64,7 @@ repositories</h3>
 &amp; <a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a>
 </h4>
             
-            <h4 data-toc-skip class="date">2025-10-15</h4>
+            <h4 data-toc-skip class="date">2025-10-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/master/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -1400,10 +1400,10 @@ the search into a sequence of shorter date ranges. The rationale is that
 by splitting the search into date ranges, users can download multiple
 .csv files, which are then combined by the function into a single
 metadata data frame. Of course users must download the csv for each data
-range. The following code looks for photos of costa’s hummingbird
-(<em>Calypte costae</em>). As Macaulay Library hosts more than 30000
-costa’s hummingbird records, we need to split the query into multiple
-date ranges:</p>
+range. The following code looks for photos of the hummingbird
+<em>Calypte costae</em>. As Macaulay Library hosts more than 30000
+<em>Calypte costae</em> records, we need to split the query into
+multiple date ranges:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># test a query with more than 10000 results paging by date</span></span>
 <span><span class="va">cal_cos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span></span>
@@ -2075,7 +2075,7 @@ wav
 </div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
-<span><span class="va">old_c_eisentrauti</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_metadata.html">subset_metadata</a></span><span class="op">(</span><span class="va">c_eisentrauti</span>, subset <span class="op">=</span> <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">old_c_eisentrauti</span> <span class="op">&lt;-</span> <span class="va">c_eisentrauti</span><span class="op">[</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># update "old" data</span></span>
 <span><span class="va">upd_c_eisentrauti</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_metadata.html">update_metadata</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">old_c_eisentrauti</span><span class="op">)</span></span>
@@ -2083,13 +2083,6 @@ wav
 <span><span class="co"># compare number of records</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">old_c_eisentrauti</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">upd_c_eisentrauti</span><span class="op">)</span></span></code></pre></div>
 <pre><code>[1] FALSE</code></pre>
-<p>Note the use of the <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> function <a href="https://marce10.github.io/suwo/reference/subset_metadata.html">subset_metadata()</a>
-to filter the data frame by date. This is a modified version of
-<code><a href="https://rdrr.io/r/base/subset.html" class="external-link">base::subset()</a></code> that makes sure that the attributes of the
-data frame are preserved, which are needed by subsequent <a href="https://github.com/maRce10/suwo" class="external-link">suwo</a> functions working on
-metadata. Those attributes will be lost if you use
-<code>dplyr::filter()</code>, <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">base::subset()</a></code> or the extract
-operator <code>[</code> (e.g. <code>metadata[1:3, ]</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="combine-metadata-from-multiple-repositories">Combine metadata from multiple repositories<a class="anchor" aria-label="anchor" href="#combine-metadata-from-multiple-repositories"></a>
@@ -3342,18 +3335,18 @@ associated with the metadata. This can be done using the <a href="https://marce1
 function, which takes as input a metadata data frame (obtained from any
 query function or any of the other metadata managing functions) and
 downloads the media files to a specified directory. For this example we
-will download images from a query on zambian slender Caesar (<em>Amanita
-zambiana</em>) (a mushroom) on GBIF:</p>
+will download images from a query on <code>Amanita zambiana</code> (a
+mushroom) on GBIF:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># query GBIF for zambian slender Caesar</span></span>
-<span><span class="va">azam_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># query GBIF for Amanita zambiana images</span></span>
+<span><span class="va">a_zam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create folder for images</span></span>
 <span><span class="va">out_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"amanita_zambiana"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">out_folder</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># download media files to a temporary directory</span></span>
-<span><span class="va">azam_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">azam_gbf</span>, path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">azam_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">a_zam</span>, path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
 <p>The output of the function is a data frame similar to the input
 metadata but with two additional columns indicating the file name of the
 downloaded files (‘downloaded_file_name’) and the result of the download
@@ -3606,7 +3599,7 @@ saved
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/RtmpKXiSuz/amanita_zambiana 
+<pre><code> /tmp/RtmpB95LoN/amanita_zambiana 
 ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
 ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
 ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -3649,53 +3642,73 @@ the argument <code>folder_by</code>. This argument takes a character of
 factor column with the names of a metadata field (a column in the
 metadata data frame) to create sub-directories within the main download
 directory (suplied with the argument <code>path</code>). For instance,
-the following code saves the previous images into sub-directories by
-country:</p>
+the following code searches/downloads images of longspined porcupinefish
+(<em>Diodon holocanthus</em>) from GBIF, and saves images into
+sub-directories by country (for simplicity only 6 of them):</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># create folder for images</span></span>
-<span><span class="va">out_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"amanita_zambiana2"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># query GBIF for longspined porcupinefish images</span></span>
+<span><span class="va">d_holocanthus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Diodon holocanthus"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># keep only JPEG records (for simplicity for this vignette)</span></span>
+<span><span class="va">d_holocanthus</span> <span class="op">&lt;-</span> <span class="va">d_holocanthus</span><span class="op">[</span><span class="va">d_holocanthus</span><span class="op">$</span><span class="va">file_extension</span> <span class="op">==</span> <span class="st">"jpeg"</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># select 6 random JPEG records</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">666</span><span class="op">)</span></span>
+<span><span class="va">d_holocanthus</span> <span class="op">&lt;-</span> <span class="va">d_holocanthus</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d_holocanthus</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>,<span class="op">]</span></span>
+<span></span>
+<span><span class="co"># create folder for images</span></span>
+<span><span class="va">out_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"diodon_holocanthus"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">out_folder</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># download media files creating sub-directories by country</span></span>
-<span><span class="va">azam_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">azam_gbf</span>,</span>
+<span><span class="va">dhol_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_media.html">download_media</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">d_holocanthus</span>,</span>
 <span>                             path <span class="op">=</span> <span class="va">out_folder</span>,</span>
 <span>                             folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/RtmpKXiSuz/amanita_zambiana2 
-├──  Cambodia 
-│   └──  Amanita_zambiana-GBIF5069132691.jpeg 
-├──  Mozambique 
-│   ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
-│   ├──  Amanita_zambiana-GBIF4430877067-2.jpeg 
-│   └──  Amanita_zambiana-GBIF4430877067-3.jpeg 
-├──  Thailand 
-│   ├──  Amanita_zambiana-GBIF5069132689-1.jpeg 
-│   └──  Amanita_zambiana-GBIF5069132689-2.jpeg 
-├──  Zambia 
-│   ├──  Amanita_zambiana-GBIF5069132732.jpeg 
-│   └──  Amanita_zambiana-GBIF5104283819.jpeg 
-└──  Zimbabwe 
-    ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
-    ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
-    ├──  Amanita_zambiana-GBIF5069132696-1.jpeg 
-    └──  Amanita_zambiana-GBIF5069132696-2.jpeg </code></pre>
-<p>In such case the ‘downloaded_file_name’ column will include the
+<pre><code> /tmp/RtmpB95LoN/diodon_holocanthus 
+├──  Cabo Verde 
+│   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
+├──  Cayman Islands 
+│   └──  Diodon_holocanthus-GBIF5827468492.jpeg 
+├──  Chinese Taipei 
+│   └──  Diodon_holocanthus-GBIF5206745484.jpeg 
+├──  Indonesia 
+│   └──  Diodon_holocanthus-GBIF4953086522.jpeg 
+└──  United States of America 
+    ├──  Diodon_holocanthus-GBIF1270050026.jpeg 
+    └──  Diodon_holocanthus-GBIF4935688405.jpeg </code></pre>
+<p>In such case the name of the downloaded files will include the
 sub-directory name:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">azam_files</span><span class="op">$</span><span class="va">downloaded_file_name</span></span></code></pre></div>
-<pre><code> [1] "Mozambique/Amanita_zambiana-GBIF4430877067-1.jpeg"
- [2] "Mozambique/Amanita_zambiana-GBIF4430877067-2.jpeg"
- [3] "Mozambique/Amanita_zambiana-GBIF4430877067-3.jpeg"
- [4] "Zambia/Amanita_zambiana-GBIF5104283819.jpeg"      
- [5] "Zimbabwe/Amanita_zambiana-GBIF3759537817-1.jpeg"  
- [6] "Zimbabwe/Amanita_zambiana-GBIF3759537817-2.jpeg"  
- [7] "Cambodia/Amanita_zambiana-GBIF5069132691.jpeg"    
- [8] "Zambia/Amanita_zambiana-GBIF5069132732.jpeg"      
- [9] "Thailand/Amanita_zambiana-GBIF5069132689-1.jpeg"  
-[10] "Thailand/Amanita_zambiana-GBIF5069132689-2.jpeg"  
-[11] "Zimbabwe/Amanita_zambiana-GBIF5069132696-1.jpeg"  
-[12] "Zimbabwe/Amanita_zambiana-GBIF5069132696-2.jpeg"  </code></pre>
+<code class="sourceCode R"><span><span class="va">dhol_files</span><span class="op">$</span><span class="va">downloaded_file_name</span></span></code></pre></div>
+<pre><code>[1] "United States of America/Diodon_holocanthus-GBIF4935688405.jpeg"
+[2] "United States of America/Diodon_holocanthus-GBIF1270050026.jpeg"
+[3] "Cabo Verde/Diodon_holocanthus-GBIF3985886532.jpeg"              
+[4] "Cayman Islands/Diodon_holocanthus-GBIF5827468492.jpeg"          
+[5] "Chinese Taipei/Diodon_holocanthus-GBIF5206745484.jpeg"          
+[6] "Indonesia/Diodon_holocanthus-GBIF4953086522.jpeg"               </code></pre>
+<p>This is a multipanel plot of 6 of the downloaded images (just for
+fun):</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create a 6 pannel plot of the downloaded images</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">dhol_files</span><span class="op">$</span><span class="va">downloaded_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>    <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'n'</span>,</span>
+<span>    axes <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/rasterImage.html" class="external-link">rasterImage</a></span><span class="op">(</span><span class="va">img</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>    <span class="va">dhol_files</span><span class="op">$</span><span class="va">country</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>    <span class="va">dhol_files</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>    sep <span class="op">=</span> <span class="st">"\n"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="suwo_files/figure-html/unnamed-chunk-38-1.png" width="80%" style="display: block; margin: auto;"></p>
 <!-- add packages used, system details and versions  -->
 <div class="section level3">
 <h3 class="unnumbered unlisted" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
