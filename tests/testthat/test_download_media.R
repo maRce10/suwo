@@ -3,7 +3,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
 
   skip_on_cran()
   skip_if_offline()
-  skip_if_not(interactive())
+  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   xc1 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
@@ -32,7 +32,7 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
 
   skip_on_cran()
   skip_if_offline()
-  skip_if_not(interactive())
+  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   xc1 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
@@ -60,7 +60,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
 
   skip_on_cran()
   skip_if_offline()
-  skip_if_not(interactive())
+  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   xc2 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = TRUE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 

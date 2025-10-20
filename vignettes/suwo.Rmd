@@ -167,13 +167,21 @@ Repository <- sapply(metadata_list, function(x)
   x[1, "repository"])
 
 names(metadata_list) <- tolower(Repository)
-Function <- sapply(metadata_list, function(x)
-  attributes(x)$query_call[[1]])
 
-Function <- sapply(Function, as.character)
+Function <- c(
+  gbif = "query_gbif",
+  inaturalist = "query_inaturalist",
+  `macaulay library` =  "query_macaulay",
+  observation = "query_observation",
+  wikiaves = "query_wikiaves",
+  `xeno-canto` = "query_xenocanto"
+)
+
+Function <- Function[match(names(metadata_list), names(Function))]
+
 
 file_types <- sapply(Function, function(x)
-  paste(formals(x)$format, collapse = ", "))
+  paste(formals(get(x))$format, collapse = ", "))
 file_types <- gsub("c, ", "", file_types)
 file_types[Function == "query_xenocanto"] <- "sound"
 
@@ -321,7 +329,7 @@ head(h_harpyja, 4)
 
 ```{r, echo=FALSE}
 
-subset_metadata(vignette_metadata$h_harpyja, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$h_harpyja, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
@@ -338,7 +346,7 @@ head(p_lotor, 4)
 
 ```{r, echo=FALSE}
 
-subset_metadata(vignette_metadata$p_lotor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$p_lotor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
@@ -424,7 +432,7 @@ head(p_striigularis, 4)
 
 ```{r, echo=FALSE}
 
-subset_metadata(vignette_metadata$p_striigularis, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$p_striigularis, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
@@ -462,7 +470,7 @@ head(t_tricolor, 4)
 
 ```{r, echo=FALSE}
 
-subset_metadata(vignette_metadata$t_tricolor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$t_tricolor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 ```
 
 ## Special queries
@@ -480,7 +488,7 @@ head(a_hahneli, 4)
 
 ```{r, echo=FALSE}
 
-subset_metadata(vignette_metadata$a_hahneli, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$a_hahneli, select = suwo:::.format_query_output(only_basic_columns = TRUE))
 ```
 
 # Update metadata
@@ -497,7 +505,7 @@ c_eisentrauti <- query_inaturalist(species = "Chorthippus eisentrauti")
 head(c_eisentrauti, 4)
 
 # exclude new observations (simulate old data)
-old_c_eisentrauti <- subset_metadata(c_eisentrauti, subset = date <= "2024-12-31" | is.na(date))
+old_c_eisentrauti <- c_eisentrauti[c_eisentrauti$date <= "2024-12-31" | is.na(c_eisentrauti$date), ]
 
 # update "old" data
 upd_c_eisentrauti <- update_metadata(metadata = old_c_eisentrauti)
@@ -506,8 +514,6 @@ upd_c_eisentrauti <- update_metadata(metadata = old_c_eisentrauti)
 nrow(old_c_eisentrauti) == nrow(upd_c_eisentrauti)
 
 ```
-
-Note the use of the [suwo](https://github.com/maRce10/suwo) function [subset_metadata()](https://marce10.github.io/suwo/reference/subset_metadata.html) to filter the data frame by date. This is a modified version of `base::subset()` that makes sure that the attributes of the data frame are preserved, which are needed by subsequent [suwo](https://github.com/maRce10/suwo) functions working on metadata. Those attributes will be lost if you use `dplyr::filter()`, `base::subset()` or the extract operator `[` (e.g. `metadata[1:3, ]`).
 
 # Combine metadata from multiple repositories
 
@@ -611,14 +617,14 @@ The last step of the workflow is to download the media files associated with the
 
 ```{r, eval = TRUE}
 # query GBIF for Amanita zambiana images
-azam_gbf <- query_gbif(species = "Amanita zambiana", format = "image")
+a_zam <- query_gbif(species = "Amanita zambiana", format = "image")
 
 # create folder for images
 out_folder <- file.path(tempdir(), "amanita_zambiana")
 dir.create(out_folder)
 
 # download media files to a temporary directory
-azam_files <- download_media(metadata = azam_gbf, path = out_folder)
+azam_files <- download_media(metadata = a_zam, path = out_folder)
 
 ```
 
@@ -633,7 +639,7 @@ head(azam_files, 4)
 ```
 
 ... and check that the files were saved in the path supplied:
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 
 fs::dir_tree(path = out_folder)
 
@@ -674,19 +680,43 @@ for (i in 1:6) {
 unlink(out_folder, recursive = TRUE)
 ```
 
-Users can also save the downloaded files into sub-directories with the argument `folder_by`. This argument takes a character of factor column with the names of a metadata field (a column in the metadata data frame) to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code saves the previous images into sub-directories by country:
+Users can also save the downloaded files into sub-directories with the argument `folder_by`. This argument takes a character of factor column with the names of a metadata field (a column in the metadata data frame) to create sub-directories within the main download directory (suplied with the argument `path`). For instance, the following code searches/downloads images of longspined porcupinefish (_Diodon holocanthus_) from GBIF, and saves images into sub-directories by country (for simplicity only 6 of them):
     
-```{r}
+```{r, eval = FALSE}
+
+# query GBIF for longspined porcupinefish images
+d_holocanthus <- query_gbif(species = "Diodon holocanthus", format = "image")
+
+# keep only JPEG records (for simplicity for this vignette)
+d_holocanthus <- d_holocanthus[d_holocanthus$file_extension == "jpeg", ]
+
+# select 6 random JPEG records
+set.seed(666)
+d_holocanthus <- d_holocanthus[sample(1:nrow(d_holocanthus), 6),]
 
 # create folder for images
-out_folder <- file.path(tempdir(), "amanita_zambiana2")
+out_folder <- file.path(tempdir(), "diodon_holocanthus")
 dir.create(out_folder)
 
 # download media files creating sub-directories by country
-azam_files <- download_media(metadata = azam_gbf,
+dhol_files <- download_media(metadata = d_holocanthus,
                              path = out_folder,
                              folder_by = "country")
 
+```
+
+```{r, echo = FALSE}
+
+d_holocanthus <- vignette_metadata$d_holocanthus
+
+# create folder for images
+out_folder <- file.path(tempdir(), "diodon_holocanthus")
+dir.create(out_folder)
+
+# download media files creating sub-directories by country
+dhol_files <- download_media(metadata = d_holocanthus,
+                             path = out_folder,
+                             folder_by = "country")
 ```
 
 ```{r, eval=FALSE}
@@ -701,15 +731,37 @@ dir_tree(path = out_folder)
 
 ```
 
-```{r, echo=FALSE}
-unlink(out_folder, recursive = TRUE)
-```
-
 In such case the name of the downloaded files will include the sub-directory name:
 ```{r}
 
-azam_files$downloaded_file_name
+dhol_files$downloaded_file_name
 
+```
+
+This is a multipanel plot of 6 of the downloaded images (just for fun):
+```{r}
+# create a 6 pannel plot of the downloaded images
+par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+
+for (i in 1:6) {
+  img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
+  plot(
+    1:2,
+    type = 'n',
+    axes = FALSE
+  )
+  rasterImage(img, 1, 1, 2, 2)
+  title(main = paste(
+    dhol_files$country[i],
+    dhol_files$date[i],
+    sep = "\n"
+  ))
+}
+
+```
+
+```{r, echo=FALSE}
+unlink(out_folder, recursive = TRUE)
 ```
 
 <!-- add packages used, system details and versions  -->

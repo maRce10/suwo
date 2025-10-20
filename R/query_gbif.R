@@ -61,8 +61,6 @@ query_gbif <-
       `interactive resource` = "InteractiveResource"
     )
 
-
-
     srch_trm <- paste0(
       "https://api.gbif.org/v1/occurrence/search?limit=300&",
       if (is.null(dataset))

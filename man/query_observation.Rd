@@ -26,7 +26,7 @@ query_observation(
 
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{token}{Character refering to the token assigned by Observation.org as authorization for searches.}
+\item{token}{Character refering to the token assigned by Observation.org as authorization for searches. Required.}
 
 \item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option ( \code{options(all_data = TRUE)}).}
 

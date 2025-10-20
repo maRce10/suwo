@@ -89,9 +89,9 @@ query_macaulay <-
     format <- rlang::arg_match(format)
 
     ml_format <- switch(format,
-                   sound = "audio",
-                   image = "photo",
-                   `video` = "video")
+                        sound = "audio",
+                        image = "photo",
+                        `video` = "video")
 
     # get species ML taxon code
     taxon_code <- .taxon_code_search(species, ml_taxon_code = taxon_code_info)
@@ -244,7 +244,7 @@ query_macaulay <-
       format = format,
       input_file = file.path(normalizePath(path), unlist(new_csv_file_list)),
       raw_data = raw_data
-      )
+    )
 
     if (verbose) {
       .success_message(text = paste0("{n} matching ", format, " file{?s} found"), n = nrow(query_output_df), format = format, suffix = "")

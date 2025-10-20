@@ -2,7 +2,7 @@ test_that("merge query_wikiaves and xc", {
 
   skip_on_cran()
   skip_if_offline()
-  skip_if_not(interactive())
+  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
   xc <- query_xenocanto(species = 'Glaucis dohrnii', api_key = Sys.getenv("XENO_CANTO_API_KEY"))

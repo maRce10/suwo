@@ -4,7 +4,7 @@
 #' @inheritParams template_params
 #' @param species Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}). Alternatively, a character string containing additional tags that follows the Xeno-Canto advanced query syntax can be provided. Tags are of the form 'tag:searchterm'. For instance, \code{'type:"song"'} will search for recordings where the sound type contains 'song'. Multiple tags can be provided (e.g., \code{'"cnt:"belize" type:"song"'}).
 #'  See examples down below and check \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help} for a full description.
-#' @param api_key Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
+#' @param api_key Character string refering to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Required.
 #' @export
 #' @name query_xenocanto
 #' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).

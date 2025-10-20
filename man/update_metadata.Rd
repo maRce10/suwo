@@ -6,12 +6,13 @@
 \usage{
 update_metadata(
   metadata,
-  token,
+  token = NULL,
   path = ".",
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  api_key
+  api_key = NULL,
+  dates = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ update_metadata(
 \item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
 \item{api_key}{Character string referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.}
+
+\item{dates}{Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well. Only needed if the input metadata comes from \code{\link{query_macaulay}}.}
 }
 \value{
 returns a data frame similar to the input 'metadata' with new data appended.

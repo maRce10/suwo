@@ -26,15 +26,6 @@ merge_metadata <-
       if (!is.data.frame(metadata_list[[i]])) {
         .stop("All inputs must be data frames obtained from suwo query functions (query_x()).")
       }
-
-      if (is.null(attr(metadata_list[[i]], "query_species"))) {
-        .stop(
-          "The input data frame '",
-          deparse(substitute(metadata_list[[i]])),
-          "' does not have the required attributes. ",
-          "Please provide a data frame obtained from any of the query_x() functions and make sure `raw_data = FALSE`."
-        )
-      }
     }
 
     # get names of the input data frames

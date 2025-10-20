@@ -207,10 +207,10 @@ pblapply_sw_int <- function(X,
 }
 
 # sanitize the name of a download folder
-.sanitize_folder_name <- function(name) {
+.sanitize_folder_name <- function(name, folder_by) {
 
   if (is.na(name)){
-    name <- "unknown_folder"
+    name <- paste0("unknown_", folder_by)
   }
 
   # Remove or replace illegal characters
@@ -237,7 +237,7 @@ pblapply_sw_int <- function(X,
 .download_basic <- function(metadata, x, path, overwrite, folder_by = NULL) {
 
   if (!is.null(folder_by)) {
-    folder_name <- .sanitize_folder_name(metadata[x, folder_by])
+    folder_name <- .sanitize_folder_name(metadata[x, folder_by], folder_by)
     path <- normalizePath(file.path(path, folder_name))
   }
 
@@ -543,17 +543,6 @@ pblapply_sw_int <- function(X,
     X <- X[, basic_colums]
   }
 
-  ## add attributes
-  X <- .add_attributes(
-    X = X,
-    species = rlang::call_args(call)$species,
-    format = format,
-    all_data = all_data,
-    raw_data = raw_data,
-    call = call,
-    input_file = input_file
-  )
-
   # drop additional levels
   X <- droplevels(X)
 
@@ -576,23 +565,6 @@ pblapply_sw_int <- function(X,
     query_macaulay = "Macaulay Library"
   )
 
-}
-
-# add attributes to output data frames
-.add_attributes <- function(X, species, format, all_data, raw_data, input_file = NA, call) {
-  species <- gsub("%20", " ", species)
-
-  # Add a timestamp attribute
-  search_time <- Sys.time()
-  attr(X, "query_call") <- call
-  attr(X, "repository") <- .repo_from_call(call)
-  attr(X, "query_time") <- search_time
-  attr(X, "query_species") <- species
-  attr(X, "query_format") <- format
-  attr(X, "all_data") <- all_data
-  attr(X, "input_file(s)") <- input_file
-  attr(X, "suwo_version") <- utils::packageVersion("suwo")
-  return(X)
 }
 
 ## function to split macaulay queries by year-month

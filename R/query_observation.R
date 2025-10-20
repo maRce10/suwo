@@ -3,7 +3,7 @@
 #' \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
-#' @param token Character refering to the token assigned by Observation.org as authorization for searches.
+#' @param token Character refering to the token assigned by Observation.org as authorization for searches. Required.
 #' @export
 #' @name query_observation
 #' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
@@ -73,7 +73,7 @@ query_observation <-
 
     # Check if token is available
     if (is.null(token)) {
-      cat("Invalid token for observation.org")
+      cat("Token is needed for observation.org")
       return(invisible(NULL))
       }
 

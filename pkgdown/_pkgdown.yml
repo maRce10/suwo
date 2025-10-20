@@ -27,7 +27,6 @@ reference:
   contents:
   - update_metadata
   - merge_metadata
-  - subset_metadata
   - find_duplicates
   - remove_duplicates
   - map_locations

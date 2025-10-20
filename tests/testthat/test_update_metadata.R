@@ -50,7 +50,7 @@ test_that("update query_xenocanto", {
 
   skip_on_cran()
   skip_if_offline()
-  skip_if_not(interactive())
+  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")), "Xeno-Canto API key not set")
 
   df1 <- query_xenocanto(species = 'Phaethornis anthophilus', all_data = FALSE, api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 

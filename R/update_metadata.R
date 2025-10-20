@@ -5,6 +5,7 @@
 #' @param path Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).
 #' @param token A valid token for the \href{https://observation.org/}{Observation.org} API. Only needed if the input metadata comes from \code{\link{query_observation}}.
 #' @param api_key Character string referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.
+#' @param dates Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well. Only needed if the input metadata comes from \code{\link{query_macaulay}}.
 #' @export
 #' @name update_metadata
 #' @return returns a data frame similar to the input 'metadata' with new data appended.
@@ -28,12 +29,13 @@
 #'
 update_metadata <-
   function(metadata,
-           token,
+           token = NULL,
            path = ".",
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
-           api_key) {
+           api_key = NULL,
+           dates = NULL) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -56,17 +58,18 @@ update_metadata <-
       )
     }
 
-    if (is.null(attr(metadata, "query_species"))) {
+    if (length(unique(metadata$species)) > 1) {
       .stop(
-        "The input data frame does not have the required attributes. ",
-        "Please provide a data frame obtained from any of the query_x() functions setting the argument `raw_data = FALSE`."
+        "All observations must belong to the same species. ",
+        "Please provide a single repository query result to update_metadata()."
       )
     }
 
     #Set query species and format for new query search
-    query_species <- attr(metadata, "query_species")
-    query_format <- attr(metadata, "query_format")
-    all_data <- attr(metadata, "all_data")
+    query_species <- metadata$species[1]
+    query_format <-  metadata$format[1]
+    # if more than basic columns are present, assume user wants all columns
+    all_data <- length(setdiff(names(metadata), .format_query_output(only_basic_columns = TRUE))) > 0
 
     if (metadata$repository[1] == "GBIF") {
       query_output_new <- query_gbif(
@@ -92,18 +95,20 @@ update_metadata <-
 
     }
     if (metadata$repository[1] == "Macaulay Library") {
+
+
       query_output_new <- query_macaulay(
         species = query_species,
         format = query_format,
         all_data = all_data,
         path = path,
-        dates = eval(rlang::call_args(attributes(metadata)$query_call)$dates),
+        dates = dates,
         verbose = verbose
       )
 
     }
     if (metadata$repository[1] == "Observation") {
-      if (missing(token)) {
+      if (is.null(token)) {
         .stop("A valid token is required for Observation.org API")
       }
 
@@ -118,7 +123,7 @@ update_metadata <-
     }
 
     if (metadata$repository[1] == "Xeno-Canto") {
-      if (missing(api_key)) {
+      if (is.null(api_key)) {
         .stop(
           "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
         )
