@@ -1,3 +1,35 @@
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=maRce10&project=suwo&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
+
 suwo: access nature media repositories through R
 ================
 
