@@ -82,7 +82,8 @@ pblapply_sw_int <- function(X,
       on.exit(pbapply::closepb(pb), add = TRUE)
       rval <- vector("list", B)
       for (i in seq_len(B)) {
-        rval[i] <- list(parallel::mclapply(X[Split[[i]]], FUN, ..., mc.cores = as.integer(cl)))
+        rval[i] <- list(parallel::mclapply(X[Split[[i]]], FUN, ...,
+                                           mc.cores = as.integer(cl)))
         pbapply::setpb(pb, i)
       }
     }
@@ -150,7 +151,8 @@ pblapply_sw_int <- function(X,
 }
 
 # style text with color
-.suwo_style <- function(type = c("success", "skip", "warning", "failure", "error", "message")) {
+.suwo_style <- function(type = c("success", "skip", "warning", "failure",
+                                 "error", "message")) {
   type <- match.arg(type)
 
   c(
@@ -164,7 +166,8 @@ pblapply_sw_int <- function(X,
 }
 
 .color_text <- function(text,
-                        as = c("success", "skip", "warning", "failure", "error", "message"),
+                        as = c("success", "skip", "warning", "failure",
+                               "error", "message"),
                         n = NULL) {
   if (!is.null(n))
     text <- cli::pluralize(text)
@@ -187,7 +190,9 @@ pblapply_sw_int <- function(X,
 }
 
 # message when files were found
-.success_message <- function(text = paste0("Obtaining metadata ({n} matching ", format, " file{?s} found)"), format, n = NULL, suffix = ":\n") {
+.success_message <- function(text = paste0("Obtaining metadata ({n} matching ",
+                                           format, " file{?s} found)"), format,
+                             n = NULL, suffix = ":\n") {
   cat(.color_text(
     text,
     as = "success",
@@ -199,7 +204,8 @@ pblapply_sw_int <- function(X,
 }
 
 
-.failure_message <- function(text = paste0(text = "No ", format, " files were found"), format) {
+.failure_message <- function(text = paste0(text = "No ", format,
+                                           " files were found"), format) {
   cat(.color_text(
     text,
     as = "failure"),
@@ -727,7 +733,8 @@ pblapply_sw_int <- function(X,
 
       # Try to parse the date
       parsed <- lubridate::parse_date_time(date_str,
-                                orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
+                                orders = c("dmy", "ymd", "ymd HMS", "ymd HM",
+                                           "ymd"),
                                 truncated = 2,
                                 quiet = TRUE)
 
@@ -1007,7 +1014,8 @@ pblapply_sw_int <- function(X,
   class(x) == "response"
 }
 
-.checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves", "xenocanto", "observation")) {
+.checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves",
+                                         "xenocanto", "observation")) {
 
   # set user agent option globally
   options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")

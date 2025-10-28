@@ -20,8 +20,8 @@
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_observation(species = 'Turdus iliacus', format = "Sound",
-cores = 4, token = ".....")
+#' df1 <- query_observation(species = 'Turdus iliacus', format = "Sound",
+#' cores = 4, token = ".....")
 #' View(df1)
 #' }
 #'

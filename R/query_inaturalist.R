@@ -102,14 +102,16 @@ query_inaturalist <- function(species = getOption("species"),
     cl <- cores
   }
 
-  query_output_list <- pblapply_sw_int(offsets, cl = cl, pbar = pb, function(offset) {
+  query_output_list <- pblapply_sw_int(offsets, cl = cl, pbar = pb,
+                                       function(offset) {
     query_output <- jsonlite::fromJSON(paste0(base_url, "&offset=", offset))
 
     if (is.null(query_output$results)) {
       return(NULL)
     }
 
-    query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
+    query_output$results <- lapply(seq_len(nrow(query_output$results)),
+                                   function(u) {
       x <- as.data.frame(query_output$results[u, ])
       media_df <- if (format == "sound")
         do.call(rbind, x$sounds)

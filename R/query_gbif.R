@@ -157,7 +157,8 @@ query_gbif <-
         return(query_output_df)
 
       # remove everything after the second parenthesis
-      query_output_df$species <- sapply(strsplit(query_output_df$species, " "), function(x) paste(x[1], x[2]))
+      query_output_df$species <- sapply(strsplit(query_output_df$species, " "),
+                                        function(x) paste(x[1], x[2]))
 
       # remove duplicated info
       query_output_df$gbifid <- query_output_df$scientificName <- NULL

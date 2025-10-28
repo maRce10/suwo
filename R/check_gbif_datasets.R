@@ -37,10 +37,12 @@ check_gbif_datasets <- function(path = ".") {
   message("Downloading GBIF dataset metadata ...")
   csv_url <- "https://api.gbif.org/v1/dataset/search/export?format=CSV&"
   # csv_response <- try(httr::GET(csv_url), silent = TRUE)
-  file_name <- paste0("gbif_datasets_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".csv")
+  file_name <- paste0("gbif_datasets_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"),
+                      ".csv")
   file_name <- file.path(normalizePath(path), file_name)
 
-  download.file("https://api.gbif.org/v1/dataset/search/export?format=CSV&",destfile = file_name)
+  download.file("https://api.gbif.org/v1/dataset/search/export?format=CSV&",
+                destfile = file_name)
 
   if (!file.exists(file_name)) {
     stop("Failed to download CSV.")

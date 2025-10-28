@@ -71,7 +71,8 @@ find_duplicates <- function(metadata, sort = TRUE) {
   metadata$..original_order <- seq_len(nrow(metadata))
 
   # keep only those complete cases for used columns
-  non_complete_metadata <- metadata[!stats::complete.cases(metadata[, c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
+  non_complete_metadata <- metadata[!stats::complete.cases(metadata[,
+                                                                    c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
   metadata <- metadata[stats::complete.cases(metadata[, c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
 
   # block to force comparison only within same format and date
@@ -79,7 +80,9 @@ find_duplicates <- function(metadata, sort = TRUE) {
 
   # spot duplicates
   similarities <-
-    RecordLinkage::compare.dedup(metadata[, c("user_name", "locality", "country", "time", "date", "format")],
+    RecordLinkage::compare.dedup(metadata[, c("user_name", "locality",
+                                              "country", "time", "date",
+                                              "format")],
                                  # identity = block,
                                  strcmp = TRUE)$pairs
 

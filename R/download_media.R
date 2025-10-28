@@ -140,9 +140,11 @@ download_media <-
     if (any(metadata$download_status == "failed")) {
 
       if (sum(metadata$download_status == "failed") == nrow(metadata)){
-        report_message <- .color_text("All files failed to download", as = "failure")
+        report_message <- .color_text("All files failed to download",
+                                      as = "failure")
       } else {
-        report_message <- c(report_message, "x" = paste0(cli::pluralize("{sum(metadata$download_status == 'failed')} file{?s} failed to download")))
+        report_message <- c(report_message,
+                            "x" = paste0(cli::pluralize("{sum(metadata$download_status == 'failed')} file{?s} failed to download")))
       }
       # remove file name from "downloaded_file_name"
       metadata$downloaded_file_name[metadata$download_status == "failed"] <- NA
@@ -173,7 +175,8 @@ download_media <-
     if (any(metadata$download_status == "saved")) {
 
       if (sum(metadata$download_status == "saved") == nrow(metadata)){
-        report_message <- .color_text("All files were downloaded successfully", as = "success")
+        report_message <- .color_text("All files were downloaded successfully",
+                                      as = "success")
       } else {
         report_message <- c(report_message, "v" = paste0(cli::pluralize("{sum(metadata$download_status == 'saved')} file{?s} w{?as/ere} downloaded successfully")))
       }
