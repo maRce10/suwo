@@ -1,23 +1,56 @@
 #' Searches for media files in the Macaulay Library
 #'
-#' \code{query_macaulay} searches for metadata from \href{https://https://www.macaulaylibrary.org/}{macaulay}.
+#' \code{query_macaulay} searches for metadata from
+#' \href{https://https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
-#' @param format Character vector with the media format to query for. Options are 'sound', 'image' of 'video'. Required.
-#' @param path Directory path where the .csv file will be saved. By default it is saved into the current working directory (\code{"."}).
-#' @param files Optional character vector with the name(s) of the .csv file(s) to read. If not provided, the function will open a browser window to the search results page, where the user must download a .csv file with the metadata.
-#' @param dates Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well.
-#' @param taxon_code_info Data frame containing the taxon code information. By default the function will use the internal data frame \code{"ml_taxon_code"} included as example data in the package. This object contains the data from the Clement list from october 2024 (downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.
+#' @param format Character vector with the media format to query for. Options
+#' are 'sound', 'image' of 'video'. Required.
+#' @param path Directory path where the .csv file will be saved. By default it
+#' is saved into the current working directory (\code{"."}).
+#' @param files Optional character vector with the name(s) of the .csv file(s)
+#' to read. If not provided, the function will open a browser window to the
+#' search results page, where the user must download a .csv file with the
+#' metadata.
+#' @param dates Optional numeric vector with years to split the search. If
+#' provided, the function will perform separate queries for each date range
+#' (between consecutive date values) and combine the results. Useful for
+#' queries that return large number of results (i.e. > 10000 results limit).
+#' For example, to search for the species between 2010 to 2020 and between 2021
+#' to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals
+#' searches will be split by months within years as well.
+#' @param taxon_code_info Data frame containing the taxon code information.
+#' By default the function will use the internal data frame
+#' \code{"ml_taxon_code"} included as example data in the package. This object
+#' contains the data from the Clement list from october 2024
+#' (downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.
 #' @export
 #' @name query_macaulay
-#' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
-#' @details This function queries for species observation info in the \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online repository and returns the metadata of media files matching the query. The Macaulay Library is the world’s largest repository of digital media (audio, photo, and video) of wildlife, and their habitats. The archive hosts more than 77 million images, 3 million sound recordings, and 350k videos, from more than 80k contributors, and is integrated with eBird, the world’s largest biodiversity dataset. This is an interactive function which opens a browser window to the Macaulay Library's search page, where the user must download a .csv file with the metadata. The function then reads the .csv file and returns a data frame with the metadata.
+#' @return The function returns a data frame with the metadata of the media
+#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
+#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' obtained from the repository is returned (without any formatting).
+#' @details This function queries for species observation info in the
+#' \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online
+#' repository and returns the metadata of media files matching the query. The
+#' Macaulay Library is the world’s largest repository of digital media
+#' (audio, photo, and video) of wildlife, and their habitats. The archive
+#' hosts more than 77 million images, 3 million sound recordings, and
+#' 350k videos, from more than 80k contributors, and is integrated with
+#' eBird, the world’s largest biodiversity dataset. This is an interactive
+#' function which opens a browser window to the Macaulay Library's search page,
+#' where the user must download a .csv file with the metadata. The function
+#' then reads the .csv file and returns a data frame with the metadata.
 #'
 #' Here are some instructions for using this function properly:
 #' \itemize{
 #'    \item Users must save the save the .csv file manually
-#'    \item \emph{If the file is saved overwritting a pre-existing file (i.e. same file name) the function will not detect it}
-#'    \item A maximum of 10000 records per query can be returned, but this can be bypassed by using the \code{dates} argument to split the search into smaller date ranges
-#'    \item Users must log in to the Macaulay Library/eBird account in order to access large batches of observations
+#'    \item \emph{If the file is saved overwritting a pre-existing file
+#'    (i.e. same file name) the function will not detect it}
+#'    \item A maximum of 10000 records per query can be returned,
+#'    but this can be bypassed by using the \code{dates} argument to split
+#'    the search into smaller date ranges
+#'    \item Users must log in to the Macaulay Library/eBird account in order
+#'    to access large batches of observations
 #'    }
 #' @examples
 #' \dontrun{
@@ -29,7 +62,8 @@
 #' cal_cos <- query_macaulay(species = "Calypte costae", format = "image",
 #' path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
 #'
-#' # this is how the internal function that splits the search by year intervals works
+#' # this is how the internal function that splits the search by year intervals
+#' works
 #' # it can split by entire year intervals
 #' suwo:::.date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
 #'
@@ -56,8 +90,13 @@
 #' }
 #'
 #' @references {
-#' Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
-#' Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, T. A. Fredericks, J. A. Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M. Smith, and C. L. Wood. 2024. The eBird/Clements checklist of Birds of the World: v2024.
+#' Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection.
+#' Cornell Lab of Ornithology. Occurrence dataset
+#' https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
+#' Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff,
+#' T. A. Fredericks, J. A. Gerbracht, D. Lepage, A. Spencer, S. M. Billerman,
+#' B. L. Sullivan, M. Smith, and C. L. Wood. 2024. The eBird/Clements
+#' checklist of Birds of the World: v2024.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 

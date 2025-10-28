@@ -1,14 +1,26 @@
 #' Access 'gbif' recordings and metadata
 #'
-#' \code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{gbif}.
+#' \code{query_gbif} searches for metadata from
+#' \href{https://www.gbif.org/}{gbif}.
 #' @inheritParams template_params
-#' @param format Character vector with the media format to query for. Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
+#' @param format Character vector with the media format to query for.
+#' Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
 #' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
 #' @export
 #' @name query_gbif
-#' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
-#' @details This function queries for species observation info in the open-access
-#' online repository \href{https://www.gbif.org/}{gbif}. GBIF (the Global Biodiversity Information Facility) is an international network and data infrastructure funded by the world's governments and aimed at providing open access to data about all types of life on Earth. Note that some of the records returned by this function could be duplicates of records returned by other suwo functions (e.g., \code{\link{query_inaturalist}}).
+#' @return The function returns a data frame with the metadata of the media
+#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
+#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' obtained from the repository is returned (without any formatting).
+#' @details This function queries for species observation info in the
+#' open-access
+#' online repository \href{https://www.gbif.org/}{gbif}.
+#' GBIF (the Global Biodiversity Information Facility) is an international
+#' network and data infrastructure funded by the world's governments and
+#' aimed at providing open access to data about all types of life on Earth.
+#' Note that some of the records returned by this function could be duplicates
+#' of records returned by other suwo functions
+#' (e.g., \code{\link{query_inaturalist}}).
 #' @seealso \code{\link{query_gbif}}
 #' @examples
 #' \dontrun{

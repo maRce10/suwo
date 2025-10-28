@@ -1,12 +1,37 @@
 #' Find duplicated entries in metadata
 #'
-#' \code{find_duplicates} detect possible duplicated entries from merged metadata from several repositories.
-#' @param metadata data frame obtained from combining the output metadata of two or more suwo query function using the `merge_metadata()` function. Data frames obtained from a single suwo query function can also be used but duplicates are not really expected within the same repository. The data frame must have the following columns: `user_name`, `locality`, `repository`, `country`, `format`, `time`, and `date`.
-#' @param sort Logical argument indicating if the output data frame should be sorted by the `duplicate_group` column. This will group all potential duplicates together in the output data frame. Default is `TRUE`.
-#' @return A single data frame with the data from all input data frames combined and with an additional column named `duplicate_group` indicating potential duplicates with a common index. Entries without potential duplicates are labeled as `NA` in this new column.
+#' \code{find_duplicates} detect possible duplicated entries from merged
+#' metadata from several repositories.
+#' @param metadata data frame obtained from combining the output metadata of
+#' two or more suwo query function using the `merge_metadata()` function.
+#' Data frames obtained from a single suwo query function can also be used
+#' but duplicates are not really expected within the same repository. The data
+#' frame must have the following columns: `user_name`, `locality`, `repository`,
+#'  `country`, `format`, `time`, and `date`.
+#' @param sort Logical argument indicating if the output data frame should be
+#' sorted by the `duplicate_group` column. This will group all potential
+#' duplicates together in the output data frame. Default is `TRUE`.
+#' @return A single data frame with the data from all input data frames
+#' combined and with an additional column named `duplicate_group` indicating
+#' potential duplicates with a common index. Entries without potential
+#' duplicates are labeled as `NA` in this new column.
 #' @export
 #' @name find_duplicates
-#' @details This function compares the information in the entries of a combined metadata data frame and labels those possible duplicates with a common index in a new column named `duplicate_group`. The comparison is based on the similarity of the following fields: `user_name`, `locality`, `time` and `country`. Only rows with no missing data for those fields will be considered. The function uses the `RecordLinkage` package to perform the a fuzzy matching comparison and identify potential duplicates based on predefined similarity thresholds. The function only spots duplicates from different repositories and assumes those duplicates should have the same `format` and `date`. This function is useful for curating the data obtained by merging data from multiple sources, as the same observation might be recorded in different repositories. This is a common issue in citizen science repositories, where users might upload the same observation to different platforms. This can also occur as some repositories automatically share data with other repositories, particularly with GBIF.
+#' @details This function compares the information in the entries of a
+#' combined metadata data frame and labels those possible duplicates with
+#' a common index in a new column named `duplicate_group`. The comparison is
+#' based on the similarity of the following fields: `user_name`, `locality`,
+#' `time` and `country`. Only rows with no missing data for those fields will
+#' be considered. The function uses the `RecordLinkage` package to perform the
+#' a fuzzy matching comparison and identify potential duplicates based on
+#' predefined similarity thresholds. The function only spots duplicates from
+#' different repositories and assumes those duplicates should have the same
+#' `format` and `date`. This function is useful for curating the data obtained
+#' by merging data from multiple sources, as the same observation might be
+#' recorded in different repositories. This is a common issue in citizen
+#' science repositories, where users might upload the same observation to
+#' different platforms. This can also occur as some repositories automatically
+#' share data with other repositories, particularly with GBIF.
 #' @examples
 #' \dontrun{
 #' # get metadata from 2 repos

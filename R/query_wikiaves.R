@@ -1,13 +1,24 @@
 #' Access 'Wikiaves' recordings and metadata
 #'
-#' \code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
+#' \code{query_wikiaves} searches for metadata from
+#' \href{https://www.wikiaves.com/}{wikiaves}.
 #' @inheritParams template_params
-#' @param format Character vector with the media format to query for. Options are 'sound' or 'image'. Required.
+#' @param format Character vector with the media format to query for.
+#' Options are 'sound' or 'image'. Required.
 #' @export
 #' @name query_wikiaves
-#' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
+#' @return The function returns a data frame with the metadata of the media
+#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
+#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' obtained from the repository is returned (without any formatting).
 #' @details This function queries for avian digital media in the open-access
-#' online repository \href{https://www.wikiaves.com/}{wikiaves} and returns its metadata. WikiAves is a Brazilian online platform and citizen science project that serves as the largest community for birdwatchers in Brazil. It functions as a collaborative, interactive encyclopedia of Brazilian birds, where users contribute georeferenced photographs and sound recordings, which are then used to build a vast database for research and conservation.
+#' online repository \href{https://www.wikiaves.com/}{wikiaves} and returns
+#' its metadata. WikiAves is a Brazilian online platform and citizen science
+#' project that serves as the largest community for birdwatchers in Brazil.
+#' It functions as a collaborative, interactive encyclopedia of Brazilian
+#' birds, where users contribute georeferenced photographs and sound
+#' recordings, which are then used to build a vast database for research
+#' and conservation.
 #' @examples
 #' \dontrun{
 #' # search
@@ -16,7 +27,9 @@
 #' }
 #'
 #' @references {
-#' Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo Guaraldo. 2019. Revealing the potential of a huge citizen-science platform to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
+#' Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo
+#' Guaraldo. 2019. Revealing the potential of a huge citizen-science platform
+#' to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 

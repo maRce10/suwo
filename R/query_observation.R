@@ -1,23 +1,33 @@
 #' Access 'observation' recordings and metadata
 #'
-#' \code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
+#' \code{query_observation} searches for metadata from
+#' \href{https://www.observation.org/}{observation}.
 #' @inheritParams template_params
-#' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
-#' @param token Character refering to the token assigned by Observation.org as authorization for searches. Required.
+#' @param format Character vector with the media format to query for.
+#' Currently 'image' and 'sound' are available.
+#' @param token Character refering to the token assigned by Observation.org
+#' as authorization for searches. Required.
 #' @export
 #' @name query_observation
-#' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
-#' @details This function queries for species observation info in the open-access
-#' online repository \href{https://www.observation.org/}{observation}. It can return media metadata.
+#' @return The function returns a data frame with the metadata of the media
+#' files matching the search criteria. If \code{all_data = TRUE}, all
+#' metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw
+#' data as obtained from the repository is returned (without any formatting).
+#' @details This function queries for species observation info in the
+#' open-access
+#' online repository \href{https://www.observation.org/}{observation}. It can
+#' return media metadata.
 #' @examples
 #' \dontrun{
 #' # search without downloading
-# df1 <- query_observation(species = 'Turdus iliacus', format = "Sound", cores = 4, token = ".....")
+# df1 <- query_observation(species = 'Turdus iliacus', format = "Sound",
+cores = 4, token = ".....")
 #' View(df1)
 #' }
 #'
 #' @references {
-#' Observation.org, Observation International and local partners. Available at https://observation.org. Retrieved June 30, 2022
+#' Observation.org, Observation International and local partners. Available
+#' at https://observation.org. Retrieved June 30, 2022
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'

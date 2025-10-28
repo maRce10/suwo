@@ -3,13 +3,17 @@
 #' \code{map_locations} creates maps to visualize the geographic spread of suwo
 #'   recordings.
 #' @inheritParams template_params
-#' @param cluster Logical to control if icons are clustered by locality. Default is \code{FALSE}.
+#' @param cluster Logical to control if icons are clustered by locality.
+#' Default is \code{FALSE}.
 #' @param palette Color palette function used for location markers.
-#' @param by Name of column to be used for coloring markers. Default is "species".
+#' @param by Name of column to be used for coloring markers. Default is
+#' "species".
 #' @return An interacrive map with the locations of the observations.
 #' @export
 #' @name map_locations
-#' @details This function creates maps for visualizing the geographic spread of observations. Note that only recordings with geographic coordinates are displayed.
+#' @details This function creates maps for visualizing the geographic
+#' spread of observations. Note that only recordings with geographic
+#' coordinates are displayed.
 #' @examples
 #' \dontrun{
 #' # search in xeno-canto
@@ -20,9 +24,12 @@
 #' }
 #'
 #' @references {
-#' Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
+#' Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to
+#' streamline analysis of animal acoustic signals. Methods in Ecology and
+#' Evolution, 8(2), 184-191.
 #' }
-#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace Smith Vidaurre
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace
+#' Smith Vidaurre
 
 map_locations <- function(metadata,
                           cluster = FALSE,

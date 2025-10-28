@@ -54,7 +54,8 @@ library(suwo)
       bold = TRUE
     )
   
-  kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+  kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", 
+                                   font_size = 14)
   kbl <- kableExtra::scroll_box(kbl, width = "100%", height = "300px")
   
   asis_output(kbl)
@@ -78,7 +79,8 @@ knitr::opts_chunk$set(
 options(width = 100, max.print = 100)
 
 dir_tree <- function(path) {
-  cat(gsub("\\[[0-9;]*[mK]", "", capture.output(fs::dir_tree(path))), sep = "\n")
+  cat(gsub("\\[[0-9;]*[mK]", "", capture.output(fs::dir_tree(path))), 
+      sep = "\n")
 }
 ```
 
@@ -87,13 +89,29 @@ dir_tree <- function(path) {
 
 #### Intended use and responsible practices {.unnumbered .unlisted}
 
-The [suwo](https://github.com/maRce10/suwo) package is designed exclusively for non-commercial, scientific purposes, including research, education, and conservation. Any **commercial use of the data or media retrieved through this package is strictly prohibited** unless explicit, separate permission is granted directly from the original source platforms and content creators. Users are obligated to comply with the specific terms of service and data use policies of each source database, which often mandate attribution and similarly restrict commercial application. The package developers assume no liability for misuse of the retrieved data or violations of third-party terms of service.
+The [suwo](https://github.com/maRce10/suwo) package is designed exclusively 
+for non-commercial, scientific purposes, including research, education, and 
+conservation. Any 
+**commercial use of the data or media retrieved through this package is strictly prohibited** 
+unless explicit, separate permission is granted directly from the original 
+source platforms and content creators. Users are obligated to comply with the 
+specific terms of service and data use policies of each source database, which 
+often mandate attribution and similarly restrict commercial application. 
+The package developers assume no liability for misuse of the retrieved data 
+or violations of third-party terms of service.
 
 :::
 
 ::: {.alert .alert-info}
 
-The [suwo](https://github.com/maRce10/suwo) package aims to simplify the retrieval of nature media (mostly photos, audio files and videos) across multiple online biodiversity databases. This vignette provides an overview of the package’s core querying functions, the searching and downloading of media files, and the compilation of metadata from various sources. For detailed information on each function, please refer to the [function reference](https://maRce10.github.io/suwo/reference/index.html) or use the help files within R (e.g., `?query_gbif`).
+The [suwo](https://github.com/maRce10/suwo) package aims to simplify the 
+retrieval of nature media (mostly photos, audio files and videos) across 
+multiple online biodiversity databases. This vignette provides an overview of 
+the package’s core querying functions, the searching and downloading of media 
+files, and the compilation of metadata from various sources. For detailed 
+information on each function, please refer to the 
+[function reference](https://maRce10.github.io/suwo/reference/index.html) 
+or use the help files within R (e.g., `?query_gbif`).
 
 :::
 
@@ -128,18 +146,27 @@ library(suwo)
 
 # Basic workflow for obtaining nature media files
 
-Finding data using [suwo](https://github.com/maRce10/suwo) follows a basic sequence. The following diagram illustrates this workflow and the main functions involved:
+Finding data using [suwo](https://github.com/maRce10/suwo) follows a basic 
+sequence. The following diagram illustrates this workflow and the main functions
+involved:
 
 <center><img src="workflow_diagram.png" alt="suwo workflow diagram" width="100%"></center>
 
 </br>
 Here is a description of each step:
 
-1. Queries regarding a species are submitted through one of the available query functions (`query_repo_name()`) that connect to five different online repositories. The output of these queries is a data frame containing metadata associated with the media files (e.g., species name, date, location, etc, see below). 
+1. Queries regarding a species are submitted through one of the available 
+query functions (`query_repo_name()`) that connect to five different online 
+repositories. The output of these queries is a data frame containing metadata 
+associated with the media files (e.g., species name, date, location, etc, see below). 
 
-1. If multiple repositories are queried, the resulting metadata data frames can be merged into a single data frame using the [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html) function. 
+1. If multiple repositories are queried, the resulting metadata data frames can 
+be merged into a single data frame using the 
+[merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html) function. 
 
-1. Check for duplicate records in their datasets using the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and geographic coordinates. User can double check the candidate duplicates and decide which records to keep, which can be done with [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html).
+1. Check for duplicate records in their datasets using the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and 
+geographic coordinates. User can double check the candidate duplicates and 
+decide which records to keep, which can be done with [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html).
  
 1. Download the media files associated with the metadata using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function. 
 
@@ -148,7 +175,8 @@ Here is a description of each step:
 
 # Obtaining metadata: the query functions
 
-The following table summarizes the available [suwo](https://github.com/maRce10/suwo) query functions and the types of metadata they retrieve:
+The following table summarizes the available [suwo](https://github.com/maRce10/suwo) 
+query functions and the types of metadata they retrieve:
 
 ```{r, echo=TRUE}
 # Load suwo package
@@ -185,7 +213,7 @@ file_types <- sapply(Function, function(x)
 file_types <- gsub("c, ", "", file_types)
 file_types[Function == "query_xenocanto"] <- "sound"
 
-urls = c(
+urls <- c(
   gbif = "https://www.gbif.org/",
   inaturalist = "https://www.inaturalist.org/",
   `macaulay library` =  "https://www.macaulaylibrary.org/",

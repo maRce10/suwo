@@ -2,13 +2,42 @@
 #'
 #' \code{remove_duplicates} merges metadata data frames from suwo queries.
 #' @inheritParams template_params
-#' @param metadata data frame obtained from possible duplicates  with the function \code{\link{find_duplicates}}. The data frame must have the column 'duplicate_group' returned by \code{\link{find_duplicates}}.
-#' @param same_repo Logical argument indicating if observations labeled as duplicates that belong to the same repository should be removed. Default is \code{FALSE}. If \code{TRUE}, only one of the duplicated observations from the same repository will be retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart.
-#' @param repo_priority Character vector indicating the priority of repositories when selecting which observation to retain when duplicates are found. Default is \code{c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves", "Observation")}, which gives priority to repositories in which media downloading is more straightforward (Xeno-Canto and GBIF).
-#' @return A single data frame with a subset of the 'metadata' with those observations that were determined not to be duplicates.
+#' @param metadata data frame obtained from possible duplicates  with the
+#' function \code{\link{find_duplicates}}. The data frame must have the column
+#' 'duplicate_group' returned by \code{\link{find_duplicates}}.
+#' @param same_repo Logical argument indicating if observations labeled
+#' as duplicates that belong to the same repository should be removed. Default
+#' is \code{FALSE}. If \code{TRUE}, only one of the duplicated observations
+#' from the same repository will be retained in the output data frame. This is
+#' useful as it can be expected that observations from the same repository are
+#' not true duplicates (e.g. different recordings uploaded to Xeno-Canto with
+#' the same date, time and location by the same user), but rather have not been
+#' documented with enough precision to be told apart.
+#' @param repo_priority Character vector indicating the priority of
+#' repositories when selecting which observation to retain when duplicates
+#' are found. Default is \code{c("Xeno-Canto", "GBIF", "iNaturalist",
+#' "Macaulay Library", "Wikiaves", "Observation")}, which gives priority to
+#' repositories in which media downloading is more
+#' straightforward (Xeno-Canto and GBIF).
+#' @return A single data frame with a subset of the 'metadata' with those
+#' observations that were determined not to be duplicates.
 #' @export
 #' @name remove_duplicates
-#' @details This function removes duplicate observations identified with the function \code{\link{find_duplicates}}. When duplicates are found, one observation from each group of duplicates is retained in the output data frame. However, if multiple observations from the same repository are labeled as duplicates, by default (\code{same_repo = FALSE}) all of them are retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart. This behavior can be modified. If \code{same_repo = TRUE}, only one of the duplicated observations from the same repository will be retained in the output data frame. The function will give priority to repositories in which media downloading is more straightforward (Xeno-Canto and GBIF), but this can be modified with the argument 'repo_priority'.
+#' @details This function removes duplicate observations identified with the
+#' function \code{\link{find_duplicates}}. When duplicates are found, one
+#' observation from each group of duplicates is retained in the output data
+#' frame. However, if multiple observations from the same repository are
+#' labeled as duplicates, by default (\code{same_repo = FALSE}) all of them
+#' are retained in the output data frame. This is useful as it can be
+#' expected that observations from the same repository are not true
+#' duplicates (e.g. different recordings uploaded to Xeno-Canto with
+#' the same date, time and location by the same user), but rather have not
+#' been documented with enough precision to be told apart. This behavior can
+#' be modified. If \code{same_repo = TRUE}, only one of the duplicated
+#' observations from the same repository will be retained in the output data
+#' frame. The function will give priority to repositories in which media
+#' downloading is more straightforward (Xeno-Canto and GBIF), but this can be
+#' modified with the argument 'repo_priority'.
 #' @examples
 #' \dontrun{
 #' # get metadata from 2 repos

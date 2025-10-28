@@ -2,14 +2,37 @@
 #'
 #' \code{update_metadata} update metadata from previous queries.
 #' @inheritParams template_params
-#' @param path Directory path where the .csv file will be saved. Only applicable for \code{\link{query_macaulay}} query results. By default it is saved into the current working directory (\code{"."}).
-#' @param token A valid token for the \href{https://observation.org/}{Observation.org} API. Only needed if the input metadata comes from \code{\link{query_observation}}.
-#' @param api_key Character string referring to the key assigned by Xeno-Canto as authorization for searches. Get yours at \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only needed if the input metadata comes from \code{\link{query_xenocanto}}.
-#' @param dates Optional numeric vector with years to split the search. If provided, the function will perform separate queries for each date range (between consecutive date values) and combine the results. Useful for queries that return large number of results (i.e. > 10000 results limit). For example, to search for the species between 2010 to 2020 and between 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals searches will be split by months within years as well. Only needed if the input metadata comes from \code{\link{query_macaulay}}.
+#' @param path Directory path where the .csv file will be saved. Only
+#' applicable for \code{\link{query_macaulay}} query results. By default it
+#' is saved into the current working directory (\code{"."}).
+#' @param token A valid token for the
+#' \href{https://observation.org/}{Observation.org} API. Only needed if the
+#' input metadata comes from \code{\link{query_observation}}.
+#' @param api_key Character string referring to the key assigned by
+#' Xeno-Canto as authorization for searches. Get yours at
+#' \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only
+#' needed if the input metadata comes from \code{\link{query_xenocanto}}.
+#' @param dates Optional numeric vector with years to split the search. If
+#' provided, the function will perform separate queries for each date range
+#' (between consecutive date values) and combine the results. Useful for
+#' queries that return large number of results (i.e. > 10000 results limit).
+#' For example, to search for the species between 2010 to 2020 and between
+#' 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain
+#' decimals searches will be split by months within years as well. Only
+#' needed if the input metadata comes from \code{\link{query_macaulay}}.
 #' @export
 #' @name update_metadata
-#' @return returns a data frame similar to the input 'metadata' with new data appended.
-#' @details This function updates the metadata from a previous query to add entries found in the source repository. All observations must belong to the same repository. The function adds the column `new_entry` which labels those entries that are new (i.e., not present in the input metadata). The input data frame must have been obtained from any of the query functions with the argument `raw_data = FALSE`. The function uses the same query species and format as in the original query. If no new entries are found, the function returns the original metadata and prints a message. If some old entries are not returned in the new query they are still retained.
+#' @return returns a data frame similar to the input 'metadata' with new
+#' data appended.
+#' @details This function updates the metadata from a previous query to
+#' add entries found in the source repository. All observations must belong
+#' to the same repository. The function adds the column `new_entry` which
+#' labels those entries that are new (i.e., not present in the input metadata).
+#' The input data frame must have been obtained from any of the query
+#' functions with the argument `raw_data = FALSE`. The function uses the same
+#' query species and format as in the original query. If no new entries are
+#' found, the function returns the original metadata and prints a message. If
+#' some old entries are not returned in the new query they are still retained.
 #' @examples
 #' \dontrun{
 #' # query metadata

@@ -49,7 +49,8 @@ test_that("search in parallel", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'bolitoglossa striatula', format =  "image", cores = 2)
+  df1 <- query_inaturalist(species = 'bolitoglossa striatula',
+                           format =  "image", cores = 2)
 
   expect_true(nrow(df1) >=  52)
 
@@ -61,7 +62,8 @@ test_that("test verbose FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- capture_output(query_inaturalist(species = 'Glaucis dohrnii', format =  "sound", verbose = FALSE))
+  df1 <- capture_output(query_inaturalist(species = 'Glaucis dohrnii',
+                                          format =  "sound", verbose = FALSE))
 
   expect_true(df1 == "")
 
@@ -72,7 +74,8 @@ test_that("test all_data FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'bolitoglossa striatula', format =  "image", all_data = FALSE)
+  df1 <- query_inaturalist(species = 'bolitoglossa striatula',
+                           format =  "image", all_data = FALSE)
 
   expected_col_names <- .format_query_output(only_basic_columns = T)
 

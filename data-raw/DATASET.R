@@ -6,18 +6,23 @@ ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv",
                           na.strings = "")
 
 # example data for Turdus rufiventris
-# options(species = "Turdus rufiventris", all_data = TRUE, verbose = TRUE, mc.cores = 1)
-# xc_adt <- query_xenocanto(species = "Thyroptera tricolor", api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+# options(species = "Turdus rufiventris", all_data = TRUE, verbose = TRUE,
+# mc.cores = 1)
+# xc_adt <- query_xenocanto(species = "Thyroptera tricolor",
+# api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 # wa_adt_s <- query_wikiaves(species = term, format = "sound")
 # wa_adt_i <- query_wikiaves(species = "Harpia harpyja", format = "image")
 # gb_adt_s <- query_gbif(species = term, format = "sound")
 # gb_adt_i <- query_gbif(species = "Procyon lotor", format = "video")
-# in_adt_s <- query_inaturalist(species = "Chorthippus eisentrauti", format = "sound")
+# in_adt_s <- query_inaturalist(species = "Chorthippus eisentrauti",
+# format = "sound")
 # in_adt_i <- query_inaturalist(species = term, format = "image")
 # ml_adt_s <- query_macaulay(species = term, format = "sound", path = tempdir())
 # ml_adt_i <- query_macaulay(species = term, format = "image", path = tempdir())
 #
-# adt_list <- list(xc_adt = xc_adt, wa_adt_s = wa_adt_s, wa_adt_i = wa_adt_i, gb_adt_s = gb_adt_s, gb_adt_i = gb_adt_i, in_adt_s = in_adt_s, in_adt_i= in_adt_i, ml_adt_s = ml_adt_s, ml_adt_i = ml_adt_i)
+# adt_list <- list(xc_adt = xc_adt, wa_adt_s = wa_adt_s, wa_adt_i = wa_adt_i,
+# gb_adt_s = gb_adt_s, gb_adt_i = gb_adt_i, in_adt_s = in_adt_s,
+# in_adt_i= in_adt_i, ml_adt_s = ml_adt_s, ml_adt_i = ml_adt_i)
 #
 # ## save turdus_rufiventris results for example data
 # metadata_list <- lapply(adt_list, subset, 1:4)
@@ -27,12 +32,15 @@ ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv",
 # metadata_list$in_adt_s <- adt_list$in_adt_s
 #
 # # add missing attributes
-# attributes(metadata_list$in_adt_s) <- c(attributes(metadata_list$in_adt_s), attrbts[setdiff(names(attrbts), names(attributes(metadata_list$in_adt_s)))])
+# attributes(metadata_list$in_adt_s) <- c(attributes(metadata_list$in_adt_s),
+# attrbts[setdiff(names(attrbts), names(attributes(metadata_list$in_adt_s)))])
 #
 # # check number of rows
 # sapply(metadata_list, nrow)
 #
-# names(metadata_list) <- c("xeno-canto_sounds", "wikiaves_sounds", "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds", "inaturalist_images", "macaulay_sounds", "macaulay_images")
+# names(metadata_list) <- c("xeno-canto_sounds", "wikiaves_sounds",
+# "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds",
+# "inaturalist_images", "macaulay_sounds", "macaulay_images")
 
 xc_adf <-  query_xenocanto(all_data = FALSE,
                            api_key = Sys.getenv("XENO_CANTO_API_KEY"))
@@ -66,8 +74,10 @@ merged_metadata <- merge_metadata(xc_adf, gb_adf_s, ml_adf_s)
 
 
 options(all_data = TRUE)
-# c_eisentrauti <- head(query_inaturalist(species = "Chorthippus eisentrauti"), 4)
-h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis", format = "image"),
+# c_eisentrauti <- head(query_inaturalist(species = "Chorthippus eisentrauti"),
+#4)
+h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis",
+                                          format = "image"),
                         4)
 h_harpyja <- head(query_wikiaves(species = "Harpia harpyja"), 4)
 a_hahneli <- query_xenocanto(species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"',

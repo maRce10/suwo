@@ -1,11 +1,18 @@
 #' Merge metadata data frames
 #'
 #' \code{merge_metadata} merges metadata data frames from suwo queries.
-#' @param ... two or more data frames (each one as a separate entry) referring to the metadata obtained from suwo query functions (`query_x()`).
-#' @return A single data frame with the data from all input data frames combined and with an additional column named `source` indicating the original data frame from which each row originated.
+#' @param ... two or more data frames (each one as a separate entry) referring
+#' to the metadata obtained from suwo query functions (`query_x()`).
+#' @return A single data frame with the data from all input data frames
+#' combined and with an additional column named `source` indicating the
+#' original data frame from which each row originated.
 #' @export
 #' @name merge_metadata
-#' @details This function combines metadata from multiple sources (e.g. WikiAves and xeno-canto) into a single data frame for easier analysis and comparison. Each input data frame must be obtained from one of the suwo query functions (e.g., `query_wikiaves()`, `query_xenocanto()`, etc.) with `raw_data = FALSE`.
+#' @details This function combines metadata from multiple sources
+#' (e.g. WikiAves and xeno-canto) into a single data frame for easier analysis
+#' and comparison. Each input data frame must be obtained from one of the
+#' suwo query functions (e.g., `query_wikiaves()`, `query_xenocanto()`, etc.)
+#' with `raw_data = FALSE`.
 #' @examples
 #' \dontrun{
 #'  # get metadata from 2 repos

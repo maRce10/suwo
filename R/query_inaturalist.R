@@ -1,16 +1,28 @@
 #' Access 'inaturalist' recordings and metadata
 #'
-#' \code{query_inaturalist} searches for metadata from \href{https://www.inaturalist.org/}{inaturalist}.
+#' \code{query_inaturalist} searches for metadata from
+#' \href{https://www.inaturalist.org/}{inaturalist}.
 #' @inheritParams template_params
-#' @param format Character vector with the media format to query for. Currently 'image' and 'sound' are available.
-#' @param identified Logical argument to define if search results are categorized as identified by inaturalist.
-#' @param verifiable Logical argument to define if search results are categorized as verifiable by inaturalist.
-#' @param all_data Logical argument that determines if all data available from database is shown in the results of search. Default is \code{TRUE}.
+#' @param format Character vector with the media format to query for.
+#' Currently 'image' and 'sound' are available.
+#' @param identified Logical argument to define if search results are
+#' categorized as identified by inaturalist.
+#' @param verifiable Logical argument to define if search results are
+#' categorized as verifiable by inaturalist.
+#' @param all_data Logical argument that determines if all data available
+#' from database is shown in the results of search. Default is \code{TRUE}.
 #' @export
 #' @name query_inaturalist
-#' @return The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
-#' @details This function queries for species observation info in the open-access
-#' online repository \href{https://www.inaturalist.org/}{inaturalist}. iNaturalist is a free, crowdsourced online platform for nature enthusiasts to document and identify plants, animals, fungi, and other organisms in the wild.
+#' @return The function returns a data frame with the metadata of the media
+#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
+#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' obtained from the repository is returned (without any formatting).
+#' @details This function queries for species observation info in the
+#' open-access
+#' online repository \href{https://www.inaturalist.org/}{inaturalist}.
+#' iNaturalist is a free, crowdsourced online platform for nature enthusiasts
+#' to document and identify plants, animals, fungi, and other organisms in
+#' the wild.
 #' @examples
 #' \dontrun{
 #' # search without downloading
