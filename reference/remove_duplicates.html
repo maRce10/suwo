@@ -55,32 +55,68 @@
 
 
 <dl><dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
-<dd><p>data frame obtained from possible duplicates  with the function <code><a href="find_duplicates.html">find_duplicates</a></code>. The data frame must have the column 'duplicate_group' returned by <code><a href="find_duplicates.html">find_duplicates</a></code>.</p></dd>
+<dd><p>data frame obtained from possible duplicates  with the
+function <code><a href="find_duplicates.html">find_duplicates</a></code>. The data frame must have the column
+'duplicate_group' returned by <code><a href="find_duplicates.html">find_duplicates</a></code>.</p></dd>
 
 
 <dt id="arg-same-repo">same_repo<a class="anchor" aria-label="anchor" href="#arg-same-repo"></a></dt>
-<dd><p>Logical argument indicating if observations labeled as duplicates that belong to the same repository should be removed. Default is <code>FALSE</code>. If <code>TRUE</code>, only one of the duplicated observations from the same repository will be retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart.</p></dd>
+<dd><p>Logical argument indicating if observations labeled
+as duplicates that belong to the same repository should be removed. Default
+is <code>FALSE</code>. If <code>TRUE</code>, only one of the duplicated observations
+from the same repository will be retained in the output data frame. This is
+useful as it can be expected that observations from the same repository are
+not true duplicates (e.g. different recordings uploaded to Xeno-Canto with
+the same date, time and location by the same user), but rather have not been
+documented with enough precision to be told apart.</p></dd>
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  <code>options(mc.cores = 2)</code>). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing
+is applied by specifying the number of cores to be used. Default is 1
+(i.e. no parallel computing). Can be set globally for the current R session
+via the "mc.cores" option (e.g.  <code>options(mc.cores = 2)</code>). Note that
+some repositories might not support parallel queries from the same IP
+address as it might be identified as denial-of-service cyberattack.</p></dd>
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
-<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>. Can be set globally for the current R session via the "pb" option ( <code>options(pb = TRUE)</code>).</p></dd>
+<dd><p>Logical argument to control if progress bar is shown. Default
+is <code>TRUE</code>. Can be set globally for the current R session via the "pb"
+option ( <code>options(pb = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-repo-priority">repo_priority<a class="anchor" aria-label="anchor" href="#arg-repo-priority"></a></dt>
-<dd><p>Character vector indicating the priority of repositories when selecting which observation to retain when duplicates are found. Default is <code>c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves", "Observation")</code>, which gives priority to repositories in which media downloading is more straightforward (Xeno-Canto and GBIF).</p></dd>
+<dd><p>Character vector indicating the priority of
+repositories when selecting which observation to retain when duplicates
+are found. Default is <code>c("Xeno-Canto", "GBIF", "iNaturalist",
+"Macaulay Library", "Wikiaves", "Observation")</code>, which gives priority to
+repositories in which media downloading is more
+straightforward (Xeno-Canto and GBIF).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A single data frame with a subset of the 'metadata' with those observations that were determined not to be duplicates.</p>
+    <p>A single data frame with a subset of the 'metadata' with those
+observations that were determined not to be duplicates.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function removes duplicate observations identified with the function <code><a href="find_duplicates.html">find_duplicates</a></code>. When duplicates are found, one observation from each group of duplicates is retained in the output data frame. However, if multiple observations from the same repository are labeled as duplicates, by default (<code>same_repo = FALSE</code>) all of them are retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart. This behavior can be modified. If <code>same_repo = TRUE</code>, only one of the duplicated observations from the same repository will be retained in the output data frame. The function will give priority to repositories in which media downloading is more straightforward (Xeno-Canto and GBIF), but this can be modified with the argument 'repo_priority'.</p>
+    <p>This function removes duplicate observations identified with the
+function <code><a href="find_duplicates.html">find_duplicates</a></code>. When duplicates are found, one
+observation from each group of duplicates is retained in the output data
+frame. However, if multiple observations from the same repository are
+labeled as duplicates, by default (<code>same_repo = FALSE</code>) all of them
+are retained in the output data frame. This is useful as it can be
+expected that observations from the same repository are not true
+duplicates (e.g. different recordings uploaded to Xeno-Canto with
+the same date, time and location by the same user), but rather have not
+been documented with enough precision to be told apart. This behavior can
+be modified. If <code>same_repo = TRUE</code>, only one of the duplicated
+observations from the same repository will be retained in the output data
+frame. The function will give priority to repositories in which media
+downloading is more straightforward (Xeno-Canto and GBIF), but this can be
+modified with the argument 'repo_priority'.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
