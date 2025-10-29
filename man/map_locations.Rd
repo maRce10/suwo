@@ -12,13 +12,16 @@ map_locations(
 )
 }
 \arguments{
-\item{metadata}{data frame previously obtained from any suwo query function (i.e. `query_reponame()`).}
+\item{metadata}{data frame previously obtained from any suwo query
+function (i.e. `query_reponame()`).}
 
-\item{cluster}{Logical to control if icons are clustered by locality. Default is \code{FALSE}.}
+\item{cluster}{Logical to control if icons are clustered by locality.
+Default is \code{FALSE}.}
 
 \item{palette}{Color palette function used for location markers.}
 
-\item{by}{Name of column to be used for coloring markers. Default is "species".}
+\item{by}{Name of column to be used for coloring markers. Default is
+"species".}
 }
 \value{
 An interacrive map with the locations of the observations.
@@ -28,7 +31,9 @@ An interacrive map with the locations of the observations.
   recordings.
 }
 \details{
-This function creates maps for visualizing the geographic spread of observations. Note that only recordings with geographic coordinates are displayed.
+This function creates maps for visualizing the geographic
+spread of observations. Note that only recordings with geographic
+coordinates are displayed.
 }
 \examples{
 \dontrun{
@@ -42,9 +47,12 @@ map_locations(metadata)
 }
 \references{
 {
-Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
+Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to
+streamline analysis of animal acoustic signals. Methods in Ecology and
+Evolution, 8(2), 184-191.
 }
 }
 \author{
-Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr}) and Grace Smith Vidaurre
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr}) and Grace
+Smith Vidaurre
 }

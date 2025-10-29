@@ -141,7 +141,7 @@ query_observation <-
         "/observations/?limit=100"
       )
 
-      dataURL <- getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
+      dataURL <- RCurl::getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
 
       # JSON format
       data <- fromJSON(dataURL)

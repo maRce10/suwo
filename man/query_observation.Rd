@@ -16,42 +16,76 @@ query_observation(
 )
 }
 \arguments{
-\item{species}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
+\item{species}{Character string with the scientific name of a species in
+the format: "Genus epithet". Required. Can be set globally for the current
+R session via the "term" option
+(e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
-\item{format}{Character vector with the media format to query for. Currently 'image' and 'sound' are available.}
+\item{format}{Character vector with the media format to query for.
+Currently 'image' and 'sound' are available.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing
+is applied by specifying the number of cores to be used. Default is 1
+(i.e. no parallel computing). Can be set globally for the current R session
+via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that
+some repositories might not support parallel queries from the same IP
+address as it might be identified as denial-of-service cyberattack.}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
+\item{pb}{Logical argument to control if progress bar is shown. Default
+is \code{TRUE}. Can be set globally for the current R session via the "pb"
+option ( \code{options(pb = TRUE)}).}
 
-\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+\item{verbose}{Logical argument that determines if text is shown in
+console. Default is \code{TRUE}. Can be set globally for the current R
+session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{token}{Character refering to the token assigned by Observation.org as authorization for searches. Required.}
+\item{token}{Character refering to the token assigned by Observation.org
+as authorization for searches. Required.}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option ( \code{options(all_data = TRUE)}).}
+\item{all_data}{Logical argument that determines if all data available
+from database is shown in the results of search. Default is \code{FALSE}.
+Can be set globally for the current R session via the "all_data"
+option ( \code{options(all_data = TRUE)}).}
 
-\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
+\item{raw_data}{Logical argument that determines if the raw data from the
+API is returned (e.g. without any manipulation). Default is \code{FALSE}.
+Can be set globally for the current R session via the "raw_data"
+option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data}
+is set to \code{TRUE} internally. Useful for developers, or if users
+suspect that some data is mishandled during processing
+(i.e. date information is lost). Note that the metadata obtained
+when \code{raw_data = TRUE} is not standardized, so most suwo functions
+for downstream steps will not work on them.}
 }
 \value{
-The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
+The function returns a data frame with the metadata of the media
+files matching the search criteria. If \code{all_data = TRUE}, all
+metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw
+data as obtained from the repository is returned (without any formatting).
 }
 \description{
-\code{query_observation} searches for metadata from \href{https://www.observation.org/}{observation}.
+\code{query_observation} searches for metadata from
+\href{https://www.observation.org/}{observation}.
 }
 \details{
-This function queries for species observation info in the open-access
-online repository \href{https://www.observation.org/}{observation}. It can return media metadata.
+This function queries for species observation info in the
+open-access
+online repository \href{https://www.observation.org/}{observation}. It can
+return media metadata.
 }
 \examples{
 \dontrun{
 # search without downloading
+df1 <- query_observation(species = 'Turdus iliacus', format = "Sound",
+cores = 4, token = ".....")
 View(df1)
 }
 
 }
 \references{
 {
-Observation.org, Observation International and local partners. Available at https://observation.org. Retrieved June 30, 2022
+Observation.org, Observation International and local partners. Available
+at https://observation.org. Retrieved June 30, 2022
 }
 }
 \author{

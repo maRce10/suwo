@@ -27,8 +27,8 @@
 #' and innovation of additional custom analyzes.
 #'
 #' @import parallel
-#' @import RCurl
 #' @import jsonlite
+#' @importFrom RCurl getURL
 #' @importFrom fs dir_tree
 #' @importFrom jpeg readJPEG
 #' @importFrom graphics rasterImage
@@ -36,7 +36,6 @@
 #' @importFrom kableExtra cell_spec kbl kable_styling column_spec
 #' @importFrom lubridate parse_date_time
 #' @importFrom tools file_ext
-#' @importFrom curl has_internet
 #' @importFrom utils packageVersion
 #' @importFrom viridis viridis
 #' @importFrom rlang arg_match

@@ -14,24 +14,60 @@ remove_duplicates(
 )
 }
 \arguments{
-\item{metadata}{data frame obtained from possible duplicates  with the function \code{\link{find_duplicates}}. The data frame must have the column 'duplicate_group' returned by \code{\link{find_duplicates}}.}
+\item{metadata}{data frame obtained from possible duplicates  with the
+function \code{\link{find_duplicates}}. The data frame must have the column
+'duplicate_group' returned by \code{\link{find_duplicates}}.}
 
-\item{same_repo}{Logical argument indicating if observations labeled as duplicates that belong to the same repository should be removed. Default is \code{FALSE}. If \code{TRUE}, only one of the duplicated observations from the same repository will be retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart.}
+\item{same_repo}{Logical argument indicating if observations labeled
+as duplicates that belong to the same repository should be removed. Default
+is \code{FALSE}. If \code{TRUE}, only one of the duplicated observations
+from the same repository will be retained in the output data frame. This is
+useful as it can be expected that observations from the same repository are
+not true duplicates (e.g. different recordings uploaded to Xeno-Canto with
+the same date, time and location by the same user), but rather have not been
+documented with enough precision to be told apart.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing
+is applied by specifying the number of cores to be used. Default is 1
+(i.e. no parallel computing). Can be set globally for the current R session
+via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that
+some repositories might not support parallel queries from the same IP
+address as it might be identified as denial-of-service cyberattack.}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
+\item{pb}{Logical argument to control if progress bar is shown. Default
+is \code{TRUE}. Can be set globally for the current R session via the "pb"
+option ( \code{options(pb = TRUE)}).}
 
-\item{repo_priority}{Character vector indicating the priority of repositories when selecting which observation to retain when duplicates are found. Default is \code{c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves", "Observation")}, which gives priority to repositories in which media downloading is more straightforward (Xeno-Canto and GBIF).}
+\item{repo_priority}{Character vector indicating the priority of
+repositories when selecting which observation to retain when duplicates
+are found. Default is \code{c("Xeno-Canto", "GBIF", "iNaturalist",
+"Macaulay Library", "Wikiaves", "Observation")}, which gives priority to
+repositories in which media downloading is more
+straightforward (Xeno-Canto and GBIF).}
 }
 \value{
-A single data frame with a subset of the 'metadata' with those observations that were determined not to be duplicates.
+A single data frame with a subset of the 'metadata' with those
+observations that were determined not to be duplicates.
 }
 \description{
 \code{remove_duplicates} merges metadata data frames from suwo queries.
 }
 \details{
-This function removes duplicate observations identified with the function \code{\link{find_duplicates}}. When duplicates are found, one observation from each group of duplicates is retained in the output data frame. However, if multiple observations from the same repository are labeled as duplicates, by default (\code{same_repo = FALSE}) all of them are retained in the output data frame. This is useful as it can be expected that observations from the same repository are not true duplicates (e.g. different recordings uploaded to Xeno-Canto with the same date, time and location by the same user), but rather have not been documented with enough precision to be told apart. This behavior can be modified. If \code{same_repo = TRUE}, only one of the duplicated observations from the same repository will be retained in the output data frame. The function will give priority to repositories in which media downloading is more straightforward (Xeno-Canto and GBIF), but this can be modified with the argument 'repo_priority'.
+This function removes duplicate observations identified with the
+function \code{\link{find_duplicates}}. When duplicates are found, one
+observation from each group of duplicates is retained in the output data
+frame. However, if multiple observations from the same repository are
+labeled as duplicates, by default (\code{same_repo = FALSE}) all of them
+are retained in the output data frame. This is useful as it can be
+expected that observations from the same repository are not true
+duplicates (e.g. different recordings uploaded to Xeno-Canto with
+the same date, time and location by the same user), but rather have not
+been documented with enough precision to be told apart. This behavior can
+be modified. If \code{same_repo = TRUE}, only one of the duplicated
+observations from the same repository will be retained in the output data
+frame. The function will give priority to repositories in which media
+downloading is more straightforward (Xeno-Canto and GBIF), but this can be
+modified with the argument 'repo_priority'.
 }
 \examples{
 \dontrun{

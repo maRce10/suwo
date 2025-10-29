@@ -7,17 +7,21 @@
 check_gbif_datasets(path = ".")
 }
 \arguments{
-\item{path}{Directory path where the output .csv file will be saved. By default is downloaded to the current working directory (\code{"."}).}
+\item{path}{Directory path where the output .csv file will be saved.
+By default is downloaded to the current working directory (\code{"."}).}
 }
 \value{
 returns dataset csv from gbif
 }
 \description{
-\code{check_gbif_datasets} searches for dataset information from \href{https://www.gbif.org}{gbif}.
+\code{check_gbif_datasets} searches for dataset information from
+\href{https://www.gbif.org}{gbif}.
 }
 \details{
 This function queries for dataset info in the open-access
-online repository \href{https://www.gbif.org}{gbif}. It saves a csv file in a the supplied `path` directory (~42 MB). The file contains some 89000 rows of datasets to explore.
+online repository \href{https://www.gbif.org}{gbif}. It saves a csv file in
+a the supplied `path` directory (~42 MB). The file contains some 89000 rows
+of datasets to explore.
 }
 \examples{
 \dontrun{
@@ -28,11 +32,13 @@ check_gbif_datasets()
 }
 \references{
 {
-GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org [13 January 2020].
+GBIF.org (2024), GBIF Home Page. Available from:
+https://www.gbif.org [13 January 2020].
 }
 }
 \seealso{
-\code{\link{check_gbif_datasets}}, \code{\link{query_observation}}, \code{\link{query_wikiaves}}, \code{\link{query_inaturalist}},
+\code{\link{check_gbif_datasets}}, \code{\link{query_observation}},
+\code{\link{query_wikiaves}}, \code{\link{query_inaturalist}},
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -15,29 +15,63 @@ query_wikiaves(
 )
 }
 \arguments{
-\item{species}{Character string with the scientific name of a species in the format: "Genus epithet". Required. Can be set globally for the current R session via the "term" option (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
+\item{species}{Character string with the scientific name of a species in
+the format: "Genus epithet". Required. Can be set globally for the current
+R session via the "term" option
+(e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
-\item{format}{Character vector with the media format to query for. Options are 'sound' or 'image'. Required.}
+\item{format}{Character vector with the media format to query for.
+Options are 'sound' or 'image'. Required.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that some repositories might not support parallel queries from the same IP address as it might be identified as denial-of-service cyberattack.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing
+is applied by specifying the number of cores to be used. Default is 1
+(i.e. no parallel computing). Can be set globally for the current R session
+via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that
+some repositories might not support parallel queries from the same IP
+address as it might be identified as denial-of-service cyberattack.}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. Can be set globally for the current R session via the "pb" option ( \code{options(pb = TRUE)}).}
+\item{pb}{Logical argument to control if progress bar is shown. Default
+is \code{TRUE}. Can be set globally for the current R session via the "pb"
+option ( \code{options(pb = TRUE)}).}
 
-\item{verbose}{Logical argument that determines if text is shown in console. Default is \code{TRUE}. Can be set globally for the current R session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+\item{verbose}{Logical argument that determines if text is shown in
+console. Default is \code{TRUE}. Can be set globally for the current R
+session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{all_data}{Logical argument that determines if all data available from database is shown in the results of search. Default is \code{FALSE}. Can be set globally for the current R session via the "all_data" option ( \code{options(all_data = TRUE)}).}
+\item{all_data}{Logical argument that determines if all data available
+from database is shown in the results of search. Default is \code{FALSE}.
+Can be set globally for the current R session via the "all_data"
+option ( \code{options(all_data = TRUE)}).}
 
-\item{raw_data}{Logical argument that determines if the raw data from the API is returned (e.g. without any manipulation). Default is \code{FALSE}. Can be set globally for the current R session via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data} is set to \code{TRUE} internally. Useful for developers, or if users suspect that some data is mishandled during processing (i.e. date information is lost). Note that the metadata obtained when \code{raw_data = TRUE} is not standardized, so most suwo functions for downstream steps will not work on them.}
+\item{raw_data}{Logical argument that determines if the raw data from the
+API is returned (e.g. without any manipulation). Default is \code{FALSE}.
+Can be set globally for the current R session via the "raw_data"
+option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data}
+is set to \code{TRUE} internally. Useful for developers, or if users
+suspect that some data is mishandled during processing
+(i.e. date information is lost). Note that the metadata obtained
+when \code{raw_data = TRUE} is not standardized, so most suwo functions
+for downstream steps will not work on them.}
 }
 \value{
-The function returns a data frame with the metadata of the media files matching the search criteria. If \code{all_data = TRUE}, all metadata fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as obtained from the repository is returned (without any formatting).
+The function returns a data frame with the metadata of the media
+files matching the search criteria. If \code{all_data = TRUE}, all metadata
+fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+obtained from the repository is returned (without any formatting).
 }
 \description{
-\code{query_wikiaves} searches for metadata from \href{https://www.wikiaves.com/}{wikiaves}.
+\code{query_wikiaves} searches for metadata from
+\href{https://www.wikiaves.com/}{wikiaves}.
 }
 \details{
 This function queries for avian digital media in the open-access
-online repository \href{https://www.wikiaves.com/}{wikiaves} and returns its metadata. WikiAves is a Brazilian online platform and citizen science project that serves as the largest community for birdwatchers in Brazil. It functions as a collaborative, interactive encyclopedia of Brazilian birds, where users contribute georeferenced photographs and sound recordings, which are then used to build a vast database for research and conservation.
+online repository \href{https://www.wikiaves.com/}{wikiaves} and returns
+its metadata. WikiAves is a Brazilian online platform and citizen science
+project that serves as the largest community for birdwatchers in Brazil.
+It functions as a collaborative, interactive encyclopedia of Brazilian
+birds, where users contribute georeferenced photographs and sound
+recordings, which are then used to build a vast database for research
+and conservation.
 }
 \examples{
 \dontrun{
@@ -49,7 +83,9 @@ View(df1)
 }
 \references{
 {
-Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo Guaraldo. 2019. Revealing the potential of a huge citizen-science platform to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
+Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo
+Guaraldo. 2019. Revealing the potential of a huge citizen-science platform
+to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
 }
 }
 \author{

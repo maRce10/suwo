@@ -18,7 +18,7 @@ Imports:
     viridis,
     rlang,
     httr,
-    curl,
+    RCurl,
     jsonlite,
     kableExtra,
     lubridate,

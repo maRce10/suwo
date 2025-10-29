@@ -103,7 +103,7 @@ or use the help files within R (e.g., `?query_gbif`).
 
 **Intended use and responsible practices**
 
-The [suwo](https://github.com/maRce10/suwo) package is designed exclusively 
+This package is designed exclusively 
 for non-commercial, scientific purposes, including research, education, and 
 conservation. Any 
 **commercial use of the data or media retrieved through this package is strictly prohibited** 
