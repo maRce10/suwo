@@ -87,7 +87,7 @@ dir_tree <- function(path) {
 
 ::: {.alert .alert-warning}
 
-#### Intended use and responsible practices {.unnumbered .unlisted}
+**Intended use and responsible practices**
 
 The [suwo](https://github.com/maRce10/suwo) package is designed exclusively 
 for non-commercial, scientific purposes, including research, education, and 
@@ -421,7 +421,7 @@ query_summary[, c("Function", "Additional data")] |>
 
 <div class="alert alert-warning">
 
-<font size = "4">Obtaining raw data</font>
+*Obtaining raw data*
 
 By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://github.com/maRce10/suwo). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html), [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html), etc) will not work properly as the basic fields are not standardized.
 
@@ -644,13 +644,9 @@ When duplicates are found, one observation from each group of duplicates is reta
 The last step of the workflow is to download the media files associated with the metadata. This can be done using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function, which takes as input a metadata data frame (obtained from any query function or any of the other metadata managing functions) and downloads the media files to a specified directory. For this example we will download images from a query on zambian slender Caesar (_Amanita zambiana_) (a mushroom) on GBIF:
 
 ```{r, eval = TRUE}
-<<<<<<< HEAD
+
 # query GBIF for Amanita zambiana images
 a_zam <- query_gbif(species = "Amanita zambiana", format = "image")
-=======
-# query GBIF for zambian slender Caesar
-azam_gbf <- query_gbif(species = "Amanita zambiana", format = "image")
->>>>>>> 7608d53c2e9e65e1faa3b89d1b0a5116f4e8db79
 
 # create folder for images
 out_folder <- file.path(tempdir(), "amanita_zambiana")
@@ -764,15 +760,7 @@ dir_tree(path = out_folder)
 
 ```
 
-<<<<<<< HEAD
-In such case the name of the downloaded files will include the sub-directory name:
-=======
-```{r, echo=FALSE}
-unlink(out_folder, recursive = TRUE)
-```
-
 In such case the 'downloaded_file_name' column will include the sub-directory name:
->>>>>>> 7608d53c2e9e65e1faa3b89d1b0a5116f4e8db79
 ```{r}
 
 dhol_files$downloaded_file_name
