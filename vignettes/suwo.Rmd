@@ -781,7 +781,7 @@ for (i in 1:6) {
   )
   rasterImage(img, 1, 1, 2, 2)
   title(main = paste(
-    dhol_files$country[i],
+    substr(dhol_files$country[i], start = 1, stop = 14),
     dhol_files$date[i],
     sep = "\n"
   ))
