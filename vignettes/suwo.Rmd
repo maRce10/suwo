@@ -767,7 +767,7 @@ dhol_files$downloaded_file_name
 
 ```
 
-This is a multipanel plot of 6 of the downloaded images (just for fun):
+This is a multipanel plot of the downloaded images (just for fun):
 ```{r}
 # create a 6 pannel plot of the downloaded images
 par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
