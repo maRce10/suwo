@@ -141,10 +141,10 @@ query_observation <-
         "/observations/?limit=100"
       )
 
-      dataURL <- RCurl::getURL(paste0(srch_trm, "&offset=", i), httpheader = headers)
+      dataURL <-  httr::GET(paste0(srch_trm, "&offset=", i), httpheader = headers)
 
       # JSON format
-      data <- fromJSON(dataURL)
+      data <- jsonlite::fromJSON(dataURL)
 
       # format as list of data frame
       data$results <- lapply(seq_len(nrow(data$results)), function(u) {
@@ -167,7 +167,7 @@ query_observation <-
         }
 
         # remove lists
-        x <- x[!sapply(x, is.list)]
+        x <- x[!vapply(x, is.list, logical(1))]
 
         # add media details
         X_df <- data.frame(x, media_URL, row.names = seq_len(length(media_URL)))

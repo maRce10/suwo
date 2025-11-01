@@ -75,15 +75,12 @@ find_duplicates <- function(metadata, sort = TRUE) {
                                                                     c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
   metadata <- metadata[stats::complete.cases(metadata[, c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
 
-  # block to force comparison only within same format and date
-  # block <- as.numeric(as.factor(paste(metadata$format, metadata$date)))
 
   # spot duplicates
   similarities <-
     RecordLinkage::compare.dedup(metadata[, c("user_name", "locality",
                                               "country", "time", "date",
                                               "format")],
-                                 # identity = block,
                                  strcmp = TRUE)$pairs
 
   # remove last column (is_match)
@@ -116,9 +113,8 @@ find_duplicates <- function(metadata, sort = TRUE) {
     repo_list[[possible_duplicates$id2[i]]] <- sort(unique(c(repo_list[[possible_duplicates$id2[i]]], possible_duplicates$repo1[i])))
   }
 
-  # make does with only 1 value a NA
-  matching_list <- sapply(matching_list, function(x) if(length(x) == 1) NA else paste(x, collapse = "-"))
-  repo_count <- sapply(repo_list, length)
+  # make those with only 1 value a NA
+  matching_list <- vapply(matching_list, function(x) if(length(x) == 1) as.character(NA) else paste(x, collapse = "-"), character(1))
 
   # convert to unique values and add duplicate index to metadata
   metadata$duplicate_group <- as.numeric(as.factor(matching_list))

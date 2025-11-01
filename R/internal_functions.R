@@ -533,9 +533,8 @@ pblapply_sw_int <- function(X,
     # save at options
     options(stats::setNames(list(X[is.na(X$file_url), ]), option_df_name))
 
-
     # let users know some observations were excluded
-    cat(.color_text(paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('",option_df_name,"')`).\n"),
+    cat(.color_text(paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('", option_df_name,"')`).\n"),
                     as = "warning",
                     n  = sum(is.na(X$file_url))
     )
@@ -544,8 +543,6 @@ pblapply_sw_int <- function(X,
     # remove those observations
     X <- X[!is.na(X$file_url), ]
   }
-
-
 
   if (!all_data) {
     # remove columns that are not basic
@@ -1000,20 +997,6 @@ pblapply_sw_int <- function(X,
 
 ## check internet
 # gracefully fail if internet resource is not available
-.try_GET <- function(x, ...) {
-  tryCatch(
-    httr::GET(url = x, httr::timeout(10), agent = "suwo (https://github.com/maRce10/suwo)"),
-    error = function(e)
-      conditionMessage(e),
-    warning = function(w)
-      conditionMessage(w)
-  )
-}
-
-.is_response <- function(x) {
-  class(x) == "response"
-}
-
 .checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves",
                                          "xenocanto", "observation")) {
 
@@ -1071,28 +1054,3 @@ pblapply_sw_int <- function(X,
       return(NULL)
     }
   }
-
-.onUnload <- function(libpath) {
-  # Get original options
-  original_op <- get(".original_options", envir = parent.env(environment()))
-
-  # Restore only the options that were modified by our package
-  package_options <- c("mc.cores", "pb", "verbose", "all_data", "raw_data")
-
-  for(opt in package_options) {
-    if(opt %in% names(original_op)) {
-      # Restore original value
-      do.call(options, setNames(list(original_op[[opt]]), opt))
-    } else {
-      # Option didn't exist before, so remove it
-      do.call(options, setNames(list(NULL), opt))
-    }
-  }
-
-  # Clean up
-  if(exists(".original_options", envir = parent.env(environment()))) {
-    rm(".original_options", envir = parent.env(environment()))
-  }
-
-  invisible()
-}

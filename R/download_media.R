@@ -143,8 +143,11 @@ download_media <-
         report_message <- .color_text("All files failed to download",
                                       as = "failure")
       } else {
+
+        unified_message <- paste("{sum(metadata$download_status == 'failed')}", "file{?s} failed to download")
         report_message <- c(report_message,
-                            "x" = paste0(cli::pluralize("{sum(metadata$download_status == 'failed')} file{?s} failed to download")))
+                            "x" = paste0(
+                              cli::pluralize(unified_message)))
       }
       # remove file name from "downloaded_file_name"
       metadata$downloaded_file_name[metadata$download_status == "failed"] <- NA
@@ -153,11 +156,16 @@ download_media <-
     # report not-overwritten files
     if (any(metadata$download_status == "already there (not downloaded)")) {
 
-      if (sum(metadata$download_status == "already there (not downloaded)") == nrow(metadata)){
-        report_message <- .color_text("All files were already there (overwritten = FALSE)", as = "success")
+      if (sum(metadata$download_status == "already there (not downloaded)") ==
+          nrow(metadata)){
+        report_message <-
+          .color_text("All files were already there (overwritten = FALSE)",
+                      as = "success")
       } else {
+ unified_message <- paste("{sum(metadata$download_status == 'already there (not downloaded)')}",
+                          "file{?s} w{?as/ere} already there (overwritten = FALSE)")
 
-        report_message <- c(report_message, "!" = paste0(cli::pluralize("{sum(metadata$download_status == 'already there (not downloaded)')} file{?s} w{?as/ere} already there (overwritten = FALSE)")))
+        report_message <- c(report_message, "!" = paste0(cli::pluralize(unified_message)))
       }
     }
 
@@ -165,9 +173,14 @@ download_media <-
     if (any(metadata$download_status == "overwritten")) {
 
       if (sum(metadata$download_status == "overwritten") == nrow(metadata)){
-        report_message <- .color_text("All files were downloaded successfully (and all were overwritten)", as = "success")
+        report_message <-
+          .color_text(
+            "All files were downloaded successfully (and all were overwritten)",
+                      as = "success")
       } else {
-        report_message <- c(report_message, "v" = paste0(cli::pluralize("{sum(metadata$download_status == 'overwritten')} file{?s} w{?as/ere} downloaded (and overwritten)")))
+      unified_message <- paste("{sum(metadata$download_status == 'overwritten')}",
+                               "file{?s} w{?as/ere} downloaded (and overwritten)")
+        report_message <- c(report_message, "v" = paste0(cli::pluralize(unified_message)))
       }
     }
 
@@ -178,13 +191,16 @@ download_media <-
         report_message <- .color_text("All files were downloaded successfully",
                                       as = "success")
       } else {
-        report_message <- c(report_message, "v" = paste0(cli::pluralize("{sum(metadata$download_status == 'saved')} file{?s} w{?as/ere} downloaded successfully")))
+        unified_message <- paste("{sum(metadata$download_status == 'saved')}",
+                                "file{?s} w{?as/ere} downloaded successfully")
+        report_message <- c(report_message, "v" = paste0(cli::pluralize(unified_message)))
       }
     }
 
-    if (length(unique(metadata$download_status)) > 1)
-    report_message <-  c(report_message, "i" = "check  the `download_status` column in the output data frame (invisibly returned) for details ")
-
+    if (length(unique(metadata$download_status)) > 1){
+      unified_message <- paste("check  the `download_status` column in the", "output data frame (invisibly returned) for details ")
+      report_message <-  c(report_message, "i" = unified_message)
+}
 
     # report download results
     if (verbose){

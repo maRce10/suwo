@@ -88,11 +88,11 @@ query_wikiaves <-
         ))
       }
       return(invisible(NULL))
-    } else {
+    }
       # make it a data frame
-      get_ids <- as.data.frame(t(sapply(get_ids, unlist)))
+      get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
 
-      get_ids$total_registers <- sapply(seq_len(nrow(get_ids)), function(u) {
+      get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
         response <- httr::GET(
           url = paste0(
             "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
@@ -105,14 +105,15 @@ query_wikiaves <-
         )
         httr::stop_for_status(response)
         as.numeric(httr::content(response, as = "parsed")$registros$total)
-      })
+      }, numeric(1))
 
       if (sum(get_ids$total_registers) == 0) {
         if (verbose) {
           .failure_message(format = format)
         }
         return(invisible(NULL))
-      } else {
+      }
+
         # get number of pages (20 is the default number of registers per page)
         get_ids$pages <- ceiling(get_ids$total_registers / 20)
 
@@ -178,9 +179,7 @@ query_wikiaves <-
 
           # make it a data frame
           output_df <-
-            as.data.frame(t(sapply(
-              query_output$registros$itens, unlist
-            )))
+            as.data.frame(do.call(rbind, lapply(query_output$registros$itens, unlist)))
 
           # fix link
           output_df$link <- gsub("#", "", as.character(output_df$link))
@@ -251,6 +250,5 @@ query_wikiaves <-
         # # Save the object to the file
         # saveRDS(query_output_df, file = file_path)
         return(query_output_df)
-      }
-    }
+
 }

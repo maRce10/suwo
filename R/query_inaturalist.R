@@ -117,10 +117,10 @@ query_inaturalist <- function(species = getOption("species"),
         do.call(rbind, x$sounds)
       else
         do.call(rbind, x$photos)
-      media_df <- media_df[!sapply(media_df, is.list)]
+      media_df <- media_df[!vapply(media_df, is.list, logical(1))]
       media_df <- data.frame(media_df)
 
-      x <- x[!sapply(x, is.list)]
+      x <- x[!vapply(x, is.list, logical(1))]
       X_df <- data.frame(t(unlist(x)))
       X_df <- cbind(X_df, media_df)
       return(X_df)
@@ -159,9 +159,10 @@ query_inaturalist <- function(species = getOption("species"),
                                  stop = 10)
 
   # fix recordist name
-  query_output_df$user_name <- sapply(strsplit(query_output_df$attribution, ","), "[[", 1)
+  query_output_df$user_name <- vapply(strsplit(query_output_df$attribution, ","), "[[", 1, FUN.VALUE = character(1))
 
-  query_output_df$user_name[query_output_df$user_name != "no rights reserved"] <- sapply(strsplit(query_output_df$user_name[query_output_df$user_name != "no rights reserved"], ") "), "[[", 2)
+  query_output_df$user_name[query_output_df$user_name != "no rights reserved"] <- vapply(strsplit(query_output_df$user_name[query_output_df$user_name != "no rights reserved"], ") "), "[[", 2, FUN.VALUE = character(1))
+
 
   # format output data frame column names
     query_output_df <- .format_query_output(

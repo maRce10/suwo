@@ -28,7 +28,6 @@
 #'
 #' @import parallel
 #' @import jsonlite
-#' @importFrom RCurl getURL
 #' @importFrom fs dir_tree
 #' @importFrom jpeg readJPEG
 #' @importFrom graphics rasterImage

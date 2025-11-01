@@ -36,7 +36,7 @@ ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv",
 # attrbts[setdiff(names(attrbts), names(attributes(metadata_list$in_adt_s)))])
 #
 # # check number of rows
-# sapply(metadata_list, nrow)
+# vapply(metadata_list, nrow, integer(1))
 #
 # names(metadata_list) <- c("xeno-canto_sounds", "wikiaves_sounds",
 # "wikiaves_images", "gbif_sounds", "gbif_images", "inaturalist_sounds",
@@ -76,11 +76,11 @@ merged_metadata <- merge_metadata(xc_adf, gb_adf_s, ml_adf_s)
 options(all_data = TRUE)
 # c_eisentrauti <- head(query_inaturalist(species = "Chorthippus eisentrauti"),
 #4)
-h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis",
-                                          format = "image"),
+h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis", format = "image"),
                         4)
 h_harpyja <- head(query_wikiaves(species = "Harpia harpyja"), 4)
-a_hahneli <- query_xenocanto(species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"',
+a_hahneli <- query_xenocanto(species =
+                               'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"',
                              api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 p_lotor <- head(query_gbif(species = "Procyon lotor", format = "video"), 4)
 t_rufiventris <- head(query_macaulay(
@@ -111,7 +111,7 @@ d_holocanthus <- d_holocanthus[d_holocanthus$file_extension == "jpeg", ]
 
 # select 6 random JPEG records
 set.seed(666)
-d_holocanthus <- d_holocanthus[sample(1:nrow(d_holocanthus), 6),]
+d_holocanthus <- d_holocanthus[sample(seq_len(nrow(d_holocanthus)), 6), ]
 
 vignette_metadata <- list(
   h_wagneriana = h_wagneriana,

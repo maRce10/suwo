@@ -258,13 +258,13 @@ query_macaulay <-
     # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)
 
-    query_output_df$file_url <- sapply(seq_len(nrow(query_output_df)), function(x) {
+    query_output_df$file_url <- vapply(seq_len(nrow(query_output_df)), function(x) {
       paste0(
         "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/",
         query_output_df$ML.Catalog.Number[x],
         "/"
       )
-    })
+    }, FUN.VALUE = character(1))
 
     # rename output columns
     query_output_df <- .format_query_output(

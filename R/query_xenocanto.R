@@ -125,7 +125,11 @@ query_xenocanto <-
         ))
 
         query_output$recordings$also <-
-          sapply(query_output$recordings$also, paste, collapse = "-")
+          vapply(query_output$recordings$also,
+                 paste,
+                 collapse = "-",
+                 FUN.VALUE = character(1))
+
 
         sono_df <- as.data.frame(query_output$recordings$sono)
         names(sono_df) <-
@@ -163,7 +167,8 @@ query_xenocanto <-
     query_output_df <- do.call(rbind, records_list2)
 
     if (as.numeric(query$numRecordings) > 0) {
-      indx <- sapply(query_output_df, is.factor)
+      indx <- vapply(query_output_df, is.factor, logical(1))
+
       query_output_df[indx] <-
         lapply(query_output_df[indx], as.character)
 

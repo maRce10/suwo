@@ -17,10 +17,6 @@ vignette: >
    %\VignetteIndexEntry{1. Package overview}
    %\usepackage[utf8]{inputenc}
    %\VignetteEncoding{UTF-8}
-   %\VignetteDepends{Rraven}
-   %\VignetteDepends{viridis}
-   %\VignetteDepends{suwo}
-   %\VignetteDepends{kableExtra}
    %\VignetteEngine{knitr::rmarkdown}     
 editor_options: 
   chunk_output_type: console
@@ -33,7 +29,6 @@ params:
 ```{r setup, eval = TRUE, echo = FALSE, message=FALSE}
 
 library(knitr)
-library(htmlwidgets)
 library(suwo)
 
 # Create custom printing method
@@ -191,8 +186,8 @@ library(kableExtra)
 
 metadata_list <-  vignette_metadata <- suwo:::vignette_metadata
 
-Repository <- sapply(metadata_list, function(x)
-  x[1, "repository"])
+Repository <- vapply(metadata_list, function(x)
+  x[1, "repository"], character(1))
 
 names(metadata_list) <- tolower(Repository)
 
@@ -208,8 +203,8 @@ Function <- c(
 Function <- Function[match(names(metadata_list), names(Function))]
 
 
-file_types <- sapply(Function, function(x)
-  paste(formals(get(x))$format, collapse = ", "))
+file_types <- vapply(Function, function(x)
+  paste(formals(get(x))$format, collapse = ", "), FUN.VALUE = character(1))
 file_types <- gsub("c, ", "", file_types)
 file_types[Function == "query_xenocanto"] <- "sound"
 
@@ -276,8 +271,8 @@ colnames <- lapply(metadata_list, names)
 colnames <- lapply(colnames, function(x)
   setdiff(x, suwo:::.format_query_output(only_basic_columns = TRUE)))
 
-additional_data <- sapply(colnames, function(x)
-  paste(x, collapse = ", "))
+additional_data <- vapply(colnames, function(x)
+  paste(x, collapse = ", "), FUN.VALUE = character(1))
 
 additional_data <- additional_data[match(names(metadata_list), names(additional_data))]
 
@@ -721,7 +716,7 @@ d_holocanthus <- d_holocanthus[d_holocanthus$file_extension == "jpeg", ]
 
 # select 6 random JPEG records
 set.seed(666)
-d_holocanthus <- d_holocanthus[sample(1:nrow(d_holocanthus), 6),]
+d_holocanthus <- d_holocanthus[sample(seq_len(nrow(d_holocanthus)), 6),]
 
 # create folder for images
 out_folder <- file.path(tempdir(), "diodon_holocanthus")
@@ -802,12 +797,7 @@ unlink(out_folder, recursive = TRUE)
 ```{r session info}
 #| echo: false
 
-# if devtools is installed use devtools::session_info()
-if (requireNamespace("devtools", quietly = TRUE)) {
-  devtools::session_info()
-} else {
-  sessionInfo()
-}
+sessionInfo()
 
 ```
 </details>

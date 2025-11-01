@@ -5,7 +5,7 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
-#' @param dataset see \url{https://www.gbif.org/dataset/search?q=}.
+#' @param dataset The name of a specific dataset in which to focus the query (by default it searchs across all available datasets). Users can check available dataset names by downloading this csv file \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}. See \url{https://www.gbif.org/dataset/search?q=} for more details.
 #' @export
 #' @name query_gbif
 #' @return The function returns a data frame with the metadata of the media
@@ -130,9 +130,8 @@ query_gbif <-
         names(media_df)[names(media_df) == "identifier"] <- "URL"
         names(media_df) <- paste0("media-", names(media_df))
 
-
         # remove lists
-        x <- x[!sapply(x, is.list)]
+        x <- x[!vapply(x, is.list, logical(1))]
 
         # make it data frame
         X_df <- data.frame(t(unlist(x)))
@@ -157,8 +156,9 @@ query_gbif <-
         return(query_output_df)
 
       # remove everything after the second parenthesis
-      query_output_df$species <- sapply(strsplit(query_output_df$species, " "),
-                                        function(x) paste(x[1], x[2]))
+      query_output_df$species <- vapply(strsplit(query_output_df$species, " "),
+                                        function(x) paste(x[1], x[2]),
+                                        character(1))
 
       # remove duplicated info
       query_output_df$gbifid <- query_output_df$scientificName <- NULL

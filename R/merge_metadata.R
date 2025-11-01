@@ -38,8 +38,7 @@ merge_metadata <-
     # get names of the input data frames
     call <- match.call()
     args <- as.list(call)[-1]  # Remove function name
-    deparse_args <- sapply(args, deparse)
-    df_names <- as.character(deparse_args)
+    df_names <- vapply(args, function(x) as.character(deparse(x)), character(1))
 
     # add source
     for (i in seq_along(metadata_list)) {
