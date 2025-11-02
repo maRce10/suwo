@@ -418,7 +418,7 @@ query_summary[, c("Function", "Additional data")] |>
 
 **Obtaining raw data**
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://github.com/maRce10/suwo). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html), [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html), etc) will not work properly as the basic fields are not standardized.
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://github.com/maRce10/suwo). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html), [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html), etc) will not work as the basic fields are not standardized.
 
 </div>
 
@@ -583,7 +583,7 @@ merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 
 # Find and remove duplicated records
 
-When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://github.com/maRce10/suwo) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html)    function.
+When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://github.com/maRce10/suwo) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function.
 
 The [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function helps users identify potential duplicate records in their metadata data frames. Duplicates are identified based on matching species name, country, date, user name, and locality. The function uses a fuzzy matching approach to account for minor variations in the data (e.g., typos, different location formats, etc).The output is a data frame with the candidate duplicate records, allowing users to review and decide which records to keep.
 
@@ -613,9 +613,7 @@ Note that the [find_duplicates()](https://marce10.github.io/suwo/reference/find_
 subset(dups_merged_metadata, duplicate_group == boesman_group)
 ```
 
-
-
-Also note that the locality is not exactly the same for these records, but the fuzzy matching approach used by [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) was able to identify them as potential duplicates.
+Also note that the locality is not exactly the same for these records, but the fuzzy matching approach used by [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) was able to identify them as potential duplicates. By default, the criteria is set to `country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1` which means that two entries will be considered duplicates if they have a country similarity greater than 0.8, locality similarity greater than 0.5, user_name similarity greater than 0.8, and exact matches for time and date (similarities range from 0 to 1). These values have been found to work well in most cases. Nonetheless, user can adjust the sensitivity based on their specific needs using the argument 'criteria'.
 
 Once users have reviewed the candidate duplicates, they can use the [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html) function to eliminate unwanted duplicates from their metadata data frames. This function takes as input a metadata data frame (either the original query results or the output of [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html)) and a vector of row numbers indicating which records to remove:
 

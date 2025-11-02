@@ -11,6 +11,7 @@
 #' @param sort Logical argument indicating if the output data frame should be
 #' sorted by the `duplicate_group` column. This will group all potential
 #' duplicates together in the output data frame. Default is `TRUE`.
+#' @param criteria A character string indicating the criteria to use to determine duplicates. By default, the criteria is set to \code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1} which means that two entries will be considered duplicates if they have a country similarity greater than 0.8, locality similarity greater than 0.5, user_name similarity greater than 0.8, and exact matches for time and date (similarities range from 0 to 1). These values have been found to work well in most cases. Users can modify this string to adjust the sensitivity of the duplicate detection based on their specific needs.
 #' @return A single data frame with the data from all input data frames
 #' combined and with an additional column named `duplicate_group` indicating
 #' potential duplicates with a common index. Entries without potential
@@ -47,7 +48,7 @@
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-find_duplicates <- function(metadata, sort = TRUE) {
+find_duplicates <- function(metadata, sort = TRUE, criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1") {
   # check arguments
   arguments <- as.list(base::match.call())[-1]
 
@@ -90,14 +91,15 @@ find_duplicates <- function(metadata, sort = TRUE) {
   similarities$repo1 <- metadata$repository[similarities$id1]
   similarities$repo2 <- metadata$repository[similarities$id2]
 
+  # add format and complete cases to criteria
+  criteria <- paste(
+    "with(similarities,",
+    criteria,
+    "& format == 1 & stats::complete.cases(similarities))"
+  )
 
-  # theshold to consider a match
-  criteria <-
-    similarities$format == 1 &
-    similarities$country > 0.8 & similarities$locality > 0.5 & similarities$user_name > 0.8 & similarities$time == 1 & similarities$date == 1  & stats::complete.cases(similarities)
-
-  # get duplicates
-  possible_duplicates <- similarities[criteria, ]
+  # spot duplicates
+  possible_duplicates <- similarities[eval(parse(text = criteria)), ]
 
   # create list with NAS and length nrow(metadata)
   matching_list <- as.list(seq_len(nrow(metadata)))
