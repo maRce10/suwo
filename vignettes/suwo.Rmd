@@ -3,7 +3,7 @@ title: package overview
 subtitle: "suwo: access nature media repositories"
 pagetitle: suwo package overview
 author: 
-- Jorge Elizondo & <a href="https://marce10.github.io/">Marcelo Araya-Salas</a>
+- Jorge Elizondo, <a href="https://marce10.github.io/">Marcelo Araya-Salas</a> & <a href="https://marce10.github.io/">Marcelo Araya-Salas</a>
 date:  "`r Sys.Date()`"
 output:
   rmarkdown::html_document:

@@ -65,7 +65,8 @@ By default the function will use the internal data frame
 \code{"ml_taxon_code"} included as example data in the package. This object
 contains the data from the Clement list from october 2024
 (downloaded from
-\url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}).
+\url{https://www.birds.cornell.edu/clementschecklist/introduction/
+updateindex/october-2024/2024-citation-checklist-downloads/}).
 If new versions of the list become available it will be updated in new
 package versions. However, if users need to update it they can download the
 new list version, read it in R as a data frame and provide it to the function
@@ -79,11 +80,11 @@ obtained from the repository is returned (without any formatting).
 }
 \description{
 \code{query_macaulay} searches for metadata from
-\href{https://https://www.macaulaylibrary.org/}{macaulay}.
+\href{https://www.macaulaylibrary.org/}{macaulay}.
 }
 \details{
 This function queries for species observation info in the
-\href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online
+\href{https://www.macaulaylibrary.org/}{Macaulay Library} online
 repository and returns the metadata of media files matching the query. The
 Macaulay Library is the world’s largest repository of digital media
 (audio, photo, and video) of wildlife, and their habitats. The archive

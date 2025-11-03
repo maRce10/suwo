@@ -84,11 +84,13 @@ if (interactive()){
 # An API key is required. Get yours at https://xeno-canto.org/account.
 XC_API_KEY <- "YOUR_API_KEY_HERE"
 
-# Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-p_anth <- query_xenocanto(species = "Phaethornis anthophilus", api_key = XC_API_KEY)
+# Simple search for a species
+p_anth <- query_xenocanto(species = "Phaethornis anthophilus",
+api_key = XC_API_KEY)
 
 # Search for same species and add specify country
-p_anth_cr <- query_xenocanto(species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
+p_anth_cr <- query_xenocanto(
+species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
 raw_data = TRUE, api_key = XC_API_KEY)
 
 # Search for female songs of a species

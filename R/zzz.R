@@ -56,7 +56,7 @@
   function(libname, pkgname) {
     packageStartupMessage("\nPlease cite 'suwo' as: \n")
     packageStartupMessage(
-      "Araya-Salas, M., & J. Elizondo-Calvo. 2023. suwo: access nature media
+      "Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025. suwo: access nature media
       repositories through R. R package version 0.1.0."
     )
   }

@@ -1,7 +1,7 @@
 #' Searches for media files in the Macaulay Library
 #'
 #' \code{query_macaulay} searches for metadata from
-#' \href{https://https://www.macaulaylibrary.org/}{macaulay}.
+#' \href{https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options
 #' are 'sound', 'image' of 'video'. Required.
@@ -36,7 +36,7 @@
 #' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
-#' \href{https://https://www.macaulaylibrary.org/}{Macaulay Library} online
+#' \href{https://www.macaulaylibrary.org/}{Macaulay Library} online
 #' repository and returns the metadata of media files matching the query. The
 #' Macaulay Library is the world’s largest repository of digital media
 #' (audio, photo, and video) of wildlife, and their habitats. The archive

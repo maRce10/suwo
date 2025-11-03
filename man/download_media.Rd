@@ -61,7 +61,7 @@ or "failed").
 \description{
 \code{download_media} downloads recordings and metadata from
 \href{https://www.xeno-canto.org/}{Xeno-Canto},
-\href{https://www.wikiaves.com/}{wikiaves} or
+\href{https://www.wikiaves.com.br/}{wikiaves} or
 \href{https://www.gbif.org/}{gbif}.
 }
 \details{

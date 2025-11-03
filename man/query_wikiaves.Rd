@@ -61,11 +61,11 @@ obtained from the repository is returned (without any formatting).
 }
 \description{
 \code{query_wikiaves} searches for metadata from
-\href{https://www.wikiaves.com/}{wikiaves}.
+\href{https://www.wikiaves.com.br/}{wikiaves}.
 }
 \details{
 This function queries for avian digital media in the open-access
-online repository \href{https://www.wikiaves.com/}{wikiaves} and returns
+online repository \href{https://www.wikiaves.com.br/}{wikiaves} and returns
 its metadata. WikiAves is a Brazilian online platform and citizen science
 project that serves as the largest community for birdwatchers in Brazil.
 It functions as a collaborative, interactive encyclopedia of Brazilian
@@ -76,7 +76,8 @@ and conservation.
 \examples{
 if (interactive()){
 # search
-p_nattereri <- query_wikiaves(species = "Phaethornis nattereri", format = "image")
+p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
+    format = "image")
 }
 
 }

@@ -43,7 +43,7 @@
 #' @importFrom methods is
 #' @importFrom cli cli_alert_info cli_alert_danger cli_alert_warning
 #' cli_alert_success pluralize cli_bullets
-#' @author Marcelo Araya-Salas & Jorge Elizondo-Calvo
+#' @author Marcelo Araya-Salas, Jorge Elizondo-Calvo & Alejandro Rico
 #'
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'

@@ -1,7 +1,7 @@
 #' Access 'Wikiaves' recordings and metadata
 #'
 #' \code{query_wikiaves} searches for metadata from
-#' \href{https://www.wikiaves.com/}{wikiaves}.
+#' \href{https://www.wikiaves.com.br/}{wikiaves}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound' or 'image'. Required.
@@ -12,7 +12,7 @@
 #' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for avian digital media in the open-access
-#' online repository \href{https://www.wikiaves.com/}{wikiaves} and returns
+#' online repository \href{https://www.wikiaves.com.br/}{wikiaves} and returns
 #' its metadata. WikiAves is a Brazilian online platform and citizen science
 #' project that serves as the largest community for birdwatchers in Brazil.
 #' It functions as a collaborative, interactive encyclopedia of Brazilian

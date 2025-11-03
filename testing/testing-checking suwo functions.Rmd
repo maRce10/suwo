@@ -483,8 +483,11 @@ devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual
 ## run in terminal:
   # /opt/R/3.6.3/bin/R
 
+urlchecker::url_check()  
+  
 lintr::lint_package(linters =  list(lintr::line_length_linter()))
 
+codemetar::write_codemeta()
 ```
 
 # additional checks
