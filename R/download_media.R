@@ -38,7 +38,7 @@
 #' existing media pool.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_macaulay}}
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #'   phae_anth <- query_xenocanto(species = 'Phaethornis anthophilus',
 #'   all_data = FALSE)
 #'

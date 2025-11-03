@@ -102,7 +102,7 @@ Here are some instructions for using this function properly:
    }
 }
 \examples{
-\dontrun{
+if (interactive()){
 # query sounds
 tur_ili <- query_macaulay(species = "Turdus iliacus", format = "sound",
 path = tempdir())

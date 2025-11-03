@@ -42,7 +42,7 @@
 #' different platforms. This can also occur as some repositories automatically
 #' share data with other repositories, particularly with GBIF.
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' # get metadata from 2 repos
 #' gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
 #' xc <- query_xenocanto(species = "Turdus rufiventris")

@@ -53,7 +53,7 @@
 #'    to access large batches of observations
 #'    }
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' # query sounds
 #' tur_ili <- query_macaulay(species = "Turdus iliacus", format = "sound",
 #' path = tempdir())

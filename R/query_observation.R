@@ -18,11 +18,10 @@
 #' online repository \href{https://www.observation.org/}{observation}. It can
 #' return media metadata.
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' # search without downloading
-#' df1 <- query_observation(species = 'Turdus iliacus', format = "Sound",
+#' t_iliacus <- query_observation(species = 'Turdus iliacus', format = "Sound",
 #' cores = 4, token = ".....")
-#' View(df1)
 #' }
 #'
 #' @references {

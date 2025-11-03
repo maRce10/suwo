@@ -78,9 +78,8 @@ to document and identify plants, animals, fungi, and other organisms in
 the wild.
 }
 \examples{
-\dontrun{
-# search without downloading
-View(df1)
+if (interactive()){
+# search Bleeding Tooth mushroom images
 }
 
 }

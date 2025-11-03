@@ -23,10 +23,9 @@
 #' (e.g., \code{\link{query_inaturalist}}).
 #' @seealso \code{\link{query_gbif}}
 #' @examples
-#' \dontrun{
-#' # search sound files
-# df1 <- query_gbif(species = 'Turdus iliacus', format = "sound")
-#' View(df1)
+#' if (interactive()){
+#' # search dink frog sound files
+# d_diastema <- query_gbif(species = "Diasporus diastema", format = "sound")
 #' }
 #'
 #' @references {

@@ -32,7 +32,7 @@
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}},
 #' \code{\link{query_inaturalist}}, \code{\link{query_observation}}
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' # An API key is required. Get yours at https://xeno-canto.org/account.
 #' XC_API_KEY <- "YOUR_API_KEY_HERE"
 #'

@@ -70,7 +70,7 @@ downloading is more straightforward (Xeno-Canto and GBIF), but this can be
 modified with the argument 'repo_priority'.
 }
 \examples{
-\dontrun{
+if (interactive()){
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
 xc <- query_xenocanto(species = "Turdus rufiventris")

@@ -20,10 +20,9 @@
 #' recordings, which are then used to build a vast database for research
 #' and conservation.
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' # search
-#' df1 <- query_wikiaves(species = "Phaethornis nattereri", format = "image")
-#' View(df1)
+#' p_nattereri <- query_wikiaves(species = "Phaethornis nattereri", format = "image")
 #' }
 #'
 #' @references {

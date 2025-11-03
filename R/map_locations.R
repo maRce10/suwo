@@ -15,7 +15,7 @@
 #' spread of observations. Note that only recordings with geographic
 #' coordinates are displayed.
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' # search in xeno-canto
 #' metadata <- query_xenocanto(species = "Phaethornis anthophilus")
 #'

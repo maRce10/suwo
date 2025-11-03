@@ -22,7 +22,15 @@ frame must have the following columns: `user_name`, `locality`, `repository`,
 sorted by the `duplicate_group` column. This will group all potential
 duplicates together in the output data frame. Default is `TRUE`.}
 
-\item{criteria}{A character string indicating the criteria to use to determine duplicates. By default, the criteria is set to \code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1} which means that two entries will be considered duplicates if they have a country similarity greater than 0.8, locality similarity greater than 0.5, user_name similarity greater than 0.8, and exact matches for time and date (similarities range from 0 to 1). These values have been found to work well in most cases. Users can modify this string to adjust the sensitivity of the duplicate detection based on their specific needs.}
+\item{criteria}{A character string indicating the criteria to use to
+determine duplicates. By default, the criteria is set to
+\code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1}
+which means that two entries will be considered duplicates if they have a
+country similarity greater than 0.8, locality similarity greater than 0.5,
+user_name similarity greater than 0.8, and exact matches for time and date
+(similarities range from 0 to 1). These values have been found to work well
+in most cases. Users can modify this string to adjust the sensitivity of the
+duplicate detection based on their specific needs.}
 }
 \value{
 A single data frame with the data from all input data frames
@@ -52,7 +60,7 @@ different platforms. This can also occur as some repositories automatically
 share data with other repositories, particularly with GBIF.
 }
 \examples{
-\dontrun{
+if (interactive()){
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
 xc <- query_xenocanto(species = "Turdus rufiventris")

@@ -80,7 +80,7 @@ the open-access
  queries can be constructed usin the Xeno-Canto advanced query syntax.
 }
 \examples{
-\dontrun{
+if (interactive()){
 # An API key is required. Get yours at https://xeno-canto.org/account.
 XC_API_KEY <- "YOUR_API_KEY_HERE"
 

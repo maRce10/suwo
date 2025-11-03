@@ -78,9 +78,8 @@ of records returned by other suwo functions
 (e.g., \code{\link{query_inaturalist}}).
 }
 \examples{
-\dontrun{
-# search sound files
-View(df1)
+if (interactive()){
+# search dink frog sound files
 }
 
 }

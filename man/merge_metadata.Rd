@@ -26,7 +26,7 @@ suwo query functions (e.g., `query_wikiaves()`, `query_xenocanto()`, etc.)
 with `raw_data = FALSE`.
 }
 \examples{
-\dontrun{
+if (interactive()){
  # get metadata from 2 repos
   wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
   xc <- query_xenocanto(species = 'Glaucis dohrnii')

@@ -75,7 +75,7 @@ found, the function returns the original metadata and prints a message. If
 some old entries are not returned in the new query they are still retained.
 }
 \examples{
-\dontrun{
+if (interactive()){
 # query metadata
 wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
 

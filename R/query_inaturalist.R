@@ -24,10 +24,9 @@
 #' to document and identify plants, animals, fungi, and other organisms in
 #' the wild.
 #' @examples
-#' \dontrun{
-#' # search without downloading
-# df1 <- query_inaturalist(species = 'Turdus plebejus', format = "sound")
-#' View(df1)
+#' if (interactive()){
+#' # search Bleeding Tooth mushroom images
+# h_peckii <- query_inaturalist(species = 'Hydnellum peckii', format = "image")
 #' }
 #'
 #' @references {
