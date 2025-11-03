@@ -320,7 +320,8 @@ frame):</li>
 <code class="sourceCode R"><span><span class="co"># Load suwo package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">h_sarapiquensis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_inaturalist.html">query_inaturalist</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Heliconia sarapiquensis"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
+<span><span class="va">h_sarapiquensis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_inaturalist.html">query_inaturalist</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Heliconia sarapiquensis"</span>, </span>
+<span>                                     format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">h_sarapiquensis</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -1152,7 +1153,8 @@ search page</a>, where the users must download a .csv file with the
 metadata. Here is a example of a query for strip-throated hermit
 (<em>Phaethornis striigularis</em>) videos:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p_striigularis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Phaethornis striigularis"</span>, format <span class="op">=</span> <span class="st">"video"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">p_striigularis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Phaethornis striigularis"</span>, </span>
+<span>                                 format <span class="op">=</span> <span class="st">"video"</span><span class="op">)</span></span></code></pre></div>
 <p>Users must click on the “Export” button to save the .csv file with
 the metadata:</p>
 <center>
@@ -1432,7 +1434,8 @@ an example of a query for Spix’s disc-winged bat (<em>Thyroptera
 tricolor</em>) audio recordings:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># replace "YOUR_XC_API_KEY" with your key</span></span>
-<span><span class="va">t_tricolor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Thyroptera tricolor"</span>, api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
+<span><span class="va">t_tricolor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Thyroptera tricolor"</span>, </span>
+<span>                              api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">t_tricolor</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -1663,7 +1666,9 @@ recordings of pale-striped poison frog (<em>Ameerega hahneli</em>,
 with the highest recording quality (q:“A”):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># replace "YOUR_XC_API_KEY" with your key</span></span>
-<span><span class="va">a_hahneli</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"'</span>, api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
+<span><span class="va">a_hahneli</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span></span>
+<span>  species <span class="op">=</span> <span class="st">'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"'</span>, </span>
+<span>  api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">a_hahneli</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -2071,7 +2076,9 @@ wav
 </div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
-<span><span class="va">old_c_eisentrauti</span> <span class="op">&lt;-</span> <span class="va">c_eisentrauti</span><span class="op">[</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">old_c_eisentrauti</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">c_eisentrauti</span><span class="op">[</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span><span class="op">)</span>, </span>
+<span>                <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># update "old" data</span></span>
 <span><span class="va">upd_c_eisentrauti</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_metadata.html">update_metadata</a></span><span class="op">(</span>metadata <span class="op">=</span> <span class="va">old_c_eisentrauti</span><span class="op">)</span></span>
@@ -3604,7 +3611,7 @@ saved
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmp4tp8OA/amanita_zambiana 
+<pre><code> /tmp/RtmpY3Fdlx/amanita_zambiana 
 ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
 ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
 ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -3622,7 +3629,7 @@ illustration purpose):</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">azam_files</span><span class="op">$</span><span class="va">downloaded_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">azam_files</span><span class="op">$</span><span class="va">downloaded_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>    <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">'n'</span>,</span>
@@ -3666,7 +3673,7 @@ sub-directories by country (for simplicity only 6 of them):</p>
 <pre><code> [32m✔ [39m All files were downloaded successfully 🥇:</code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmp4tp8OA/diodon_holocanthus 
+<pre><code> /tmp/RtmpY3Fdlx/diodon_holocanthus 
 ├──  Cabo Verde 
 │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
 ├──  Cayman Islands 
@@ -3695,7 +3702,7 @@ fun):</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">dhol_files</span><span class="op">$</span><span class="va">downloaded_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">jpeg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jpeg/man/readJPEG.html" class="external-link">readJPEG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">out_folder</span>, <span class="va">dhol_files</span><span class="op">$</span><span class="va">downloaded_file_name</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>    <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">'n'</span>,</span>
