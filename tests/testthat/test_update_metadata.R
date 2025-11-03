@@ -32,7 +32,8 @@ test_that("update query_inaturalist", {
 test_that("update query_gbif", {
   skip_on_cran()
   skip_if_offline()
-
+  # skip if on windows
+  skip_on_os("windows")
   df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "sound")
 
   # remove last 3 rows to test update_metadata
