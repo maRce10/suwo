@@ -49,7 +49,8 @@ map_locations <- function(metadata,
     !is.na(metadata$longitude)
 
   if (all(!inx_with_coors)){
-    .message("Not a single observation (row) has geographic coordinates", as = "failure")
+    .message("Not a single observation (row) has geographic coordinates",
+             as = "failure")
     return(invisible(NULL))
 }
   metadata <- metadata[inx_with_coors, , drop = FALSE]
