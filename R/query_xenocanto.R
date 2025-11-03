@@ -85,8 +85,8 @@ query_xenocanto <-
     # URL encode (spaces -> %20, quotes -> %22, etc.)
     query_str <- utils::URLencode(query_str, reserved = TRUE)
 
-    if (pb & verbose) {
-      cat(.color_text("Obtaining metadata:\n", as = "success"))
+    if (verbose) {
+      .message("Obtaining metadata:\n", as = "success")
     }
 
     # --- API request ---
@@ -99,7 +99,7 @@ query_xenocanto <-
 
     if (as.numeric(query$numRecordings) == 0) {
       if (verbose)
-        .failure_message(format = "sound")
+        .message(text = "No matching records found", as = "failure")
       return(invisible(NULL))
     }
 
@@ -220,12 +220,12 @@ query_xenocanto <-
         raw_data = raw_data
       )
 
-      if (pb & verbose) {
-        cat(.color_text(
+      if (verbose) {
+        .message(
           paste0("{n} matching sound file{?s} found"),
           as = "success",
           n = nrow(query_output_df)
-        ))
+        )
       }
       return(droplevels(query_output_df))
     }

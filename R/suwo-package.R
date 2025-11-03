@@ -26,8 +26,8 @@
 #' bioacoustic analysis, which facilitates opportunities for use in research
 #' and innovation of additional custom analyzes.
 #'
-#' @import parallel
-#' @import jsonlite
+#' @importFrom jsonlite fromJSON
+#' @importFrom parallel makePSOCKcluster detectCores parLapply mclapply
 #' @importFrom fs dir_tree
 #' @importFrom jpeg readJPEG
 #' @importFrom graphics rasterImage
@@ -41,7 +41,7 @@
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils download.file read.csv write.csv
 #' @importFrom methods is
-#' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors cli_text
+#' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors cli_text cli_alert_info cli_alert_danger cli_alert_warning cli_alert_success pluralize
 #' @author Marcelo Araya-Salas & Jorge Elizondo-Calvo
 #'
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

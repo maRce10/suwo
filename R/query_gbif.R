@@ -91,14 +91,14 @@ query_gbif <-
     # message if nothing found
     if (base.srch.pth$count == 0) {
       if (verbose) {
-        .failure_message(format = format)
+        .message(text = "No matching records found",as = "failure")
       }
       return(invisible(NULL))
     }
 
     # message number of results
-    if (pb & verbose) {
-      .success_message(n = base.srch.pth$count, format = format)
+    if (verbose) {
+      .message(n = base.srch.pth$count, as = "success")
     }
 
     # get total number of pages

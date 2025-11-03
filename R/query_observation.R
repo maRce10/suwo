@@ -111,14 +111,14 @@ query_observation <-
 
     if (data$count == 0) {
       if (verbose) {
-        .failure_message(format = format)
+        .message(text = "No matching records found", as = "failure")
       }
       return(invisible(NULL))
     } else {
       # message number of results
-      if (pb & verbose) {
-        .success_message(n = data$count, format = format)
-      }
+      if (verbose) {
+        .message(n = data$count, as = "success")
+        }
     }
 
     # get total number of pages

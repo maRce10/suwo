@@ -177,9 +177,7 @@ update_metadata <-
 
     if (nrow(query_output_new) == 0) {
       if (verbose) {
-        cat(.color_text("No new entries found", "failure"),
-            .add_emoji("sad"),
-            "\n")
+        .message("No new entries found", "failure", suffix =  "\n")
       }
       return(metadata)
     }
@@ -197,9 +195,7 @@ update_metadata <-
 
     if (verbose) {
       if (sum_new > 0) {
-        cat(.color_text(paste("\n", sum_new, "new entries found"), "success"),
-            .add_emoji("happy"),
-            "\n")
+        .message(text = paste("\n", sum_new, "new entries found"), "success", suffix = "\n")
       }
     }
 

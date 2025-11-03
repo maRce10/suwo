@@ -49,7 +49,7 @@ map_locations <- function(metadata,
     !is.na(metadata$longitude)
 
   if (all(!inx_with_coors)){
-    .failure_message("Not a single observation (row) has geographic coordinates")
+    .message("Not a single observation (row) has geographic coordinates", as = "failure")
     return(invisible(NULL))
 }
   metadata <- metadata[inx_with_coors, , drop = FALSE]
@@ -187,15 +187,13 @@ map_locations <- function(metadata,
 
   # let users know that some observations were not
   if (any(!inx_with_coors)){
-    cat(
-    .color_text(
+    .message(
       paste(
         "{n} observation{?s} d{?oes/o} not have geographic coordinates and w{?as/ere} ignored"
       ),
       n =  sum(!inx_with_coors),
       as = "warning"
      )
-    )
     }
 
   # plot map

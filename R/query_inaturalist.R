@@ -85,14 +85,14 @@ query_inaturalist <- function(species = getOption("species"),
 
   if (total_results == 0) {
     if (verbose) {
-      .failure_message(format = format)
+      .message(text = "No matching records found",as = "failure")
     }
     return(invisible(NULL))
   }
 
-  if (pb & verbose) {
-    .success_message(n = total_results, format = format)
-  }
+  if (verbose) {
+    .message(n = total_results, as = "success")
+    }
 
   offsets <- seq(0, total_results, by = 200)
 

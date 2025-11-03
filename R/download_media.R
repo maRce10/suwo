@@ -106,7 +106,7 @@ download_media <-
       )
 
     # set clusters for windows OS
-    if (pb & verbose) {
+    if (verbose) {
       write(file = "", x = "Downloading media files:")
     }
     if (Sys.info()[1] == "Windows" & cores > 1) {
@@ -140,7 +140,7 @@ download_media <-
     if (any(metadata$download_status == "failed")) {
 
       if (sum(metadata$download_status == "failed") == nrow(metadata)){
-        report_message <- .color_text("All files failed to download",
+        report_message <- .message("All files failed to download",
                                       as = "failure")
       } else {
 
@@ -159,7 +159,7 @@ download_media <-
       if (sum(metadata$download_status == "already there (not downloaded)") ==
           nrow(metadata)){
         report_message <-
-          .color_text("All files were already there (overwritten = FALSE)",
+          .message("All files were already there (overwritten = FALSE)",
                       as = "success")
       } else {
  unified_message <- paste("{sum(metadata$download_status == 'already there (not downloaded)')}",
@@ -174,7 +174,7 @@ download_media <-
 
       if (sum(metadata$download_status == "overwritten") == nrow(metadata)){
         report_message <-
-          .color_text(
+          .message(
             "All files were downloaded successfully (and all were overwritten)",
                       as = "success")
       } else {
@@ -188,7 +188,7 @@ download_media <-
     if (any(metadata$download_status == "saved")) {
 
       if (sum(metadata$download_status == "saved") == nrow(metadata)){
-        report_message <- .color_text("All files were downloaded successfully",
+        report_message <- .message("All files were downloaded successfully",
                                       as = "success")
       } else {
         unified_message <- paste("{sum(metadata$download_status == 'saved')}",

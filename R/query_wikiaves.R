@@ -82,10 +82,7 @@ query_wikiaves <-
 
     if (length(get_ids) == 0) {
       if (verbose) {
-        cat(paste(
-          .color_text("Search species not found", "failure"),
-          .add_emoji("sad")
-        ))
+          .message("Search species not found", as = "failure")
       }
       return(invisible(NULL))
     }
@@ -109,7 +106,7 @@ query_wikiaves <-
 
       if (sum(get_ids$total_registers) == 0) {
         if (verbose) {
-          .failure_message(format = format)
+          .message(text = "No matching records found", as = "failure")
         }
         return(invisible(NULL))
       }
@@ -128,8 +125,8 @@ query_wikiaves <-
         id_by_page_df <- do.call(rbind, id_by_page_list)
 
         # search recs in wikiaves (results are returned in pages with 500 recordings each)
-        if (pb & verbose) {
-          .success_message(n = get_ids$total_registers, format = format)
+        if (verbose) {
+          .message(n = get_ids$total_registers, as = "success")
         }
 
         # set clusters for windows OS

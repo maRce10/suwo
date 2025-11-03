@@ -137,13 +137,12 @@ query_macaulay <-
 
     # function will stop here
     if (is.null(taxon_code)) {
-      .failure_message(
-        paste(
-          "No matching species found for ",
-          species,
-          sep = ""
-        )
-      )
+      .message(text = paste(
+        "No matching species found for ",
+        species,
+        sep = ""
+      ),as = "failure")
+
       return(invisible(NULL))
     }
 
@@ -187,21 +186,21 @@ query_macaulay <-
           }
 
           if (nrow(date_ranges_df) > 1) {
-            .message(paste0(
-              "* Query ",
+            cli_bullets(c("*" = paste0(
+              "Query ",
               i,
               " of ",
               nrow(date_ranges_df),
               " (",
               date_range,
               "):"
-            ))
+            )))
           }
         }
         # let users know where to save the file
-        .message("A browser will open the macaulay library website. Save the .csv file ('export' button) to this directory:")
+        cat("A browser will open the macaulay library website. Save the .csv file ('export' button) to this directory:")
         cat(normalizePath(path), "/", sep = "")
-        .message("   (R is monitoring for new .csv files. Press ESC to stop the function)")
+        cat("   (R is monitoring for new .csv files. Press ESC to stop the function)")
 
         # pause 3 s so users can read message but only in the first query in a batch
         if (i == 1)
@@ -243,7 +242,7 @@ query_macaulay <-
         new_csv_file_list[[length(new_csv_file_list) + 1]] <- .monitor_new_files(path  = path)
 
         # let users know the name of the csv file that was read
-        .message("The data will be read from the file:", suffix = " ")
+        cat("\nThe data will be read from the file:", suffix = " ")
 
         cat(paste(new_csv_file_list[[length(new_csv_file_list)]], "\n"))
       }
@@ -286,15 +285,15 @@ query_macaulay <-
     )
 
     if (verbose) {
-      .success_message(text = paste0("{n} matching ", format, " file{?s} found"), n = nrow(query_output_df), format = format, suffix = "")
+      .message(text = "{n} matching record{?s} found", n = nrow(query_output_df), as = "success", suffix = "\n")
     }
 
 
     if (nrow(query_output_df) == 10000) {
-      cat(.color_text(
+      .message(text =
         paste("The query returned 10,000 records, which is the maximum allowed. It is likely that more", format, "files that matched the query exists but were not retrieved."),
         as = "warning"
-      ))
+      )
     }
 
     return(query_output_df)

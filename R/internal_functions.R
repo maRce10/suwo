@@ -98,11 +98,6 @@ pblapply_sw_int <- function(X,
   stop(..., call. = FALSE)
 }
 
-# detect if string includes color
-.has_color <- function() {
-  cli::num_ansi_colors() > 1
-}
-
 # add emojis to messages. based on praise_emoji from testthat
 .add_emoji <- function(mood) {
   if (!cli::is_utf8_output()) {
@@ -150,70 +145,41 @@ pblapply_sw_int <- function(X,
   }
 }
 
-# style text with color
-.suwo_style <- function(type = c("success", "skip", "warning", "failure",
-                                 "error", "message")) {
-  type <- match.arg(type)
+.message <- function(text =
+                       paste0("Obtaining metadata ({n} matching record{?s} found)"),
+                     as = c("success", "warning", "failure", "error", "message"),
+                     n = NULL,
+                     suffix = ":\n") {
 
-  c(
-    success = "green",
-    skip = "blue",
-    warning = "magenta",
-    failure = "orange",
-    error = "red",
-    message = "cyan"
-  )[[type]]
-}
-
-.color_text <- function(text,
-                        as = c("success", "skip", "warning", "failure",
-                               "error", "message"),
-                        n = NULL) {
   if (!is.null(n))
     text <- cli::pluralize(text)
 
-  if (.has_color()) {
-    unclass(cli::make_ansi_style(.suwo_style(as))(text))
-  } else {
-    text
+  if (as == "success"){
+
+    if(!cli::is_utf8_output()){
+      return(text)
+    }
+
+    cli::cli_alert_success(paste0(text, " ", .add_emoji("happy"), suffix))
+  }
+
+  if (as == "warning"){
+    cli::cli_alert_warning(paste0(text, " "))
+  }
+
+  if (as == "failure"){
+    cli::cli_alert_danger(paste0(text, " ", .add_emoji("sad")))
+  }
+
+  if (as == "error"){
+    cli::cli_alert_danger(paste0(text, " "))
+  }
+
+  if (as == "message"){
+    cli::cli_alert_info(paste0(text, " "))
   }
 }
 
-# info messages
-.message <- function(text, suffix = "\n") {
-  cat(.color_text(
-    text,
-    as = "message"),
-    suffix,
-    sep = ""
-  )
-}
-
-# message when files were found
-.success_message <- function(text = paste0("Obtaining metadata ({n} matching ",
-                                           format, " file{?s} found)"), format,
-                             n = NULL, suffix = ":\n") {
-  cat(.color_text(
-    text,
-    as = "success",
-    n = n),
-    .add_emoji("happy"),
-    suffix,
-    sep = ""
-  )
-}
-
-
-.failure_message <- function(text = paste0(text = "No ", format,
-                                           " files were found"), format) {
-  cat(.color_text(
-    text,
-    as = "failure"),
-    .add_emoji("sad"),
-    "\n",
-    sep = ""
-  )
-}
 
 # sanitize the name of a download folder
 .sanitize_folder_name <- function(name, folder_by) {
@@ -534,7 +500,7 @@ pblapply_sw_int <- function(X,
     options(stats::setNames(list(X[is.na(X$file_url), ]), option_df_name))
 
     # let users know some observations were excluded
-    cat(.color_text(paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('", option_df_name,"')`).\n"),
+    cat(.message(text = paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('", option_df_name,"')`).\n"),
                     as = "warning",
                     n  = sum(is.na(X$file_url))
     )
@@ -1030,13 +996,13 @@ pblapply_sw_int <- function(X,
   response <- try(httr::GET(url,  httr::user_agent("suwo (https://github.com/maRce10/suwo)")), silent = TRUE)
 
   if (inherits(response, "try-error") || httr::http_error(response)) {
-    .failure_message(paste("No connection to", name, "(check your internet connection!)"))
+    .message(paste("No connection to", name, "(check your internet connection!)"), as = "failure")
     return(FALSE)
     }
 
   content <- httr::content(response, as = "text", encoding = "UTF-8")
   if (grepl("Could not connect to the database", content)) {
-    .failure_message(paste(name, "website is apparently down"))
+    .message(paste(name, "website is apparently down"), as = "failure")
     return(FALSE)
   }
 
