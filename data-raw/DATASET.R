@@ -76,7 +76,8 @@ merged_metadata <- merge_metadata(xc_adf, gb_adf_s, ml_adf_s)
 options(all_data = TRUE)
 # c_eisentrauti <- head(query_inaturalist(species = "Chorthippus eisentrauti"),
 #4)
-h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis", format = "image"),
+h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis",
+                                          format = "image"),
                         4)
 h_harpyja <- head(query_wikiaves(species = "Harpia harpyja"), 4)
 a_hahneli <- query_xenocanto(species =

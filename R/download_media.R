@@ -144,7 +144,8 @@ download_media <-
                                       as = "failure")
       } else {
 
-        unified_message <- paste("{sum(metadata$download_status == 'failed')}", "file{?s} failed to download")
+        unified_message <- paste("{sum(metadata$download_status == 'failed')}",
+                                 "file{?s} failed to download")
         report_message <- c(report_message,
                             "x" = paste0(
                               cli::pluralize(unified_message)))
@@ -198,7 +199,8 @@ download_media <-
     }
 
     if (length(unique(metadata$download_status)) > 1){
-      unified_message <- paste("check  the `download_status` column in the", "output data frame (invisibly returned) for details ")
+      unified_message <- paste("check  the `download_status` column in the",
+                               "output data frame (invisibly returned) for details ")
       report_message <-  c(report_message, "i" = unified_message)
 }
 
