@@ -5,7 +5,11 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
-#' @param dataset The name of a specific dataset in which to focus the query (by default it searchs across all available datasets). Users can check available dataset names by downloading this csv file \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}. See \url{https://www.gbif.org/dataset/search?q=} for more details.
+#' @param dataset The name of a specific dataset in which to focus the query
+#' (by default it searchs across all available datasets).
+#' Users can check available dataset names by downloading this csv file
+#'  \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}.
+#'  See \url{https://www.gbif.org/dataset/search?q=} for more details.
 #' @export
 #' @name query_gbif
 #' @return The function returns a data frame with the metadata of the media
@@ -29,7 +33,7 @@
 #' }
 #'
 #' @references {
-#' GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org [13 January 2020].
+#' GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
@@ -90,7 +94,7 @@ query_gbif <-
     # message if nothing found
     if (base.srch.pth$count == 0) {
       if (verbose) {
-        .message(text = "No matching records found",as = "failure")
+        .message(text = "No matching records found", as = "failure")
       }
       return(invisible(NULL))
     }
@@ -106,20 +110,21 @@ query_gbif <-
     )) - 1) * 300
 
     # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & cores > 1) {
+    if (Sys.info()[1] == "Windows" && cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
       cl <- cores
     }
 
-    query_output_list <- pblapply_sw_int(offsets, cl = 1, pbar = pb, function(i) {
+    query_output_list <- pblapply_sw_int(offsets, cl = cl, pbar = pb,
+                                         function(i) {
       query_output <- jsonlite::fromJSON(paste0(srch_trm, "&offset=", i))
 
       # format as list of data frame
-      query_output$results <- lapply(seq_len(nrow(query_output$results)), function(u) {
+      query_output$results <- lapply(seq_len(nrow(query_output$results)),
+                                     function(u) {
         x <- query_output$results[u, ]
 
-        # media_df <- do.call(rbind, media_list)
         media_df <- do.call(rbind, x$media)
 
         # select format
@@ -142,54 +147,54 @@ query_gbif <-
       })
 
       output_df <- .merge_data_frames(query_output$results)
-        output_df$page <- i
+      output_df$page <- i
 
-        return(output_df)
-      })
+      return(output_df)
+    })
 
-      # combine into a single data frame
-      query_output_df <- .merge_data_frames(query_output_list)
+    # combine into a single data frame
+    query_output_df <- .merge_data_frames(query_output_list)
 
-      # stop here if nothing found
-      if (is.null(query_output_df))
-        return(query_output_df)
-
-      # remove everything after the second parenthesis
-      query_output_df$species <- vapply(strsplit(query_output_df$species, " "),
-                                        function(x) paste(x[1], x[2]),
-                                        character(1))
-
-      # remove duplicated info
-      query_output_df$gbifid <- query_output_df$scientificName <- NULL
-
-      # format output data frame column names
-      query_output_df <- .format_query_output(
-        X = query_output_df,
-        call = base::match.call(),
-        column_names = c(
-          "media-URL" = "file_url",
-          "eventDate" = "date",
-          "decimalLatitude" = "latitude",
-          "decimalLongitude" = "longitude",
-          "specificepithet" = "specific_epithet",
-          "recordedby" = "recordist",
-          "stateprovince" = "state_province",
-          "specieskey" = "species_code",
-          "genuskey" = "genus_code",
-          "kingdomkey" = "kingdom_code",
-          "phylumkey" = "phylum_code",
-          "classkey" = "class_code",
-          "orderkey" = "order_code",
-          "familykey" = "family_key",
-          "fieldnotes" = "comments",
-          "eventtime" = "time",
-          "media-creator" = "user_name",
-          "media-format" = "file_extension"
-        ),
-        all_data = all_data,
-        format = format,
-        raw_data = raw_data
-      )
-
+    # stop here if nothing found
+    if (is.null(query_output_df))
       return(query_output_df)
+
+    # remove everything after the second parenthesis
+    query_output_df$species <- vapply(strsplit(query_output_df$species, " "),
+                                      function(x)
+      paste(x[1], x[2]), character(1))
+
+    # remove duplicated info
+    query_output_df$gbifid <- query_output_df$scientificName <- NULL
+
+    # format output data frame column names
+    query_output_df <- .format_query_output(
+      X = query_output_df,
+      call = base::match.call(),
+      column_names = c(
+        "media-URL" = "file_url",
+        "eventDate" = "date",
+        "decimalLatitude" = "latitude",
+        "decimalLongitude" = "longitude",
+        "specificepithet" = "specific_epithet",
+        "recordedby" = "recordist",
+        "stateprovince" = "state_province",
+        "specieskey" = "species_code",
+        "genuskey" = "genus_code",
+        "kingdomkey" = "kingdom_code",
+        "phylumkey" = "phylum_code",
+        "classkey" = "class_code",
+        "orderkey" = "order_code",
+        "familykey" = "family_key",
+        "fieldnotes" = "comments",
+        "eventtime" = "time",
+        "media-creator" = "user_name",
+        "media-format" = "file_extension"
+      ),
+      all_data = all_data,
+      format = format,
+      raw_data = raw_data
+    )
+
+    return(query_output_df)
   }

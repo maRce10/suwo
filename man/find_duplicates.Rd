@@ -24,7 +24,8 @@ duplicates together in the output data frame. Default is `TRUE`.}
 
 \item{criteria}{A character string indicating the criteria to use to
 determine duplicates. By default, the criteria is set to
-\code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1}
+\code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1
+& date == 1}
 which means that two entries will be considered duplicates if they have a
 country similarity greater than 0.8, locality similarity greater than 0.5,
 user_name similarity greater than 0.8, and exact matches for time and date

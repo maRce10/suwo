@@ -84,18 +84,18 @@ query_inaturalist <- function(species = getOption("species"),
 
   if (total_results == 0) {
     if (verbose) {
-      .message(text = "No matching records found",as = "failure")
+      .message(text = "No matching records found", as = "failure")
     }
     return(invisible(NULL))
   }
 
   if (verbose) {
     .message(n = total_results, as = "success")
-    }
+  }
 
   offsets <- seq(0, total_results, by = 200)
 
-  if (Sys.info()[1] == "Windows" & cores > 1) {
+  if (Sys.info()[1] == "Windows" && cores > 1) {
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
   } else {
     cl <- cores
@@ -135,7 +135,8 @@ query_inaturalist <- function(species = getOption("species"),
   # combine into a single data frame
   query_output_df <- .merge_data_frames(query_output_list)
 
-  split_location <- do.call(rbind, strsplit(as.character(query_output_df$location), ","))
+  split_location <- do.call(rbind,
+                        strsplit(as.character(query_output_df$location), ","))
   latitude <- split_location[, 1]
   longitude <- split_location[, 2]
   query_output_df$latitude <- latitude
@@ -149,7 +150,8 @@ query_inaturalist <- function(species = getOption("species"),
   query_output_df$species <- species
 
   # add format
-  query_output_df$file_extension <- sub(".*\\.", "", sub("\\?.*", "", query_output_df[, grep("url", names(query_output_df), value = TRUE)]))
+  query_output_df$file_extension <- sub(".*\\.", "", sub("\\?.*", "",
+        query_output_df[, grep("url", names(query_output_df), value = TRUE)]))
 
   # fix column names
   query_output_df$country <- NA
@@ -158,13 +160,21 @@ query_inaturalist <- function(species = getOption("species"),
                                  stop = 10)
 
   # fix recordist name
-  query_output_df$user_name <- vapply(strsplit(query_output_df$attribution, ","), "[[", 1, FUN.VALUE = character(1))
+  query_output_df$user_name <- vapply(
+    strsplit(query_output_df$attribution, ","),
+                                      "[[",
+                                      1,
+                                      FUN.VALUE = character(1))
 
-  query_output_df$user_name[query_output_df$user_name != "no rights reserved"] <- vapply(strsplit(query_output_df$user_name[query_output_df$user_name != "no rights reserved"], ") "), "[[", 2, FUN.VALUE = character(1))
+ query_output_df$user_name[query_output_df$user_name != "no rights reserved"] <-
+    vapply(
+      strsplit(query_output_df$user_name[
+        query_output_df$user_name != "no rights reserved"], ") "),
+      "[[", 2, FUN.VALUE = character(1))
 
 
   # format output data frame column names
-    query_output_df <- .format_query_output(
+  query_output_df <- .format_query_output(
     X = query_output_df,
     call = base::match.call(),
     column_names = c(

@@ -483,12 +483,13 @@ devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual
 ## run in terminal:
   # /opt/R/3.6.3/bin/R
 
+lintr::lint_package(linters =  list(lintr::line_length_linter()))
 
 ```
 
 # additional checks
 ```{r}
-pkgcheck::pkgcheck(".")
+pkgcheck::pkgcheck(".", use_cache = FALSE)
 cyclocomp::cyclocomp_package_dir(".")
 
 pkgstats::pkgstats(".")
@@ -908,6 +909,7 @@ ml_adt$recordist
 # find issues in metadata formatting
 ```{r}
 
+
 run.all()
 term <- "Turdus rufiventris"
 
@@ -926,6 +928,24 @@ basic_colms <- .format_query_output(only_basic_columns = T)
 # adt_list <- list(xc_adt = xc_adt, wa_adt_s = wa_adt_s, wa_adt_i = wa_adt_i, gb_adt_s = gb_adt_s, gb_adt_i = gb_adt_i, in_adt_s = in_adt_s, in_adt_i= in_adt_i, ml_adt_s = ml_adt_s, ml_adt_i = ml_adt_i)
 # 
 # saveRDS(adt_list, "./testing/adt_list.rds")
+
+# get example macaulay data for calypte coste to show spliting by range
+cal_cos <- query_macaulay(
+  species = "Calypte costae",
+  format = "image",
+  path = tempdir(),
+  dates = c(1976, 2019)
+)
+
+# cal_cos <- query_macaulay(species = "Calypte costae", format = "image",
+#path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
+
+# metadata_list <- lapply(metadata_list, function(x){
+#   attributes(x)$all_data <- FALSE
+#   return(x)
+# })
+
+
 
 adt_list <- readRDS("./testing/adt_list.rds")
 

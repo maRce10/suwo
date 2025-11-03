@@ -43,7 +43,8 @@
 
   # Clean up
   if(exists(".original_options", envir = parent.env(environment()))) {
-    try(rm(".original_options", envir = parent.env(environment())), silent = TRUE)
+    try(rm(".original_options", envir = parent.env(environment())),
+        silent = TRUE)
   }
 
   invisible()

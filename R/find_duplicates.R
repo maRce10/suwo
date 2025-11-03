@@ -13,7 +13,8 @@
 #' duplicates together in the output data frame. Default is `TRUE`.
 #' @param criteria A character string indicating the criteria to use to
 #' determine duplicates. By default, the criteria is set to
-#' \code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1}
+#' \code{country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1
+#' & date == 1}
 #' which means that two entries will be considered duplicates if they have a
 #' country similarity greater than 0.8, locality similarity greater than 0.5,
 #' user_name similarity greater than 0.8, and exact matches for time and date
@@ -56,7 +57,9 @@
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
-find_duplicates <- function(metadata, sort = TRUE, criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1") {
+find_duplicates <- function(metadata, sort = TRUE,
+   criteria =
+  "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1") {
   # check arguments
   arguments <- as.list(base::match.call())[-1]
 
@@ -80,17 +83,30 @@ find_duplicates <- function(metadata, sort = TRUE, criteria = "country > 0.8 & l
   metadata$..original_order <- seq_len(nrow(metadata))
 
   # keep only those complete cases for used columns
-  non_complete_metadata <- metadata[!stats::complete.cases(metadata[,
-                                                                    c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
-  metadata <- metadata[stats::complete.cases(metadata[, c("user_name", "locality", "country", "format", "time", "date", "format")]), ]
+  non_complete_metadata <-
+    metadata[!stats::complete.cases(metadata[, c("user_name",
+                                                  "locality",
+                                                  "country",
+                                                  "format",
+                                                  "time",
+                                                  "date",
+                                                  "format")]), ]
+
+  metadata <-
+    metadata[stats::complete.cases(metadata[, c("user_name",
+                                                "locality",
+                                                "country",
+                                                "format",
+                                                "time",
+                                                "date",
+                                                "format")]), ]
 
 
   # spot duplicates
   similarities <-
-    RecordLinkage::compare.dedup(metadata[, c("user_name", "locality",
-                                              "country", "time", "date",
-                                              "format")],
-                                 strcmp = TRUE)$pairs
+    RecordLinkage::compare.dedup(
+    metadata[, c("user_name", "locality", "country", "time", "date", "format")],
+     strcmp = TRUE)$pairs
 
   # remove last column (is_match)
   similarities <- similarities[, -ncol(similarities)]
@@ -116,34 +132,46 @@ find_duplicates <- function(metadata, sort = TRUE, criteria = "country > 0.8 & l
   ## create labels to group duplicates
   ## also keep track if their belong to the same repository
   for (i in seq_len(nrow(possible_duplicates))) {
-    matching_list[[possible_duplicates$id1[i]]] <- sort(unique(c(matching_list[[possible_duplicates$id1[i]]], possible_duplicates$id2[i])))
-    repo_list[[possible_duplicates$id1[i]]] <- sort(unique(c(repo_list[[possible_duplicates$id1[i]]], possible_duplicates$repo2[i])))
+    matching_list[[possible_duplicates$id1[i]]] <- sort(unique(c(
+      matching_list[[possible_duplicates$id1[i]]], possible_duplicates$id2[i]
+    )))
+    repo_list[[possible_duplicates$id1[i]]] <- sort(unique(c(
+      repo_list[[possible_duplicates$id1[i]]], possible_duplicates$repo2[i]
+    )))
 
-    matching_list[[possible_duplicates$id2[i]]] <- sort(unique(c(matching_list[[possible_duplicates$id2[i]]], possible_duplicates$id1[i])))
-    repo_list[[possible_duplicates$id2[i]]] <- sort(unique(c(repo_list[[possible_duplicates$id2[i]]], possible_duplicates$repo1[i])))
+    matching_list[[possible_duplicates$id2[i]]] <- sort(unique(c(
+      matching_list[[possible_duplicates$id2[i]]], possible_duplicates$id1[i]
+    )))
+    repo_list[[possible_duplicates$id2[i]]] <- sort(unique(c(
+      repo_list[[possible_duplicates$id2[i]]], possible_duplicates$repo1[i]
+    )))
   }
 
   # make those with only 1 value a NA
-  matching_list <- vapply(matching_list, function(x) if(length(x) == 1) as.character(NA) else paste(x, collapse = "-"), character(1))
+  matching_list <- vapply(matching_list, function(x)
+    if (length(x) == 1)
+      as.character(NA)
+    else
+      paste(x, collapse = "-"), character(1))
 
   # convert to unique values and add duplicate index to metadata
   metadata$duplicate_group <- as.numeric(as.factor(matching_list))
   non_complete_metadata$duplicate_group <- NA
 
   # sort by duplicate_group
-  if (sort){
-  metadata <- metadata[order(metadata$duplicate_group), ]
-}
+  if (sort) {
+    metadata <- metadata[order(metadata$duplicate_group), ]
+  }
 
   metadata <- rbind(metadata, non_complete_metadata)
 
   # order back
-  if (!sort){
-  metadata <- metadata[order(metadata$..original_order), ]
+  if (!sort) {
+    metadata <- metadata[order(metadata$..original_order), ]
   }
 
   # remove original order column
   metadata$..original_order <- NULL
 
   return(metadata)
-  }
+}

@@ -5,9 +5,6 @@
 #' @param path Directory path where the .csv file will be saved. Only
 #' applicable for \code{\link{query_macaulay}} query results. By default it
 #' is saved into the current working directory (\code{"."}).
-#' @param token A valid token for the
-#' \href{https://observation.org/}{Observation.org} API. Only needed if the
-#' input metadata comes from \code{\link{query_observation}}.
 #' @param api_key Character string referring to the key assigned by
 #' Xeno-Canto as authorization for searches. Get yours at
 #' \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only
@@ -52,7 +49,6 @@
 #'
 update_metadata <-
   function(metadata,
-           token = NULL,
            path = ".",
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
@@ -92,7 +88,9 @@ update_metadata <-
     query_species <- metadata$species[1]
     query_format <-  metadata$format[1]
     # if more than basic columns are present, assume user wants all columns
-    all_data <- length(setdiff(names(metadata), .format_query_output(only_basic_columns = TRUE))) > 0
+    all_data <-
+      length(setdiff(names(metadata),
+                     .format_query_output(only_basic_columns = TRUE))) > 0
 
     if (metadata$repository[1] == "GBIF") {
       query_output_new <- query_gbif(
@@ -130,25 +128,12 @@ update_metadata <-
       )
 
     }
-    if (metadata$repository[1] == "Observation") {
-      if (is.null(token)) {
-        .stop("A valid token is required for Observation.org API")
-      }
-
-      query_output_new <- query_observation(
-        species = query_species,
-        format = query_format,
-        token = token,
-        cores = cores,
-        verbose = verbose,
-        pb = pb
-      )
-    }
 
     if (metadata$repository[1] == "Xeno-Canto") {
       if (is.null(api_key)) {
         .stop(
-          "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
+          paste("An API key is required for Xeno-Canto API v3.",
+                "Get yours at https://xeno-canto.org/account.")
         )
       }
       query_output_new <- query_xenocanto(
@@ -173,7 +158,8 @@ update_metadata <-
     }
 
     # Find duplicates
-    query_output_new <- query_output_new[!query_output_new$key %in% metadata$key, ]
+    query_output_new <- query_output_new[
+      !query_output_new$key %in% metadata$key, ]
 
     if (nrow(query_output_new) == 0) {
       if (verbose) {
@@ -189,13 +175,15 @@ update_metadata <-
     query_output_df$source <- NULL
 
     # tag new entries
-    query_output_df$new_entry <- ifelse(query_output_df$key %in% metadata$key, FALSE, TRUE)
+    query_output_df$new_entry <- ifelse(query_output_df$key %in% metadata$key,
+                                        FALSE, TRUE)
 
     sum_new <- sum(query_output_df$new_entry)
 
     if (verbose) {
       if (sum_new > 0) {
-        .message(text = paste("\n", sum_new, "new entries found"), "success", suffix = "\n")
+        .message(text = paste("\n", sum_new, "new entries found"),
+                 "success", suffix = "\n")
       }
     }
 

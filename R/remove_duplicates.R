@@ -58,8 +58,16 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 remove_duplicates <-
-  function(metadata, same_repo = FALSE, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves", "Observation")) {
-
+  function(metadata,
+           same_repo = FALSE,
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           repo_priority = c("Xeno-Canto",
+                             "GBIF",
+                             "iNaturalist",
+                             "Macaulay Library",
+                             "Wikiaves",
+                             "Observation")) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
@@ -81,44 +89,44 @@ remove_duplicates <-
     dups <- metadata[!is.na(metadata$duplicate_group), ]
 
     # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & cores > 1) {
+    if (Sys.info()[1] == "Windows" && cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
       cl <- cores
     }
 
     # loop over unique duplicate groups
-    dedups_list <- pblapply_sw_int(unique(dups$duplicate_group), cl = cl, pbar = pb,  function(x){
-
+    dedups_list <- pblapply_sw_int(unique(dups$duplicate_group), cl = cl,
+                                   pbar = pb, function(x) {
       # subset of duplicates
       sub_dups <- dups[dups$duplicate_group == x, ]
 
       # order according to priority
-      sub_dups$.repository_factor <- factor(sub_dups$repository, levels = repo_priority)
+      sub_dups$.repository_factor <- factor(sub_dups$repository,
+                                            levels = repo_priority)
       sub_dups <- sub_dups[order(as.numeric(sub_dups$.repository_factor)), ]
 
       # count possible duplicates by repository
       repo_counts <- table(sub_dups$repository)
 
       # get repo with more observations
-      if (!same_repo){
+      if (!same_repo) {
         # if same_repo is TRUE, keep only one observation per repository
         sub_dups <- sub_dups[!duplicated(sub_dups$repository), ]
       } else {
+        if (length(unique(repo_counts)) == 1) {
+          # select which repo to use
+          top_repo <- repo_priority[
+            which.min(which(repo_priority %in% names(repo_counts)))]
 
-      if (length(unique(repo_counts)) == 1){
-
-        # select which repo to use
-        top_repo <- repo_priority[which.min(which(repo_priority %in% names(repo_counts)))]
-
-        # select XC if available, if not GBIF if not, any
-        if ("Xeno-Canto" %in% names(repo_counts)){
-          top_repo <- "Xeno-Canto"
-        } else if ("GBIF" %in% names(repo_counts)){
-          top_repo <- "GBIF"
-        } else {
-          top_repo <- names(repo_counts)[1]
-        }
+          # select XC if available, if not GBIF if not, any
+          if ("Xeno-Canto" %in% names(repo_counts)) {
+            top_repo <- "Xeno-Canto"
+          } else if ("GBIF" %in% names(repo_counts)) {
+            top_repo <- "GBIF"
+          } else {
+            top_repo <- names(repo_counts)[1]
+          }
 
         } else {
           top_repo <- names(repo_counts)[which.max(repo_counts)]
@@ -129,7 +137,7 @@ remove_duplicates <-
 
       sub_dups$.repository_factor <- NULL
 
-     return(sub_dups)
+      return(sub_dups)
     })
 
     # get all deduplicated
@@ -139,4 +147,4 @@ remove_duplicates <-
     dedup_metadata <- rbind(dedups, no_dups)
 
     return(dedup_metadata)
-      }
+  }

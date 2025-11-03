@@ -30,17 +30,19 @@
 #'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. Complex
 #'  queries can be constructed usin the Xeno-Canto advanced query syntax.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}},
-#' \code{\link{query_inaturalist}}, \code{\link{query_observation}}
+#' \code{\link{query_inaturalist}}
 #' @examples
 #' if (interactive()){
 #' # An API key is required. Get yours at https://xeno-canto.org/account.
 #' XC_API_KEY <- "YOUR_API_KEY_HERE"
 #'
-#' # Simple search for a species (will be converted to sp:"Phaethornis anthophilus")
-#' p_anth <- query_xenocanto(species = "Phaethornis anthophilus", api_key = XC_API_KEY)
+#' # Simple search for a species
+#' p_anth <- query_xenocanto(species = "Phaethornis anthophilus",
+#' api_key = XC_API_KEY)
 #'
 #' # Search for same species and add specify country
-#' p_anth_cr <- query_xenocanto(species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
+#' p_anth_cr <- query_xenocanto(
+#' species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
 #' raw_data = TRUE, api_key = XC_API_KEY)
 #'
 #' # Search for female songs of a species
@@ -66,17 +68,19 @@ query_xenocanto <-
     # Check for API key
     if (is.null(api_key) || !nzchar(api_key)) {
       .stop(
-        "An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account."
+        paste("An API key is required for Xeno-Canto API v3.",
+              "Get yours at https://xeno-canto.org/account.")
       )
     }
 
     # --- build query from tags ---
     # Handle species names with spaces by wrapping them in quotes for the query
-    if (!grepl(":", species)){
-    species_name <- ifelse(grepl("\\s", species), paste0('"', species, '"'), species)
+    if (!grepl(":", species)) {
+      species_name <- ifelse(grepl("\\s", species), paste0('"', species, '"'),
+                             species)
 
-    # Prepend the required 'sp:' tag to the species name
-    query_str <- paste0("sp:", species_name)
+      # Prepend the required 'sp:' tag to the species name
+      query_str <- paste0("sp:", species_name)
     } else {
       # Collapse into a single query string
       query_str <- paste(species, collapse = " ")
@@ -90,12 +94,14 @@ query_xenocanto <-
     }
 
     # --- API request ---
-    query <- jsonlite::fromJSON(paste0(
-      "https://www.xeno-canto.org/api/3/recordings?query=",
-      query_str,
-      "&key=",
-      api_key
-    ))
+    query <- jsonlite::fromJSON(
+      paste0(
+        "https://www.xeno-canto.org/api/3/recordings?query=",
+        query_str,
+        "&key=",
+        api_key
+      )
+    )
 
     if (as.numeric(query$numRecordings) == 0) {
       if (verbose)
@@ -103,7 +109,7 @@ query_xenocanto <-
       return(invisible(NULL))
     }
 
-    if (Sys.info()[1] == "Windows" & cores > 1) {
+    if (Sys.info()[1] == "Windows" && cores > 1) {
       cl <-
         parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
@@ -115,20 +121,24 @@ query_xenocanto <-
       X = seq_len(query$numPages),
       cl = cl,
       FUN = function(y) {
-        query_output <- jsonlite::fromJSON(paste0(
-          "https://www.xeno-canto.org/api/3/recordings?query=",
-          query_str,
-          "&page=",
-          y,
-          "&key=",
-          api_key
-        ))
+        query_output <- jsonlite::fromJSON(
+          paste0(
+            "https://www.xeno-canto.org/api/3/recordings?query=",
+            query_str,
+            "&page=",
+            y,
+            "&key=",
+            api_key
+          )
+        )
 
         query_output$recordings$also <-
-          vapply(query_output$recordings$also,
-                 paste,
-                 collapse = "-",
-                 FUN.VALUE = character(1))
+          vapply(
+            query_output$recordings$also,
+            paste,
+            collapse = "-",
+            FUN.VALUE = character(1)
+          )
 
 
         sono_df <- as.data.frame(query_output$recordings$sono)
@@ -153,12 +163,10 @@ query_xenocanto <-
       nms <- names(X)
       if (length(nms) != length(pooled_column_names)) {
         for (i in pooled_column_names) {
-          X <- data.frame(
-            X,
-            NA,
-            stringsAsFactors = FALSE,
-            check.names = FALSE
-          )
+          X <- data.frame(X,
+                          NA,
+                          stringsAsFactors = FALSE,
+                          check.names = FALSE)
           names(X)[ncol(X)] <- i
         }
       }
@@ -178,7 +186,9 @@ query_xenocanto <-
         sub(".*\\.", "", query_output_df$`file-name`)
       query_output_df$repository <- "Xeno-Canto"
       query_output_df$file <-
-        paste0("https://xeno-canto.org/", query_output_df$id, "/download")
+        paste0("https://xeno-canto.org/",
+               query_output_df$id,
+               "/download")
       query_output_df$date <-
         gsub("-", "/", query_output_df$date)
 

@@ -22,7 +22,8 @@
 #' @examples
 #' if (interactive()){
 #' # search
-#' p_nattereri <- query_wikiaves(species = "Phaethornis nattereri", format = "image")
+#' p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
+#'     format = "image")
 #' }
 #'
 #' @references {
@@ -81,170 +82,177 @@ query_wikiaves <-
 
     if (length(get_ids) == 0) {
       if (verbose) {
-          .message("Search species not found", as = "failure")
+        .message("Search species not found", as = "failure")
       }
       return(invisible(NULL))
     }
-      # make it a data frame
-      get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
+    # make it a data frame
+    get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
 
-      get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
-        response <- httr::GET(
-          url = paste0(
+    get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
+      response <- httr::GET(
+        url = paste0(
+          "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+          wiki_format,
+          "&t=s&s=",
+          get_ids$id[u],
+          "&o=mp&p=1"
+        ),
+        httr::user_agent("suwo (https://github.com/maRce10/suwo)")
+      )
+      httr::stop_for_status(response)
+      as.numeric(httr::content(response, as = "parsed")$registros$total)
+    }, numeric(1))
+
+    if (sum(get_ids$total_registers) == 0) {
+      if (verbose) {
+        .message(text = "No matching records found", as = "failure")
+      }
+      return(invisible(NULL))
+    }
+
+    # get number of pages (20 is the default number of registers per page)
+    get_ids$pages <- ceiling(get_ids$total_registers / 20)
+
+    # remove those rows with no pages
+    # (only needed when many species are returned)
+    get_ids <- get_ids[get_ids$pages > 0, ]
+
+    id_by_page_list <- lapply(seq_len(nrow(get_ids)), function(x) {
+      X <- get_ids[x, ]
+      data.frame(id = X$id, page = 1:X$pages)
+    })
+
+    id_by_page_df <- do.call(rbind, id_by_page_list)
+
+    # search recs in wikiaves (results are returned in pages with 500
+    # recordings each)
+    if (verbose) {
+      .message(n = get_ids$total_registers, as = "success")
+    }
+
+    # set clusters for windows OS
+    if (Sys.info()[1] == "Windows" && cores > 1) {
+      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+    } else {
+      cl <- cores
+    }
+
+    # loop over pages
+    query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl,
+                                         pbar = pb, function(i) {
+      # print(i)
+      Sys.sleep(1)
+
+      query_output <-
+        try(jsonlite::fromJSON(
+          paste0(
             "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
             wiki_format,
-            "&t=s&s=",
-            get_ids$id[u],
-            "&o=mp&p=1"
-          ),
-          httr::user_agent("suwo (https://github.com/maRce10/suwo)")
-        )
-        httr::stop_for_status(response)
-        as.numeric(httr::content(response, as = "parsed")$registros$total)
-      }, numeric(1))
+            "&t=",
+            "s",
+            "&s=",
+            id_by_page_df$id[i],
+            "&o=mp&p=",
+            id_by_page_df$page[i]
+          )
+        ), silent = TRUE)
 
-      if (sum(get_ids$total_registers) == 0) {
-        if (verbose) {
-          .message(text = "No matching records found", as = "failure")
-        }
-        return(invisible(NULL))
+      # retry if an error occurs waiting 1 s
+      if (is(query_output, "try-error")) {
+        Sys.sleep(1)
+
+        query_output <- jsonlite::fromJSON(
+          paste0(
+            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+            wiki_format,
+            "&t=",
+            "s",
+            "&s=",
+            id_by_page_df$id[i],
+            "&o=mp&p=",
+            id_by_page_df$page[i]
+          )
+        )
       }
 
-        # get number of pages (20 is the default number of registers per page)
-        get_ids$pages <- ceiling(get_ids$total_registers / 20)
 
-        # remove those rows with no pages (only needed when many species are returned)
-        get_ids <- get_ids[get_ids$pages > 0, ]
+      # make it a data frame
+      output_df <-
+        as.data.frame(do.call(rbind, lapply(
+          query_output$registros$itens, unlist
+        )))
 
-        id_by_page_list <- lapply(seq_len(nrow(get_ids)), function(x) {
-          X <- get_ids[x, ]
-          out_df <- data.frame(id = X$id, page = 1:X$pages)
-        })
+      # fix link
+      output_df$link <- gsub("#", "", as.character(output_df$link))
 
-        id_by_page_df <- do.call(rbind, id_by_page_list)
+      return(output_df)
+    })
 
-        # search recs in wikiaves (results are returned in pages with 500 recordings each)
-        if (verbose) {
-          .message(n = get_ids$total_registers, as = "success")
-        }
+    # combine into a single data frame
+    query_output_df <- .merge_data_frames(query_output_list)
 
-        # set clusters for windows OS
-        if (Sys.info()[1] == "Windows" & cores > 1) {
-          cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
-        } else {
-          cl <- cores
-        }
+    # rename rows
+    rownames(query_output_df) <- seq_len(nrow(query_output_df))
 
-        # loop over pages
-        query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl, pbar = pb, function(i) {
-          # print(i)
-          Sys.sleep(1)
+    # change jpg to mp3 in links
+    if (format == "sound") {
+      query_output_df$link <-
+        gsub(".jpg$", ".mp3", query_output_df$link)
+    }
 
-          query_output <-
-            try(jsonlite::fromJSON(
-              paste0(
-                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                wiki_format,
-                "&t=",
-                "s",
-                "&s=",
-                id_by_page_df$id[i],
-                "&o=mp&p=",
-                id_by_page_df$page[i]
-              )
-            ),
-            silent = TRUE)
+    # remove weird columns
+    query_output_df$por <- query_output_df$grande <-
+      query_output_df$enviado <- NULL
 
-          # retry if an error occurs waiting 1 s
-          if (is(query_output, "try-error")) {
-            Sys.sleep(1)
+    # flip verified
+    query_output_df$is_questionada <-
+      !as.logical(query_output_df$is_questionada)
 
-            query_output <-jsonlite::fromJSON(
-              paste0(
-                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                wiki_format,
-                "&t=",
-                "s",
-                "&s=",
-                id_by_page_df$id[i],
-                "&o=mp&p=",
-                id_by_page_df$page[i]
-              ))
-            }
+    # add file format
+    query_output_df$file_extension <- sub(".*\\.", "", query_output_df$link)
 
+    # add missing basic columns
+    query_output_df$format <- format
+    query_output_df$country <- "Brazil"
 
-          # make it a data frame
-          output_df <-
-            as.data.frame(do.call(rbind, lapply(query_output$registros$itens, unlist)))
+    # rename output columns
+    query_output_df <- .format_query_output(
+      X = query_output_df,
+      call = base::match.call(),
+      column_names = c(
+        "id" = "key",
+        "tipo" = "format",
+        "id_usuario" = "user.id",
+        "sp.id" = "species_id",
+        "sp.nome" = "species",
+        "sp.nvt" = "common.name",
+        "sp.idwiki" = "repository.id",
+        "autor" = "author",
+        "perfil" = "user_name",
+        "data" = "date",
+        "is_questionada" = "verified",
+        "local" = "locality",
+        "idMunicipio" = "locality.id",
+        "coms" = "number_of_comments",
+        "likes" = "likes",
+        "vis" = "visualizations",
+        "link" = "file_url",
+        "dura" = "duration",
+        "scientific.name" = "species",
+        "record.id" = "key",
+        "species_id" = "species_code",
+        "author" = "user_name"
+      ),
+      all_data = all_data,
+      format = format,
+      raw_data = raw_data
+    )
+    # Generate a file path by combining tempdir() with a file name
+    # file_path <- file.path(tempdir(), paste0(species, ".rds"))
+    #
+    # # Save the object to the file
+    # saveRDS(query_output_df, file = file_path)
+    return(query_output_df)
 
-          # fix link
-          output_df$link <- gsub("#", "", as.character(output_df$link))
-
-          return(output_df)
-        })
-
-        # combine into a single data frame
-        query_output_df <- .merge_data_frames(query_output_list)
-
-        # rename rows
-        rownames(query_output_df) <- seq_len(nrow(query_output_df))
-
-        # change jpg to mp3 in links
-        if (format == "sound") {
-          query_output_df$link <-
-            gsub(".jpg$", ".mp3", query_output_df$link)
-        }
-
-        # remove weird columns
-        query_output_df$por <- query_output_df$grande <- query_output_df$enviado <- NULL
-
-        # flip verified
-        query_output_df$is_questionada <- !as.logical(query_output_df$is_questionada)
-
-        # add file format
-        query_output_df$file_extension <- sub(".*\\.", "", query_output_df$link)
-
-        # add missing basic columns
-        query_output_df$format <- format
-        query_output_df$country <- "Brazil"
-
-        # rename output columns
-        query_output_df <- .format_query_output(
-          X = query_output_df,
-          call = base::match.call(),
-          column_names = c(
-            "id" = "key",
-            "tipo" = "format",
-            "id_usuario" = "user.id",
-            "sp.id" = "species_id",
-            "sp.nome" = "species",
-            "sp.nvt" = "common.name",
-            "sp.idwiki" = "repository.id",
-            "autor" = "author",
-            "perfil" = "user_name",
-            "data" = "date",
-            "is_questionada" = "verified",
-            "local" = "locality",
-            "idMunicipio" = "locality.id",
-            "coms" = "number_of_comments",
-            "likes" = "likes",
-            "vis" = "visualizations",
-            "link" = "file_url",
-            "dura" = "duration",
-            "scientific.name" = "species",
-            "record.id" = "key",
-            "species_id" = "species_code",
-            "author" = "user_name"
-          ),
-          all_data = all_data,
-          format = format,
-          raw_data = raw_data
-          )
-        # Generate a file path by combining tempdir() with a file name
-        # file_path <- file.path(tempdir(), paste0(species, ".rds"))
-        #
-        # # Save the object to the file
-        # saveRDS(query_output_df, file = file_path)
-        return(query_output_df)
-
-}
+  }

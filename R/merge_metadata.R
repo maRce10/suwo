@@ -31,14 +31,16 @@ merge_metadata <-
 
     for (i in seq_along(metadata_list)) {
       if (!is.data.frame(metadata_list[[i]])) {
-        .stop("All inputs must be data frames obtained from suwo query functions (query_x()).")
+      .stop(paste("All inputs must be data frames obtained",
+                  "from suwo query functions (query_x())."))
       }
     }
 
     # get names of the input data frames
     call <- match.call()
     args <- as.list(call)[-1]  # Remove function name
-    df_names <- vapply(args, function(x) as.character(deparse(x)), character(1))
+    df_names <- vapply(args, function(x)
+      as.character(deparse(x)), character(1))
 
     # add source
     for (i in seq_along(metadata_list)) {

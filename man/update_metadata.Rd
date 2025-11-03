@@ -6,7 +6,6 @@
 \usage{
 update_metadata(
   metadata,
-  token = NULL,
   path = ".",
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
@@ -18,10 +17,6 @@ update_metadata(
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query
 function (i.e. `query_reponame()`).}
-
-\item{token}{A valid token for the
-\href{https://observation.org/}{Observation.org} API. Only needed if the
-input metadata comes from \code{\link{query_observation}}.}
 
 \item{path}{Directory path where the .csv file will be saved. Only
 applicable for \code{\link{query_macaulay}} query results. By default it

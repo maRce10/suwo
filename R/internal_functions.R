@@ -146,36 +146,34 @@ pblapply_sw_int <- function(X,
 }
 
 .message <- function(text =
-                       paste0("Obtaining metadata ({n} matching record{?s} found)"),
-                     as = c("success", "warning", "failure", "error", "message"),
+                  paste0("Obtaining metadata ({n} matching record{?s} found)"),
+                  as = c("success", "warning", "failure", "error", "message"),
                      n = NULL,
                      suffix = ":\n") {
-
   if (!is.null(n))
     text <- cli::pluralize(text)
 
-  if (as == "success"){
-
-    if(!cli::is_utf8_output()){
+  if (as == "success") {
+    if (!cli::is_utf8_output()) {
       return(text)
     }
 
     cli::cli_alert_success(paste0(text, " ", .add_emoji("happy"), suffix))
   }
 
-  if (as == "warning"){
+  if (as == "warning") {
     cli::cli_alert_warning(paste0(text, " "))
   }
 
-  if (as == "failure"){
+  if (as == "failure") {
     cli::cli_alert_danger(paste0(text, " ", .add_emoji("sad")))
   }
 
-  if (as == "error"){
+  if (as == "error") {
     cli::cli_alert_danger(paste0(text, " "))
   }
 
-  if (as == "message"){
+  if (as == "message") {
     cli::cli_alert_info(paste0(text, " "))
   }
 }
@@ -183,8 +181,7 @@ pblapply_sw_int <- function(X,
 
 # sanitize the name of a download folder
 .sanitize_folder_name <- function(name, folder_by) {
-
-  if (is.na(name)){
+  if (is.na(name)) {
     name <- paste0("unknown_", folder_by)
   }
 
@@ -210,7 +207,6 @@ pblapply_sw_int <- function(X,
 
 # Function to download file according to repository
 .download_basic <- function(metadata, x, path, overwrite, folder_by = NULL) {
-
   if (!is.null(folder_by)) {
     folder_name <- .sanitize_folder_name(metadata[x, folder_by], folder_by)
     path <- normalizePath(file.path(path, folder_name))
@@ -225,9 +221,9 @@ pblapply_sw_int <- function(X,
   destfile <- file.path(normalizePath(path), metadata$downloaded_file_name[x])
 
   exists <- file.exists(destfile)
-  if (exists & !overwrite){
+  if (exists && !overwrite) {
     (return("already there (not downloaded)"))
-    }
+  }
 
   dl_result <- try(download.file(
     url = as.character(metadata$file_url[x]),
@@ -236,7 +232,8 @@ pblapply_sw_int <- function(X,
     mode = "wb",
     method = "auto",
     cacheOK = TRUE,
-    extra = getOption("download.file.extra")),
+    extra = getOption("download.file.extra")
+  ),
   silent = TRUE)
 
   # if failed try again after wating 0.5 seconds
@@ -252,24 +249,26 @@ pblapply_sw_int <- function(X,
       extra = getOption("download.file.extra")
     ),
     silent = TRUE)
-    }
+  }
 
   # if still failed then return FALSE
   if (is(dl_result, "try-error")) {
     return("failed")
   } else {
     if (exists)
-      (return("overwritten")) else
-    return("saved")
+      (return("overwritten"))
+    else
+      return("saved")
   }
 }
 
 # suppressing warnings from download.file
-.download <- function(...) suppressWarnings(.download_basic(...))
+.download <- function(...){
+  suppressWarnings(.download_basic(...))
+}
 
 # fix extension so it is homogeneous across functions
 .fix_extension <- function(x, url) {
-
   # if the strings contains "?" extract string before "?"
   if (any(grepl("\\?", x)))
     x <- gsub("\\?.*$", "", x)
@@ -319,7 +318,7 @@ pblapply_sw_int <- function(X,
 
 # rbind all data frames in a list after making them have the same columns
 # X must be a list of data frames
-.merge_data_frames <- function(X){
+.merge_data_frames <- function(X) {
   # get common names to all data frames in X
   common_names <- unique(unlist(lapply(X, names)))
 
@@ -367,7 +366,6 @@ pblapply_sw_int <- function(X,
                                  call,
                                  input_file = NA,
                                  only_basic_columns = FALSE) {
-
   if (raw_data)
     return(X)
 
@@ -461,7 +459,7 @@ pblapply_sw_int <- function(X,
 
     # fix image size in URL
     X$file_url <- gsub("square", "original", X$file_url)
-    }
+  }
 
   # fix time
   ## for Macaulay first
@@ -492,19 +490,23 @@ pblapply_sw_int <- function(X,
   X <- X[, c(basic_colums, non_basic_colms)]
 
   # remove rows with NAs in URL
-  if (anyNA(X$file_url)){
-
+  if (anyNA(X$file_url)) {
     option_df_name <- tolower(paste0(X$repository[1], "_excluded_results"))
 
     # save at options
     options(stats::setNames(list(X[is.na(X$file_url), ]), option_df_name))
 
     # let users know some observations were excluded
-    cat(.message(text = paste0("{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere} removed from the results (saved at `options('", option_df_name,"')`).\n"),
-                    as = "warning",
-                    n  = sum(is.na(X$file_url))
-    )
-    )
+    cat(.message(
+      text = paste0(
+        "{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere}",
+        " removed from the results (saved at `options('",
+        option_df_name,
+        "')`).\n"
+      ),
+      as = "warning",
+      n  = sum(is.na(X$file_url))
+    ))
 
     # remove those observations
     X <- X[!is.na(X$file_url), ]
@@ -533,7 +535,6 @@ pblapply_sw_int <- function(X,
     query_xenocanto = "Xeno-Canto",
     query_gbif = "GBIF",
     query_inaturalist = "iNaturalist",
-    query_observation = "Observation",
     query_macaulay = "Macaulay Library"
   )
 
@@ -541,7 +542,6 @@ pblapply_sw_int <- function(X,
 
 ## function to split macaulay queries by year-month
 .date_ranges <- function(x) {
-
   x <- sort(x)
   # current year as year.decimal
   current_year <- as.numeric(format(Sys.Date(), "%Y"))
@@ -571,19 +571,22 @@ pblapply_sw_int <- function(X,
       poss_month_year_df$year + (poss_month_year_df$month - 1) / 12
 
 
-    date_list <- lapply(seq_along(x[-1]), function(y){
+    date_list <- lapply(seq_along(x[-1]), function(y) {
       time_diff <- poss_month_year_df$year_decimal - x[y]
 
-      start <- poss_month_year_df[poss_month_year_df$year_decimal == poss_month_year_df$year_decimal[time_diff >= 0][1], ]
+      start <- poss_month_year_df[
+        poss_month_year_df$year_decimal == poss_month_year_df$year_decimal[
+          time_diff >= 0][1], ]
       time_diff <- poss_month_year_df$year_decimal - x[y + 1]
-      end <- poss_month_year_df[poss_month_year_df$year_decimal == rev(poss_month_year_df$year_decimal[time_diff < 0])[1], ]
+      end <- poss_month_year_df[
+        poss_month_year_df$year_decimal == rev(poss_month_year_df$year_decimal[
+          time_diff < 0])[1], ]
 
       out <- cbind(start[, 1:2], end[, 1:2])
 
       names(out) <- c("start_month", "start_year", "end_month", "end_year")
-    return(out)
-      }
-    )
+      return(out)
+    })
 
     dates_df <- do.call(rbind, date_list)
 
@@ -607,7 +610,13 @@ pblapply_sw_int <- function(X,
     # remove years above current year
     unique_years <- unique_years[unique_years <= current_year]
 
-    dates_df <- data.frame(start_month = 1, start_year = x[-length(x)], end_month = 12, end_year = c(x[-c(1, length(x))] - 1, x[length(x)]), stringsAsFactors = FALSE)
+    dates_df <- data.frame(
+      start_month = 1,
+      start_year = x[-length(x)],
+      end_month = 12,
+      end_year = c(x[-c(1, length(x))] - 1, x[length(x)]),
+      stringsAsFactors = FALSE
+    )
   }
   return(dates_df)
 }
@@ -649,80 +658,86 @@ pblapply_sw_int <- function(X,
 }
 
 
-# clean not valid date format (must be "YYYY-MM-DD"), if possible extracts year from various formats, using current year as upper bound
+# clean not valid date format (must be "YYYY-MM-DD"),
+# if possible extracts year from various formats, using current year
+# as upper bound
 .clean_dates <- function(date_strings) {
-    current_year <- as.numeric(format(Sys.Date(), "%Y"))
+  current_year <- as.numeric(format(Sys.Date(), "%Y"))
 
-    vapply(date_strings, function(date_str) {
-      if (is.na(date_str)) {
-        return(NA_character_)
-      }
-
-      # First check if it's valid YYYY-MM-DD format
-      if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
-        # Validate month and day ranges
-        parts <- strsplit(date_str, "-")[[1]]
-        year <- as.numeric(parts[1])
-        month <- as.numeric(parts[2])
-        day <- as.numeric(parts[3])
-
-        if (month >= 1 & month <= 12 & day >= 1 & day <= 31 & year <= current_year) {
-          return(date_str)  # Keep the full valid date
-        }
-      }
-
-      # If not valid YYYY-MM-DD, try to extract just the year
-      year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
-      if (length(year_match) > 0) {
-        year <- as.numeric(year_match[1])
-        # Return just the year if it's reasonable (between 1900 and current year)
-        if (year >= 1900 & year <= current_year) {
-          return(as.character(year))
-        }
-      }
-
-      # If we can't extract a reasonable year, return NA
+  vapply(date_strings, function(date_str) {
+    if (is.na(date_str)) {
       return(NA_character_)
-    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-  }
+    }
+
+    # First check if it's valid YYYY-MM-DD format
+    if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
+      # Validate month and day ranges
+      parts <- strsplit(date_str, "-")[[1]]
+      year <- as.numeric(parts[1])
+      month <- as.numeric(parts[2])
+      day <- as.numeric(parts[3])
+
+      if (month >= 1 &
+          month <= 12 & day >= 1 & day <= 31 & year <= current_year) {
+        return(date_str)  # Keep the full valid date
+      }
+    }
+
+    # If not valid YYYY-MM-DD, try to extract just the year
+    year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
+    if (length(year_match) > 0) {
+      year <- as.numeric(year_match[1])
+      # Return just the year if it's reasonable (between 1900 and current year)
+      if (year >= 1900 & year <= current_year) {
+        return(as.character(year))
+      }
+    }
+
+    # If we can't extract a reasonable year, return NA
+    return(NA_character_)
+  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+}
 
 # homogenize dates
 .homogenize_dates <- function(date_strings) {
   date_strings <- vapply(date_strings, function(date_str) {
-      # If input is NA, return NA
-      if (is.na(date_str)) {
-        return(NA_character_)
-      }
+    # If input is NA, return NA
+    if (is.na(date_str)) {
+      return(NA_character_)
+    }
 
-      # Try to parse the date
-      parsed <- lubridate::parse_date_time(date_str,
-                                orders = c("dmy", "ymd", "ymd HMS", "ymd HM",
-                                           "ymd"),
-                                truncated = 2,
-                                quiet = TRUE)
+    # Try to parse the date
+    parsed <- lubridate::parse_date_time(
+      date_str,
+      orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
+      truncated = 2,
+      quiet = TRUE
+    )
 
-      # If parsing succeeded, convert to Date format
-      if (!is.na(parsed)) {
-        as.character(as.Date(parsed))
-      } else {
-        # If parsing failed but input is not NA, return the input value
-        date_str
-      }
-    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+    # If parsing succeeded, convert to Date format
+    if (!is.na(parsed)) {
+      as.character(as.Date(parsed))
+    } else {
+      # If parsing failed but input is not NA, return the input value
+      date_str
+    }
+  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 
   # remove invalid dates
   date_strings <- .clean_dates(date_strings)
-  }
+}
 
 # Function to check if a string is a valid time
 .is_valid_time <- function(time_str) {
-  if (is.na(time_str)) return(FALSE)
+  if (is.na(time_str))
+    return(FALSE)
 
   # Remove spaces and convert to lowercase for easier matching
   clean_str <- tolower(trimws(time_str))
 
   # Check for invalid patterns first
-  if (grepl("^\\?|xx|morning|^[a-z]+$", clean_str) && !grepl("am|pm", clean_str)) {
+  if (grepl("^\\?|xx|morning|^[a-z]+$", clean_str) &&
+      !grepl("am|pm", clean_str)) {
     return(FALSE)
   }
 
@@ -916,7 +931,8 @@ pblapply_sw_int <- function(X,
     )
 
     checkmate::assertNames(
-      x = names(args$metadata), must.include = .format_query_output(only_basic_columns = TRUE),
+      x = names(args$metadata),
+      must.include = .format_query_output(only_basic_columns = TRUE),
       add = check_collection,
       .var.name = "column names in metadata"
     )
@@ -929,7 +945,7 @@ pblapply_sw_int <- function(X,
         .var.name = "folder_by"
       )
     }
-    }
+  }
 
 
 
@@ -951,7 +967,7 @@ pblapply_sw_int <- function(X,
 
   # Only set options that haven't been set by user
   toset <- !(names(op.yourpackage) %in% names(op))
-  if(any(toset)) {
+  if (any(toset)) {
     options(op.yourpackage[toset])
   }
 
@@ -963,9 +979,12 @@ pblapply_sw_int <- function(X,
 
 ## check internet
 # gracefully fail if internet resource is not available
-.checkconnection <- function(service = c("gbif", "inat", "macaulay", "wikiaves",
-                                         "xenocanto", "observation")) {
-
+.checkconnection <- function(service = c("gbif",
+                                         "inat",
+                                         "macaulay",
+                                         "wikiaves",
+                                         "xenocanto",
+                                         "observation")) {
   # set user agent option globally
   options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
 
@@ -993,12 +1012,17 @@ pblapply_sw_int <- function(X,
   name <- messages[[service]]
 
   # Attempt request
-  response <- try(httr::GET(url,  httr::user_agent("suwo (https://github.com/maRce10/suwo)")), silent = TRUE)
+  response <- try(httr::GET(url,
+                  httr::user_agent("suwo (https://github.com/maRce10/suwo)")),
+                  silent = TRUE)
 
-  if (inherits(response, "try-error") || httr::http_error(response)) {
-    .message(paste("No connection to", name, "(check your internet connection!)"), as = "failure")
+  if (inherits(response, "try-error") ||
+      httr::http_error(response)) {
+    .message(paste("No connection to", name,
+                   "(check your internet connection!)"),
+             as = "failure")
     return(FALSE)
-    }
+  }
 
   content <- httr::content(response, as = "text", encoding = "UTF-8")
   if (grepl("Could not connect to the database", content)) {
@@ -1011,9 +1035,11 @@ pblapply_sw_int <- function(X,
 
 # look up species taxon code for Macaulay queries
 .taxon_code_search <-
-  function(species = getOption("species"), ml_taxon_code = ml_taxon_code) {
-    taxon_code <- ml_taxon_code$species_code[ml_taxon_code$scientific.name == species &
-                                               !is.na(ml_taxon_code$scientific.name)]
+  function(species = getOption("species"),
+           ml_taxon_code = ml_taxon_code) {
+    taxon_code <- ml_taxon_code$species_code[
+      ml_taxon_code$scientific.name == species &
+      !is.na(ml_taxon_code$scientific.name)]
     if (length(taxon_code) > 0) {
       return(taxon_code[1])
     } else {

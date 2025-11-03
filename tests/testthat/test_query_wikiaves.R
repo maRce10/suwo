@@ -83,7 +83,8 @@ test_that("test all_data FALSE", {
 
   query_col_names <- colnames(df1)
 
-  expect_true(all(query_col_names %in% expected_col_names) & all(expected_col_names %in% query_col_names),
+  expect_true(all(query_col_names %in% expected_col_names) &
+                all(expected_col_names %in% query_col_names),
               info = "Column names do not match the expected names")
 
 })

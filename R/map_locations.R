@@ -37,7 +37,8 @@ map_locations <- function(metadata,
                           by = "species") {
   # error message if leaflet is not installed
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    .stop("must install 'leaflet' to use leaflet style maps (when 'leaflet.map = TRUE')")
+    .stop(paste("must install 'leaflet' to use leaflet",
+                "style maps (when 'leaflet.map = TRUE')"))
   }
 
   # make lat lon numeric and remove rows with no coords
@@ -190,7 +191,8 @@ map_locations <- function(metadata,
   if (any(!inx_with_coors)){
     .message(
       paste(
-        "{n} observation{?s} d{?oes/o} not have geographic coordinates and w{?as/ere} ignored"
+        "{n} observation{?s} d{?oes/o} not have geographic",
+        "coordinates and w{?as/ere} ignored"
       ),
       n =  sum(!inx_with_coors),
       as = "warning"

@@ -64,7 +64,12 @@ searches will be split by months within years as well.}
 By default the function will use the internal data frame
 \code{"ml_taxon_code"} included as example data in the package. This object
 contains the data from the Clement list from october 2024
-(downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.}
+(downloaded from
+\url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}).
+If new versions of the list become available it will be updated in new
+package versions. However, if users need to update it they can download the
+new list version, read it in R as a data frame and provide it to the function
+ through this argument.}
 }
 \value{
 The function returns a data frame with the metadata of the media

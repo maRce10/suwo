@@ -22,7 +22,13 @@
 #' By default the function will use the internal data frame
 #' \code{"ml_taxon_code"} included as example data in the package. This object
 #' contains the data from the Clement list from october 2024
-#' (downloaded from \url{https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2024/2024-citation-checklist-downloads/}). If new versions of the list become available it will be updated in new package versions. However, if users need to update it they can download the new list version, read it in R as a data frame and provide it to the function through this argument.
+#' (downloaded from
+#' \url{https://www.birds.cornell.edu/clementschecklist/introduction/
+#' updateindex/october-2024/2024-citation-checklist-downloads/}).
+#' If new versions of the list become available it will be updated in new
+#' package versions. However, if users need to update it they can download the
+#' new list version, read it in R as a data frame and provide it to the function
+#'  through this argument.
 #' @export
 #' @name query_macaulay
 #' @return The function returns a data frame with the metadata of the media
@@ -137,11 +143,9 @@ query_macaulay <-
 
     # function will stop here
     if (is.null(taxon_code)) {
-      .message(text = paste(
-        "No matching species found for ",
-        species,
-        sep = ""
-      ),as = "failure")
+      .message(text =
+                 paste("No matching species found for ", species, sep = ""),
+               as = "failure")
 
       return(invisible(NULL))
     }
@@ -154,7 +158,6 @@ query_macaulay <-
     new_csv_file_list <- list()
 
     if (is.null(files)) {
-
       # Apply to all elements
       if (!is.null(dates)) {
         date_ranges_df <- .date_ranges(x = dates)
@@ -165,7 +168,8 @@ query_macaulay <-
       for (i in seq_len(nrow(date_ranges_df))) {
         if (!is.null(dates)) {
           # extract date range to let users know while batching
-          date_range <- if (date_ranges_df$start_month[i] == 1 & date_ranges_df$end_month[i] == 12) {
+          date_range <- if (date_ranges_df$start_month[i] == 1 &&
+                            date_ranges_df$end_month[i] == 12) {
             if (date_ranges_df$start_year[i] !=  date_ranges_df$end_year[i]) {
               paste0(date_ranges_df$start_year[i],
                      "-",
@@ -198,11 +202,15 @@ query_macaulay <-
           }
         }
         # let users know where to save the file
-        cat("A browser will open the macaulay library website. Save the .csv file ('export' button) to this directory:")
+        cat(
+          paste("A browser will open the macaulay library website.",
+                "Save the .csv file ('export' button) to this directory:")
+        )
         cat(normalizePath(path), "/", sep = "")
-        cat("   (R is monitoring for new .csv files. Press ESC to stop the function)")
+ cat("   (R is monitoring for new .csv files. Press ESC to stop the function)")
 
-        # pause 3 s so users can read message but only in the first query in a batch
+        # pause 3 s so users can read message but only in the first query in
+        # a batch
         if (i == 1)
           Sys.sleep(3)
 
@@ -224,7 +232,8 @@ query_macaulay <-
             date_ranges_df$end_year[i]
           )
 
-          if (date_ranges_df$start_month[i] != 1 | date_ranges_df$end_month[i] != 12) {
+          if (date_ranges_df$start_month[i] != 1 ||
+              date_ranges_df$end_month[i] != 12) {
             search_url <- paste0(
               search_url,
               "&beginMonth=",
@@ -239,7 +248,8 @@ query_macaulay <-
         utils::browseURL(search_url)
 
         # monitor for new files
-        new_csv_file_list[[length(new_csv_file_list) + 1]] <- .monitor_new_files(path  = path)
+        new_csv_file_list[[length(new_csv_file_list) + 1]] <-
+          .monitor_new_files(path  = path)
 
         # let users know the name of the csv file that was read
         cat("\nThe data will be read from the file:", suffix = " ")
@@ -257,7 +267,8 @@ query_macaulay <-
     # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)
 
-    query_output_df$file_url <- vapply(seq_len(nrow(query_output_df)), function(x) {
+    query_output_df$file_url <- vapply(seq_len(nrow(query_output_df)),
+                                       function(x) {
       paste0(
         "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/",
         query_output_df$ML.Catalog.Number[x],
@@ -285,13 +296,24 @@ query_macaulay <-
     )
 
     if (verbose) {
-      .message(text = "{n} matching record{?s} found", n = nrow(query_output_df), as = "success", suffix = "\n")
+      .message(
+        text = "{n} matching record{?s} found",
+        n = nrow(query_output_df),
+        as = "success",
+        suffix = "\n"
+      )
     }
 
 
     if (nrow(query_output_df) == 10000) {
-      .message(text =
-        paste("The query returned 10,000 records, which is the maximum allowed. It is likely that more", format, "files that matched the query exists but were not retrieved."),
+      .message(
+        text =
+          paste(
+            "The query returned 10,000 records, which is the maximum allowed.",
+            "It is likely that more",
+            format,
+            "files that matched the query exists but were not retrieved."
+          ),
         as = "warning"
       )
     }

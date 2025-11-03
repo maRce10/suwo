@@ -39,7 +39,11 @@ option ( \code{options(pb = TRUE)}).}
 console. Default is \code{TRUE}. Can be set globally for the current R
 session via the "verbose" option ( \code{options(verbose = TRUE)}).}
 
-\item{dataset}{The name of a specific dataset in which to focus the query (by default it searchs across all available datasets). Users can check available dataset names by downloading this csv file \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}. See \url{https://www.gbif.org/dataset/search?q=} for more details.}
+\item{dataset}{The name of a specific dataset in which to focus the query
+(by default it searchs across all available datasets).
+Users can check available dataset names by downloading this csv file
+ \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}.
+ See \url{https://www.gbif.org/dataset/search?q=} for more details.}
 
 \item{all_data}{Logical argument that determines if all data available
 from database is shown in the results of search. Default is \code{FALSE}.

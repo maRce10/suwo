@@ -274,7 +274,8 @@ colnames <- lapply(colnames, function(x)
 additional_data <- vapply(colnames, function(x)
   paste(x, collapse = ", "), FUN.VALUE = character(1))
 
-additional_data <- additional_data[match(names(metadata_list), names(additional_data))]
+additional_data <- additional_data[match(names(metadata_list), 
+                                         names(additional_data))]
 
 query_summary <- data.frame(
   Function = Function,
@@ -297,7 +298,7 @@ query_summary <- query_summary[order(query_summary$Repository),]
 
 query_summary$`URL link` <- kableExtra::cell_spec(query_summary$`URL link`,
                                                   "html",
-                                                  link = query_summary$`URL link`,
+                                                link = query_summary$`URL link`,
                                                   new_tab = TRUE)
 
 query_summary$Function <- kableExtra::cell_spec(
@@ -334,7 +335,8 @@ These are some example queries:
 # Load suwo package
 library(suwo)
 
-h_sarapiquensis <- query_inaturalist(species = "Heliconia sarapiquensis", format = "image")
+h_sarapiquensis <- query_inaturalist(species = "Heliconia sarapiquensis", 
+                                     format = "image")
 
 head(h_sarapiquensis, 4)
 ```
@@ -352,7 +354,8 @@ head(h_harpyja, 4)
 
 ```{r, echo=FALSE}
 
-subset(vignette_metadata$h_harpyja, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$h_harpyja, 
+       select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
@@ -369,7 +372,8 @@ head(p_lotor, 4)
 
 ```{r, echo=FALSE}
 
-subset(vignette_metadata$p_lotor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$p_lotor, 
+       select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
@@ -431,7 +435,8 @@ The code above examplifies the most common use of query functions, which applies
 [query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) is the only interactive function. This means that when users run a query the function opens a browser window to the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog), where the users must download a .csv file with the metadata. Here is a example of a query for strip-throated hermit (_Phaethornis striigularis_) videos:
 
 ```{r, eval = FALSE}
-p_striigularis <- query_macaulay(species = "Phaethornis striigularis", format = "video")
+p_striigularis <- query_macaulay(species = "Phaethornis striigularis", 
+                                 format = "video")
 ```
 
 Users must click on the "Export" button to save the .csv file with the metadata: 
@@ -455,7 +460,8 @@ head(p_striigularis, 4)
 
 ```{r, echo=FALSE}
 
-subset(vignette_metadata$p_striigularis, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$p_striigularis, 
+       select = suwo:::.format_query_output(only_basic_columns = TRUE))
 
 ```
 
@@ -486,14 +492,16 @@ Users can check at the Macaulay Library website how many records are available f
 ```{r, eval = FALSE}
 
 # replace "YOUR_XC_API_KEY" with your key
-t_tricolor <- query_xenocanto(species = "Thyroptera tricolor", api_key = "YOUR_XC_API_KEY")
+t_tricolor <- query_xenocanto(species = "Thyroptera tricolor", 
+                              api_key = "YOUR_XC_API_KEY")
 
 head(t_tricolor, 4)
 ```
 
 ```{r, echo=FALSE}
 
-subset(vignette_metadata$t_tricolor, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$t_tricolor, 
+       select = suwo:::.format_query_output(only_basic_columns = TRUE))
 ```
 
 ## Special queries
@@ -504,14 +512,17 @@ subset(vignette_metadata$t_tricolor, select = suwo:::.format_query_output(only_b
 ```{r, eval = FALSE}
 
 # replace "YOUR_XC_API_KEY" with your key
-a_hahneli <- query_xenocanto(species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"', api_key = "YOUR_XC_API_KEY")
+a_hahneli <- query_xenocanto(
+  species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"', 
+  api_key = "YOUR_XC_API_KEY")
 
 head(a_hahneli, 4)
 ```
 
 ```{r, echo=FALSE}
 
-subset(vignette_metadata$a_hahneli, select = suwo:::.format_query_output(only_basic_columns = TRUE))
+subset(vignette_metadata$a_hahneli,
+       select = suwo:::.format_query_output(only_basic_columns = TRUE))
 ```
 
 # Update metadata
@@ -528,7 +539,9 @@ c_eisentrauti <- query_inaturalist(species = "Chorthippus eisentrauti")
 head(c_eisentrauti, 4)
 
 # exclude new observations (simulate old data)
-old_c_eisentrauti <- c_eisentrauti[c_eisentrauti$date <= "2024-12-31" | is.na(c_eisentrauti$date), ]
+old_c_eisentrauti <- 
+  c_eisentrauti[c_eisentrauti$date <= "2024-12-31" | is.na(c_eisentrauti$date), 
+                ]
 
 # update "old" data
 upd_c_eisentrauti <- update_metadata(metadata = old_c_eisentrauti)
@@ -599,7 +612,8 @@ head(dups_merged_metadata)
 
 ```{r, echo=FALSE}
 
-boesman_group <- dups_merged_metadata$duplicate_group[dups_merged_metadata$key== 273100]
+boesman_group <- 
+  dups_merged_metadata$duplicate_group[dups_merged_metadata$key== 273100]
 
 # Define display function
 display_code <- function(value) {
@@ -682,7 +696,7 @@ This is a multipanel plot of 6 of the downloaded images (just for illustration p
 par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
-  img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
+img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
   plot(
     1:2,
     type = 'n',
@@ -766,7 +780,7 @@ This is a multipanel plot of the downloaded images (just for fun):
 par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
-  img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
+img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
   plot(
     1:2,
     type = 'n',

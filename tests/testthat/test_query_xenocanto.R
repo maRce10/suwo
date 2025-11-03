@@ -36,7 +36,8 @@ test_that("no recs found", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
           "Xeno-Canto API key not set")
 
-  df1 <- query_xenocanto(species = '000', api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  df1 <- query_xenocanto(species = '000',
+                         api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   expect_true(is.null(df1))
 })
@@ -82,9 +83,11 @@ test_that("test all_data FALSE", {
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
 
-  expected_col_names <- .format_query_output(only_basic_columns = T)
+  expected_col_names <- .format_query_output(only_basic_columns = TRUE)
   query_col_names <- colnames(df1)
-  expect_true(all(expected_col_names %in% query_col_names) && all(query_col_names %in% expected_col_names), info = "Column names do not match the expected names")
+  expect_true(all(expected_col_names %in% query_col_names) &&
+                all(query_col_names %in% expected_col_names),
+              info = "Column names do not match the expected names")
 })
 
 test_that("test raw_data TRUE", {
@@ -117,7 +120,8 @@ test_that("test tags", {
 
   expect_true(nrow(df1) > 1)
 
-  femsong <- query_xenocanto(species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"',
+  femsong <- query_xenocanto(
+    species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"',
                              api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   expect_true(nrow(femsong) > 490)

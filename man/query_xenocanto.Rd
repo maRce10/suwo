@@ -106,7 +106,7 @@ to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
 }
 \seealso{
 \code{\link{query_gbif}}, \code{\link{query_wikiaves}},
-\code{\link{query_inaturalist}}, \code{\link{query_observation}}
+\code{\link{query_inaturalist}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
