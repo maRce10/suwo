@@ -1,4 +1,4 @@
-test_that("search Glaucis dohrnii sound", {
+test_that("search Helicobacter pylori sound", {
   skip_on_cran()
   skip_if_offline()
 
@@ -13,7 +13,7 @@ test_that("search Spatula discors sound (no sounds)", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound")
+  df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound", identified = TRUE, verifiable = TRUE)
 
   expect_true(nrow(df1) >= 20)
 

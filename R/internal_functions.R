@@ -902,15 +902,6 @@ pblapply_sw_int <- function(X,
     )
   }
 
-  if (!is.null(args$token)) {
-    checkmate::assert_multi_class(
-      x = args$token,
-      classes = c("character"),
-      add = check_collection,
-      .var.name = "token"
-    )
-  }
-
   if (!is.null(args$path)) {
     if (!is.null(args$path)) {
       checkmate::assert_directory(
@@ -1037,9 +1028,9 @@ pblapply_sw_int <- function(X,
 .taxon_code_search <-
   function(species = getOption("species"),
            ml_taxon_code = ml_taxon_code) {
-    taxon_code <- ml_taxon_code$species_code[
-      ml_taxon_code$scientific.name == species &
-      !is.na(ml_taxon_code$scientific.name)]
+    taxon_code <- ml_taxon_code$SPECIES_CODE[
+      ml_taxon_code$SCI_NAME == species &
+      !is.na(ml_taxon_code$SCI_NAME)]
     if (length(taxon_code) > 0) {
       return(taxon_code[1])
     } else {

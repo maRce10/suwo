@@ -30,7 +30,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(a$download_file_name %in% expected_files))
+  expect_true(all(a$downloaded_file_name %in% expected_files))
 
 })
 
@@ -70,7 +70,7 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(a$download_file_name %in% expected_files))
+  expect_true(all(a$downloaded_file_name %in% expected_files))
 
 })
 
@@ -106,7 +106,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   expect_true(all(expected_files %in% fls))
 
   expect_true(all(
-    a$download_file_name %in% c(
+    a$downloaded_file_name %in% c(
       "Phaethornis_anthophilus-XC532163.mp3",
       "Phaethornis_anthophilus-XC568491.mp3"
     )
@@ -143,7 +143,7 @@ test_that("wikiaves Glaucis dohrnii sp download, all.data = TRUE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(a$download_file_name %in% expected_files))
+  expect_true(all(a$downloaded_file_name %in% expected_files))
 
 })
 
@@ -174,7 +174,7 @@ test_that("wikiaves Urubitinga solitaria sp download image all.data = FALSE",
             # test
             expect_true(all(expected_files %in% fls))
 
-            expect_true(all(a$download_file_name %in% expected_files))
+            expect_true(all(a$downloaded_file_name %in% expected_files))
 
           })
 
@@ -206,7 +206,7 @@ test_that("search GBIF sp download image all_data = TRUE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(a$download_file_name %in% expected_files))
+  expect_true(all(a$downloaded_file_name %in% expected_files))
 
 })
 
@@ -236,7 +236,7 @@ test_that("search GBIF sp download sound all_data = FALSE", {
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(a$download_file_name %in% expected_files))
+  expect_true(all(a$downloaded_file_name %in% expected_files))
 })
 
 ## iNaturalist
@@ -272,7 +272,7 @@ test_that("search inaturalist sp download all_data = TRUE", {
   )
 
   expect_true(all(exp_files %in% fls))
-  expect_true(all(a$download_file_name %in% exp_files))
+  expect_true(all(a$downloaded_file_name %in% exp_files))
 
 })
 
@@ -288,11 +288,11 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
 
   sin2 <- subset(in2, key %in% test_keys)
 
-  a <- download_media(metadata = sin2, path = tempdir())
+  a <- download_media(metadata = sin2, path = tempdir(), folder_by = "file_extension")
 
   fls <- list.files(path = tempdir(),
                     pattern = ".mp3$|m4a$",
-                    ignore.case = TRUE)
+                    ignore.case = TRUE, recursive = TRUE)
 
   # remove files
   unlink(file.path(tempdir(), fls))
@@ -300,8 +300,8 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
   expected_files <- c("Rattus_rattus-INAT281653293.m4a",
                       "Rattus_rattus-INAT283643216.mp3")
 
-  expect_true(all(expected_files %in% fls))
-  expect_true(all(a$download_file_name %in% fls))
+  expect_true(all(expected_files %in% basename(fls)))
+  expect_true(all(a$downloaded_file_name %in% fls))
 
 })
 
@@ -337,7 +337,7 @@ test_that("search macaulay sp download all_data = TRUE", {
                       "Glaucis_dohrnii-ML624733750.mp3")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(a$download_file_name %in% fls))
+  expect_true(all(a$downloaded_file_name %in% fls))
 
 })
 
@@ -371,7 +371,7 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
                       "Harpia_harpyja-ML639955653.jpeg")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(a$download_file_name %in% fls))
+  expect_true(all(a$downloaded_file_name %in% fls))
 
 })
 
@@ -405,6 +405,6 @@ test_that("search macaulay sp download video all_data = FALSE", {
                       "Calypte_anna-ML639255345.mp4")
 
   expect_true(all(expected_files %in% fls))
-  expect_true(all(a$download_file_name %in% fls))
+  expect_true(all(a$downloaded_file_name %in% fls))
 
 })

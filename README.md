@@ -14,11 +14,9 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
 [![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--03-yellowgreen.svg)](/commits/master)
 [![Codecov test
-coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=master)
+coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
-[![Codecov test
-coverage](https://codecov.io/gh/maRce10/suwo/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo)
 <!-- badges: end -->
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->

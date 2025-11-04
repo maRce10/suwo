@@ -1,3 +1,17 @@
+test_that("search Glaucis dohrnii sound reading existing file", {
+
+  tf <- tempfile()
+
+  write.csv(file = tf, x = suwo:::vignette_metadata$t_rufiventris[1:3, ])
+
+  df1 <- query_macaulay(species = 'Glaucis dohrnii',
+                        format =  "sound",
+                        path = tempdir(), files = basename(tf))
+
+  expect_true(nrow(df1) == 3)
+
+})
+
 test_that("search Glaucis dohrnii sound", {
   skip_if_not(interactive())
   skip_on_cran()
@@ -10,7 +24,6 @@ test_that("search Glaucis dohrnii sound", {
   expect_true(nrow(df1) >= 12)
 
 })
-
 
 test_that("search Glaucis dohrnii images", {
   skip_if_not(interactive())

@@ -1,8 +1,11 @@
 ## code to prepare `DATASET` dataset goes here
 # see https://r-pkgs.org/data.html#sec-data-sysdata
 
+
 # Taxon code for macaulay
-ml_taxon_code <- read.csv("./examples/Clements-v2024-October-2024-rev.csv",
+# downloaded from https://www.birds.cornell.edu/clementschecklist/introduction
+#/updateindex/october-2025/2025-citation-checklist-downloads/
+ml_taxon_code <- read.csv("./examples/eBird_taxonomy_v2025.csv",
                           na.strings = "")
 
 

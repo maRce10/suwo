@@ -14,10 +14,9 @@ editor_options:
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-`r strsplit(gsub("depends: R \\(|\\)", "", grep("^DEPENDS", ignore.case = TRUE, readLines(con = "./DESCRIPTION"), value = TRUE), ignore.case = TRUE), ",")[[1]][1]`-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-`r gsub("version: |version:", "", grep("^version", ignore.case = TRUE, readLines(con = "./DESCRIPTION"), value = TRUE), ignore.case = TRUE)`-orange.svg?style=flat-square)](commits/develop)  -->
 [![Last-changedate](https://img.shields.io/badge/last%20change-`r gsub('-', '--', Sys.Date())`-yellowgreen.svg)](/commits/master) 
-  [![Codecov test coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=master)
+  [![Codecov test coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
-[![Codecov test coverage](https://codecov.io/gh/maRce10/suwo/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo)
 <!-- badges: end -->
   
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->

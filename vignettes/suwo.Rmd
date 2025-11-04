@@ -447,7 +447,8 @@ Users must click on the "Export" button to save the .csv file with the metadata:
 
 Here are some tips for using this function properly:
 
-* The file must be saved in the directory specified by the `path` argument of the function (default is the current working directory)
+* Valid species names can be checked at `suwo:::ml_taxon_code$SCI_NAME`
+* The exported csv file must be saved in the directory specified by the `path` argument of the function (default is the current working directory)
 * If the file is saved overwriting a pre-existing file (i.e. same file name) the function will not detect it
 * The function will not proceed until the file is saved 
 * Users must log in to the Macaulay Library/eBird account in order to access large batches of observations

@@ -450,7 +450,6 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 
 #run document twice
 devtools::document(".")
-devtools::document(".")
 
 devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
 
@@ -498,6 +497,23 @@ cyclocomp::cyclocomp_package_dir(".")
 pkgstats::pkgstats(".")
 
 ```
+
+# code coverage
+```{r}
+
+covr::file_coverage(
+    source_files = list.files("./R", full.names = TRUE, pattern = "\\.R"),
+    test_files = list.files("./tests/testthat/", full.names = TRUE)
+)
+
+covr::file_coverage(
+    source_files = "./R/query_macaulay.R",
+    test_files = "./tests/testthat/test_query_macaulay.R")
+
+
+
+```
+
 
 # check and build package
 ```{r check and build package, eval = FALSE}
