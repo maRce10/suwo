@@ -155,11 +155,13 @@ to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.</p>
 <span class="r-in"><span><span class="co"># An API key is required. Get yours at https://xeno-canto.org/account.</span></span></span>
 <span class="r-in"><span><span class="va">XC_API_KEY</span> <span class="op">&lt;-</span> <span class="st">"YOUR_API_KEY_HERE"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Simple search for a species (will be converted to sp:"Phaethornis anthophilus")</span></span></span>
-<span class="r-in"><span><span class="va">p_anth</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Phaethornis anthophilus"</span>, api_key <span class="op">=</span> <span class="va">XC_API_KEY</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Simple search for a species</span></span></span>
+<span class="r-in"><span><span class="va">p_anth</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Phaethornis anthophilus"</span>,</span></span>
+<span class="r-in"><span>api_key <span class="op">=</span> <span class="va">XC_API_KEY</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Search for same species and add specify country</span></span></span>
-<span class="r-in"><span><span class="va">p_anth_cr</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span>species <span class="op">=</span> <span class="st">'sp:"Phaethornis anthophilus" cnt:"Panama"'</span>,</span></span>
+<span class="r-in"><span><span class="va">p_anth_cr</span> <span class="op">&lt;-</span> <span class="fu">query_xenocanto</span><span class="op">(</span></span></span>
+<span class="r-in"><span>species <span class="op">=</span> <span class="st">'sp:"Phaethornis anthophilus" cnt:"Panama"'</span>,</span></span>
 <span class="r-in"><span>raw_data <span class="op">=</span> <span class="cn">TRUE</span>, api_key <span class="op">=</span> <span class="va">XC_API_KEY</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Search for female songs of a species</span></span></span>
@@ -175,7 +177,7 @@ to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marcelo Araya-Salas, Jorge Elizondo-Calvo.</p>
+  <p>Developed by Marcelo Araya-Salas, Jorge Elizondo-Calvo, Alejandro Rico-Guevara.</p>
 </div>
 
 <div class="pkgdown-footer-right">
