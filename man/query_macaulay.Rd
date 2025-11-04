@@ -63,10 +63,9 @@ searches will be split by months within years as well.}
 \item{taxon_code_info}{Data frame containing the taxon code information.
 By default the function will use the internal data frame
 \code{"ml_taxon_code"} included as example data in the package. This object
-contains the data from the Clement list from october 2024
+contains the data from the October-2025 eBird taxonomy
 (downloaded from
-\url{https://www.birds.cornell.edu/clementschecklist/introduction/
-updateindex/october-2024/2024-citation-checklist-downloads/}).
+\url{https://www.birds.cornell.edu/clementschecklist}).
 If new versions of the list become available it will be updated in new
 package versions. However, if users need to update it they can download the
 new list version, read it in R as a data frame and provide it to the function
@@ -97,6 +96,8 @@ then reads the .csv file and returns a data frame with the metadata.
 
 Here are some instructions for using this function properly:
 \itemize{
+   \item Valid species names can be checked at
+   \code{suwo:::ml_taxon_code$SCI_NAME}.
    \item Users must save the save the .csv file manually
    \item \emph{If the file is saved overwritting a pre-existing file
    (i.e. same file name) the function will not detect it}
@@ -150,10 +151,11 @@ tur_ili2 <- query_macaulay(species = "Turdus iliacus", format = "sound",
 Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection.
 Cornell Lab of Ornithology. Occurrence dataset
 https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
-Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff,
-T. A. Fredericks, J. A. Gerbracht, D. Lepage, A. Spencer, S. M. Billerman,
-B. L. Sullivan, M. Smith, and C. L. Wood. 2024. The eBird/Clements
-checklist of Birds of the World: v2024.
+Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, J. A.
+Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M.
+Smith, and C. L. Wood. 2025. The eBird/Clements checklist of Birds of the
+World: v2025. Downloaded from
+https://www.birds.cornell.edu/clementschecklist/download/
 }
 }
 \author{
