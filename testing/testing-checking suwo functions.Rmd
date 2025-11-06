@@ -469,7 +469,7 @@ devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual
 # devtools::install()
 
 ## set XC Key
-# Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
+Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
 
   run.all()
   options(verbose = TRUE)
@@ -495,6 +495,8 @@ pkgcheck::pkgcheck(".", use_cache = FALSE)
 cyclocomp::cyclocomp_package_dir(".")
 
 pkgstats::pkgstats(".")
+
+goodpractice::gp()
 
 ```
 

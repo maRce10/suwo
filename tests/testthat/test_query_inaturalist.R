@@ -13,7 +13,8 @@ test_that("search Spatula discors sound (no sounds)", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound", identified = TRUE, verifiable = TRUE)
+  df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound",
+                           identified = TRUE, verifiable = TRUE)
 
   expect_true(nrow(df1) >= 20)
 

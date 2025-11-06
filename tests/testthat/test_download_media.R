@@ -134,7 +134,7 @@ test_that("wikiaves Glaucis dohrnii sp download, all.data = TRUE", {
   fls <- list.files(path = tempdir(), pattern = "mp3$")
 
   # remove files
-  unlink(file.path(tempdir(), fls))
+  unlink(file.path(tempdir(), fls[1]))
 
   # expected files
   expected_files <- c("Glaucis_dohrnii-WA2286824.mp3",
@@ -288,7 +288,8 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
 
   sin2 <- subset(in2, key %in% test_keys)
 
-  a <- download_media(metadata = sin2, path = tempdir(), folder_by = "file_extension")
+  a <- download_media(metadata = sin2, path = tempdir(),
+                      folder_by = "file_extension")
 
   fls <- list.files(path = tempdir(),
                     pattern = ".mp3$|m4a$",

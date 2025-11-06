@@ -140,7 +140,8 @@ download_media <-
     # report failed files
     if (any(metadata$download_status == "failed")) {
       if (sum(metadata$download_status == "failed") == nrow(metadata)) {
-      report_message <- .message("All files failed to download", as = "failure")
+      report_message <- .message("All files failed to download", as = "failure",
+                                 suffix = "\n")
       } else {
         unified_message <- paste("{sum(metadata$download_status == 'failed')}",
                                  "file{?s} failed to download")
@@ -157,7 +158,7 @@ download_media <-
           nrow(metadata)) {
         report_message <-
           .message("All files were already there (overwritten = FALSE)",
-                   as = "success")
+                   as = "success", suffix = "\n")
       } else {
         unified_message <- paste(
           "{sum(metadata$download_status == 'already there (not downloaded)')}",
@@ -174,7 +175,7 @@ download_media <-
       if (sum(metadata$download_status == "overwritten") == nrow(metadata)) {
         report_message <-
   .message("All files were downloaded successfully (and all were overwritten)",
-                   as = "success")
+                   as = "success", suffix = "\n")
       } else {
         unified_message <- paste(
           "{sum(metadata$download_status == 'overwritten')}",
@@ -189,7 +190,8 @@ download_media <-
     if (any(metadata$download_status == "saved")) {
       if (sum(metadata$download_status == "saved") == nrow(metadata)) {
         report_message <-
-          .message("All files were downloaded successfully", as = "success")
+          .message("All files were downloaded successfully", as = "success",
+                   suffix = "\n")
       } else {
         unified_message <- paste(
           "{sum(metadata$download_status == 'saved')}",

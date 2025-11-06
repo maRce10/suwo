@@ -12,9 +12,9 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--03-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--06-yellowgreen.svg)](/commits/main)
 [![Codecov test
-coverage](https://codecov.io/gh/maRce10/suwo/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
+coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
 <!-- badges: end -->
@@ -47,11 +47,11 @@ suggest a new repository.
 
 ## Installing suwo
 
-Install/load the package from CRAN as follows:
+Install/load the package from R universe as follows:
 
 ``` r
-# From CRAN would be
-# install.packages("suwo")
+# From R universe would be
+install.packages('suwo', repos = c('https://marce10.r-universe.dev'))
 
 # load package
 library(suwo)
