@@ -2,12 +2,15 @@ test_that("map Helicobacter pylori", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = "Helicobacter pylori", format =  "image")
+  df1 <- query_inaturalist(species = "Helicobacter pylori", format =  "image", verbose = TRUE)
 
-  map_locations(df1)
+  df1$latitude[1] <- NA
 
-  expect_true(nrow(df1) >= 1)
+  a <- map_locations(df1, cluster = TRUE)
 
+  expect_true(class(a)[1] == "leaflet")
+
+  expect_true(class(a)[1] == "htmlwidget")
 })
 
 

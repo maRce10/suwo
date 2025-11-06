@@ -46,7 +46,7 @@ map_locations <- function(metadata,
   metadata$longitude <- as.numeric(as.character(metadata$longitude))
 
   # remove observations with no lat lon data
-  inx_with_coors <- !is.na(metadata$latitude) &
+  inx_with_coors <- !is.na(metadata$latitude) |
     !is.na(metadata$longitude)
 
   if (all(!inx_with_coors)){
