@@ -51,7 +51,9 @@ test_that("check messages", {
     query_xenocanto(species = '000', verbose = TRUE,
                     api_key = "")
   )
-  expect_true(as.character(msg) == "Error: An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account.\n")
+  expect_true(as.character(msg) ==
+                paste("Error: An API key is required for Xeno-Canto API v3.",
+                      "Get yours at https://xeno-canto.org/account.\n"))
 
   msg <- capture.output(
     a <- query_xenocanto(species = '000', verbose = FALSE,
