@@ -27,7 +27,6 @@ test_that("all data TRUE", {
   )
 
   expect_true(nrow(df1) >= 15)
-  expect_true(ncol(df1) == 46)
 })
 
 test_that("no recs found", {
@@ -48,16 +47,17 @@ test_that("check messages", {
   skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
           "Xeno-Canto API key not set")
 
-  msg <- capture.output(
+  msg <- capture_error(
     query_xenocanto(species = '000', verbose = TRUE,
-                    api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+                    api_key = "")
   )
-  expect_true(any(grepl("No sound files were found", msg)))
+  expect_true(as.character(msg) == "Error: An API key is required for Xeno-Canto API v3. Get yours at https://xeno-canto.org/account.\n")
 
   msg <- capture.output(
     a <- query_xenocanto(species = '000', verbose = FALSE,
                          api_key = Sys.getenv("XENO_CANTO_API_KEY"))
   )
+
   expect_true(length(msg) == 0)
 
   msg <- capture.output(

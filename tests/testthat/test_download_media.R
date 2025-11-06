@@ -276,6 +276,48 @@ test_that("search inaturalist sp download all_data = TRUE", {
 
 })
 
+test_that("search inaturalist sp download all_data = TRUE", {
+  skip_on_cran()
+  skip_if_offline()
+
+  in1 <- query_inaturalist(species = 'Agalychnis lemur',
+                           format = "image",
+                           all_data = TRUE)
+
+  test_keys <- c("303641298", "303641290")
+
+  sin1 <- subset(in1, key %in% test_keys)
+
+  a <- download_media(metadata = sin1, path = tempdir())
+
+  fls <- list.files(path = tempdir(),
+                    pattern = ".jpeg$",
+                    ignore.case = TRUE)
+
+  # expected files
+  exp_files <- c(
+    "Agalychnis_lemur-INAT303641290-1.jpeg",
+    "Agalychnis_lemur-INAT303641290-2.jpeg",
+    "Agalychnis_lemur-INAT303641298-1.jpeg",
+    "Agalychnis_lemur-INAT303641298-2.jpeg",
+    "Agalychnis_lemur-INAT303641298-3.jpeg"
+  )
+
+  expect_true(all(exp_files %in% fls))
+  expect_true(all(a$downloaded_file_name %in% exp_files))
+
+  # remove files
+  unlink(file.path(tempdir(), fls[1:3]))
+
+  sin1$file_url[1] <- "asdasd"
+
+  a <- download_media(metadata = sin1, path = tempdir())
+
+  expect_true(length(unique(a$download_status)) == 3)
+
+})
+
+
 test_that("search inaturalist sp download sound all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
