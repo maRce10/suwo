@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--06-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--07-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
@@ -20,14 +20,14 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https
 <!-- badges: end -->
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
+<!-- <img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
 
-<img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/>
-
-[suwo](https://github.com/maRce10/suwo) is intended streamline
+<a href="https://marce10.github.io/suwo"><img src="man/figures/logo.png" align="right" height="139" alt="suwo website" /></a>
+[suwo](https://marce10.github.io/suwo) is intended streamline
 searching/downloading of nature media files (e.g. audios, photos) from
 online repositories.
 
-[suwo](https://github.com/maRce10/suwo) offers functions for critical
+[suwo](https://marce10.github.io/suwo) offers functions for critical
 steps in the acquisition of data necessary to develop methods that
 require a large amount of data.
 
@@ -70,7 +70,7 @@ library(suwo)
 
 ## Intended use and responsible practices
 
-The [suwo](https://github.com/maRce10/suwo) package is designed
+The [suwo](https://marce10.github.io/suwo) package is designed
 exclusively for non-commercial, scientific purposes, including research,
 education, and conservation. **Any commercial use of the data or media
 retrieved through this package is strictly prohibited** unless explicit,
@@ -81,12 +81,13 @@ which often mandate attribution and similarly restrict commercial
 application. The package developers assume no liability for misuse of
 the retrieved data or violations of third-party terms of service.
 
-Take a look at the [package vignette](./articles/suwo.html) for an
+Take a look at the [package
+vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
 overview of the main features of the packages.
 
 ## Citation
 
-Please cite [suwo](https://github.com/maRce10/suwo) as follows:
+Please cite [suwo](https://marce10.github.io/suwo) as follows:
 
 Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025. suwo: access
 nature media repositories through R. R package version 0.1.0.

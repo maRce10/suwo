@@ -82,7 +82,7 @@ dir_tree <- function(path) {
 
 ::: {.alert .alert-info}
 
-The [suwo](https://github.com/maRce10/suwo) package aims to simplify the 
+The [suwo](https://marce10.github.io/suwo) package aims to simplify the 
 retrieval of nature media (mostly photos, audio files and videos) across 
 multiple online biodiversity databases. This vignette provides an overview of 
 the package’s core querying functions, the searching and downloading of media 
@@ -141,7 +141,7 @@ library(suwo)
 
 # Basic workflow for obtaining nature media files
 
-Finding data using [suwo](https://github.com/maRce10/suwo) follows a basic 
+Finding data using [suwo](https://marce10.github.io/suwo) follows a basic 
 sequence. The following diagram illustrates this workflow and the main functions
 involved:
 
@@ -170,7 +170,7 @@ decide which records to keep, which can be done with [remove_duplicates()](https
 
 # Obtaining metadata: the query functions
 
-The following table summarizes the available [suwo](https://github.com/maRce10/suwo) 
+The following table summarizes the available [suwo](https://marce10.github.io/suwo) 
 query functions and the types of metadata they retrieve:
 
 ```{r, echo=TRUE}
@@ -422,7 +422,7 @@ query_summary[, c("Function", "Additional data")] |>
 
 **Obtaining raw data**
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://github.com/maRce10/suwo). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html), [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html), etc) will not work as the basic fields are not standardized.
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://marce10.github.io/suwo). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html), [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html), etc) will not work as the basic fields are not standardized.
 
 </div>
 
@@ -597,7 +597,7 @@ merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 
 # Find and remove duplicated records
 
-When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://github.com/maRce10/suwo) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function.
+When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://marce10.github.io/suwo) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function.
 
 The [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function helps users identify potential duplicate records in their metadata data frames. Duplicates are identified based on matching species name, country, date, user name, and locality. The function uses a fuzzy matching approach to account for minor variations in the data (e.g., typos, different location formats, etc).The output is a data frame with the candidate duplicate records, allowing users to review and decide which records to keep.
 
