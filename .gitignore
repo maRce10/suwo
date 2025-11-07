@@ -7,3 +7,4 @@ testing
 docs
 inst/doc
 ctags/
+*.gz
