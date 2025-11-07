@@ -9,7 +9,7 @@ suwo: access nature media repositories through R
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+<!-- [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)  -->
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
 [![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--07-yellowgreen.svg)](/commits/main)
@@ -23,13 +23,12 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https
 <!-- <img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
 <!-- <a href="https://marce10.github.io/suwo"><img src="man/figures/logo.png" align="right" height="139" alt="suwo website" /></a> -->
 
-[suwo](https://marce10.github.io/suwo) is intended streamline
-searching/downloading of nature media files (e.g. audios, photos) from
-online repositories.
-
-[suwo](https://marce10.github.io/suwo) offers functions for critical
-steps in the acquisition of data necessary to develop methods that
-require a large amount of data.
+The [suwo](https://marce10.github.io/suwo) package aims to simplify the
+retrieval of nature media (mostly photos, audio files and videos) across
+multiple online biodiversity databases. Such media are increasingly used
+in diverse fields ranging from ecology and evolutionary biology
+(e.g. trait evolution) to wildlife monitoring and conservation (training
+species detection models).
 
 The main features of the package are:
 
@@ -37,14 +36,20 @@ The main features of the package are:
 - Downloading associated media files
 - Updating data sets with new records
 
-We are currently searching for new online repositories to be included in
-the package. Please [open a new
-issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to
-suggest a new repository.
-
 ## Installing suwo
 
-Install/load the package from R universe as follows:
+Install the package from CRAN:
+
+``` r
+# install from CRAN
+install.packages("suwo")
+
+# load package
+library(suwo)
+```
+
+Alternatively, the package can also be installed from R universe as
+follows:
 
 ``` r
 # From R universe would be
@@ -59,6 +64,7 @@ To install the latest developmental version from
 [remotes](https://cran.r-project.org/package=remotes):
 
 ``` r
+# install remotes if you don't have it yet
 remotes::install_github("maRce10/suwo")
 
 #load package
