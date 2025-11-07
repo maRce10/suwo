@@ -9,7 +9,7 @@ suwo: access nature media repositories through R
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-<!-- [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)  -->
+[![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
 [![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--07-yellowgreen.svg)](/commits/main)
@@ -36,9 +36,6 @@ The main features of the package are:
 - Obtaining media metadata from online repositories
 - Downloading associated media files
 - Updating data sets with new records
-
-:warning:**THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE AND WILL BE
-MODIFIED FREQUENTLY.**:warning:
 
 We are currently searching for new online repositories to be included in
 the package. Please [open a new

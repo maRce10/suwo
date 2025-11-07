@@ -36,7 +36,6 @@ The main features of the package are:
 - Downloading associated media files
 - Updating data sets with new records
 
-
 We are currently searching for new online repositories to be included in the package.
 Please [open a new
 issue](https://github.com/maRce10/suwo/issues/new/choose) if you want to
