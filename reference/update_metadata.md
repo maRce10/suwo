@@ -1,0 +1,113 @@
+# Update metadata
+
+`update_metadata` update metadata from previous queries.
+
+## Usage
+
+``` r
+update_metadata(
+  metadata,
+  path = ".",
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  verbose = getOption("verbose", TRUE),
+  api_key = NULL,
+  dates = NULL
+)
+```
+
+## Arguments
+
+- metadata:
+
+  data frame previously obtained from any suwo query function (i.e.
+  \`query_reponame()\`).
+
+- path:
+
+  Directory path where the .csv file will be saved. Only applicable for
+  [`query_macaulay`](https://marce10.github.io/suwo/reference/query_macaulay.md)
+  query results. By default it is saved into the current working
+  directory (`"."`).
+
+- cores:
+
+  Numeric vector of length 1. Controls whether parallel computing is
+  applied by specifying the number of cores to be used. Default is 1
+  (i.e. no parallel computing). Can be set globally for the current R
+  session via the "mc.cores" option (e.g. `options(mc.cores = 2)`). Note
+  that some repositories might not support parallel queries from the
+  same IP address as it might be identified as denial-of-service
+  cyberattack.
+
+- pb:
+
+  Logical argument to control if progress bar is shown. Default is
+  `TRUE`. Can be set globally for the current R session via the "pb"
+  option ( `options(pb = TRUE)`).
+
+- verbose:
+
+  Logical argument that determines if text is shown in console. Default
+  is `TRUE`. Can be set globally for the current R session via the
+  "verbose" option ( `options(verbose = TRUE)`).
+
+- api_key:
+
+  Character string referring to the key assigned by Xeno-Canto as
+  authorization for searches. Get yours at
+  <https://xeno-canto.org/account>. Only needed if the input metadata
+  comes from
+  [`query_xenocanto`](https://marce10.github.io/suwo/reference/query_xenocanto.md).
+
+- dates:
+
+  Optional numeric vector with years to split the search. If provided,
+  the function will perform separate queries for each date range
+  (between consecutive date values) and combine the results. Useful for
+  queries that return large number of results (i.e. \> 10000 results
+  limit). For example, to search for the species between 2010 to 2020
+  and between 2021 to 2025 use `dates = c(2010, 2020, 2025)`. If years
+  contain decimals searches will be split by months within years as
+  well. Only needed if the input metadata comes from
+  [`query_macaulay`](https://marce10.github.io/suwo/reference/query_macaulay.md).
+
+## Value
+
+returns a data frame similar to the input 'metadata' with new data
+appended.
+
+## Details
+
+This function updates the metadata from a previous query to add entries
+found in the source repository. All observations must belong to the same
+repository. The function adds the column \`new_entry\` which labels
+those entries that are new (i.e., not present in the input metadata).
+The input data frame must have been obtained from any of the query
+functions with the argument \`raw_data = FALSE\`. The function uses the
+same query species and format as in the original query. If no new
+entries are found, the function returns the original metadata and prints
+a message. If some old entries are not returned in the new query they
+are still retained.
+
+## Author
+
+Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
+
+## Examples
+
+``` r
+if (interactive()){
+# query metadata
+wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
+
+# remove last 3 rows to test update_metadata
+sub_wa <- wa[1:(nrow(wa)- 3), ]
+
+# update
+up_wa <- update_metadata(metadata = sub_wa)
+
+# check number of rows is the same
+nrow(up_wa) == nrow(wa)
+}
+```
