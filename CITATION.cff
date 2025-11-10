@@ -12,12 +12,10 @@ version: 0.1.0
 identifiers:
 - type: url
   value: https://github.com/maRce10/suwo
-abstract: suwo is intended streamline searching/downloading of nature media files
-  (e.g. audios, photos) from online repositories. The package offers functions for,obtaining
-  media metadata from online repositories, downloading associated media files ad updating
-  data sets with new records THE PACKAGE IS ON AN EARLY DEVELOPMENTAL STAGE. We are
-  currently searching for new online repositories to be included in the package. Please
-  open a new issue if you want to suggest a new repository.
+abstract: Streamline searching/downloading of nature media files (e.g. audios, photos)
+  from online repositories. The package offers functions for,obtaining media metadata
+  from online repositories, downloading associated media files ad updating data sets
+  with new records.
 authors:
 - family-names: Araya-Salas
   given-names: Marcelo
