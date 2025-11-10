@@ -1,13 +1,8 @@
 test_that("merge query_wikiaves and xc", {
 
-  skip_on_cran()
-  skip_if_offline()
-  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
-          "Xeno-Canto API key not set")
 
-  wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
-  xc <- query_xenocanto(species = 'Glaucis dohrnii',
-                        api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  wa <- suwo:::vignette_metadata$h_harpyja
+  gbf <- suwo:::vignette_metadata$p_lotor
 
   merged_mt <- merge_metadata(wa, xc)
 
@@ -16,7 +11,10 @@ test_that("merge query_wikiaves and xc", {
   expect_true(all(unique(merged_mt$source) %in% c("wa", "xc")))
 
   # add a third source
-  gbf <- query_gbif(species = 'Glaucis dohrnii', format =  "sound")
+  wa <- suwo:::vignette_metadata$h_harpyja
+  gbf <- suwo:::vignette_metadata$p_lotor
+  xc <- suwo:::vignette_metadata$a_hahneli
+
 
   merged_mt2 <- merge_metadata(wa, xc, gbf)
 

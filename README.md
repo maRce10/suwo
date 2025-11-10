@@ -9,21 +9,22 @@ suwo: access nature media repositories through R
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-<!-- [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)  -->
+[![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--07-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--10-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
+[![R-CMD-check](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 <!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
 <!-- <img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
-<!-- <a href="https://marce10.github.io/suwo"><img src="man/figures/logo.png" align="right" height="139" alt="suwo website" /></a> -->
+<!-- <a href="https://marce10.github.io/suwo/"><img src="man/figures/logo.png" align="right" height="139" alt="suwo website" /></a> -->
 
-The [suwo](https://marce10.github.io/suwo) package aims to simplify the
+The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
 multiple online biodiversity databases. Such media are increasingly used
 in diverse fields ranging from ecology and evolutionary biology
@@ -71,9 +72,13 @@ remotes::install_github("maRce10/suwo")
 library(suwo)
 ```
 
+Take a look at the [package
+vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
+overview of the main features of the packages.
+
 ## Intended use and responsible practices
 
-The [suwo](https://marce10.github.io/suwo) package is designed
+The [suwo](https://marce10.github.io/suwo/) package is designed
 exclusively for non-commercial, scientific purposes, including research,
 education, and conservation. **Any commercial use of the data or media
 retrieved through this package is strictly prohibited** unless explicit,
@@ -84,13 +89,9 @@ which often mandate attribution and similarly restrict commercial
 application. The package developers assume no liability for misuse of
 the retrieved data or violations of third-party terms of service.
 
-Take a look at the [package
-vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
-overview of the main features of the packages.
-
 ## Citation
 
-Please cite [suwo](https://marce10.github.io/suwo) as follows:
+Please cite [suwo](https://marce10.github.io/suwo/) as follows:
 
 Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025. suwo: access
 nature media repositories through R. R package version 0.1.0.
