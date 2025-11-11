@@ -170,24 +170,6 @@ query_xenocanto <-
       return(invisible(NULL))
     }
 
-    # pooled_column_names <-
-    #   unique(unlist(lapply(query_output_list, names)))
-    # query_output_list2 <- lapply(query_output_list, function(X) {
-    #   nms <- names(X)
-    #   if (length(nms) != length(pooled_column_names)) {
-    #     for (i in pooled_column_names) {
-    #       X <- data.frame(X,
-    #                       NA,
-    #                       stringsAsFactors = FALSE,
-    #                       check.names = FALSE)
-    #       names(X)[ncol(X)] <- i
-    #     }
-    #   }
-    #   return(X)
-    # })
-    #
-    # query_output_df <- do.call(rbind, query_output_list2)
-
     # make all data frames have the same columns
     query_output_df <- .merge_data_frames(query_output_list)
 

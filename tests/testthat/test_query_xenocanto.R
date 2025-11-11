@@ -5,14 +5,13 @@ test_that("search Phaethornis check rows", {
           "Xeno-Canto API key not set")
 
   df1 <- query_xenocanto(
-    species = 'Phaethornis anthophilus',
-    all_data = FALSE,
+    species = "Zonotrichia capensis",
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
 
   skip_if(is.null(df1))
 
-  expect_true(nrow(df1) > 15)
+  expect_true(nrow(df1) > 900)
   expect_true(ncol(df1) == length(.format_query_output(only_basic_columns = T)))
 })
 

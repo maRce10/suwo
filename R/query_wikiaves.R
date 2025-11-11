@@ -75,7 +75,18 @@ query_wikiaves <-
     )
 
     # check if request succeeded
-    httr::stop_for_status(response)
+     if (httr::http_status(response)$category != "Success") {
+      if (verbose) {
+        .message(
+          text = paste0(
+            "Wikiaves query request failed: ",
+            httr::http_status(response)$message
+          ),
+          as = "failure"
+        )
+      }
+      return(invisible(NULL))
+     }
 
     get_ids <- httr::content(response, as = "parsed", type = "application/json")
 
@@ -101,7 +112,22 @@ query_wikiaves <-
         ),
         httr::user_agent("suwo (https://github.com/maRce10/suwo)")
       )
-      httr::stop_for_status(response)
+
+      # check if request succeeded
+      if (httr::http_status(response)$category != "Success") {
+        if (verbose) {
+          .message(
+            text = paste0(
+              "Wikiaves query request failed: ",
+              httr::http_status(response)$message
+            ),
+            as = "failure"
+          )
+        }
+        return(invisible(NULL))
+      }
+
+
       as.numeric(httr::content(response, as = "parsed")$registros$total)
     }, numeric(1))
 
