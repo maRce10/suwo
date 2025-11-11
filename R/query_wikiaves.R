@@ -124,12 +124,19 @@ query_wikiaves <-
             as = "failure"
           )
         }
-        return(invisible(NULL))
+        return(-999)
       }
-
 
       as.numeric(httr::content(response, as = "parsed")$registros$total)
     }, numeric(1))
+
+    # let user gracefully know error when downloading metadata
+    if (any(vapply(get_ids$total_registers, function(x) x == -999, FUN.VALUE = logical(1)))) {
+      if (verbose) {
+        .message(text = "Metadata could not be dowloaded", as = "failure")
+      }
+      return(invisible(NULL))
+    }
 
     if (sum(get_ids$total_registers) == 0) {
       if (verbose) {
