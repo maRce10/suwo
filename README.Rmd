@@ -74,7 +74,7 @@ library(suwo)
 ```
 
 
-Take a look at the [package vignette](https://marce10.github.io/suwo/articles/suwo.html) for an overview of the main features of the packages.
+Take a look at the [package vignette](https://marce10.github.io/suwo/articles/suwo.html) for an overview of the core querying functions, and the package's workflow to obtain, organized and curate media files from various sources.
 
 ## Intended use and responsible practices
 
