@@ -40,9 +40,9 @@ library(suwo)
 
 ## Basic workflow for obtaining nature media files
 
-Finding data using [suwo](https://marce10.github.io/suwo/) follows a
-basic sequence. The following diagram illustrates this workflow and the
-main functions involved:
+Obtaining nature media using [suwo](https://marce10.github.io/suwo/)
+follows a basic sequence. The following diagram illustrates this
+workflow and the main functions involved:
 
 ![suwo workflow diagram](workflow_diagram.png)
 
@@ -613,7 +613,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpeJzH7W/amanita_zambiana 
+     /tmp/Rtmp8RWPp8/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -687,7 +687,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpeJzH7W/diodon_holocanthus 
+     /tmp/Rtmp8RWPp8/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 

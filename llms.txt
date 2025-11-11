@@ -50,9 +50,9 @@ library(suwo)
 
 # Basic workflow for obtaining nature media files
 
-Finding data using [suwo](https://marce10.github.io/suwo/) follows a
-basic sequence. The following diagram illustrates this workflow and the
-main functions involved:
+Obtaining nature media using [suwo](https://marce10.github.io/suwo/)
+follows a basic sequence. The following diagram illustrates this
+workflow and the main functions involved:
 
 ![suwo workflow diagram](./articles/workflow_diagram.png)
 
