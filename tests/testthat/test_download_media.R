@@ -11,6 +11,8 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
 
+  skip_if(is.null(xc1))
+
   test_keys <- c("532163", "568491")
 
   sxc1 <- subset(xc1, key %in% test_keys)
@@ -47,6 +49,7 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
 
+  skip_if(is.null(xc1))
   test_keys <- c("532163", "568491")
 
   sxc1 <- subset(xc1, key %in% test_keys)
@@ -85,6 +88,8 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
     all_data = TRUE,
     api_key = Sys.getenv("XENO_CANTO_API_KEY")
   )
+
+  skip_if(is.null(xc2))
 
   test_keys <- c("532163", "568491")
 
@@ -125,6 +130,8 @@ test_that("wikiaves Glaucis dohrnii sp download, all.data = TRUE", {
                         format = "sound",
                         all_data = TRUE)
 
+  skip_if(is.null(wa1))
+
   test_keys <- c("2286824", "4522545")
 
   swa1 <- subset(wa1, key %in% test_keys)
@@ -155,6 +162,8 @@ test_that("wikiaves Urubitinga solitaria sp download image all.data = FALSE",
             wa2 <- query_wikiaves(species = 'Urubitinga solitaria',
                                   format = "image",
                                   all_data = FALSE)
+
+            skip_if(is.null(wa2))
 
             test_keys <- c("3227223", "5415237")
 
@@ -188,6 +197,8 @@ test_that("search GBIF sp download image all_data = TRUE", {
                     format = "image",
                     all_data = TRUE)
 
+  skip_if(is.null(gb1))
+
   test_keys <- c("5154503342", "4525343483")
 
   sgb1 <- subset(gb1, key %in% test_keys)
@@ -217,6 +228,8 @@ test_that("search GBIF sp download sound all_data = FALSE", {
   gb2 <- query_gbif(species = 'Glaucis dohrnii',
                     format = "sound",
                     all_data = FALSE)
+
+  skip_if(is.null(gb2))
 
   test_keys <- c("3863342525", "2243728561")
 
@@ -248,6 +261,8 @@ test_that("search inaturalist sp download all_data = TRUE", {
   in1 <- query_inaturalist(species = 'Agalychnis lemur',
                            format = "image",
                            all_data = TRUE)
+
+  skip_if(is.null(in1))
 
   test_keys <- c("303641298", "303641290")
 
@@ -283,6 +298,8 @@ test_that("search inaturalist sp download all_data = TRUE", {
   in1 <- query_inaturalist(species = 'Agalychnis lemur',
                            format = "image",
                            all_data = TRUE)
+
+  skip_if(is.null(in1))
 
   test_keys <- c("303641298", "303641290")
 
@@ -325,6 +342,8 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
   in2 <- query_inaturalist(species = "Rattus rattus",
                            format = "sound",
                            all_data = FALSE)
+
+  skip_if(is.null(in2))
 
   test_keys <- c("283643216", "281653293")
 

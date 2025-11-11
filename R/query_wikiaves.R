@@ -56,7 +56,7 @@ query_wikiaves <-
     checkmate::reportAssertions(check_results)
 
     # Use the unified connection checker
-    if (!.checkconnection("wikiaves")) {
+    if (!.checkconnection(verb = verbose, service = "wikiaves")) {
       return(invisible(NULL))
     }
 
@@ -86,6 +86,7 @@ query_wikiaves <-
       }
       return(invisible(NULL))
     }
+
     # make it a data frame
     get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
 
@@ -142,7 +143,7 @@ query_wikiaves <-
     query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl,
                                          pbar = pb, function(i) {
       # print(i)
-      Sys.sleep(1)
+      # Sys.sleep(1)
 
       query_output <-
         try(jsonlite::fromJSON(
@@ -162,7 +163,7 @@ query_wikiaves <-
       if (is(query_output, "try-error")) {
         Sys.sleep(1)
 
-        query_output <- jsonlite::fromJSON(
+        query_output <- try(jsonlite::fromJSON(jsonlite::fromJSON(
           paste0(
             "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
             wiki_format,
@@ -173,9 +174,14 @@ query_wikiaves <-
             "&o=mp&p=",
             id_by_page_df$page[i]
           )
-        )
+        ), silent = TRUE)
+      )
       }
 
+      # if error then just return the error
+      if (is(query_output, "try-error")){
+        return(query_output)
+      }
 
       # make it a data frame
       output_df <-
@@ -188,6 +194,14 @@ query_wikiaves <-
 
       return(output_df)
     })
+
+    # let user know error when downloading metadata
+    if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
+      if (verbose) {
+        .message(text = "Metadata could not be dowloaded", as = "failure")
+      }
+      return(invisible(NULL))
+    }
 
     # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)

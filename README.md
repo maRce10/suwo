@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--10-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--11-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
@@ -72,9 +72,19 @@ remotes::install_github("maRce10/suwo")
 library(suwo)
 ```
 
+# Basic workflow for obtaining nature media files
+
+Finding data using [suwo](https://marce10.github.io/suwo/) follows a
+basic sequence. The following diagram illustrates this workflow and the
+main functions involved:
+
+<center>
+<img src="./vignettes/workflow_diagram.png" alt="suwo workflow diagram" width="100%">
+</center>
+
 Take a look at the [package
 vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
-overview of the main features of the packages.
+overview of the workflow and the core querying functions.
 
 ## Intended use and responsible practices
 

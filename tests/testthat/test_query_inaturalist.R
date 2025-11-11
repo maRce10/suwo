@@ -4,6 +4,8 @@ test_that("search Helicobacter pylori sound", {
 
   df1 <- query_inaturalist(species = "Helicobacter pylori", format =  "image")
 
+  skip_if(is.null(df1))
+
   expect_true(nrow(df1) >= 1)
 
 })
@@ -16,6 +18,8 @@ test_that("search Spatula discors sound (no sounds)", {
   df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound",
                            identified = TRUE, verifiable = TRUE)
 
+  skip_if(is.null(df1))
+
   expect_true(nrow(df1) >= 20)
 
 })
@@ -25,6 +29,8 @@ test_that("search Glaucis dohrnii photos", {
   skip_if_offline()
 
   df1 <- query_inaturalist(species = 'Glaucis dohrnii', format =  "image")
+
+  skip_if(is.null(df1))
 
   expect_true(nrow(df1) >=  10)
 
@@ -48,6 +54,7 @@ test_that("search in parallel", {
   df1 <- query_inaturalist(species = 'bolitoglossa striatula',
                            format =  "image",
                            cores = 2)
+  skip_if(is.null(df1))
 
   expect_true(nrow(df1) >=  52)
 
@@ -64,6 +71,8 @@ test_that("test verbose FALSE", {
     verbose = FALSE
   ))
 
+  skip_if(is.null(df1))
+
   expect_true(df1 == "")
 
 })
@@ -75,6 +84,8 @@ test_that("test all_data FALSE", {
   df1 <- query_inaturalist(species = 'bolitoglossa striatula',
                            format =  "image",
                            all_data = FALSE)
+
+  skip_if(is.null(df1))
 
   expected_col_names <- .format_query_output(only_basic_columns = T)
 

@@ -61,7 +61,7 @@ query_gbif <-
     checkmate::reportAssertions(check_results)
 
     # Use the unified connection checker
-    if (!.checkconnection("gbif")) {
+    if (!.checkconnection(verb = verbose, service = "gbif")) {
       return(invisible(NULL))
     }
 
@@ -118,7 +118,14 @@ query_gbif <-
 
     query_output_list <- pblapply_sw_int(offsets, cl = cl, pbar = pb,
                                          function(i) {
-      query_output <- jsonlite::fromJSON(paste0(srch_trm, "&offset=", i))
+      query_output <-
+        try(jsonlite::fromJSON(paste0(srch_trm, "&offset=", i)),
+                          silent = TRUE)
+
+      # if error then just return it and stop here
+      if (is(query_output, "try-error")){
+        return(query_output)
+      }
 
       # format as list of data frame
       query_output$results <- lapply(seq_len(nrow(query_output$results)),
@@ -151,6 +158,15 @@ query_gbif <-
 
       return(output_df)
     })
+
+
+    # let user know error when downloading metadata
+    if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
+      if (verbose) {
+        .message(text = "Metadata could not be dowloaded", as = "failure")
+      }
+      return(invisible(NULL))
+    }
 
     # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)

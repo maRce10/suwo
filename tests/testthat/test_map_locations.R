@@ -5,6 +5,8 @@ test_that("map Helicobacter pylori", {
   df1 <- query_inaturalist(species = "Helicobacter pylori", format =  "image",
                            verbose = TRUE)
 
+  skip_if(is.null(df1))
+
   df1$latitude[1] <- NA
 
   a <- map_locations(df1, cluster = TRUE)

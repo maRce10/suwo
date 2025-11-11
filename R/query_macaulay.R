@@ -153,7 +153,7 @@ query_macaulay <-
     }
 
     # Use the unified connection checker
-    if (!.checkconnection("macaulay")) {
+    if (!.checkconnection(verb = verbose, service = "macaulay")) {
       return(invisible(NULL))
     }
 

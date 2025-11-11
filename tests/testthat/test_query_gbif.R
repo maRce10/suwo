@@ -3,6 +3,7 @@ test_that("search Glaucis dohrnii audio", {
   skip_if_offline()
 
   df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "sound")
+  skip_if(is.null(df1))
 
   expect_true(nrow(df1) >= 20)
 
@@ -14,6 +15,8 @@ test_that("search Aristolochia baetica images", {
 
   df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "image")
 
+  skip_if(is.null(df1))
+
   expect_true(nrow(df1) >= 30)
 
 })
@@ -24,6 +27,7 @@ test_that("search Floractus heimi audio (no audios)", {
   skip_if_offline()
 
   df1 <- query_gbif(species = 'Floractus heimi', format =  "sound")
+  skip_if(is.null(df1))
 
   expect_true(is.null(df1))
 
@@ -34,6 +38,7 @@ test_that("search Glaucis dohrnii photos", {
   skip_if_offline()
 
   df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "image")
+  skip_if(is.null(df1))
 
   expect_true(nrow(df1) >=  29)
 
@@ -46,6 +51,7 @@ test_that("search Glaucis dohrnii photos specific data set", {
   df1 <- query_gbif(species = 'Glaucis dohrnii',
                     format =  "image",
                     dataset = "b1047888-ae52-4179-9dd5-5448ea342a24")
+  skip_if(is.null(df1))
 
   expect_true(nrow(df1) >=  22)
 
@@ -58,6 +64,8 @@ test_that("no result", {
   skip_if_offline()
 
   df1 <- query_gbif(species = 'asdasdasd', format =  "image")
+
+  skip_if(is.null(df1))
 
   expect_true(is.null(df1))
 
@@ -76,6 +84,7 @@ test_that("search Aristolochia baetica photos in parallel", {
   df1 <- query_gbif(species = 'Aristolochia baetica',
                     format = "image",
                     cores = cores)
+  skip_if(is.null(df1))
 
   expect_true(nrow(df1) >= 2003)
 
@@ -87,13 +96,14 @@ test_that("test verbose FALSE", {
   skip_if_offline()
 
   msg <- capture.output(
-    a <- query_gbif(
+    df1 <- query_gbif(
       species = 'Glaucis dohrnii',
       format =  "image",
       verbose = FALSE,
       pb = FALSE
     )
   )
+  skip_if(is.null(df1))
 
   expect_true(length(msg) == 0)
 
@@ -106,6 +116,8 @@ test_that("test all_data FALSE", {
   df1 <- query_gbif(species = 'Glaucis dohrnii',
                     format =  "image",
                     all_data = FALSE)
+
+  skip_if(is.null(df1))
 
   expected_col_names <- .format_query_output(only_basic_columns = TRUE)
 

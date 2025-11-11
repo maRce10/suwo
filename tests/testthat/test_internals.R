@@ -6,4 +6,8 @@ test_that(".date_ranges", {
   # test
   expect_true(nrow(dts) == 5)
 
+  dts <- suwo:::.date_ranges(x = seq(1976, 2026, length.out = 50))
+
+  expect_true(nrow(dts) == 94)
+
 })

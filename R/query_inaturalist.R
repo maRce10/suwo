@@ -57,7 +57,7 @@ query_inaturalist <- function(species = getOption("species"),
   inat_format <- switch(format, sound = "sounds", image = "photos")
 
   # Use the unified connection checker
-  if (!.checkconnection("inat")) {
+  if (!.checkconnection(verb = verbose, service = "inat")) {
     return(invisible(NULL))
   }
 
@@ -103,10 +103,16 @@ query_inaturalist <- function(species = getOption("species"),
 
   query_output_list <- pblapply_sw_int(offsets, cl = cl, pbar = pb,
                                        function(offset) {
-    query_output <- jsonlite::fromJSON(paste0(base_url, "&offset=", offset))
+    query_output <-
+      try(jsonlite::fromJSON(paste0(base_url, "&offset=", offset)),
+          silent = TRUE)
 
     if (is.null(query_output$results)) {
       return(NULL)
+    }
+    # if error then just return it and stop here
+    if (is(query_output, "try-error")){
+      return(query_output)
     }
 
     query_output$results <- lapply(seq_len(nrow(query_output$results)),
@@ -131,6 +137,14 @@ query_inaturalist <- function(species = getOption("species"),
     output_df$offset <- offset
     return(output_df)
   })
+
+  # let user know error when downloading metadata
+  if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
+    if (verbose) {
+      .message(text = "Metadata could not be dowloaded", as = "failure")
+    }
+    return(invisible(NULL))
+  }
 
   # combine into a single data frame
   query_output_df <- .merge_data_frames(query_output_list)

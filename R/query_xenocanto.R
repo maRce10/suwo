@@ -116,12 +116,12 @@ query_xenocanto <-
       cl <- cores
     }
 
-    records_list <- pblapply_sw_int(
+    query_output_list <- pblapply_sw_int(
       pbar = pb,
       X = seq_len(query$numPages),
       cl = cl,
       FUN = function(y) {
-        query_output <- jsonlite::fromJSON(
+        query_output <- try(jsonlite::fromJSON(
           paste0(
             "https://www.xeno-canto.org/api/3/recordings?query=",
             query_str,
@@ -130,7 +130,12 @@ query_xenocanto <-
             "&key=",
             api_key
           )
-        )
+        ), silent = TRUE)
+
+        # if error then just return the error
+        if (is(query_output, "try-error")){
+          return(query_output)
+        }
 
         query_output$recordings$also <-
           vapply(
@@ -157,22 +162,36 @@ query_xenocanto <-
       }
     )
 
-    pooled_column_names <-
-      unique(unlist(lapply(records_list, names)))
-    records_list2 <- lapply(records_list, function(X) {
-      nms <- names(X)
-      if (length(nms) != length(pooled_column_names)) {
-        for (i in pooled_column_names) {
-          X <- data.frame(X,
-                          NA,
-                          stringsAsFactors = FALSE,
-                          check.names = FALSE)
-          names(X)[ncol(X)] <- i
-        }
+    # let user know error when downloading metadata
+    if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
+      if (verbose) {
+        .message(text = "Metadata could not be dowloaded", as = "failure")
       }
-      return(X)
-    })
-    query_output_df <- do.call(rbind, records_list2)
+      return(invisible(NULL))
+    }
+
+    # pooled_column_names <-
+    #   unique(unlist(lapply(query_output_list, names)))
+    # query_output_list2 <- lapply(query_output_list, function(X) {
+    #   nms <- names(X)
+    #   if (length(nms) != length(pooled_column_names)) {
+    #     for (i in pooled_column_names) {
+    #       X <- data.frame(X,
+    #                       NA,
+    #                       stringsAsFactors = FALSE,
+    #                       check.names = FALSE)
+    #       names(X)[ncol(X)] <- i
+    #     }
+    #   }
+    #   return(X)
+    # })
+    #
+    # query_output_df <- do.call(rbind, query_output_list2)
+
+    # make all data frames have the same columns
+    query_output_df <- .merge_data_frames(query_output_list)
+
+
 
     if (as.numeric(query$numRecordings) > 0) {
       indx <- vapply(query_output_df, is.factor, logical(1))

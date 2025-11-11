@@ -975,7 +975,8 @@ pblapply_sw_int <- function(X,
                                          "macaulay",
                                          "wikiaves",
                                          "xenocanto",
-                                         "observation")) {
+                                         "observation"),
+                             verb = TRUE) {
   # set user agent option globally
   options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
 
@@ -1009,15 +1010,19 @@ pblapply_sw_int <- function(X,
 
   if (inherits(response, "try-error") ||
       httr::http_error(response)) {
-    .message(paste("No connection to", name,
+    if (verb)
+{    .message(paste("No connection to", name,
                    "(check your internet connection!)"),
              as = "failure")
+      }
     return(FALSE)
   }
 
   content <- httr::content(response, as = "text", encoding = "UTF-8")
   if (grepl("Could not connect to the database", content)) {
+    if (verb){
     .message(paste(name, "website is apparently down"), as = "failure")
+      }
     return(FALSE)
   }
 
@@ -1037,3 +1042,8 @@ pblapply_sw_int <- function(X,
       return(NULL)
     }
   }
+
+# get if an object is an error from try()
+.is_error <- function(x){
+  is(x, "try-error")
+}
