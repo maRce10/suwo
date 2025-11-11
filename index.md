@@ -48,9 +48,17 @@ remotes::install_github("maRce10/suwo")
 library(suwo)
 ```
 
+# Basic workflow for obtaining nature media files
+
+Finding data using [suwo](https://marce10.github.io/suwo/) follows a
+basic sequence. The following diagram illustrates this workflow and the
+main functions involved:
+
+![suwo workflow diagram](./articles/workflow_diagram.png)
+
 Take a look at the [package
 vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
-overview of the main features of the packages.
+overview of the workflow and the core querying functions.
 
 ## Intended use and responsible practices
 
