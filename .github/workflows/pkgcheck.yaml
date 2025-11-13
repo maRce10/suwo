@@ -18,5 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      XENO_CANTO_API_KEY: ${{ secrets.XENO_CANTO_API_KEY }}
     steps:
       - uses: ropensci-review-tools/pkgcheck-action@main
