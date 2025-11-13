@@ -98,18 +98,18 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 
 ``` r
 # query metadata
-wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
+a_gioiosa <- query_gbif(species = "Amanita gioiosa", format =  "image")
 
 # run if query didnt fail
- if (!is.null(wa)) {
+ if (!is.null(a_gioiosa)) {
 # remove last 3 rows to test update_metadata
-sub_wa <- wa[1:(nrow(wa)- 3), ]
+sub_a_gioiosa <- a_gioiosa[1:(nrow(a_gioiosa)- 3), ]
 
 # update
-up_wa <- update_metadata(metadata = sub_wa)
+up_a_gioiosa <- update_metadata(metadata = sub_a_gioiosa)
 
 # check number of rows is the same
-nrow(up_wa) == nrow(wa)
+nrow(up_a_gioiosa) == nrow(a_gioiosa)
 }
 #> [1] TRUE
 ```
