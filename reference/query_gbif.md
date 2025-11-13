@@ -112,7 +112,5 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
 # search dink frog sound files
-}
 ```

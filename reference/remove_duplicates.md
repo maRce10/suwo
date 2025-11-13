@@ -96,10 +96,13 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
-xc <- query_xenocanto(species = "Turdus rufiventris")
+#> ! 2 observations do not have a download link and were removed from the results (saved at `options('gbif_excluded_results')`). 
+
+if(interactive()){
+key <- "YOUR XENO CANTO API KEY"
+xc <- query_xenocanto(species = "Turdus rufiventris", api_key = key)
 
 # combine metadata
 merged_metadata <- merge_metadata(xc, gb)

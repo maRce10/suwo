@@ -77,13 +77,16 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
-xc <- query_xenocanto(species = "Turdus rufiventris")
+#> ! 2 observations do not have a download link and were removed from the results (saved at `options('gbif_excluded_results')`). 
+inat <- query_inaturalist(species = "Turdus rufiventris",
+  format = "sound")
 
+# run if queries didnt fail
+ if (!is.null(gb) && !is.null(inat)) {
 # combine metadata
-merged_metadata <- merge_metadata(xc, gb)
+merged_metadata <- merge_metadata(inat, gb)
 
 # find duplicates
 label_dup_metadata <- find_duplicates(metadata = merged_metadata)

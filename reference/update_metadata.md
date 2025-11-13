@@ -97,10 +97,11 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
 # query metadata
 wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
 
+# run if query didnt fail
+ if (!is.null(wa)) {
 # remove last 3 rows to test update_metadata
 sub_wa <- wa[1:(nrow(wa)- 3), ]
 
@@ -110,4 +111,5 @@ up_wa <- update_metadata(metadata = sub_wa)
 # check number of rows is the same
 nrow(up_wa) == nrow(wa)
 }
+#> [1] TRUE
 ```

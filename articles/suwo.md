@@ -449,11 +449,11 @@ merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 ## Find and remove duplicated records
 
 When compiling data from multiple repositories, duplicated media records
-are a common issue. These duplicates occur both through data sharing
-between repositories like Xeno-Canto and GBIF, and when users upload the
-same file to multiple platforms. To help users efficiently identify
-these duplicate records, [suwo](https://marce10.github.io/suwo/)
-provides the
+are a common issue, particularly for sound recordings. These duplicates
+occur both through data sharing between repositories like Xeno-Canto and
+GBIF, and when users upload the same file to multiple platforms. To help
+users efficiently identify these duplicate records,
+[suwo](https://marce10.github.io/suwo/) provides the
 [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html)
 function.
 
@@ -613,7 +613,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpwPaVAj/amanita_zambiana 
+     /tmp/RtmpygRQbF/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -631,7 +631,7 @@ illustration purpose):
 
 ``` r
 # create a 6 pannel plot of the downloaded images
-par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+opar <- par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
 img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
@@ -650,6 +650,11 @@ img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
 ```
 
 ![](suwo_files/figure-html/unnamed-chunk-31-1.png)
+
+``` r
+# reset par
+par(opar)
+```
 
 Users can also save the downloaded files into sub-directories with the
 argument `folder_by`. This argument takes a character of factor column
@@ -687,7 +692,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpwPaVAj/diodon_holocanthus 
+     /tmp/RtmpygRQbF/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -718,7 +723,7 @@ This is a multipanel plot of the downloaded images (just for fun):
 
 ``` r
 # create a 6 pannel plot of the downloaded images
-par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+opar <- par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
 img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
@@ -737,6 +742,11 @@ img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
 ```
 
 ![](suwo_files/figure-html/unnamed-chunk-38-1.png)
+
+``` r
+# reset par
+par(opar)
+```
 
 ### Session information
 

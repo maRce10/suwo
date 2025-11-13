@@ -36,12 +36,13 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
- # get metadata from 2 repos
-  wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
-  xc <- query_xenocanto(species = 'Glaucis dohrnii')
+# get metadata from 2 repos
+wa <- query_wikiaves(species = "Glaucis dohrnii", format =  "sound")
+gb <- query_gbif(species = "Glaucis dohrnii", format = "sound")
 
-  # combine metadata
-  merged_mt <- merge_metadata(wa, xc)
+# run if queries didnt fail
+ if (!is.null(wa) && !is.null(gb)) {
+ # combine metadata
+ merged_mt <- merge_metadata(wa, gb)
 }
 ```

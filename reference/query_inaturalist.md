@@ -108,7 +108,5 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
 # search Bleeding Tooth mushroom images
-}
 ```

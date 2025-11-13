@@ -103,9 +103,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ## Examples
 
 ``` r
-if (interactive()){
 # search
 p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
     format = "image")
-}
 ```

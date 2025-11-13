@@ -1,4 +1,4 @@
-# suwo: access nature media repositories through R
+# suwo: access nature media repositories
 
 The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
@@ -78,4 +78,4 @@ the retrieved data or violations of third-party terms of service.
 Please cite [suwo](https://marce10.github.io/suwo/) as follows:
 
 Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025. suwo: access
-nature media repositories through R. R package version 0.1.0.
+nature media repositories. R package version 0.1.0.
