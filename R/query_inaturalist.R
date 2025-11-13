@@ -76,7 +76,16 @@ query_inaturalist <- function(species = getOption("species"),
   )
 
 
-  first_query <- jsonlite::fromJSON(base_url)
+  first_query <- try(jsonlite::fromJSON(base_url), silent = TRUE)
+
+  # let user know error when downloading metadata
+  if (.is_error(first_query)) {
+    if (verbose) {
+      .message(text = "Metadata could not be dowloaded", as = "failure")
+    }
+    return(invisible(NULL))
+  }
+
 
   total_results <- first_query$total_results
 

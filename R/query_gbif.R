@@ -87,7 +87,15 @@ query_gbif <-
       gbif_format
     )
 
-    base.srch.pth <- jsonlite::fromJSON(srch_trm)
+    base.srch.pth <- try(jsonlite::fromJSON(srch_trm), silent = TRUE)
+
+    # let user know error when downloading metadata
+    if (.is_error(base.srch.pth)) {
+      if (verbose) {
+        .message(text = "Metadata could not be dowloaded", as = "failure")
+      }
+      return(invisible(NULL))
+    }
 
     # message if nothing found
     if (base.srch.pth$count == 0) {

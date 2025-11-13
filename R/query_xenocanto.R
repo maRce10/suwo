@@ -94,14 +94,22 @@ query_xenocanto <-
     }
 
     # --- API request ---
-    query <- jsonlite::fromJSON(
+    query <- try(jsonlite::fromJSON(
       paste0(
         "https://www.xeno-canto.org/api/3/recordings?query=",
         query_str,
         "&key=",
         api_key
       )
-    )
+    ), silent = TRUE)
+
+    # let user know error when downloading metadata
+    if (.is_error(query)) {
+      if (verbose) {
+        .message(text = "Metadata could not be dowloaded", as = "failure")
+      }
+      return(invisible(NULL))
+    }
 
     if (as.numeric(query$numRecordings) == 0) {
       if (verbose)

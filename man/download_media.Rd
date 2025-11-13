@@ -76,13 +76,13 @@ the same function call. Can also be used on a updated query output
 existing media pool.
 }
 \examples{
-  h_peckii <- query_inaturalist(species = 'Hydnellum peckii',
+  a_zambiana <- query_inaturalist(species = "Amanita zambiana",
   format = "image")
 
 # run if query didnt fail
- if (!is.null(h_peckii)) {
+ if (!is.null(a_zambiana)) {
   # donwload the first to files
-  phae_anth_downl <- download_media(metadata = h_peckii[1:2, ],
+  phae_anth_downl <- download_media(metadata = a_zambiana[1:2, ],
   path = tempdir())
 }
 

@@ -11,6 +11,8 @@ test_that("update query_wikiaves", {
 
   up_df <- update_metadata(metadata = sub_df)
 
+  skip_if(is.null(up_df))
+
   expect_true(nrow(up_df) == nrow(df1))
 
 })
@@ -29,6 +31,8 @@ test_that("update query_inaturalist", {
 
   up_df <- update_metadata(metadata = sub_df)
 
+  skip_if(is.null(up_df))
+
   expect_true(nrow(up_df) == nrow(df1))
 })
 
@@ -43,6 +47,8 @@ test_that("update query_gbif", {
   sub_df <- df1[1:(nrow(df1) - 3), ]
 
   up_df <- update_metadata(metadata = sub_df)
+
+  skip_if(is.null(up_df))
 
   expect_true(nrow(up_df) == nrow(df1))
 
@@ -68,6 +74,8 @@ test_that("update query_xenocanto", {
   up_df <- update_metadata(metadata = sub_df,
                            api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
+  skip_if(is.null(up_df))
+
   expect_true(nrow(up_df) == nrow(df1))
 
 })
@@ -85,6 +93,8 @@ test_that("update query_macaulay", {
   sub_df <- df1[1:(nrow(df1) - 3), ]
 
   up_df <- update_metadata(metadata = sub_df, path = tempdir())
+
+  skip_if(is.null(up_df))
 
   expect_true(nrow(up_df) == nrow(df1))
 
@@ -108,6 +118,8 @@ test_that("update query_macaulay with paging", {
 
   up_df <- update_metadata(metadata = sub_df, path = tempdir(),
                            dates = c(1979, 2022, 2026))
+
+  skip_if(is.null(up_df))
 
   expect_true(nrow(up_df) == nrow(df1))
 

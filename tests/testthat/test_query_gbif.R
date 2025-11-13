@@ -13,7 +13,7 @@ test_that("search Aristolochia baetica images", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "image")
+  df1 <- query_gbif(species = 'Aristolochia baetica', format =  "image")
 
   skip_if(is.null(df1))
 
