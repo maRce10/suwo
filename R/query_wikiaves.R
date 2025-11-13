@@ -20,11 +20,9 @@
 #' recordings, which are then used to build a vast database for research
 #' and conservation.
 #' @examples
-#' if (interactive()){
 #' # search
 #' p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
 #'     format = "image")
-#' }
 #'
 #' @references {
 #' Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo
@@ -102,7 +100,7 @@ query_wikiaves <-
     get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
 
     get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
-      response <- httr::GET(
+      response <- try(httr::GET(
         url = paste0(
           "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
           wiki_format,
@@ -111,19 +109,15 @@ query_wikiaves <-
           "&o=mp&p=1"
         ),
         httr::user_agent("suwo (https://github.com/maRce10/suwo)")
-      )
+      ), silent = TRUE)
+
+      # if fail request return -9999
+      if (.is_error(response)) {
+        return(-999)
+      }
 
       # check if request succeeded
       if (httr::http_status(response)$category != "Success") {
-        if (verbose) {
-          .message(
-            text = paste0(
-              "Wikiaves query request failed: ",
-              httr::http_status(response)$message
-            ),
-            as = "failure"
-          )
-        }
         return(-999)
       }
 
@@ -175,8 +169,7 @@ query_wikiaves <-
     # loop over pages
     query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl,
                                          pbar = pb, function(i) {
-      # print(i)
-      # Sys.sleep(1)
+      Sys.sleep(0.2)
 
       query_output <-
         try(jsonlite::fromJSON(
@@ -193,7 +186,7 @@ query_wikiaves <-
         ), silent = TRUE)
 
       # retry if an error occurs waiting 1 s
-      if (is(query_output, "try-error")) {
+      if (.is_error(query_output)) {
         Sys.sleep(1)
 
         query_output <- try(jsonlite::fromJSON(jsonlite::fromJSON(
@@ -212,7 +205,7 @@ query_wikiaves <-
       }
 
       # if error then just return the error
-      if (is(query_output, "try-error")){
+      if (.is_error(query_output)){
         return(query_output)
       }
 

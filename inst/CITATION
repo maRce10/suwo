@@ -2,9 +2,9 @@ citHeader("Please cite 'suwo' as follows:")
 
 bibentry(entry = "MISC",
         bibtype = "Manual",
-        title = "suwo: access nature media repositories through R 0.1.0.",
+        title = "suwo: access nature media repositories 0.1.0.",
         author =  c(as.person("M. Araya-Salas"), as.person("Jorge Elizondo-Calvo"), as.person("Alejandro Rico-Guevara")),
         year = "2025",
-        textVersion = "Araya-Salas M, J Elizondo-Calvo & A Rico-Guevara (2025), suwo: access nature media repositories through R. R package version 0.1.0."
+        textVersion = "Araya-Salas M, J Elizondo-Calvo & A Rico-Guevara (2025), suwo: access nature media repositories. R package version 0.1.0."
 )
 

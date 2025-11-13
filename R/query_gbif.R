@@ -27,10 +27,8 @@
 #' (e.g., \code{\link{query_inaturalist}}).
 #' @seealso \code{\link{query_gbif}}
 #' @examples
-#' if (interactive()){
 #' # search dink frog sound files
 # d_diastema <- query_gbif(species = "Diasporus diastema", format = "sound")
-#' }
 #'
 #' @references {
 #' GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
@@ -123,7 +121,7 @@ query_gbif <-
                           silent = TRUE)
 
       # if error then just return it and stop here
-      if (is(query_output, "try-error")){
+      if (.is_error(query_output)){
         return(query_output)
       }
 

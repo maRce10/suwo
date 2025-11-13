@@ -66,17 +66,14 @@
 #' path = tempdir())
 #'
 #' # test a query with more than 10000 results paging by date
+#' # this example splits by entire year intervals
 #' cal_cos <- query_macaulay(species = "Calypte costae", format = "image",
 #' path = tempdir(), dates = c(1976, 2019, 2022, 2024, 2025, 2026))
 #'
-#' # this is how the internal function that splits the search by year intervals
-#' works
-#' # it can split by entire year intervals
-#' suwo:::.date_ranges(x = c(1976, 2020, 2022, 2024, 2025, 2026))
 #'
-#' # or by year-month intervals if dates have decimals
-#' # (note that it cannot split across years)
-#' suwo:::.date_ranges(x = seq(2020, 2026, length.out = 10))
+#' # this example splits  by year-month intervals (as dates have decimals)
+#' cal_cos <- query_macaulay(species = "Calypte costae", format = "image",
+#' path = tempdir(), dates = seq(2020, 2026, length.out = 10))
 #'
 #' ## update clement list (note that this is actually the same list used in the
 #' # current 'suwo' version, just for the sake of the example)

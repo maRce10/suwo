@@ -106,7 +106,8 @@ test_that("update query_macaulay with paging", {
   # remove last 3 rows to test update_metadata
   sub_df <- df1[1:(nrow(df1) - 3), ]
 
-  up_df <- update_metadata(metadata = sub_df, path = tempdir())
+  up_df <- update_metadata(metadata = sub_df, path = tempdir(),
+                           dates = c(1979, 2022, 2026))
 
   expect_true(nrow(up_df) == nrow(df1))
 

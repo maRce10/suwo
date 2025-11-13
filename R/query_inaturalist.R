@@ -24,10 +24,8 @@
 #' to document and identify plants, animals, fungi, and other organisms in
 #' the wild.
 #' @examples
-#' if (interactive()){
 #' # search Bleeding Tooth mushroom images
 # h_peckii <- query_inaturalist(species = 'Hydnellum peckii', format = "image")
-#' }
 #'
 #' @references {
 #' iNaturalist. Available from https://www.inaturalist.org. Accessed [date]
@@ -111,7 +109,7 @@ query_inaturalist <- function(species = getOption("species"),
       return(NULL)
     }
     # if error then just return it and stop here
-    if (is(query_output, "try-error")){
+    if (.is_error(query_output)){
       return(query_output)
     }
 

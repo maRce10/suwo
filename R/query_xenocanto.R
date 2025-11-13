@@ -133,7 +133,7 @@ query_xenocanto <-
         ), silent = TRUE)
 
         # if error then just return the error
-        if (is(query_output, "try-error")){
+        if (.is_error(query_output)){
           return(query_output)
         }
 

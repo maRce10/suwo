@@ -597,7 +597,7 @@ merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 
 # Find and remove duplicated records
 
-When compiling data from multiple repositories, duplicated media records are a common issue. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://marce10.github.io/suwo/) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function.
+When compiling data from multiple repositories, duplicated media records are a common issue, particularly for sound recordings. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://marce10.github.io/suwo/) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function.
 
 The [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function helps users identify potential duplicate records in their metadata data frames. Duplicates are identified based on matching species name, country, date, user name, and locality. The function uses a fuzzy matching approach to account for minor variations in the data (e.g., typos, different location formats, etc).The output is a data frame with the candidate duplicate records, allowing users to review and decide which records to keep.
 
@@ -694,7 +694,7 @@ Note that the name of the downloaded files includes the species name, an abbrevi
 This is a multipanel plot of 6 of the downloaded images (just for illustration purpose):
 ```{r}
 # create a 6 pannel plot of the downloaded images
-par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+opar <- par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
 img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
@@ -710,6 +710,9 @@ img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
     sep = "\n"
   ))
 }
+
+# reset par
+par(opar)
 
 ```
 
@@ -778,7 +781,7 @@ dhol_files$downloaded_file_name
 This is a multipanel plot of the downloaded images (just for fun):
 ```{r}
 # create a 6 pannel plot of the downloaded images
-par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+opar <- par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
 
 for (i in 1:6) {
 img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
@@ -794,6 +797,9 @@ img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
     sep = "\n"
   ))
 }
+
+# reset par
+par(opar)
 
 ```
 

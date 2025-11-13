@@ -57,6 +57,6 @@
     packageStartupMessage("\nPlease cite 'suwo' as: \n")
     packageStartupMessage(
       "Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025.
-    suwo: access nature media repositories through R. R package version 0.1.0."
+    suwo: access nature media repositories. R package version 0.1.0."
     )
   }

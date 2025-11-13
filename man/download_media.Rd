@@ -76,12 +76,13 @@ the same function call. Can also be used on a updated query output
 existing media pool.
 }
 \examples{
-if (interactive()){
-  phae_anth <- query_xenocanto(species = 'Phaethornis anthophilus',
-  all_data = FALSE)
+  h_peckii <- query_inaturalist(species = 'Hydnellum peckii',
+  format = "image")
 
+# run if query didnt fail
+ if (!is.null(h_peckii)) {
   # donwload the first to files
-  phae_anth_downl <- download_media(metadata = phae_anth[1:2, ],
+  phae_anth_downl <- download_media(metadata = h_peckii[1:2, ],
   path = tempdir())
 }
 

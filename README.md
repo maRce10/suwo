@@ -1,4 +1,4 @@
-suwo: access nature media repositories through R
+suwo: access nature media repositories
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -12,9 +12,10 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--11-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--13-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
+[![pkgcheck](https://github.com/maRce10/suwo/workflows/pkgcheck/badge.svg)](https://github.com/maRce10/suwo/actions?query=workflow%3Apkgcheck)  
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
 [![R-CMD-check](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml)
@@ -104,4 +105,4 @@ the retrieved data or violations of third-party terms of service.
 Please cite [suwo](https://marce10.github.io/suwo/) as follows:
 
 Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025. suwo: access
-nature media repositories through R. R package version 0.1.0.
+nature media repositories. R package version 0.1.0.

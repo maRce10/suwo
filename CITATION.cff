@@ -2,18 +2,18 @@
 # CITATION file created with {cffr} R package
 # See also: https://docs.ropensci.org/cffr/
 # --------------------------------------------
- 
+
 cff-version: 1.2.0
 message: 'To cite package "suwo" in publications use:'
 type: software
 license: GPL-2.0-or-later
-title: 'suwo: Access Nature Media Repositories Through R'
+title: 'suwo: Access Nature Media Repositories'
 version: 0.1.0
 identifiers:
 - type: url
   value: https://github.com/maRce10/suwo
 abstract: Streamline searching/downloading of nature media files (e.g. audios, photos)
-  from online repositories. The package offers functions for,obtaining media metadata
+  from online repositories. The package offers functions for obtaining media metadata
   from online repositories, downloading associated media files ad updating data sets
   with new records.
 authors:
@@ -29,7 +29,7 @@ authors:
   orcid: https://orcid.org/0000-0003-4067-5312
 preferred-citation:
   type: manual
-  title: 'suwo: access nature media repositories through R 0.1.0.'
+  title: 'suwo: access nature media repositories 0.1.0.'
   authors:
   - family-names: Araya-Salas
     given-names: M.

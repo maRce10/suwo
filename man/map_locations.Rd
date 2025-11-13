@@ -36,12 +36,14 @@ spread of observations. Note that only recordings with geographic
 coordinates are displayed.
 }
 \examples{
-if (interactive()){
 # search in xeno-canto
-metadata <- query_xenocanto(species = "Phaethornis anthophilus")
+e_hochs <- query_gbif(species = "Entoloma hochstetteri", format = "image")
+
+# run if query didnt fail
+ if (!is.null(e_hochs)) {
 
 # create map
-map_locations(metadata)
+map_locations(e_hochs)
 }
 
 }

@@ -82,9 +82,7 @@ of records returned by other suwo functions
 (e.g., \code{\link{query_inaturalist}}).
 }
 \examples{
-if (interactive()){
 # search dink frog sound files
-}
 
 }
 \references{

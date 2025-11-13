@@ -78,9 +78,7 @@ to document and identify plants, animals, fungi, and other organisms in
 the wild.
 }
 \examples{
-if (interactive()){
 # search Bleeding Tooth mushroom images
-}
 
 }
 \references{

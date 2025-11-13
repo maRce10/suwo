@@ -416,7 +416,9 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
     path = tempdir()
   )
 
-  test_keys <- c("639757637", "639955653")
+  tab <- table(ml2$key)
+
+  test_keys <- names(tab)[tab == 1][1:2]
 
   sml2 <- subset(ml2, key %in% test_keys)
 
@@ -429,8 +431,7 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
   # remove files
   unlink(file.path(tempdir(), fls))
 
-  expected_files <- c("Harpia_harpyja-ML639757637.jpeg",
-                      "Harpia_harpyja-ML639955653.jpeg")
+  expected_files <- paste("Harpia_harpyja-ML",test_keys,".jpeg",sep="")
 
   expect_true(all(expected_files %in% fls))
   expect_true(all(a$downloaded_file_name %in% fls))

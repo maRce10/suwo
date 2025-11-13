@@ -237,7 +237,7 @@ pblapply_sw_int <- function(X,
   silent = TRUE)
 
   # if failed try again after wating 0.5 seconds
-  if (is(dl_result, "try-error")) {
+  if (.is_error(dl_result)) {
     Sys.sleep(0.5)
     dl_result <- try(download.file(
       url = as.character(metadata$file_url[x]),
@@ -252,7 +252,7 @@ pblapply_sw_int <- function(X,
   }
 
   # if still failed then return FALSE
-  if (is(dl_result, "try-error")) {
+  if (.is_error(dl_result)) {
     return("failed")
   } else {
     if (exists)
@@ -1008,7 +1008,7 @@ pblapply_sw_int <- function(X,
                   httr::user_agent("suwo (https://github.com/maRce10/suwo)")),
                   silent = TRUE)
 
-  if (inherits(response, "try-error") ||
+  if (.is_error(response) ||
       httr::http_error(response)) {
     if (verb)
 {    .message(paste("No connection to", name,

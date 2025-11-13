@@ -38,12 +38,13 @@
 #' existing media pool.
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_macaulay}}
 #' @examples
-#' if (interactive()){
-#'   phae_anth <- query_xenocanto(species = 'Phaethornis anthophilus',
-#'   all_data = FALSE)
+#'   a_zambiana <- query_inaturalist(species = "Amanita zambiana",
+#'   format = "image")
 #'
+#' # run if query didnt fail
+#'  if (!is.null(a_zambiana)) {
 #'   # donwload the first to files
-#'   phae_anth_downl <- download_media(metadata = phae_anth[1:2, ],
+#'   phae_anth_downl <- download_media(metadata = a_zambiana[1:2, ],
 #'   path = tempdir())
 #' }
 #'

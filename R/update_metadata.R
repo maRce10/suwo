@@ -31,10 +31,11 @@
 #' found, the function returns the original metadata and prints a message. If
 #' some old entries are not returned in the new query they are still retained.
 #' @examples
-#' if (interactive()){
 #' # query metadata
 #' wa <- query_wikiaves(species = 'Glaucis dohrnii', format =  "sound")
 #'
+#' # run if query didnt fail
+#'  if (!is.null(wa)) {
 #' # remove last 3 rows to test update_metadata
 #' sub_wa <- wa[1:(nrow(wa)- 3), ]
 #'
