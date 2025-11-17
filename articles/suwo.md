@@ -376,10 +376,10 @@ head(c_eisentrauti, 4)
 
 | repository  | format |    key    |         species         |    date    | time  |       user_name       | country |          locality          | latitude | longitude |                            file_url                            | file_extension |
 |:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:---------------------:|:-------:|:--------------------------:|:--------:|:---------:|:--------------------------------------------------------------:|:--------------:|
+| iNaturalist | sound  | 326470869 | Chorthippus eisentrauti | 2025-11-13 | 14:26 | Eliot Stein-Deffarges |   NA    |  44.0506903802,7.64412147  | 44.05069 | 7.644121  | <https://static.inaturalist.org/sounds/1693720.wav?1763129563> |      wav       |
+| iNaturalist | sound  | 326470844 | Chorthippus eisentrauti | 2025-11-13 | 13:30 | Eliot Stein-Deffarges |   NA    | 44.0489666389,7.6286233333 | 44.04897 | 7.628623  | <https://static.inaturalist.org/sounds/1693713.wav?1763128937> |      wav       |
+| iNaturalist | sound  | 326470823 | Chorthippus eisentrauti | 2025-11-13 | 12:37 | Eliot Stein-Deffarges |   NA    | 44.0468833056,7.6305133333 | 44.04688 | 7.630513  | <https://static.inaturalist.org/sounds/1693708.wav?1763127622> |      wav       |
 | iNaturalist | sound  | 319153344 | Chorthippus eisentrauti | 2025-09-23 | 11:05 | Eliot Stein-Deffarges |   NA    |   44.0312216667,7.510275   | 44.03122 | 7.510275  | <https://static.inaturalist.org/sounds/1659586.wav?1759761352> |      wav       |
-| iNaturalist | sound  | 319153342 | Chorthippus eisentrauti | 2025-09-23 | 10:47 | Eliot Stein-Deffarges |   NA    |   44.0303266667,7.51011    | 44.03033 | 7.510110  | <https://static.inaturalist.org/sounds/1659585.wav?1759761315> |      wav       |
-| iNaturalist | sound  | 318152028 | Chorthippus eisentrauti |     NA     |  NA   | Eliot Stein-Deffarges |   NA    | 43.9479833757,7.5524406909 | 43.94798 | 7.552441  | <https://static.inaturalist.org/sounds/1655306.wav?1759392035> |      wav       |
-| iNaturalist | sound  | 318151985 | Chorthippus eisentrauti | 2025-08-29 | 12:54 | Eliot Stein-Deffarges |   NA    |   43.947875,7.5523733333   | 43.94788 | 7.552373  | <https://static.inaturalist.org/sounds/1655305.wav?1759391936> |      wav       |
 
 ``` r
 # exclude new observations (simulate old data)
@@ -613,7 +613,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmphWzqJI/amanita_zambiana 
+     /tmp/Rtmp6O3gMq/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -692,7 +692,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmphWzqJI/diodon_holocanthus 
+     /tmp/Rtmp6O3gMq/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
