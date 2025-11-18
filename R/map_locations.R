@@ -37,11 +37,6 @@ map_locations <- function(metadata,
                           cluster = FALSE,
                           palette = viridis::viridis,
                           by = "species") {
-  # error message if leaflet is not installed
-  if (!requireNamespace("leaflet", quietly = TRUE)) {
-    .stop(paste("must install 'leaflet' to use leaflet",
-                "style maps (when 'leaflet.map = TRUE')"))
-  }
 
   # make lat lon numeric and remove rows with no coords
   metadata$latitude <- as.numeric(as.character(metadata$latitude))

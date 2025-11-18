@@ -27,6 +27,7 @@
 #' and innovation of additional custom analyzes.
 #'
 #' @importFrom jsonlite fromJSON
+#' @importFrom leaflet awesomeIcons leaflet addTiles addAwesomeMarkers markerClusterOptions addMiniMap addEasyButton easyButton JS easyButtonState
 #' @importFrom parallel makePSOCKcluster detectCores parLapply mclapply
 #' @importFrom fs dir_tree
 #' @importFrom jpeg readJPEG

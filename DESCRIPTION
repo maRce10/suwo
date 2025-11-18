@@ -23,11 +23,11 @@ Imports:
     tools,
     RecordLinkage,
     jpeg,
-    fs
+    fs,
+    leaflet
 Suggests: 
     covr,
     testthat,
-    leaflet,
     knitr,
     rmarkdown,
     graphics

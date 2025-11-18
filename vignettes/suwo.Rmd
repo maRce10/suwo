@@ -152,7 +152,7 @@ Here is a description of each step:
 
 1. Queries regarding a species are submitted through one of the available 
 query functions (`query_repo_name()`) that connect to five different online 
-repositories. The output of these queries is a data frame containing metadata 
+repositories (Xeno-Canto, Inaturalist, GBIF, Macaulay Library and Wikiaves). The output of these queries is a data frame containing metadata 
 associated with the media files (e.g., species name, date, location, etc, see below). 
 
 1. If multiple repositories are queried, the resulting metadata data frames can 
