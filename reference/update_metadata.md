@@ -109,7 +109,6 @@ sub_a_gioiosa <- a_gioiosa[1:(nrow(a_gioiosa)- 3), ]
 up_a_gioiosa <- update_metadata(metadata = sub_a_gioiosa)
 
 # check number of rows is the same
-nrow(up_a_gioiosa) == nrow(a_gioiosa)
+# nrow(up_a_gioiosa) == nrow(a_gioiosa)
 }
-#> [1] TRUE
 ```
