@@ -71,7 +71,7 @@ query_wikiaves <-
       )
     )
     request_obj <- httr2::req_user_agent(request_obj,
-                                         "suwo (https://github.com/maRce10/suwo)")
+                                      "suwo (https://github.com/maRce10/suwo)")
     response <- httr2::req_perform(request_obj)
 
     # check if request succeeded
@@ -179,7 +179,7 @@ query_wikiaves <-
     # loop over pages
     query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl,
                                          pbar = pb, function(i) {
-      Sys.sleep(0.2)
+      Sys.sleep(0.5)
 
       query_output <-
         try(jsonlite::fromJSON(
