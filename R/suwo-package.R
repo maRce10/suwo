@@ -27,6 +27,7 @@
 #' and innovation of additional custom analyzes.
 #'
 #' @importFrom jsonlite fromJSON
+#' @importFrom httr2 request req_user_agent req_error req_perform resp_is_error resp_body_string resp_status resp_status_desc resp_body_json
 #' @importFrom leaflet awesomeIcons leaflet addTiles addAwesomeMarkers markerClusterOptions addMiniMap addEasyButton easyButton JS easyButtonState
 #' @importFrom parallel makePSOCKcluster detectCores parLapply mclapply
 #' @importFrom fs dir_tree

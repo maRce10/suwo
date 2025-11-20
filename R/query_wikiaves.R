@@ -64,30 +64,30 @@ query_wikiaves <-
     wiki_format <- switch(format, sound = "s", image = "f")
 
     # initialize search with user agent
-    response <- httr::GET(
-      url = paste0(
+    request_obj <- httr2::request(
+      paste0(
         "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
         gsub(" ", "%20", species)
-      ),
-      httr::user_agent("suwo (https://github.com/maRce10/suwo)")
+      )
     )
+    request_obj <- httr2::req_user_agent(request_obj, "suwo (https://github.com/maRce10/suwo)")
+    response <- httr2::req_perform(request_obj)
 
     # check if request succeeded
-     if (httr::http_status(response)$category != "Success") {
+    if (httr2::resp_status(response) >= 400) {
       if (verbose) {
         .message(
           text = paste0(
             "Wikiaves query request failed: ",
-            httr::http_status(response)$message
+            httr2::resp_status_desc(response)
           ),
           as = "failure"
         )
       }
       return(invisible(NULL))
-     }
+    }
 
-    get_ids <- httr::content(response, as = "parsed", type = "application/json")
-
+    get_ids <- jsonlite::fromJSON(httr2::resp_body_string(response))
 
     if (length(get_ids) == 0) {
       if (verbose) {
@@ -97,19 +97,22 @@ query_wikiaves <-
     }
 
     # make it a data frame
-    get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
+    # get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
 
     get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
-      response <- try(httr::GET(
-        url = paste0(
+      request_obj <- httr2::request(
+      paste0(
           "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
           wiki_format,
           "&t=s&s=",
           get_ids$id[u],
           "&o=mp&p=1"
-        ),
-        httr::user_agent("suwo (https://github.com/maRce10/suwo)")
-      ), silent = TRUE)
+        )
+      )
+      request_obj <- httr2::req_user_agent(request_obj, "suwo (https://github.com/maRce10/suwo)")
+      request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)
+
+      response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
       # if fail request return -9999
       if (.is_error(response)) {
@@ -117,11 +120,13 @@ query_wikiaves <-
       }
 
       # check if request succeeded
-      if (httr::http_status(response)$category != "Success") {
+      if (httr2::resp_is_error(response)) {
         return(-999)
       }
 
-      as.numeric(httr::content(response, as = "parsed")$registros$total)
+      content <- httr2::resp_body_json(response)
+      as.numeric(content$registros$total)
+
     }, numeric(1))
 
     # let user gracefully know error when downloading metadata

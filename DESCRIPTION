@@ -16,7 +16,7 @@ Imports:
     utils,
     viridis,
     rlang,
-    httr,
+    httr2,
     jsonlite,
     kableExtra,
     lubridate,

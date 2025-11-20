@@ -1004,25 +1004,27 @@ pblapply_sw_int <- function(X,
   name <- messages[[service]]
 
   # Attempt request
-  response <- try(httr::GET(url,
-                  httr::user_agent("suwo (https://github.com/maRce10/suwo)")),
-                  silent = TRUE)
+  request_obj <- httr2::request(url)
+  request_obj <- httr2::req_user_agent(request_obj, "suwo (https://github.com/maRce10/suwo)")
+  request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)  # Disable auto-throwing
+
+  response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
   if (.is_error(response) ||
-      httr::http_error(response)) {
-    if (verb)
-{    .message(paste("No connection to", name,
-                   "(check your internet connection!)"),
-             as = "failure")
-      }
+      httr2::resp_is_error(response)) {
+    if (verb) {
+      .message(paste("No connection to", name,
+                     "(check your internet connection!)"),
+               as = "failure")
+    }
     return(FALSE)
   }
 
-  content <- httr::content(response, as = "text", encoding = "UTF-8")
+  content <- httr2::resp_body_string(response, encoding = "UTF-8")
   if (grepl("Could not connect to the database", content)) {
-    if (verb){
-    .message(paste(name, "website is apparently down"), as = "failure")
-      }
+    if (verb) {
+      .message(paste(name, "website is apparently down"), as = "failure")
+    }
     return(FALSE)
   }
 
