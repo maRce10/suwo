@@ -146,8 +146,8 @@ pblapply_sw_int <- function(X,
 }
 
 .message <- function(text =
-                       paste0("Obtaining metadata ({n} matching record{?s} found)"),
-                     as = c("success", "warning", "failure", "error", "message"),
+                  paste0("Obtaining metadata ({n} matching record{?s} found)"),
+                  as = c("success", "warning", "failure", "error", "message"),
                      n = NULL,
                      suffix = ":\n") {
   if (!is.null(n))
@@ -1005,8 +1005,10 @@ pblapply_sw_int <- function(X,
 
   # Attempt request
   request_obj <- httr2::request(url)
-  request_obj <- httr2::req_user_agent(request_obj, "suwo (https://github.com/maRce10/suwo)")
-  request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)  # Disable auto-throwing
+  request_obj <- httr2::req_user_agent(request_obj,
+                                       "suwo (https://github.com/maRce10/suwo)")
+  # Disable auto-throwing
+  request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)
 
   response <- try(httr2::req_perform(request_obj), silent = TRUE)
 

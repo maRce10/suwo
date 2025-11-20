@@ -70,7 +70,8 @@ query_wikiaves <-
         gsub(" ", "%20", species)
       )
     )
-    request_obj <- httr2::req_user_agent(request_obj, "suwo (https://github.com/maRce10/suwo)")
+    request_obj <- httr2::req_user_agent(request_obj,
+                                         "suwo (https://github.com/maRce10/suwo)")
     response <- httr2::req_perform(request_obj)
 
     # check if request succeeded
@@ -109,8 +110,11 @@ query_wikiaves <-
           "&o=mp&p=1"
         )
       )
-      request_obj <- httr2::req_user_agent(request_obj, "suwo (https://github.com/maRce10/suwo)")
-      request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)
+      request_obj <-
+        httr2::req_user_agent(request_obj,
+              "suwo (https://github.com/maRce10/suwo)")
+      request_obj <- httr2::req_error(request_obj,
+                                      is_error = function(resp) FALSE)
 
       response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
@@ -130,7 +134,8 @@ query_wikiaves <-
     }, numeric(1))
 
     # let user gracefully know error when downloading metadata
-    if (any(vapply(get_ids$total_registers, function(x) x == -999, FUN.VALUE = logical(1)))) {
+    if (any(vapply(get_ids$total_registers, function(x) x == -999,
+                   FUN.VALUE = logical(1)))) {
       if (verbose) {
         .message(text = "Metadata could not be dowloaded", as = "failure")
       }

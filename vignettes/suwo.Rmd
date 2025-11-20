@@ -243,12 +243,12 @@ tax_level <-  c(
 tax_level <- tax_level[match(names(metadata_list), names(tax_level))]
 
 geo_cover <-  c(
-  gbif = "Worldwide",
-  inaturalist = "Worldwide",
-  `macaulay library` =  "Worldwide",
-  observation = "Worldwide",
+  gbif = "Global",
+  inaturalist = "Global",
+  `macaulay library` =  "Global",
+  observation = "Global",
   wikiaves = "Brazil",
-  `xeno-canto` = "Worldwide"
+  `xeno-canto` = "Global"
 )
 
 geo_cover <- geo_cover[match(names(metadata_list), names(geo_cover))]
