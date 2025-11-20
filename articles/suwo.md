@@ -89,11 +89,11 @@ library(suwo)
 
 | Function                                                                             | Repository       | URL link                                                             | File types                                | Requires api key | Taxonomic level                           | Geographic coverage | Other features                                        |
 |:-------------------------------------------------------------------------------------|:-----------------|:---------------------------------------------------------------------|:------------------------------------------|:-----------------|:------------------------------------------|:--------------------|:------------------------------------------------------|
-| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | sound, image, video, interactive resource | No               | Species                                   | Worldwide           | Specify query by data base                            |
-| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | sound, image                              | No               | Species                                   | Worldwide           | NA                                                    |
-| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | sound, image, video                       | No               | Species                                   | Worldwide           | Interactive                                           |
+| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | sound, image, video, interactive resource | No               | Species                                   | Global              | Specify query by data base                            |
+| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | sound, image                              | No               | Species                                   | Global              | NA                                                    |
+| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | sound, image, video                       | No               | Species                                   | Global              | Interactive                                           |
 | [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | Wikiaves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | sound, image                              | No               | Species                                   | Brazil              | NA                                                    |
-| [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                     | Yes              | Species, subspecies, genus, family, group | Worldwide           | Specify query by taxonomy, geographic range and dates |
+| [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                     | Yes              | Species, subspecies, genus, family, group | Global              | Specify query by taxonomy, geographic range and dates |
 
 Table 1: Summary of query functions.
 
@@ -614,7 +614,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmpw559Mk/amanita_zambiana 
+     /tmp/RtmpF9pzPR/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -693,7 +693,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmpw559Mk/diodon_holocanthus 
+     /tmp/RtmpF9pzPR/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
