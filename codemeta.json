@@ -2,7 +2,7 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "suwo",
-  "description": "suwo is intended streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for obtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records. We are currently searching for new online repositories to be included in the package. Please open a new issue if you want to suggest a new repository.",
+  "description": "Streamline searching/downloading of nature media files (e.g. audios, photos) from online repositories. The package offers functions for obtaining media metadata from online repositories, downloading associated media files ad updating data sets with new records.",
   "name": "suwo: Access Nature Media Repositories",
   "relatedLink": "https://marce10.github.io/suwo/",
   "codeRepository": "https://github.com/maRce10/suwo",
@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.2 (2023-10-31)",
+  "runtimePlatform": "R version 4.5.0 (2025-04-11)",
   "author": [
     {
       "@type": "Person",
@@ -69,18 +69,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "leaflet",
-      "name": "leaflet",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=leaflet"
     },
     {
       "@type": "SoftwareApplication",
@@ -185,15 +173,15 @@
     },
     "8": {
       "@type": "SoftwareApplication",
-      "identifier": "httr",
-      "name": "httr",
+      "identifier": "httr2",
+      "name": "httr2",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=httr"
+      "sameAs": "https://CRAN.R-project.org/package=httr2"
     },
     "9": {
       "@type": "SoftwareApplication",
@@ -274,15 +262,51 @@
     },
     "16": {
       "@type": "SoftwareApplication",
+      "identifier": "leaflet",
+      "name": "leaflet",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=leaflet"
+    },
+    "17": {
+      "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.5"
     },
     "SystemRequirements": null
   },
-  "fileSize": "1966.437KB",
+  "fileSize": "5754.304KB",
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "datePublished": "2025",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "M.",
+          "familyName": "Araya-Salas"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Jorge",
+          "familyName": "Elizondo-Calvo"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Alejandro",
+          "familyName": "Rico-Guevara"
+        }
+      ],
+      "name": "suwo: access nature media repositories 0.1.0."
+    }
+  ],
   "releaseNotes": "https://github.com/maRce10/suwo/blob/master/NEWS.md",
   "readme": "https://github.com/maRce10/suwo/blob/main/README.md",
-  "contIntegration": ["https://app.codecov.io/gh/maRce10/suwo?branch=master", "https://app.codecov.io/gh/maRce10/suwo"],
+  "contIntegration": ["https://app.codecov.io/gh/maRce10/suwo?branch=main", "https://github.com/maRce10/suwo/actions?query=workflow%3Apkgcheck", "https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml"],
   "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html", "https://www.repostatus.org/#active"]
 }
