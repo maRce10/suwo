@@ -1,3 +1,5 @@
+options(verbose = TRUE)
+
 test_that("merge query_wikiaves and xc", {
 
 

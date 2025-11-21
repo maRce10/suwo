@@ -452,7 +452,7 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
 devtools::document(".")
 
-devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = FALSE, manual = TRUE)
+devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = TRUE, manual = TRUE)
 
 # styler::style_dir("./R")
 # system("autoconf  ")

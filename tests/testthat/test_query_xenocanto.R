@@ -1,3 +1,6 @@
+options(verbose = TRUE)
+
+
 test_that("search Phaethornis check rows", {
   skip_on_cran()
   skip_if_offline()
@@ -41,6 +44,20 @@ test_that("no recs found", {
                          api_key = Sys.getenv("XENO_CANTO_API_KEY"))
 
   expect_true(is.null(df1))
+})
+
+test_that("bad key", {
+  skip_on_cran()
+  skip_if_offline()
+
+  msg <- capture_error(
+    query_xenocanto(species = '000', verbose = TRUE,
+                    api_key = "")
+  )
+  expect_true(as.character(msg) ==
+                paste("Error: An API key is required for Xeno-Canto API v3.",
+                      "Get yours at https://xeno-canto.org/account.\n"))
+
 })
 
 test_that("check messages", {

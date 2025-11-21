@@ -5,8 +5,6 @@
 # that allows to define internally if progress bar would be used
 # (pbapply::pblapply uses pboptions to do this)
 
-# Create internal funciton to update datasets from gbif, launch once
-# before every session
 
 pblapply_sw_int <- function(X,
                             FUN,
@@ -622,7 +620,8 @@ pblapply_sw_int <- function(X,
 }
 
 # monitor if a new file is added
-.monitor_new_files <- function(path, interval = 1) {
+# added that it breaks after 10 s
+.monitor_new_files <- function(path, interval = 1, break.time = 10) {
   # Create initial snapshot
   prev_snap <- utils::fileSnapshot(
     path = path,
@@ -632,6 +631,9 @@ pblapply_sw_int <- function(X,
     recursive = FALSE    # Don't check subfolders
   )
 
+  # set initial time
+  start_time <- Sys.time()
+
   while (TRUE) {
     # Take new snapshot
     current_snap <- utils::fileSnapshot(
@@ -640,6 +642,12 @@ pblapply_sw_int <- function(X,
       pattern = "\\.csv$",
       recursive = FALSE
     )
+    # Check elapsed time
+    elapsed_time <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
+
+    if (elapsed_time > break.time) {
+      return(NULL)  # Return NULL if break time exceeded
+    }
 
     # Compare snapshots
     changes <- utils::changedFiles(prev_snap, current_snap)

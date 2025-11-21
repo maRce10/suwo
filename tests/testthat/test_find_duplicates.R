@@ -1,3 +1,6 @@
+options(verbose = TRUE)
+
+
 test_that("find from gbif ml and xc", {
 
   skip_on_cran()

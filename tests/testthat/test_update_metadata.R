@@ -53,26 +53,25 @@ test_that("update query_gbif", {
   expect_true(nrow(up_df) == nrow(df1))
 
 })
+options(verbose = TRUE)
 
-test_that("update query_xenocanto", {
+test_that("update gbif", {
   skip_on_cran()
   skip_if_offline()
-  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
-          "Xeno-Canto API key not set")
 
-  df1 <- query_xenocanto(
+  df1 <- query_gbif(
     species = 'Phaethornis anthophilus',
     all_data = FALSE,
-    api_key = Sys.getenv("XENO_CANTO_API_KEY")
+    format = "image"
   )
 
   skip_if(is.null(df1))
 
-  # remove last 3 rows to test update_metadata
-  sub_df <- df1[1:(nrow(df1) - 3), ]
 
-  up_df <- update_metadata(metadata = sub_df,
-                           api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+  # remove last 3 rows to test update_metadata
+  sub_df <- df1[df1$key != df1$key[1], ]
+
+  up_df <- update_metadata(metadata = sub_df)
 
   skip_if(is.null(up_df))
 

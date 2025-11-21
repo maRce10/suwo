@@ -1,3 +1,5 @@
+options(verbose = TRUE)
+
 test_that("search Glaucis dohrnii audio", {
   skip_on_cran()
   skip_if_offline()

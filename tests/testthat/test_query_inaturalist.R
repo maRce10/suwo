@@ -61,6 +61,8 @@ test_that("search in parallel", {
 })
 
 
+options(verbose = TRUE)
+
 test_that("test verbose FALSE", {
   skip_on_cran()
   skip_if_offline()

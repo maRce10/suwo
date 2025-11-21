@@ -1,3 +1,5 @@
+options(verbose = TRUE)
+
 test_that("search Glaucis dohrnii sound", {
 
   skip_on_cran()

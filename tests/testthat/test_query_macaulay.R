@@ -1,3 +1,6 @@
+
+options(verbose = TRUE)
+
 test_that("search Glaucis dohrnii sound reading existing file", {
 
   tf <- tempfile()
@@ -38,6 +41,7 @@ test_that("search Glaucis dohrnii images", {
 
 })
 
+
 test_that("paging by date", {
   skip_if_not(interactive())
   skip_on_cran()
@@ -53,3 +57,15 @@ test_that("paging by date", {
   expect_true(nrow(df1) >= 15000)
 
 })
+
+
+test_that("null taxon", {
+
+  df1 <- query_macaulay(species = "asdasdasd",
+    format =  "image",
+                        path = tempdir())
+
+  expect_true(is.null(df1))
+
+})
+

@@ -68,6 +68,8 @@ functions with the argument `raw_data = FALSE`. The function uses the same
 query species and format as in the original query. If no new entries are
 found, the function returns the original metadata and prints a message. If
 some old entries are not returned in the new query they are still retained.
+The function assumes that no new files are added to existing repository
+entries.
 }
 \examples{
 # query metadata

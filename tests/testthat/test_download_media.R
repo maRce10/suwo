@@ -1,32 +1,33 @@
+
+options(verbose = TRUE)
+
 ## Xeno-Canto
 test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   skip_on_cran()
   skip_if_offline()
-  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
-          "Xeno-Canto API key not set")
 
-  xc1 <- query_xenocanto(
+  df1 <- query_gbif(
     species = 'Phaethornis anthophilus',
     all_data = FALSE,
-    api_key = Sys.getenv("XENO_CANTO_API_KEY")
+    format = "image"
   )
 
-  skip_if(is.null(xc1))
+  skip_if(is.null(df1))
 
-  test_keys <- c("532163", "568491")
 
-  sxc1 <- subset(xc1, key %in% test_keys)
+  df1 <- df1[df1$key %in%  c("5063794756", "5077057045"), ]
+  sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
 
   a <- download_media(metadata = sxc1, path = tempdir())
 
-  fls <- list.files(path = tempdir(), pattern = "mp3$")
+  fls <- list.files(path = tempdir(), pattern = "jpeg$")
 
   # remove files
   unlink(file.path(tempdir(), fls))
 
   expected_files <- c(
-    "Phaethornis_anthophilus-XC532163.mp3",
-    "Phaethornis_anthophilus-XC568491.mp3"
+    "Phaethornis_anthophilus-GBIF5063794756.jpeg",
+    "Phaethornis_anthophilus-GBIF5077057045.jpeg"
   )
 
   # test
@@ -40,39 +41,35 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
 test_that("Xenocanto Phaethornis anthophilus download folder_by", {
   skip_on_cran()
   skip_if_offline()
-  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
-          "Xeno-Canto API key not set")
 
-  xc1 <- query_xenocanto(
+  df1 <- query_gbif(
     species = 'Phaethornis anthophilus',
     all_data = FALSE,
-    api_key = Sys.getenv("XENO_CANTO_API_KEY")
+    format = "image"
   )
 
-  skip_if(is.null(xc1))
-  test_keys <- c("532163", "568491")
+  skip_if(is.null(df1))
 
-  sxc1 <- subset(xc1, key %in% test_keys)
 
-  a <- download_media(metadata = sxc1,
-                      path = tempdir(),
-                      folder_by = "date")
+  df1 <- df1[df1$key %in%  c("5063794756", "5077057045"), ]
+  sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
+
+  a <- download_media(metadata = sxc1, path = tempdir(), folder_by = "country")
 
   fls <- list.files(path = tempdir(),
-                    pattern = "mp3$",
+                    pattern = "jpeg$",
                     recursive = TRUE)
 
   # remove filess
-  unlink(file.path(tempdir(), fls))
+  unlink(file.path(tempdir(), a$downloaded_file_name))
 
   expected_files <- c(
-    "2020-03-05/Phaethornis_anthophilus-XC532163.mp3",
-    "2020-06-14/Phaethornis_anthophilus-XC568491.mp3"
+    "Panama/Phaethornis_anthophilus-GBIF5063794756.jpeg",
+    "Colombia/Phaethornis_anthophilus-GBIF5077057045.jpeg"
   )
 
   # test
   expect_true(all(expected_files %in% fls))
-
   expect_true(all(a$downloaded_file_name %in% expected_files))
 
 })
@@ -80,42 +77,35 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
 test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   skip_on_cran()
   skip_if_offline()
-  skip_if(!nzchar(Sys.getenv("XENO_CANTO_API_KEY")),
-          "Xeno-Canto API key not set")
 
-  xc2 <- query_xenocanto(
+  df1 <- query_gbif(
     species = 'Phaethornis anthophilus',
     all_data = TRUE,
-    api_key = Sys.getenv("XENO_CANTO_API_KEY")
+    format = "image"
   )
 
-  skip_if(is.null(xc2))
+  skip_if(is.null(df1))
 
-  test_keys <- c("532163", "568491")
 
-  sxc2 <- subset(xc2, key %in% test_keys)
+  df1 <- df1[df1$key %in%  c("5063794756", "5077057045"), ]
+  sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
 
-  a <- download_media(metadata = sxc2, path = tempdir())
+  a <- download_media(metadata = sxc1, path = tempdir())
 
-  fls <- list.files(path = tempdir(), pattern = "mp3$")
+  fls <- list.files(path = tempdir(), pattern = "jpeg$")
 
   # remove files
   unlink(file.path(tempdir(), fls))
 
   expected_files <- c(
-    "Phaethornis_anthophilus-XC532163.mp3",
-    "Phaethornis_anthophilus-XC568491.mp3"
+    "Phaethornis_anthophilus-GBIF5063794756.jpeg",
+    "Phaethornis_anthophilus-GBIF5077057045.jpeg"
   )
 
   # test
   expect_true(all(expected_files %in% fls))
 
-  expect_true(all(
-    a$downloaded_file_name %in% c(
-      "Phaethornis_anthophilus-XC532163.mp3",
-      "Phaethornis_anthophilus-XC568491.mp3"
-    )
-  ))
+  expect_true(all(a$downloaded_file_name %in% expected_files))
 
 })
 
@@ -188,39 +178,6 @@ test_that("wikiaves Urubitinga solitaria sp download image all.data = FALSE",
           })
 
 ### GBIF
-
-test_that("search GBIF sp download image all_data = TRUE", {
-  skip_on_cran()
-  skip_if_offline()
-
-  gb1 <- query_gbif(species = 'Glaucis dohrnii',
-                    format = "image",
-                    all_data = TRUE)
-
-  skip_if(is.null(gb1))
-
-  test_keys <- c("5154503342", "4525343483")
-
-  sgb1 <- subset(gb1, key %in% test_keys)
-
-  a <- download_media(metadata = sgb1, path = tempdir())
-
-  fls <- list.files(path = tempdir(), pattern = "jpeg$|png$")
-
-  # remove files
-  unlink(file.path(tempdir(), fls))
-
-  # expected files
-  expected_files <- c("Glaucis_dohrnii-GBIF5154503342.png",
-                      "Glaucis_dohrnii-GBIF4525343483.jpeg")
-
-  # test
-  expect_true(all(expected_files %in% fls))
-
-  expect_true(all(a$downloaded_file_name %in% expected_files))
-
-})
-
 test_that("search GBIF sp download sound all_data = FALSE", {
   skip_on_cran()
   skip_if_offline()
@@ -435,5 +392,39 @@ test_that("search macaulay sp download video all_data = FALSE", {
 
   expect_true(all(expected_files %in% fls))
   expect_true(all(a$downloaded_file_name %in% fls))
+
+})
+
+test_that("overwrite and already there", {
+  skip_on_cran()
+  skip_if_offline()
+
+
+  df1 <- suwo:::vignette_metadata$h_sarapiquensis[1:4,]
+
+  dir.create(file.path(tempdir(), "downloads"))
+
+  a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"))
+
+  fls <- list.files(path = file.path(tempdir(), "downloads"),
+                    pattern = ".jpeg$",
+                    ignore.case = TRUE)
+
+  # remove files
+  unlink(file.path(tempdir(), "downloads" ,  fls[1:2]))
+
+
+  df1$file_url[4] <- "adasd"
+  a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"))
+
+  expect_length(unique(a$download_status), 3)
+
+  df1$file_url[4] <- "adasd"
+  a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"),
+                      overwrite = TRUE)
+
+  expect_length(unique(a$download_status), 2)
+
+  unlink(file.path(tempdir(), "downloads"), recursive = TRUE)
 
 })
