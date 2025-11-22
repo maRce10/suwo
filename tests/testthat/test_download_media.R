@@ -20,6 +20,8 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
 
   a <- download_media(metadata = sxc1, path = tempdir())
 
+  skip_if(is.null(a))
+
   fls <- list.files(path = tempdir(), pattern = "jpeg$")
 
   # remove files
@@ -56,6 +58,8 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
 
   a <- download_media(metadata = sxc1, path = tempdir(), folder_by = "country")
 
+  skip_if(is.null(a))
+
   fls <- list.files(path = tempdir(),
                     pattern = "jpeg$",
                     recursive = TRUE)
@@ -91,6 +95,7 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
 
   a <- download_media(metadata = sxc1, path = tempdir())
+  skip_if(is.null(a))
 
   fls <- list.files(path = tempdir(), pattern = "jpeg$")
 
@@ -127,6 +132,7 @@ test_that("wikiaves Glaucis dohrnii sp download, all.data = TRUE", {
   swa1 <- subset(wa1, key %in% test_keys)
 
   a <- download_media(metadata = swa1, path = tempdir())
+  skip_if(is.null(a))
 
   fls <- list.files(path = tempdir(), pattern = "mp3$")
 
@@ -161,6 +167,8 @@ test_that("wikiaves Urubitinga solitaria sp download image all.data = FALSE",
 
             a <- download_media(metadata = swa2, path = tempdir())
 
+            skip_if(is.null(a))
+
             fls <- list.files(path = tempdir(), pattern = "jpeg$")
 
             # remove files
@@ -193,6 +201,8 @@ test_that("search GBIF sp download sound all_data = FALSE", {
   sgb2 <- subset(gb2, key %in% test_keys)
 
   a <- download_media(metadata = sgb2, path = tempdir())
+
+  skip_if(is.null(a))
 
   fls <- list.files(path = tempdir(), pattern = "mp3$")
 
@@ -229,12 +239,7 @@ test_that("search inaturalist sp download all_data = TRUE", {
 
   a <- download_media(metadata = sin1, path = tempdir())
 
-  fls <- list.files(path = tempdir(),
-                    pattern = ".jpeg$",
-                    ignore.case = TRUE)
-
-  # remove files
-  # unlink(file.path(tempdir(), fls))
+  skip_if(is.null(a))
 
   # expected files
   exp_files <- c(
@@ -251,9 +256,16 @@ test_that("search inaturalist sp download all_data = TRUE", {
   sin1$file_url[1] <- "asdasd"
 
   a <- download_media(metadata = sin1, path = tempdir())
+  skip_if(is.null(a))
 
-  expect_true(length(unique(a$download_status)) == 2)
+  expect_length(length(unique(a$download_status)), 2)
 
+  fls <- list.files(path = tempdir(),
+                    pattern = ".jpeg$",
+                    ignore.case = TRUE)
+
+  # remove files
+  unlink(file.path(tempdir(), fls))
 
 })
 
@@ -274,6 +286,8 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
 
   a <- download_media(metadata = sin2, path = tempdir(),
                       folder_by = "file_extension")
+
+  skip_if(is.null(a))
 
   fls <- list.files(path = tempdir(),
                     pattern = ".mp3$|m4a$",
@@ -311,6 +325,8 @@ test_that("search macaulay sp download all_data = TRUE", {
 
   a <- download_media(metadata = sml1, path = tempdir())
 
+  skip_if(is.null(a))
+
   fls <- list.files(path = tempdir(),
                     pattern = ".mp3$|m4a$",
                     ignore.case = TRUE)
@@ -347,6 +363,8 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
 
   a <- download_media(metadata = sml2, path = tempdir())
 
+  skip_if(is.null(a))
+
   fls <- list.files(path = tempdir(),
                     pattern = "jpeg$",
                     ignore.case = TRUE)
@@ -380,6 +398,8 @@ test_that("search macaulay sp download video all_data = FALSE", {
 
   a <- download_media(metadata = sml3, path = tempdir())
 
+  skip_if(is.null(a))
+
   fls <- list.files(path = tempdir(),
                     pattern = ".mp4$",
                     ignore.case = TRUE)
@@ -405,6 +425,7 @@ test_that("overwrite and already there", {
   dir.create(file.path(tempdir(), "downloads"))
 
   a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"))
+  skip_if(is.null(a))
 
   fls <- list.files(path = file.path(tempdir(), "downloads"),
                     pattern = ".jpeg$",
@@ -417,11 +438,14 @@ test_that("overwrite and already there", {
   df1$file_url[4] <- "adasd"
   a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"))
 
+  skip_if(is.null(a))
+
   expect_length(unique(a$download_status), 3)
 
   df1$file_url[4] <- "adasd"
   a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"),
                       overwrite = TRUE)
+  skip_if(is.null(a))
 
   expect_length(unique(a$download_status), 2)
 

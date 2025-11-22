@@ -985,8 +985,20 @@ pblapply_sw_int <- function(X,
                                          "xenocanto",
                                          "observation"),
                              verb = TRUE) {
+
   # set user agent option globally
   options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
+
+    # check if internet is available
+  if (!httr2::is_online()) {
+    if (verb) {
+      .message("No internet connection available (check your connection!)",
+               as = "failure")
+    }
+    return(FALSE)
+  }
+
+  if (!is.null(service)){
 
   service <- match.arg(service)
 
@@ -1023,8 +1035,7 @@ pblapply_sw_int <- function(X,
   if (.is_error(response) ||
       httr2::resp_is_error(response)) {
     if (verb) {
-      .message(paste("No connection to", name,
-                     "(check your internet connection!)"),
+      .message(paste("No connection to", name),
                as = "failure")
     }
     return(FALSE)
@@ -1037,7 +1048,7 @@ pblapply_sw_int <- function(X,
     }
     return(FALSE)
   }
-
+}
   return(TRUE)
 }
 

@@ -72,6 +72,11 @@ download_media <-
     # report errors
     checkmate::reportAssertions(check_results)
 
+    # Use the unified connection checker
+    if (!.checkconnection(verb = verbose, service = NULL)) {
+      return(invisible(NULL))
+    }
+
 
     # Abbreviate repository name
     metadata$repository <- vapply(metadata$repository, function(x) {
