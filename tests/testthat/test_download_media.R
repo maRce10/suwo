@@ -247,6 +247,10 @@ test_that("search inaturalist sp download all_data = TRUE", {
     "Agalychnis_lemur-INAT303641298.jpeg"
   )
 
+  fls <- list.files(path = tempdir(),
+                    pattern = ".jpeg$",
+                    ignore.case = TRUE)
+
   expect_true(all(exp_files %in% fls))
   expect_true(all(a$downloaded_file_name %in% exp_files))
 
