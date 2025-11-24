@@ -237,6 +237,10 @@ test_that("search inaturalist sp download all_data = TRUE", {
 
   sin1 <- sin1[!duplicated(sin1$key),]
 
+  unlink(list.files(path = tempdir(),
+                    pattern = ".jpeg$",
+                    ignore.case = TRUE))
+
   a <- download_media(metadata = sin1, path = tempdir())
 
   skip_if(is.null(a))
@@ -260,9 +264,10 @@ test_that("search inaturalist sp download all_data = TRUE", {
   sin1$file_url[1] <- "asdasd"
 
   a <- download_media(metadata = sin1, path = tempdir())
+
   skip_if(is.null(a))
 
-  expect_length(length(unique(a$download_status)), 2)
+  expect_length(unique(a$download_status), 2)
 
   fls <- list.files(path = tempdir(),
                     pattern = ".jpeg$",
@@ -287,6 +292,11 @@ test_that("search inaturalist sp download sound all_data = FALSE", {
   test_keys <- c("283643216", "281653293")
 
   sin2 <- subset(in2, key %in% test_keys)
+
+  unlink(list.files(path = tempdir(),
+                    pattern = ".mp3$|m4a$",
+                    ignore.case = TRUE))
+
 
   a <- download_media(metadata = sin2, path = tempdir(),
                       folder_by = "file_extension")
@@ -327,6 +337,11 @@ test_that("search macaulay sp download all_data = TRUE", {
 
   sml1 <- subset(ml1, key %in% test_keys)
 
+
+  unlink(list.files(path = tempdir(),
+                    pattern = ".mp3$|m4a$",
+                    ignore.case = TRUE))
+
   a <- download_media(metadata = sml1, path = tempdir())
 
   skip_if(is.null(a))
@@ -365,6 +380,10 @@ test_that("search macaulay Harpia harpyja download sound all_data = FALSE", {
 
   sml2 <- subset(ml2, key %in% test_keys)
 
+  unlink(list.files(path = tempdir(),
+                    pattern = ".jpeg$",
+                    ignore.case = TRUE))
+
   a <- download_media(metadata = sml2, path = tempdir())
 
   skip_if(is.null(a))
@@ -399,6 +418,10 @@ test_that("search macaulay sp download video all_data = FALSE", {
   test_keys <- c("639261756", "639255345")
 
   sml3 <- subset(ml3, key %in% test_keys)
+
+  unlink(list.files(path = tempdir(),
+                    pattern = ".mp4$",
+                    ignore.case = TRUE))
 
   a <- download_media(metadata = sml3, path = tempdir())
 
