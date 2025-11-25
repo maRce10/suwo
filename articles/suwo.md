@@ -293,6 +293,17 @@ sub-query has less than 10000 records.
 
 ![Checking number of records at Macaulay Library](ml_num_recs.jpeg)
 
+#### Querying non-bird species
+
+[query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html)
+can only search for bird species. However, the Macaulay Library hosts
+media files for other taxonomic groups as well (e.g., mammals,
+amphibians, insects). To obtain metadata for these other groups (e.g.,
+mammals, amphibians, insects) users must manually search for the species
+at the [Macaulay Library website](https://www.macaulaylibrary.org/),
+download the .csv file with the metadata, and then provide the name of
+the csv file(s) to the argument `files`.
+
 ### query_xenocanto()
 
 #### API key
@@ -614,7 +625,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp0ZbTUu/amanita_zambiana 
+     /tmp/Rtmpuo2txb/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -693,7 +704,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp0ZbTUu/diodon_holocanthus 
+     /tmp/Rtmpuo2txb/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 

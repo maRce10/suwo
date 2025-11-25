@@ -103,9 +103,8 @@ is saved into the current working directory (<code>"."</code>).</p></dd>
 
 <dt id="arg-files">files<a class="anchor" aria-label="anchor" href="#arg-files"></a></dt>
 <dd><p>Optional character vector with the name(s) of the .csv file(s)
-to read. If not provided, the function will open a browser window to the
-search results page, where the user must download a .csv file with the
-metadata.</p></dd>
+to read. If provided, the function will import the data from the .csv files
+instead of opening the Macaulay Library search page in a browser.</p></dd>
 
 
 <dt id="arg-dates">dates<a class="anchor" aria-label="anchor" href="#arg-dates"></a></dt>
@@ -133,10 +132,14 @@ new list version, read it in R as a data frame and provide it to the function
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The function returns a data frame with the metadata of the media
-files matching the search criteria. If <code>all_data = TRUE</code>, all metadata
-fields (columns) are returned. If <code>raw_data = TRUE</code>, the raw data as
-obtained from the repository is returned (without any formatting).</p>
+    <p>This is an interactive function which opens a browser window to the
+Macaulay Library's search page, where the user must download a .csv file
+with the metadata. The function then reads the .csv file and returns a data
+frame with the metadata. The function can also import previously downloaded
+metadata (in csv format) with the argument `files`. If
+<code>all_data = TRUE</code>, all metadata fields (columns) are returned.
+If <code>raw_data = TRUE</code>, the raw data as obtained from the repository is
+returned (without any formatting).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -147,10 +150,7 @@ Macaulay Library is the world’s largest repository of digital media
 (audio, photo, and video) of wildlife, and their habitats. The archive
 hosts more than 77 million images, 3 million sound recordings, and
 350k videos, from more than 80k contributors, and is integrated with
-eBird, the world’s largest biodiversity dataset. This is an interactive
-function which opens a browser window to the Macaulay Library's search page,
-where the user must download a .csv file with the metadata. The function
-then reads the .csv file and returns a data frame with the metadata.</p>
+eBird, the world’s largest biodiversity dataset.</p>
 <p>Here are some instructions for using this function properly:</p><ul><li><p>Valid species names can be checked at
    <code>suwo:::ml_taxon_code$SCI_NAME</code>.</p></li>
 <li><p>Users must save the save the .csv file manually</p></li>

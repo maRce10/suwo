@@ -65,9 +65,9 @@ query_macaulay(
 - files:
 
   Optional character vector with the name(s) of the .csv file(s) to
-  read. If not provided, the function will open a browser window to the
-  search results page, where the user must download a .csv file with the
-  metadata.
+  read. If provided, the function will import the data from the .csv
+  files instead of opening the Macaulay Library search page in a
+  browser.
 
 - dates:
 
@@ -94,10 +94,14 @@ query_macaulay(
 
 ## Value
 
-The function returns a data frame with the metadata of the media files
-matching the search criteria. If `all_data = TRUE`, all metadata fields
-(columns) are returned. If `raw_data = TRUE`, the raw data as obtained
-from the repository is returned (without any formatting).
+This is an interactive function which opens a browser window to the
+Macaulay Library's search page, where the user must download a .csv file
+with the metadata. The function then reads the .csv file and returns a
+data frame with the metadata. The function can also import previously
+downloaded metadata (in csv format) with the argument \`files\`. If
+`all_data = TRUE`, all metadata fields (columns) are returned. If
+`raw_data = TRUE`, the raw data as obtained from the repository is
+returned (without any formatting).
 
 ## Details
 
@@ -108,10 +112,7 @@ the world’s largest repository of digital media (audio, photo, and
 video) of wildlife, and their habitats. The archive hosts more than 77
 million images, 3 million sound recordings, and 350k videos, from more
 than 80k contributors, and is integrated with eBird, the world’s largest
-biodiversity dataset. This is an interactive function which opens a
-browser window to the Macaulay Library's search page, where the user
-must download a .csv file with the metadata. The function then reads the
-.csv file and returns a data frame with the metadata.
+biodiversity dataset.
 
 Here are some instructions for using this function properly:
 
