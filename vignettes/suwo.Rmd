@@ -484,6 +484,10 @@ Users can check at the Macaulay Library website how many records are available f
 
 <center><img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%"></center>
 
+### Querying non-bird species
+
+[query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) can only search for bird species. However, the Macaulay Library hosts media files for other taxonomic groups as well (e.g., mammals, amphibians, insects). To obtain metadata for these other groups (e.g., mammals, amphibians, insects) users must manually search for the species at the [Macaulay Library website](https://www.macaulaylibrary.org/), download the .csv file with the metadata, and then provide the name of the csv file(s) to the argument `files`.
+
 ## query_xenocanto()
 
 ### API key

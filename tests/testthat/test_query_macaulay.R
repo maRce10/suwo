@@ -7,9 +7,7 @@ test_that("search Glaucis dohrnii sound reading existing file", {
 
   write.csv(file = tf, x = suwo:::vignette_metadata$t_rufiventris[1:3, ])
 
-  df1 <- query_macaulay(species = 'Glaucis dohrnii',
-                        format =  "sound",
-                        path = tempdir(), files = basename(tf))
+  df1 <- query_macaulay(path = tempdir(), files = basename(tf))
 
   expect_true(nrow(df1) == 3)
 

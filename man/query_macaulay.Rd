@@ -48,9 +48,8 @@ for downstream steps will not work on them.}
 is saved into the current working directory (\code{"."}).}
 
 \item{files}{Optional character vector with the name(s) of the .csv file(s)
-to read. If not provided, the function will open a browser window to the
-search results page, where the user must download a .csv file with the
-metadata.}
+to read. If provided, the function will import the data from the .csv files
+instead of opening the Macaulay Library search page in a browser.}
 
 \item{dates}{Optional numeric vector with years to split the search. If
 provided, the function will perform separate queries for each date range
@@ -72,10 +71,14 @@ new list version, read it in R as a data frame and provide it to the function
  through this argument.}
 }
 \value{
-The function returns a data frame with the metadata of the media
-files matching the search criteria. If \code{all_data = TRUE}, all metadata
-fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
-obtained from the repository is returned (without any formatting).
+This is an interactive function which opens a browser window to the
+Macaulay Library's search page, where the user must download a .csv file
+with the metadata. The function then reads the .csv file and returns a data
+frame with the metadata. The function can also import previously downloaded
+metadata (in csv format) with the argument `files`. If
+\code{all_data = TRUE}, all metadata fields (columns) are returned.
+If \code{raw_data = TRUE}, the raw data as obtained from the repository is
+returned (without any formatting).
 }
 \description{
 \code{query_macaulay} searches for metadata from
@@ -89,10 +92,7 @@ Macaulay Library is the world’s largest repository of digital media
 (audio, photo, and video) of wildlife, and their habitats. The archive
 hosts more than 77 million images, 3 million sound recordings, and
 350k videos, from more than 80k contributors, and is integrated with
-eBird, the world’s largest biodiversity dataset. This is an interactive
-function which opens a browser window to the Macaulay Library's search page,
-where the user must download a .csv file with the metadata. The function
-then reads the .csv file and returns a data frame with the metadata.
+eBird, the world’s largest biodiversity dataset.
 
 Here are some instructions for using this function properly:
 \itemize{

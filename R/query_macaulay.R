@@ -8,9 +8,9 @@
 #' @param path Directory path where the .csv file will be saved. By default it
 #' is saved into the current working directory (\code{"."}).
 #' @param files Optional character vector with the name(s) of the .csv file(s)
-#' to read. If not provided, the function will open a browser window to the
-#' search results page, where the user must download a .csv file with the
-#' metadata.
+#' to read. If provided, the function will import the data from the .csv files
+#' instead of opening the Macaulay Library search page in a browser ('species'
+#' is ignored if supplied).
 #' @param dates Optional numeric vector with years to split the search. If
 #' provided, the function will perform separate queries for each date range
 #' (between consecutive date values) and combine the results. Useful for
@@ -30,10 +30,14 @@
 #'  through this argument.
 #' @export
 #' @name query_macaulay
-#' @return The function returns a data frame with the metadata of the media
-#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
-#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
-#' obtained from the repository is returned (without any formatting).
+#' @return  This is an interactive function which opens a browser window to the
+#' Macaulay Library's search page, where the user must download a .csv file
+#' with the metadata. The function then reads the .csv file and returns a data
+#' frame with the metadata. The function can also import previously downloaded
+#' metadata (in csv format) with the argument `files`. If
+#' \code{all_data = TRUE}, all metadata fields (columns) are returned.
+#' If \code{raw_data = TRUE}, the raw data as obtained from the repository is
+#' returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' \href{https://www.macaulaylibrary.org/}{Macaulay Library} online
 #' repository and returns the metadata of media files matching the query. The
@@ -41,10 +45,7 @@
 #' (audio, photo, and video) of wildlife, and their habitats. The archive
 #' hosts more than 77 million images, 3 million sound recordings, and
 #' 350k videos, from more than 80k contributors, and is integrated with
-#' eBird, the world’s largest biodiversity dataset. This is an interactive
-#' function which opens a browser window to the Macaulay Library's search page,
-#' where the user must download a .csv file with the metadata. The function
-#' then reads the .csv file and returns a data frame with the metadata.
+#' eBird, the world’s largest biodiversity dataset.
 #'
 #' Here are some instructions for using this function properly:
 #' \itemize{
@@ -138,25 +139,36 @@ query_macaulay <-
                         `video` = "video")
 
     # get species ML taxon code
-    taxon_code <- .taxon_code_search(species, ml_taxon_code = taxon_code_info)
+     if (is.null(species) & is.null(files)){
+       # either species or files must be supplied
+       .message(text =
+                  paste("Either 'species' or 'files' must be supplied", species, sep = ""),
+                as = "failure")
 
-    # function will stop here
-    if (is.null(taxon_code)) {
-      .message(text =
-                 paste("No matching species found for ", species, sep = ""),
-               as = "failure")
-
-      return(invisible(NULL))
-    }
-
-    # Use the unified connection checker
-    if (!.checkconnection(verb = verbose, service = "macaulay")) {
-      return(invisible(NULL))
-    }
-
-    new_csv_file_list <- list()
+     }
 
     if (is.null(files)) {
+
+      # set output message wording
+      out_text <- "{n} matching record{?s} found"
+      nfiles <- NULL
+
+        taxon_code <- .taxon_code_search(species, ml_taxon_code = taxon_code_info)
+
+      # function will stop here
+      if (is.null(taxon_code)) {
+        .message(text =
+                   paste("No matching species found for ", species, sep = ""),
+                 as = "failure")
+
+        return(invisible(NULL))
+      }
+
+      # Use the unified connection checker
+      if (!.checkconnection(verb = verbose, service = "macaulay")) {
+        return(invisible(NULL))
+      }
+
       # Apply to all elements
       if (!is.null(dates)) {
         date_ranges_df <- .date_ranges(x = dates)
@@ -164,6 +176,9 @@ query_macaulay <-
         date_ranges_df <- data.frame(start_year = NA)
       }
 
+      new_csv_file_list <- vector(length = nrow(date_ranges_df), mode = "character")
+
+      print(new_csv_file_list)
       for (i in seq_len(nrow(date_ranges_df))) {
         if (!is.null(dates)) {
           # extract date range to let users know while batching
@@ -247,16 +262,20 @@ query_macaulay <-
         utils::browseURL(search_url)
 
         # monitor for new files
-        new_csv_file_list[[length(new_csv_file_list) + 1]] <-
+        new_csv_file_list[i] <-
           .monitor_new_files(path  = path)
 
         # let users know the name of the csv file that was read
         cat("\nThe data will be read from the file:", suffix = " ")
 
-        cat(paste(new_csv_file_list[[length(new_csv_file_list)]], "\n"))
+        cat(paste(new_csv_file_list[i], "\n"))
       }
     } else {
-      new_csv_file_list <- as.list(files)
+
+      nfiles <- length(files)
+      # set output message wording
+      out_text <- "{n} matching record{?s} read from {nfiles} file{?s}"
+      new_csv_file_list <- files
     }
 
     # Read the CSV file
@@ -290,16 +309,17 @@ query_macaulay <-
       ),
       all_data = all_data,
       format = format,
-      input_file = file.path(normalizePath(path), unlist(new_csv_file_list)),
+      input_file = file.path(normalizePath(path), new_csv_file_list),
       raw_data = raw_data
     )
 
     if (verbose) {
       .message(
-        text = "{n} matching record{?s} found",
+        text = out_text,
         n = nrow(query_output_df),
         as = "success",
-        suffix = "\n"
+        suffix = "\n",
+        nfiles = nfiles
       )
     }
 
