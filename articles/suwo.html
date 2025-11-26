@@ -61,7 +61,7 @@
 repositories</h3>
                         <h4 data-toc-skip class="author">Jorge Elizondo,
 <a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a> &amp;
-<a href="https://marce10.github.io/" class="external-link">Marcelo Araya-Salas</a>
+<a href="https://ecophysics.org/" class="external-link">Alejandro Rico-Guevara</a>
 </h4>
             
             <h4 data-toc-skip class="date">2025-11-26</h4>
@@ -91,8 +91,8 @@ purposes, including research, education, and conservation. Any
 <strong>commercial use of the data or media retrieved through this
 package is strictly prohibited</strong> unless explicit, separate
 permission is granted directly from the original source platforms and
-content creators. Users are obligated to comply with the specific terms
-of service and data use policies of each source database, which often
+rights holders. Users are obligated to comply with the specific terms of
+service and data use policies of each source database, which often
 mandate attribution and similarly restrict commercial application. The
 package developers assume no liability for misuse of the retrieved data
 or violations of third-party terms of service.</p>
@@ -1164,9 +1164,9 @@ the metadata:</p>
 <p></p>
 <p>Here are some tips for using this function properly:</p>
 <ul>
-<li>Valid species names can be checked at
-<code>suwo:::ml_taxon_code$SCI_NAME</code>
-</li>
+<li>Valid bird species names can be checked at
+<code>suwo:::ml_taxon_code$SCI_NAME</code> (see ‘Querying non-bird
+species’ section below for other groups)</li>
 <li>The exported csv file must be saved in the directory specified by
 the <code>path</code> argument of the function (default is the current
 working directory)</li>
@@ -1432,7 +1432,9 @@ amphibians, insects). To obtain metadata for these other groups (e.g.,
 mammals, amphibians, insects) users must manually search for the species
 at the <a href="https://www.macaulaylibrary.org/" class="external-link">Macaulay Library
 website</a>, download the .csv file with the metadata, and then provide
-the name of the csv file(s) to the argument <code>files</code>.</p>
+1) the name of the csv file(s) to the argument <code>files</code> and 2)
+the directory path were it was saved to the argument
+<code>path</code>.</p>
 </div>
 </div>
 <div class="section level3">
@@ -3628,7 +3630,7 @@ saved
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/RtmphiCBOD/amanita_zambiana 
+<pre><code> /tmp/RtmpVR6pIY/amanita_zambiana 
 ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
 ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
 ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -3693,7 +3695,7 @@ sub-directories by country (for simplicity only 6 of them):</p>
 <pre><code> [32m✔ [39m All files were downloaded successfully 🥇</code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/RtmphiCBOD/diodon_holocanthus 
+<pre><code> /tmp/RtmpVR6pIY/diodon_holocanthus 
 ├──  Cabo Verde 
 │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
 ├──  Cayman Islands 

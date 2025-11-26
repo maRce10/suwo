@@ -19,7 +19,7 @@ This package is designed exclusively for non-commercial, scientific
 purposes, including research, education, and conservation. Any
 **commercial use of the data or media retrieved through this package is
 strictly prohibited** unless explicit, separate permission is granted
-directly from the original source platforms and content creators. Users
+directly from the original source platforms and rights holders. Users
 are obligated to comply with the specific terms of service and data use
 policies of each source database, which often mandate attribution and
 similarly restrict commercial application. The package developers assume
@@ -239,7 +239,9 @@ metadata:
 
 Here are some tips for using this function properly:
 
-- Valid species names can be checked at `suwo:::ml_taxon_code$SCI_NAME`
+- Valid bird species names can be checked at
+  `suwo:::ml_taxon_code$SCI_NAME` (see ‘Querying non-bird species’
+  section below for other groups)
 - The exported csv file must be saved in the directory specified by the
   `path` argument of the function (default is the current working
   directory)
@@ -301,8 +303,9 @@ media files for other taxonomic groups as well (e.g., mammals,
 amphibians, insects). To obtain metadata for these other groups (e.g.,
 mammals, amphibians, insects) users must manually search for the species
 at the [Macaulay Library website](https://www.macaulaylibrary.org/),
-download the .csv file with the metadata, and then provide the name of
-the csv file(s) to the argument `files`.
+download the .csv file with the metadata, and then provide 1) the name
+of the csv file(s) to the argument `files` and 2) the directory path
+were it was saved to the argument `path`.
 
 ### query_xenocanto()
 
@@ -625,7 +628,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmphiCBOD/amanita_zambiana 
+     /tmp/RtmpVR6pIY/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -704,7 +707,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmphiCBOD/diodon_holocanthus 
+     /tmp/RtmpVR6pIY/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 

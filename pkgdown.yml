@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   suwo: suwo.html
-last_built: 2025-11-26T14:57Z
+last_built: 2025-11-26T15:26Z
 urls:
   reference: https://marce10.github.io/suwo/reference
   article: https://marce10.github.io/suwo/articles
