@@ -243,7 +243,7 @@ Here are some tips for using this function properly:
   `suwo:::ml_taxon_code$SCI_NAME` (see ‘Querying non-bird species’
   section below for other groups)
 - The exported csv file must be saved in the directory specified by the
-  `path` argument of the function (default is the current working
+  argument `path` of the function (default is the current working
   directory)
 - If the file is saved overwriting a pre-existing file (i.e. same file
   name) the function will not detect it
@@ -269,7 +269,7 @@ head(p_striigularis, 4)
 #### Bypassing record limit
 
 Even if logged in, a maximum of 10000 records per query can be returned.
-This can be bypassed by using the ‘dates’ argument to split the search
+This can be bypassed by using the argument `dates` to split the search
 into a sequence of shorter date ranges. The rationale is that by
 splitting the search into date ranges, users can download multiple .csv
 files, which are then combined by the function into a single metadata
@@ -535,7 +535,7 @@ a country similarity greater than 0.8, locality similarity greater than
 0.5, user_name similarity greater than 0.8, and exact matches for time
 and date (similarities range from 0 to 1). These values have been found
 to work well in most cases. Nonetheless, users can adjust the
-sensitivity based on their specific needs using the argument ‘criteria’.
+sensitivity based on their specific needs using the argument `criteria`.
 
 Once users have reviewed the candidate duplicates, they can use the
 [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html)
@@ -578,7 +578,7 @@ the duplicated observations from the same repository will be retained in
 the output data frame (and all other excluded). The function will give
 priority to repositories in which media downloading is more
 straightforward (i.e. Xeno-Canto, GBIF), but this can be modified with
-the argument ‘repo_priority’.
+the argument `repo_priority`.
 
 ## Download media files
 
@@ -628,7 +628,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpVR6pIY/amanita_zambiana 
+     /tmp/RtmpeYvHTc/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -707,7 +707,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpVR6pIY/diodon_holocanthus 
+     /tmp/RtmpeYvHTc/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 

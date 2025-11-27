@@ -39,6 +39,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 # get metadata from 2 repos
 wa <- query_wikiaves(species = "Glaucis dohrnii", format =  "sound")
 gb <- query_gbif(species = "Glaucis dohrnii", format = "sound")
+#> Warning: URL 'https://api.gbif.org/v1/occurrence/search?limit=300&&scientificName=Glaucis%20dohrnii&media_type=Sound': status was 'SSL connect error'
 
 # run if queries didnt fail
  if (!is.null(wa) && !is.null(gb)) {

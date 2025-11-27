@@ -67,7 +67,7 @@ exclusively for non-commercial, scientific purposes, including research,
 education, and conservation. **Any commercial use of the data or media
 retrieved through this package is strictly prohibited** unless explicit,
 separate permission is granted directly from the original source
-platforms and content creators. Users are obligated to comply with the
+platforms and rights holders. Users are obligated to comply with the
 specific terms of service and data use policies of each source database,
 which often mandate attribution and similarly restrict commercial
 application. The package developers assume no liability for misuse of
