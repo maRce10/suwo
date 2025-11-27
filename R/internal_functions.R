@@ -524,6 +524,13 @@ pblapply_sw_int <- function(X,
 
 # get repo name from call
 .repo_from_call <- function(x) {
+
+  # get function symbol as string
+  x <- as.character(x[[1]])
+
+  # drop namespace if any (suwo::fun)
+  x <- grep(pattern = "query", x = x, value = TRUE)
+
   switch(
     strsplit(
       x = as.character(x),

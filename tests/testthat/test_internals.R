@@ -46,3 +46,26 @@ test_that(".monitor_new_files", {
 
 })
 
+
+test_that(".repo_from_call handles namespaced calls", {
+
+  skip_on_cran()
+  skip_if_offline()
+
+  # construct call objects
+  call_non_ns <- quote(query_gbif(species = 'Aristolochia baetica', format =  "image"))
+  call_ns <- quote(suwo::query_gbif(species = 'Aristolochia baetica', format =  "image"))
+
+  # call the internal function using the namespace
+  f <- suwo:::.repo_from_call
+
+  expect_identical(
+    f(call_non_ns),
+    "GBIF"
+  )
+
+  expect_identical(
+    f(call_ns),
+    "GBIF"
+  )
+})

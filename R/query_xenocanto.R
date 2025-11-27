@@ -182,7 +182,7 @@ query_xenocanto <-
     query_output_df <- .merge_data_frames(query_output_list)
 
 
-
+    # format output
     if (as.numeric(query$numRecordings) > 0) {
       indx <- vapply(query_output_df, is.factor, logical(1))
 
@@ -193,11 +193,12 @@ query_xenocanto <-
         paste(query_output_df$gen, query_output_df$sp, sep = " ")
       query_output_df$file_extension <-
         sub(".*\\.", "", query_output_df$`file-name`)
-      query_output_df$repository <- "Xeno-Canto"
+
       query_output_df$file <-
         paste0("https://xeno-canto.org/",
                query_output_df$id,
                "/download")
+
       query_output_df$date <-
         gsub("-", "/", query_output_df$date)
 
