@@ -53,8 +53,10 @@ test_that(".repo_from_call handles namespaced calls", {
   skip_if_offline()
 
   # construct call objects
-  call_non_ns <- quote(query_gbif(species = 'Aristolochia baetica', format =  "image"))
-  call_ns <- quote(suwo::query_gbif(species = 'Aristolochia baetica', format =  "image"))
+  call_non_ns <- quote(query_gbif(species = 'Aristolochia baetica',
+                                  format =  "image"))
+  call_ns <- quote(suwo::query_gbif(species = 'Aristolochia baetica',
+                                    format =  "image"))
 
   # call the internal function using the namespace
   f <- suwo:::.repo_from_call

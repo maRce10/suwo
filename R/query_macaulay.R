@@ -142,7 +142,8 @@ query_macaulay <-
      if (is.null(species) & is.null(files)){
        # either species or files must be supplied
        .message(text =
-                  paste("Either 'species' or 'files' must be supplied", species, sep = ""),
+                  paste("Either 'species' or 'files' must be supplied",
+                        species, sep = ""),
                 as = "failure")
 
      }
@@ -153,7 +154,8 @@ query_macaulay <-
       out_text <- "{n} matching record{?s} found"
       nfiles <- NULL
 
-        taxon_code <- .taxon_code_search(species, ml_taxon_code = taxon_code_info)
+        taxon_code <- .taxon_code_search(species,
+                                         ml_taxon_code = taxon_code_info)
 
       # function will stop here
       if (is.null(taxon_code)) {
@@ -176,7 +178,8 @@ query_macaulay <-
         date_ranges_df <- data.frame(start_year = NA)
       }
 
-      new_csv_file_list <- vector(length = nrow(date_ranges_df), mode = "character")
+      new_csv_file_list <- vector(length = nrow(date_ranges_df),
+                                  mode = "character")
 
       print(new_csv_file_list)
       for (i in seq_len(nrow(date_ranges_df))) {
@@ -272,8 +275,19 @@ query_macaulay <-
       }
     } else {
 
-      nfiles <- length(files)
+      # warning if species was also supplied
+      if (!is.null(species)) {
+        .message(
+          text =
+            paste(
+              "'species' is ignored when 'files' is supplied."
+            ),
+          as = "warning"
+        )
+      }
+
       # set output message wording
+      nfiles <- length(files)
       out_text <- "{n} matching record{?s} read from {nfiles} file{?s}"
       new_csv_file_list <- files
     }
