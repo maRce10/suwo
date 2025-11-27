@@ -100,7 +100,6 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 # query metadata
 a_gioiosa <- query_gbif(species = "Amanita gioiosa", format =  "image")
-#> Warning: URL 'https://api.gbif.org/v1/occurrence/search?limit=300&&scientificName=Amanita%20gioiosa&media_type=StillImage&offset=0': status was 'SSL connect error'
 
 # run if query didnt fail
  if (!is.null(a_gioiosa)) {
