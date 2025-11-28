@@ -44,6 +44,7 @@ macaulay."><meta property="og:image" content="https://marce10.github.io/suwo/log
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_macaulay</span><span class="op">(</span></span>
 <span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"species"</span><span class="op">)</span>,</span>
+<span>  taxon_code <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sound"</span>, <span class="st">"image"</span>, <span class="st">"video"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
@@ -64,6 +65,11 @@ macaulay."><meta property="og:image" content="https://marce10.github.io/suwo/log
 the format: "Genus epithet". Required. Can be set globally for the current
 R session via the "term" option
 (e.g. <code>options(term = "Hypsiboas rufitelus")</code>).</p></dd>
+
+
+<dt id="arg-taxon-code">taxon_code<a class="anchor" aria-label="anchor" href="#arg-taxon-code"></a></dt>
+<dd><p>Optional character string with the Macaulay Library taxon
+code (see vignette for more details). If provided, 'species' is ignored.</p></dd>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
@@ -104,7 +110,8 @@ is saved into the current working directory (<code>"."</code>).</p></dd>
 <dt id="arg-files">files<a class="anchor" aria-label="anchor" href="#arg-files"></a></dt>
 <dd><p>Optional character vector with the name(s) of the .csv file(s)
 to read. If provided, the function will import the data from the .csv files
-instead of opening the Macaulay Library search page in a browser.</p></dd>
+instead of opening the Macaulay Library search page in a browser ('species'
+is ignored if supplied).</p></dd>
 
 
 <dt id="arg-dates">dates<a class="anchor" aria-label="anchor" href="#arg-dates"></a></dt>

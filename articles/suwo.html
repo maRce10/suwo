@@ -150,7 +150,7 @@ types of metadata they retrieve:</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/suwo/">suwo</a></span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed table-responsive" style="width: auto !important; ">
 <caption>
-Table 1: Summary of query functions.
+Table 1: Summary of query functions and the associated repositories.
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -173,6 +173,9 @@ Taxonomic level
 </th>
 <th style="text-align:left;">
 Geographic coverage
+</th>
+<th style="text-align:left;">
+Taxonomic coverage
 </th>
 <th style="text-align:left;">
 Other features
@@ -202,6 +205,9 @@ Species
 Global
 </td>
 <td style="text-align:left;">
+All life
+</td>
+<td style="text-align:left;">
 Specify query by data base
 </td>
 </tr>
@@ -228,7 +234,9 @@ Species
 Global
 </td>
 <td style="text-align:left;">
-NA
+All life
+</td>
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -252,6 +260,9 @@ Species
 </td>
 <td style="text-align:left;">
 Global
+</td>
+<td style="text-align:left;">
+Mostly birds but also other vertebrates and invertebrates
 </td>
 <td style="text-align:left;">
 Interactive
@@ -280,7 +291,9 @@ Species
 Brazil
 </td>
 <td style="text-align:left;">
-NA
+Birds
+</td>
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -304,6 +317,9 @@ Species, subspecies, genus, family, group
 </td>
 <td style="text-align:left;">
 Global
+</td>
+<td style="text-align:left;">
+Birds, frogs, non-marine mammals and grasshoppers
 </td>
 <td style="text-align:left;">
 Specify query by taxonomy, geographic range and dates
@@ -3635,7 +3651,7 @@ saved
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmp7zsu6m/amanita_zambiana 
+<pre><code> /tmp/Rtmp3J326C/amanita_zambiana 
 ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
 ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
 ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -3700,7 +3716,7 @@ sub-directories by country (for simplicity only 6 of them):</p>
 <pre><code> [32m✔ [39m All files were downloaded successfully 🥇</code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmp7zsu6m/diodon_holocanthus 
+<pre><code> /tmp/Rtmp3J326C/diodon_holocanthus 
 ├──  Cabo Verde 
 │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
 ├──  Cayman Islands 

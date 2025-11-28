@@ -44,6 +44,6 @@ Useful links:
 
 ## Author
 
-Marcelo Araya-Salas, Jorge Elizondo-Calvo & Alejandro Rico
+Marcelo Araya-Salas, Jorge Elizondo-Calvo & Alejandro Rico-Guevara
 
 Maintainer: Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)

@@ -8,6 +8,7 @@
 ``` r
 query_macaulay(
   species = getOption("species"),
+  taxon_code = NULL,
   format = c("sound", "image", "video"),
   verbose = getOption("verbose", TRUE),
   all_data = getOption("all_data", FALSE),
@@ -27,6 +28,11 @@ query_macaulay(
   "Genus epithet". Required. Can be set globally for the current R
   session via the "term" option (e.g.
   `options(term = "Hypsiboas rufitelus")`).
+
+- taxon_code:
+
+  Optional character string with the Macaulay Library taxon code (see
+  vignette for more details). If provided, 'species' is ignored.
 
 - format:
 
@@ -66,8 +72,8 @@ query_macaulay(
 
   Optional character vector with the name(s) of the .csv file(s) to
   read. If provided, the function will import the data from the .csv
-  files instead of opening the Macaulay Library search page in a
-  browser.
+  files instead of opening the Macaulay Library search page in a browser
+  ('species' is ignored if supplied).
 
 - dates:
 
