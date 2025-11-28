@@ -177,7 +177,7 @@ query_wikiaves <-
     }
 
     # loop over pages
-    query_output_list <- pblapply_sw_int(seq_len(nrow(id_by_page_df)), cl = cl,
+    query_output_list <- .pbapply_sw(seq_len(nrow(id_by_page_df)), cl = cl,
                                          pbar = pb, function(i) {
       Sys.sleep(0.5)
 

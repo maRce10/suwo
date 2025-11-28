@@ -57,7 +57,7 @@ test_that("paging by date", {
 })
 
 
-test_that("null taxon", {
+test_that("non-existing taxon", {
 
   df1 <- query_macaulay(species = "asdasdasd",
     format =  "image",
@@ -66,4 +66,19 @@ test_that("null taxon", {
   expect_true(is.null(df1))
 
 })
+
+test_that("non-existing taxon", {
+  skip_if_not(interactive())
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- query_macaulay(taxon_code = "coshum",
+                        species = "asdasd",
+                        format =  "image",
+                        path = tempdir())
+
+  expect_true(nrow(df1) == 10000)
+
+})
+
 

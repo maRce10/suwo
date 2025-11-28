@@ -122,7 +122,7 @@ query_gbif <-
       cl <- cores
     }
 
-    query_output_list <- pblapply_sw_int(offsets, cl = cl, pbar = pb,
+    query_output_list <- .pbapply_sw(offsets, cl = cl, pbar = pb,
                                          function(i) {
       query_output <-
         try(jsonlite::fromJSON(paste0(srch_trm, "&offset=", i)),

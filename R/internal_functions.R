@@ -6,7 +6,7 @@
 # (pbapply::pblapply uses pboptions to do this)
 
 
-pblapply_sw_int <- function(X,
+.pbapply_sw <- function(X,
                             FUN,
                             cl = 1,
                             pbar = TRUE,
@@ -628,48 +628,48 @@ pblapply_sw_int <- function(X,
 }
 
 # monitor if a new file is added
-# added that it breaks after 10 s
-.monitor_new_files <- function(path, interval = 1, break.time = 10) {
-  # Create initial snapshot
-  prev_snap <- utils::fileSnapshot(
-    path = path,
-    full.names = FALSE,
-    # Return only file names (not full paths)
-    pattern = "\\.csv$",
-    recursive = FALSE    # Don't check subfolders
-  )
+.monitor_new_files <- function(path, interval = 1, break.time = 60) {
 
-  # set initial time
+  # initial list of csv files
+  old_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
+
   start_time <- Sys.time()
 
-  while (TRUE) {
-    # Take new snapshot
-    current_snap <- utils::fileSnapshot(
-      path = path,
-      full.names = FALSE,
-      pattern = "\\.csv$",
-      recursive = FALSE
-    )
-    # Check elapsed time
-    elapsed_time <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
-
-    if (elapsed_time > break.time) {
-      return(NULL)  # Return NULL if break time exceeded
-    }
-
-    # Compare snapshots
-    changes <- utils::changedFiles(prev_snap, current_snap)
-
-    # Return only names of new files
-    if (length(changes$added) > 0) {
-      return(changes$added)  # Returns character vector of new file names
-    }
-
-    # Wait before checking again
+  repeat {
     Sys.sleep(interval)
 
-    # Update snapshot for next comparison
-    prev_snap <- current_snap
+    # time-out
+    if (as.numeric(difftime(Sys.time(), start_time, units = "secs")) >
+        break.time) {
+      return(NULL)
+    }
+
+    # list current csv files
+    new_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
+
+    # detect new ones
+    added <- setdiff(new_files, old_files)
+
+    if (length(added) > 0) {
+
+      file_path <- file.path(path, added[1])
+
+      # wait until file stops growing (important!)
+      last_size <- -1
+
+      repeat {
+        size <- file.info(file_path)$size
+
+        if (!is.na(size) && size == last_size) {
+          break
+        }
+
+        last_size <- size
+        Sys.sleep(0.5)
+      }
+
+      return(added[1])
+    }
   }
 }
 

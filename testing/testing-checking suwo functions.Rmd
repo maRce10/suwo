@@ -500,7 +500,9 @@ sudo docker run --rm ghcr.io/ropensci-review-tools/pkgcheck bash -c "git clone h
 pkgcheck::pkgcheck(".", use_cache = FALSE)
 cyclocomp::cyclocomp_package_dir(".")
 
-pkgstats::pkgstats(".")
+pkst <- pkgstats::pkgstats(".")
+
+pkst
 
 goodpractice::gp()
 

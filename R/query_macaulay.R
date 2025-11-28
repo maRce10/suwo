@@ -108,6 +108,7 @@
 
 query_macaulay <-
   function(species = getOption("species"),
+           taxon_code = NULL,
            format = c("sound", "image", "video"),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
@@ -139,10 +140,10 @@ query_macaulay <-
                         `video` = "video")
 
     # get species ML taxon code
-     if (is.null(species) & is.null(files)){
+     if (is.null(species) & is.null(files) & is.null(taxon_code)){
        # either species or files must be supplied
        .message(text =
-                  paste("Either 'species' or 'files' must be supplied",
+           paste("Either 'species', 'taxon_code' or 'files' must be supplied",
                         species, sep = ""),
                 as = "failure")
 
@@ -154,8 +155,22 @@ query_macaulay <-
       out_text <- "{n} matching record{?s} found"
       nfiles <- NULL
 
+      if (is.null(taxon_code)){
         taxon_code <- .taxon_code_search(species,
                                          ml_taxon_code = taxon_code_info)
+      } else
+        {
+          if (!is.null(species)) {
+            .message(
+              text =
+                paste(
+                  "'species' is ignored when 'taxon_code' is supplied."
+                ),
+              as = "warning"
+            )
+          }
+
+      }
 
       # function will stop here
       if (is.null(taxon_code)) {
@@ -181,7 +196,6 @@ query_macaulay <-
       new_csv_file_list <- vector(length = nrow(date_ranges_df),
                                   mode = "character")
 
-      print(new_csv_file_list)
       for (i in seq_len(nrow(date_ranges_df))) {
         if (!is.null(dates)) {
           # extract date range to let users know while batching
@@ -284,12 +298,24 @@ query_macaulay <-
             ),
           as = "warning"
         )
+
+      }
+      # warning if taxon_code was also supplied
+      if (!is.null(taxon_code)) {
+        .message(
+          text =
+            paste(
+              "'taxon_code' is ignored when 'files' is supplied."
+            ),
+          as = "warning"
+        )
       }
 
       # set output message wording
       nfiles <- length(files)
       out_text <- "{n} matching record{?s} read from {nfiles} file{?s}"
       new_csv_file_list <- files
+
     }
 
     # Read the CSV file

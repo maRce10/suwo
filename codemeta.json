@@ -26,7 +26,8 @@
     {
       "@type": "Person",
       "givenName": "Jorge",
-      "familyName": "Elizondo-Calvo"
+      "familyName": "Elizondo-Calvo",
+      "@id": "https://orcid.org/0009-0004-5873-9585"
     },
     {
       "@type": "Person",
@@ -280,7 +281,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "5757.257KB",
+  "fileSize": "5758.32KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

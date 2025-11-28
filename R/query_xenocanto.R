@@ -124,7 +124,7 @@ query_xenocanto <-
       cl <- cores
     }
 
-    query_output_list <- pblapply_sw_int(
+    query_output_list <- .pbapply_sw(
       pbar = pb,
       X = seq_len(query$numPages),
       cl = cl,
