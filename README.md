@@ -27,10 +27,16 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https
 
 The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
-multiple online biodiversity databases. Such media are increasingly used
-in diverse fields ranging from ecology and evolutionary biology
-(e.g. trait evolution) to wildlife monitoring and conservation (training
-species detection models).
+multiple online biodiversity databases. The five major media
+repositories accessed by this package (GBIF, iNaturalist, Macaulay
+Library, WikiAves, and Xeno-Canto) collectively host more than 250
+million media files. Such media are increasingly used in diverse fields,
+ranging from ecology and evolutionary biology (e.g., trait evolution) to
+wildlife monitoring and conservation (e.g., for training species
+detection models). The ability to access and download large amounts of
+media files and their associated metadata from a single interface thus
+provides a uniquely powerful resource for facilitating research and
+conservation efforts.
 
 The main features of the package are:
 
