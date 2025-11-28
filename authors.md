@@ -6,6 +6,7 @@
   [](https://orcid.org/0000-0003-3594-619X)
 
 - **Jorge Elizondo-Calvo**. Author.
+  [](https://orcid.org/0009-0004-5873-9585)
 
 - **Alejandro Rico-Guevara**. Author.
   [](https://orcid.org/0000-0003-4067-5312)

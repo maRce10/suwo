@@ -64,7 +64,7 @@ repositories</h3>
 <a href="https://ecophysics.org/" class="external-link">Alejandro Rico-Guevara</a>
 </h4>
             
-            <h4 data-toc-skip class="date">2025-11-27</h4>
+            <h4 data-toc-skip class="date">2025-11-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/main/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -1162,11 +1162,25 @@ the metadata:</p>
 <img src="ml_browser.jpeg" alt="Macaulay library search site" width="100%">
 </center>
 <p></p>
+<p>Note that for bird species the species name must be valid according
+to the Macaulay Library taxonomy (which follows the Clements checklist).
+For non-bird species users must use the argument
+<code>taxon_code</code>. The species taxon code can be found by running
+a search at the <a href="https://search.macaulaylibrary.org/catalog" class="external-link">Macaulay Library’s
+search page</a> and checking the URL of the species page. For instance,
+the taxon code for jaguar (<em>Panthera onca</em>) is “t-11032765”:</p>
+<center>
+<img src="ml_taxon_code.png" alt="Macaulay library taxon code" width="100%">
+</center>
+<p>Once you have the taxon code, you can run the query as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">jaguar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>taxon_code <span class="op">=</span>  <span class="st">"t-11032765"</span>, </span>
+<span>                                 format <span class="op">=</span> <span class="st">"video"</span><span class="op">)</span></span></code></pre></div>
 <p>Here are some tips for using this function properly:</p>
 <ul>
 <li>Valid bird species names can be checked at
-<code>suwo:::ml_taxon_code$SCI_NAME</code> (see ‘Querying non-bird
-species’ section below for other groups)</li>
+<code>suwo:::ml_taxon_code$SCI_NAME</code>
+</li>
 <li>The exported csv file must be saved in the directory specified by
 the argument <code>path</code> of the function (default is the current
 working directory)</li>
@@ -1179,7 +1193,7 @@ access large batches of observations</li>
 <p>After saving the file, the function will read the file and return a
 data frame with the metadata. Here we print the first 4 rows of the
 output data frame:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p_striigularis</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
@@ -1406,7 +1420,7 @@ for each data range. The following code looks for photos of costa’s
 hummingbird (<em>Calypte costae</em>). As Macaulay Library hosts more
 than 30000 costa’s hummingbird records, we need to split the query into
 multiple date ranges:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># test a query with more than 10000 results paging by date</span></span>
 <span><span class="va">cal_cos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span></span>
 <span>  species <span class="op">=</span> <span class="st">"Calypte costae"</span>,</span>
@@ -1421,20 +1435,11 @@ sub-query has less than 10000 records.</p>
 <center>
 <img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%">
 </center>
-</div>
-<div class="section level4">
-<h4 id="querying-non-bird-species">Querying non-bird species<a class="anchor" aria-label="anchor" href="#querying-non-bird-species"></a>
-</h4>
 <p><a href="https://marce10.github.io/suwo/reference/query_macaulay.html">query_macaulay()</a>
-can only search for bird species. However, the Macaulay Library hosts
-media files for other taxonomic groups as well (e.g., mammals,
-amphibians, insects). To obtain metadata for these other groups (e.g.,
-mammals, amphibians, insects) users must manually search for the species
-at the <a href="https://www.macaulaylibrary.org/" class="external-link">Macaulay Library
-website</a>, download the .csv file with the metadata, and then provide
-1) the name of the csv file(s) to the argument <code>files</code> and 2)
-the directory path were it was saved to the argument
-<code>path</code>.</p>
+can also read metadata previously downloaded from <a href="https://www.macaulaylibrary.org/" class="external-link">Macaulay Library website</a>. To
+do this, users must provide 1) the name of the csv file(s) to the
+argument <code>files</code> and 2) the directory path were it was saved
+to the argument <code>path</code>.</p>
 </div>
 </div>
 <div class="section level3">
@@ -1450,7 +1455,7 @@ page</a>. Once users have their API key, they can use it in the <a href="https:/
 function by providing it as the <code>api_key</code> argument. Here is
 an example of a query for Spix’s disc-winged bat (<em>Thyroptera
 tricolor</em>) audio recordings:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># replace "YOUR_XC_API_KEY" with your key</span></span>
 <span><span class="va">t_tricolor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Thyroptera tricolor"</span>, </span>
 <span>                              api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
@@ -1682,7 +1687,7 @@ available tags here</a>). Here is an example of a query for audio
 recordings of pale-striped poison frog (<em>Ameerega hahneli</em>,
 ’sp:“Ameerega hahneli”) from French Guiana (cnt:“French Guiana”) and
 with the highest recording quality (q:“A”):</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># replace "YOUR_XC_API_KEY" with your key</span></span>
 <span><span class="va">a_hahneli</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span></span>
 <span>  species <span class="op">=</span> <span class="st">'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"'</span>, </span>
@@ -1876,7 +1881,7 @@ initial query was done a while ago and we want to update it to include
 any new records that might have been added since then. The following
 code removes all observations recorded after 2024-12-31 to simulate an
 old query:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># initial query</span></span>
 <span><span class="va">c_eisentrauti</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_inaturalist.html">query_inaturalist</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Chorthippus eisentrauti"</span><span class="op">)</span></span>
 <span></span>
@@ -2092,7 +2097,7 @@ wav
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># exclude new observations (simulate old data)</span></span>
 <span><span class="va">old_c_eisentrauti</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">c_eisentrauti</span><span class="op">[</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2024-12-31"</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">c_eisentrauti</span><span class="op">$</span><span class="va">date</span><span class="op">)</span>, </span>
@@ -2117,7 +2122,7 @@ only be combined if the column names from different repositories match.
 The function will return a data frame that includes a new column called
 <code>source</code> indicating the name of the original metadata data
 frame:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>,</span>
 <span>                             format <span class="op">=</span> <span class="st">"sound"</span>,</span>
 <span>                             api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
@@ -2361,7 +2366,7 @@ the same search species (i.e. species name) and media format (e.g.,
 sound, image, video). To facilitate this, users can set the global
 options <code>species</code> and <code>format</code> so they do not need
 to specify them in each query function:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
 <span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
 <span><span class="va">truf_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -2390,7 +2395,7 @@ frame with the candidate duplicate records, allowing users to review and
 decide which records to keep.</p>
 <p>In this example we look for possible duplicates in the merged
 metadata data frame from the previous section:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># find duplicates</span></span>
 <span><span class="va">dups_merged_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_duplicates.html">find_duplicates</a></span><span class="op">(</span><span class="va">merged_metadata</span><span class="op">)</span></span>
 <span></span>
@@ -2738,7 +2743,7 @@ potential duplicates, allowing users to easily identify and review them.
 For instance, in the example above, records from duplicated group 75
 belong to the same user, were recorded on the same date and time and in
 the same country:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span>, <span class="va">duplicate_group</span> <span class="op">==</span> <span class="fl">75</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
@@ -3093,12 +3098,12 @@ function to eliminate unwanted duplicates from their metadata data
 frames. This function takes as input a metadata data frame (either the
 original query results or the output of <a href="https://marce10.github.io/suwo/reference/find_duplicates.html">find_duplicates()</a>)
 and a vector of row numbers indicating which records to remove:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># remove duplicates</span></span>
 <span><span class="va">dedup_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_duplicates.html">remove_duplicates</a></span><span class="op">(</span><span class="va">dups_merged_metadata</span><span class="op">)</span></span></code></pre></div>
 <p>The output is a data frame similar to the input but without the
 specified duplicate records:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># look at first 4 columns of deduplicated metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dedup_metadata</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -3368,7 +3373,7 @@ query function or any of the other metadata managing functions) and
 downloads the media files to a specified directory. For this example we
 will download images from a query on zambian slender Caesar (<em>Amanita
 zambiana</em>) (a mushroom) on GBIF:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query GBIF for Amanita zambiana images</span></span>
 <span><span class="va">a_zam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Amanita zambiana"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
 <span></span>
@@ -3384,7 +3389,7 @@ downloaded files (‘downloaded_file_name’) and the result of the download
 attempt (‘download_status’, with values “success”, ‘failed’, ‘already
 there (not downloaded)’ or ‘overwritten’).</p>
 <p>Here we print the first 4 rows of the output data frame:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">azam_files</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
@@ -3628,9 +3633,9 @@ saved
 </table>
 </div>
 <p>… and check that the files were saved in the path supplied:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmph15UMz/amanita_zambiana 
+<pre><code> /tmp/Rtmp7zsu6m/amanita_zambiana 
 ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
 ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
 ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -3643,7 +3648,7 @@ more than one media file is associated with a record, a sequential
 number is added at the end of the file name.</p>
 <p>This is a multipanel plot of 6 of the downloaded images (just for
 illustration purpose):</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a 6 pannel plot of the downloaded images</span></span>
 <span><span class="va">opar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -3661,8 +3666,8 @@ illustration purpose):</p>
 <span>    sep <span class="op">=</span> <span class="st">"\n"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="suwo_files/figure-html/unnamed-chunk-31-1.png" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<p><img src="suwo_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reset par</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">opar</span><span class="op">)</span></span></code></pre></div>
 <p>Users can also save the downloaded files into sub-directories with
@@ -3673,7 +3678,7 @@ directory (suplied with the argument <code>path</code>). For instance,
 the following code searches/downloads images of longspined porcupinefish
 (<em>Diodon holocanthus</em>) from GBIF, and saves images into
 sub-directories by country (for simplicity only 6 of them):</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query GBIF for longspined porcupinefish images</span></span>
 <span><span class="va">d_holocanthus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Diodon holocanthus"</span>, format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span>
 <span></span>
@@ -3693,9 +3698,9 @@ sub-directories by country (for simplicity only 6 of them):</p>
 <span>                             path <span class="op">=</span> <span class="va">out_folder</span>,</span>
 <span>                             folder_by <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <pre><code> [32m✔ [39m All files were downloaded successfully 🥇</code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmph15UMz/diodon_holocanthus 
+<pre><code> /tmp/Rtmp7zsu6m/diodon_holocanthus 
 ├──  Cabo Verde 
 │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
 ├──  Cayman Islands 
@@ -3709,7 +3714,7 @@ sub-directories by country (for simplicity only 6 of them):</p>
     └──  Diodon_holocanthus-GBIF4935688405.jpeg </code></pre>
 <p>In such case the ‘downloaded_file_name’ column will include the
 sub-directory name:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dhol_files</span><span class="op">$</span><span class="va">downloaded_file_name</span></span></code></pre></div>
 <pre><code>[1] "United States of America/Diodon_holocanthus-GBIF4935688405.jpeg"
 [2] "United States of America/Diodon_holocanthus-GBIF1270050026.jpeg"
@@ -3719,7 +3724,7 @@ sub-directory name:</p>
 [6] "Indonesia/Diodon_holocanthus-GBIF4953086522.jpeg"               </code></pre>
 <p>This is a multipanel plot of the downloaded images (just for
 fun):</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a 6 pannel plot of the downloaded images</span></span>
 <span><span class="va">opar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -3737,8 +3742,8 @@ fun):</p>
 <span>    sep <span class="op">=</span> <span class="st">"\n"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="suwo_files/figure-html/unnamed-chunk-38-1.png" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<p><img src="suwo_files/figure-html/unnamed-chunk-39-1.png" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reset par</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">opar</span><span class="op">)</span></span></code></pre></div>
 <!-- add packages used, system details and versions  -->

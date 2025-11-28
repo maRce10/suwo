@@ -237,11 +237,27 @@ metadata:
 
 ![Macaulay library search site](ml_browser.jpeg)
 
+Note that for bird species the species name must be valid according to
+the Macaulay Library taxonomy (which follows the Clements checklist).
+For non-bird species users must use the argument `taxon_code`. The
+species taxon code can be found by running a search at the [Macaulay
+Library’s search page](https://search.macaulaylibrary.org/catalog) and
+checking the URL of the species page. For instance, the taxon code for
+jaguar (*Panthera onca*) is “t-11032765”:
+
+![Macaulay library taxon code](ml_taxon_code.png)
+
+Once you have the taxon code, you can run the query as follows:
+
+``` r
+jaguar <- query_macaulay(taxon_code =  "t-11032765", 
+                                 format = "video")
+```
+
 Here are some tips for using this function properly:
 
 - Valid bird species names can be checked at
-  `suwo:::ml_taxon_code$SCI_NAME` (see ‘Querying non-bird species’
-  section below for other groups)
+  `suwo:::ml_taxon_code$SCI_NAME`
 - The exported csv file must be saved in the directory specified by the
   argument `path` of the function (default is the current working
   directory)
@@ -295,17 +311,11 @@ sub-query has less than 10000 records.
 
 ![Checking number of records at Macaulay Library](ml_num_recs.jpeg)
 
-#### Querying non-bird species
-
 [query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html)
-can only search for bird species. However, the Macaulay Library hosts
-media files for other taxonomic groups as well (e.g., mammals,
-amphibians, insects). To obtain metadata for these other groups (e.g.,
-mammals, amphibians, insects) users must manually search for the species
-at the [Macaulay Library website](https://www.macaulaylibrary.org/),
-download the .csv file with the metadata, and then provide 1) the name
-of the csv file(s) to the argument `files` and 2) the directory path
-were it was saved to the argument `path`.
+can also read metadata previously downloaded from [Macaulay Library
+website](https://www.macaulaylibrary.org/). To do this, users must
+provide 1) the name of the csv file(s) to the argument `files` and 2)
+the directory path were it was saved to the argument `path`.
 
 ### query_xenocanto()
 
@@ -628,7 +638,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmph15UMz/amanita_zambiana 
+     /tmp/Rtmp7zsu6m/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -664,7 +674,7 @@ img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
 }
 ```
 
-![](suwo_files/figure-html/unnamed-chunk-31-1.png)
+![](suwo_files/figure-html/unnamed-chunk-32-1.png)
 
 ``` r
 # reset par
@@ -707,7 +717,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmph15UMz/diodon_holocanthus 
+     /tmp/Rtmp7zsu6m/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -756,7 +766,7 @@ img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
 }
 ```
 
-![](suwo_files/figure-html/unnamed-chunk-38-1.png)
+![](suwo_files/figure-html/unnamed-chunk-39-1.png)
 
 ``` r
 # reset par
