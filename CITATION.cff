@@ -23,6 +23,7 @@ authors:
   orcid: https://orcid.org/0000-0003-3594-619X
 - family-names: Elizondo-Calvo
   given-names: Jorge
+  orcid: https://orcid.org/0009-0004-5873-9585
 - family-names: Rico-Guevara
   given-names: Alejandro
   email: colibri@uw.edu
@@ -35,6 +36,7 @@ preferred-citation:
     given-names: M.
   - family-names: Elizondo-Calvo
     given-names: Jorge
+    orcid: https://orcid.org/0009-0004-5873-9585
   - family-names: Rico-Guevara
     given-names: Alejandro
     email: colibri@uw.edu
