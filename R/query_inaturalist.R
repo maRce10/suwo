@@ -22,7 +22,8 @@
 #' online repository \href{https://www.inaturalist.org/}{inaturalist}.
 #' iNaturalist is a free, crowdsourced online platform for nature enthusiasts
 #' to document and identify plants, animals, fungi, and other organisms in
-#' the wild.
+#' the wild. Note that Inaturaist observations do not include a 'country'
+#' field.
 #' @examples
 #' # search Bleeding Tooth mushroom images
 # h_peckii <- query_inaturalist(species = 'Hydnellum peckii', format = "image")

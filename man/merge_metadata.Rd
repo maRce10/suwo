@@ -4,16 +4,26 @@
 \alias{merge_metadata}
 \title{Merge metadata data frames}
 \usage{
-merge_metadata(...)
+merge_metadata(..., check_columns = TRUE)
 }
 \arguments{
 \item{...}{two or more data frames (each one as a separate entry) referring
-to the metadata obtained from suwo query functions (`query_x()`).}
+to the metadata obtained from suwo query functions (`query_x()`).
+Alternatively, a single list of data frames can be provided. The name
+provided for each data frame (either as individual data frames or in a list)
+will be used as label in the `source` column in the output data frame.}
+
+\item{check_columns}{Logical argument indicating if the function should
+check that all input data frames have the required basic columns.
+Default is `TRUE`.}
 }
 \value{
 A single data frame with the data from all input data frames
 combined and with an additional column named `source` indicating the
-original data frame from which each row originated.
+original data frame from which each row originated. The column `source` will
+ contain the name provided for each data frame (either as individual data
+ frames or in a list). If no names were provided, the object names will
+ be used instead.
 }
 \description{
 \code{merge_metadata} merges metadata data frames from suwo queries.
@@ -32,8 +42,14 @@ gb <- query_gbif(species = "Glaucis dohrnii", format = "sound")
 
 # run if queries didnt fail
  if (!is.null(wa) && !is.null(gb)) {
- # combine metadata
+ # combine metadata using single data frames
  merged_mt <- merge_metadata(wa, gb)
+
+ # combine metadata using named single data frames
+ merged_mt <- merge_metadata(wikiaves = wa, gbif = gb)
+
+ # combine metadata using a list of data frames
+ mt_list <- list(wikiaves = wa, gbif = gb)
 }
 
 }

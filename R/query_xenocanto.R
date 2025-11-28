@@ -27,8 +27,11 @@
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries metadata for animal sound recordings in
 #' the open-access
-#'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}. Complex
-#'  queries can be constructed usin the Xeno-Canto advanced query syntax.
+#'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}.
+#'  \href{https://www.xeno-canto.org/}{Xeno-Canto} hosts sound recordings of
+#'  birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
+#'  constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
+#'  advanced query syntax (see examples).
 #' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}},
 #' \code{\link{query_inaturalist}}
 #' @examples

@@ -3,6 +3,8 @@
 #' \code{query_macaulay} searches for metadata from
 #' \href{https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
+#' @param taxon_code Optional character string with the Macaulay Library taxon
+#' code (see vignette for more details). If provided, 'species' is ignored.
 #' @param format Character vector with the media format to query for. Options
 #' are 'sound', 'image' of 'video'. Required.
 #' @param path Directory path where the .csv file will be saved. By default it
@@ -42,7 +44,8 @@
 #' \href{https://www.macaulaylibrary.org/}{Macaulay Library} online
 #' repository and returns the metadata of media files matching the query. The
 #' Macaulay Library is the world’s largest repository of digital media
-#' (audio, photo, and video) of wildlife, and their habitats. The archive
+#' (audio, photo, and video) of wildlife (mostly birds but also other
+#' vertebrates and invertebrates), and their habitats. The archive
 #' hosts more than 77 million images, 3 million sound recordings, and
 #' 350k videos, from more than 80k contributors, and is integrated with
 #' eBird, the world’s largest biodiversity dataset.

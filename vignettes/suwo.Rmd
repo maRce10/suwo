@@ -253,12 +253,24 @@ geo_cover <-  c(
 
 geo_cover <- geo_cover[match(names(metadata_list), names(geo_cover))]
 
+tax_coverage <-  c(
+  gbif = "All life",
+  inaturalist = "All life",
+  `macaulay library` =  "Mostly birds but also other vertebrates and 
+  invertebrates",
+  observation = NA,
+  wikiaves = "Birds",
+  `xeno-canto` = "Birds, frogs, non-marine mammals and grasshoppers"
+)
+
+tax_coverage <- tax_coverage[match(names(metadata_list), names(tax_coverage))]
+
 other <-  c(
   gbif = "Specify query by data base",
-  inaturalist = NA,
+  inaturalist = "",
   `macaulay library` =  "Interactive",
-  observation = NA,
-  wikiaves = NA,
+  observation = "",
+  wikiaves = "",
   `xeno-canto` = "Specify query by taxonomy, geographic range and dates"
 )
 
@@ -285,6 +297,7 @@ query_summary <- data.frame(
   `Requires api key` = token,
   `Taxonomic level` = tax_level,
   `Geographic coverage` = geo_cover,
+  `Taxonomic coverage` = tax_coverage,
   `Additional data` = additional_data,
   `Other features` = other,
   stringsAsFactors = FALSE,
@@ -314,7 +327,8 @@ query_summary$Function <- kableExtra::cell_spec(
 
 query_summary[, names(query_summary) != "Additional data"] |>
   kableExtra::kbl(
-    caption = "Table 1: Summary of query functions.",
+    caption = 
+  "Table 1: Summary of query functions and the associated repositories.",
     format = "html",
     escape = FALSE,
     row.names = FALSE
