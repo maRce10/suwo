@@ -487,7 +487,7 @@ Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
 
 urlchecker::url_check()  
   
-lintr::lint_package(linters =  list(lintr::line_length_linter()))
+lintr::lint_package(linters = list(lintr::line_length_linter()))
 
 codemetar::write_codemeta()
 ```

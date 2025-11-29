@@ -36,10 +36,7 @@
 #' Macaulay Library's search page, where the user must download a .csv file
 #' with the metadata. The function then reads the .csv file and returns a data
 #' frame with the metadata. The function can also import previously downloaded
-#' metadata (in csv format) with the argument `files`. If
-#' \code{all_data = TRUE}, all metadata fields (columns) are returned.
-#' If \code{raw_data = TRUE}, the raw data as obtained from the repository is
-#' returned (without any formatting).
+#' metadata (in csv format) with the argument `files`.
 #' @details This function queries for species observation info in the
 #' \href{https://www.macaulaylibrary.org/}{Macaulay Library} online
 #' repository and returns the metadata of media files matching the query. The
@@ -49,13 +46,23 @@
 #' hosts more than 77 million images, 3 million sound recordings, and
 #' 350k videos, from more than 80k contributors, and is integrated with
 #' eBird, the world’s largest biodiversity dataset.
-#'
+#' For bird species the species name must be valid according to the Macaulay
+#' Library taxonomy (which follows the Clements checklist). For non-bird
+#' species users must use the argument `taxon_code`. The species taxon code
+#' can be found by running a search at the
+#' \href{https://www.macaulaylibrary.org/}{Macaulay Library's search page} and
+#'  checking the URL of the species page. For instance, the URL when searching
+#'  for jaguar (Panthera onca) is
+#'  'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765' so the
+#'  taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata fields
+#'   (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#'   obtained from the repository is returned (without any formatting).
 #' Here are some instructions for using this function properly:
 #' \itemize{
-#'    \item Valid species names can be checked at
+#'    \item Valid bird species names can be checked at
 #'    \code{suwo:::ml_taxon_code$SCI_NAME}.
 #'    \item Users must save the save the .csv file manually
-#'    \item \emph{If the file is saved overwritting a pre-existing file
+#'    \item \emph{If the file is saved overwriting a pre-existing file
 #'    (i.e. same file name) the function will not detect it}
 #'    \item A maximum of 10000 records per query can be returned,
 #'    but this can be bypassed by using the \code{dates} argument to split
@@ -95,6 +102,11 @@
 #' # provide "updated" clements list to query_macaulay()
 #' tur_ili2 <- query_macaulay(species = "Turdus iliacus", format = "sound",
 #'  taxon_code_info = new_clements, path = tempdir())
+#'
+#'  # query using taxon code
+#'  # this is the URL when querying jaguars:
+#'  # https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765
+#'  p_onca <- query_macaulay(taxon_code = "t-11032765", format = "image")
 #' }
 #'
 #' @references {
