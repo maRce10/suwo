@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--28-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--29-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 [![pkgcheck](https://github.com/maRce10/suwo/workflows/pkgcheck/badge.svg)](https://github.com/maRce10/suwo/actions?query=workflow%3Apkgcheck)  
@@ -27,10 +27,16 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https
 
 The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
-multiple online biodiversity databases. Such media are increasingly used
-in diverse fields ranging from ecology and evolutionary biology
-(e.g. trait evolution) to wildlife monitoring and conservation (training
-species detection models).
+multiple online biodiversity databases. The five major media
+repositories accessed by this package (GBIF, iNaturalist, Macaulay
+Library, WikiAves, and Xeno-Canto) collectively host more than 250
+million media files. Such media are increasingly used in diverse fields,
+ranging from ecology and evolutionary biology (e.g., trait evolution) to
+wildlife monitoring and conservation (e.g., for training species
+detection models). The ability to access and download large amounts of
+media files and their associated metadata from a single interface thus
+provides a uniquely powerful resource for facilitating research and
+conservation efforts.
 
 The main features of the package are:
 
