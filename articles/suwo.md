@@ -480,17 +480,12 @@ GBIF, and when users upload the same file to multiple platforms. To help
 users efficiently identify these duplicate records,
 [suwo](https://marce10.github.io/suwo/) provides the
 [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html)
-function.
-
-The
-[find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html)
-function helps users identify potential duplicate records in their
-metadata data frames. Duplicates are identified based on matching
-species name, country, date, user name, and locality. The function uses
-a fuzzy matching approach to account for minor variations in the data
-(e.g., typos, different location formats, etc).The output is a data
-frame with the candidate duplicate records, allowing users to review and
-decide which records to keep.
+function. Duplicates are identified based on matching species name,
+country, date, user name, and locality. The function uses a fuzzy
+matching approach to account for minor variations in the data (e.g.,
+typos, different location formats, etc).The output is a data frame with
+the candidate duplicate records, allowing users to review and decide
+which records to keep.
 
 In this example we look for possible duplicates in the merged metadata
 data frame from the previous section:
@@ -547,7 +542,7 @@ and date (similarities range from 0 to 1). These values have been found
 to work well in most cases. Nonetheless, users can adjust the
 sensitivity based on their specific needs using the argument `criteria`.
 
-Once users have reviewed the candidate duplicates, they can use the
+Once users have reviewed the candidate duplicates, they can apply the
 [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html)
 function to eliminate unwanted duplicates from their metadata data
 frames. This function takes as input a metadata data frame (either the
@@ -638,7 +633,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmpm7Qxjc/amanita_zambiana 
+     /tmp/RtmpwBidFV/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -682,7 +677,7 @@ par(opar)
 ```
 
 Users can also save the downloaded files into sub-directories with the
-argument `folder_by`. This argument takes a character of factor column
+argument `folder_by`. This argument takes a character or factor column
 with the names of a metadata field (a column in the metadata data frame)
 to create sub-directories within the main download directory (suplied
 with the argument `path`). For instance, the following code
@@ -717,7 +712,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmpm7Qxjc/diodon_holocanthus 
+     /tmp/RtmpwBidFV/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
