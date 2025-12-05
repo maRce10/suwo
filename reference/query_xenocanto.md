@@ -90,8 +90,10 @@ from the repository is returned (without any formatting).
 
 This function queries metadata for animal sound recordings in the
 open-access online repository [Xeno-Canto](https://www.xeno-canto.org/).
-Complex queries can be constructed usin the Xeno-Canto advanced query
-syntax.
+[Xeno-Canto](https://www.xeno-canto.org/) hosts sound recordings of
+birds, frogs, non-marine mammals and grasshoppers. Complex queries can
+be constructed using the [Xeno-Canto](https://www.xeno-canto.org/)
+advanced query syntax (see examples).
 
 ## References
 

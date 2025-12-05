@@ -94,7 +94,8 @@ This function queries for species observation info in the open-access
 online repository [inaturalist](https://www.inaturalist.org/).
 iNaturalist is a free, crowdsourced online platform for nature
 enthusiasts to document and identify plants, animals, fungi, and other
-organisms in the wild.
+organisms in the wild. Note that Inaturaist observations do not include
+a 'country' field.
 
 ## References
 

@@ -48,6 +48,8 @@ workflow and the main functions involved:
 
 Here is a description of each step:
 
+Obtain metadata:
+
 1.  Queries regarding a species are submitted through one of the
     available query functions (`query_repo_name()`) that connect to five
     different online repositories (Xeno-Canto, Inaturalist, GBIF,
@@ -55,12 +57,14 @@ Here is a description of each step:
     data frame containing metadata associated with the media files
     (e.g., species name, date, location, etc, see below).
 
-2.  If multiple repositories are queried, the resulting metadata data
+Curate metadata:
+
+1.  If multiple repositories are queried, the resulting metadata data
     frames can be merged into a single data frame using the
     [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html)
     function.
 
-3.  Check for duplicate records in their datasets using the
+2.  Check for duplicate records in their datasets using the
     [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html)
     function. Candidate duplicated entries are identified based on
     matching species name, country, date, user name, and geographic
@@ -68,11 +72,11 @@ Here is a description of each step:
     decide which records to keep, which can be done with
     [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html).
 
-4.  Download the media files associated with the metadata using the
+3.  Download the media files associated with the metadata using the
     [download_media()](https://marce10.github.io/suwo/reference/download_media.html)
     function.
 
-5.  Users can update their datasets with new records using the
+4.  Users can update their datasets with new records using the
     [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html)
     function.
 
@@ -633,7 +637,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpID7djE/amanita_zambiana 
+     /tmp/RtmpRt5VMN/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -712,7 +716,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpID7djE/diodon_holocanthus 
+     /tmp/RtmpRt5VMN/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -798,9 +802,9 @@ Click to see
      [1] viridisLite_0.4.2      farver_2.1.2           blob_1.2.4             viridis_0.6.5         
      [5] S7_0.2.1               fastmap_1.2.0          leaflet_2.2.3          digest_0.6.39         
      [9] rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.4        survival_3.8-3        
-    [13] RSQLite_2.4.4          magrittr_2.0.4         compiler_4.5.2         rlang_1.1.6           
-    [17] sass_0.4.10            tools_4.5.2            yaml_2.3.10            data.table_1.17.8     
-    [21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.0            
+    [13] RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2         rlang_1.1.6           
+    [17] sass_0.4.10            tools_4.5.2            yaml_2.3.11            data.table_1.17.8     
+    [21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.1            
     [25] RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20            grid_4.5.2            
     [29] xtable_1.8-4           e1071_1.7-16           future_1.68.0          ada_2.0-5             
     [33] ggplot2_4.0.1          globals_0.18.0         scales_1.4.0           MASS_7.3-65           
@@ -812,7 +816,7 @@ Click to see
     [57] systemfonts_1.3.1      jpeg_0.1-11            crosstalk_1.2.2        evd_2.3-7.1           
     [61] jquerylib_0.1.4        glue_1.8.0             parallelly_1.45.1      pkgdown_2.2.0         
     [65] codetools_0.2-20       lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6          
-    [69] tibble_3.3.0           pillar_1.11.1          rappdirs_0.3.3         htmltools_0.5.8.1     
+    [69] tibble_3.3.0           pillar_1.11.1          rappdirs_0.3.3         htmltools_0.5.9       
     [73] ipred_0.9-15           lava_1.8.2             R6_2.6.1               ff_4.5.2              
     [77] httr2_1.2.1            textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7        
     [81] backports_1.5.0        memoise_2.0.1          bslib_0.9.0            class_7.3-23          
