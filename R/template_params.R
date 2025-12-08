@@ -30,5 +30,6 @@
 #' @param metadata data frame previously obtained from any suwo query
 #' function (i.e. `query_reponame()`).
 #' @name template_params
+#' @keywords internal
 #' @title template_params
 NULL

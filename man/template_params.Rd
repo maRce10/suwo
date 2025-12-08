@@ -45,3 +45,4 @@ function (i.e. `query_reponame()`).}
 \description{
 template_params
 }
+\keyword{internal}
