@@ -54,10 +54,10 @@
 #' api_key = XC_API_KEY)
 #' }
 #'
-#' @references {
+#' @references
 #' Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way
 #' to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
-#' }
+#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_xenocanto <-

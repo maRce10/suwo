@@ -80,11 +80,9 @@ p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
 
 }
 \references{
-{
 Schubert, Stephanie Caroline, Lilian Tonelli Manica, and André De Camargo
 Guaraldo. 2019. Revealing the potential of a huge citizen-science platform
 to study bird migration. Emu-Austral Ornithology 119.4: 364-373.
-}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

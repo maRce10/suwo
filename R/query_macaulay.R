@@ -62,8 +62,8 @@
 #'    \item Valid bird species names can be checked at
 #'    \code{suwo:::ml_taxon_code$SCI_NAME}.
 #'    \item Users must save the save the .csv file manually
-#'    \item \emph{If the file is saved overwriting a pre-existing file
-#'    (i.e. same file name) the function will not detect it}
+#'    \item If the file is saved overwriting a pre-existing file
+#'    (i.e. same file name) the function will not detect it
 #'    \item A maximum of 10000 records per query can be returned,
 #'    but this can be bypassed by using the \code{dates} argument to split
 #'    the search into smaller date ranges
@@ -109,16 +109,17 @@
 #'  p_onca <- query_macaulay(taxon_code = "t-11032765", format = "image")
 #' }
 #'
-#' @references {
+#' @references
 #' Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video Collection.
 #' Cornell Lab of Ornithology. Occurrence dataset
 #' https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
+#'
 #' Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, J. A.
 #' Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M.
 #' Smith, and C. L. Wood. 2025. The eBird/Clements checklist of Birds of the
 #' World: v2025. Downloaded from
 #' https://www.birds.cornell.edu/clementschecklist/download/
-#' }
+#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_macaulay <-

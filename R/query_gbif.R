@@ -30,9 +30,9 @@
 #' # search dink frog sound files
 # d_diastema <- query_gbif(species = "Diasporus diastema", format = "sound")
 #'
-#' @references {
+#' @references
 #' GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
-#' }
+#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-

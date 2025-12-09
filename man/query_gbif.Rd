@@ -86,9 +86,7 @@ of records returned by other suwo functions
 
 }
 \references{
-{
 GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
-}
 }
 \seealso{
 \code{\link{query_gbif}}
