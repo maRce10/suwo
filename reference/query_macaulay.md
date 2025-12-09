@@ -135,8 +135,8 @@ instructions for using this function properly:
 
 - Users must save the save the .csv file manually
 
-- *If the file is saved overwriting a pre-existing file (i.e. same file
-  name) the function will not detect it*
+- If the file is saved overwriting a pre-existing file (i.e. same file
+  name) the function will not detect it
 
 - A maximum of 10000 records per query can be returned, but this can be
   bypassed by using the `dates` argument to split the search into
@@ -150,6 +150,7 @@ instructions for using this function properly:
 Scholes III, Ph.D. E (2015). Macaulay Library Audio and Video
 Collection. Cornell Lab of Ornithology. Occurrence dataset
 https://doi.org/10.15468/ckcdpy accessed via GBIF.org on 2024-05-09.
+
 Clements, J. F., P. C. Rasmussen, T. S. Schulenberg, M. J. Iliff, J. A.
 Gerbracht, D. Lepage, A. Spencer, S. M. Billerman, B. L. Sullivan, M.
 Smith, and C. L. Wood. 2025. The eBird/Clements checklist of Birds of

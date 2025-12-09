@@ -637,7 +637,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpQxz9LX/amanita_zambiana 
+     /tmp/RtmpFwDGjK/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -716,7 +716,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpQxz9LX/diodon_holocanthus 
+     /tmp/RtmpFwDGjK/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -818,7 +818,7 @@ Click to see
     [65] codetools_0.2-20       lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6          
     [69] tibble_3.3.0           pillar_1.11.1          rappdirs_0.3.3         htmltools_0.5.9       
     [73] ipred_0.9-15           lava_1.8.2             R6_2.6.1               ff_4.5.2              
-    [77] httr2_1.2.1            textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7        
+    [77] httr2_1.2.2            textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7        
     [81] backports_1.5.0        memoise_2.0.1          bslib_0.9.0            class_7.3-23          
     [85] Rcpp_1.1.0             svglite_2.2.2          gridExtra_2.3          prodlim_2025.04.28    
     [89] checkmate_2.3.3        xfun_0.54              pkgconfig_2.0.3        fs_1.6.6              
