@@ -116,12 +116,12 @@ h_sarapiquensis <- query_inaturalist(species = "Heliconia sarapiquensis",
 head(h_sarapiquensis, 4)
 ```
 
-| repository  | format |    key    |         species         |    date    | time  |    user_name     | country |           locality           | latitude | longitude |                                    file_url                                     | file_extension |
-|:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:----------------:|:-------:|:----------------------------:|:--------:|:---------:|:-------------------------------------------------------------------------------:|:--------------:|
-| iNaturalist | image  | 263417773 | Heliconia sarapiquensis | 2025-02-28 | 14:23 | Original Madness |   NA    | 10.163116739,-83.9389050007  | 10.16312 | -83.93891 | <https://inaturalist-open-data.s3.amazonaws.com/photos/473219810/original.jpeg> |      jpeg      |
-| iNaturalist | image  | 263417128 | Heliconia sarapiquensis | 2025-02-28 | 14:18 | Original Madness |   NA    | 10.163116739,-83.9389050007  | 10.16312 | -83.93891 | <https://inaturalist-open-data.s3.amazonaws.com/photos/473218501/original.jpeg> |      jpeg      |
-| iNaturalist | image  | 263415801 | Heliconia sarapiquensis | 2025-02-28 | 14:11 | Original Madness |   NA    | 10.163116739,-83.9389050007  | 10.16312 | -83.93891 | <https://inaturalist-open-data.s3.amazonaws.com/photos/473216124/original.jpeg> |      jpeg      |
-| iNaturalist | image  | 234065037 | Heliconia sarapiquensis | 2024-08-05 | 16:57 | Shakiraprovasoli |   NA    | 10.4436533293,-84.0696545598 | 10.44365 | -84.06965 |         <https://static.inaturalist.org/photos/416318291/original.jpeg>         |      jpeg      |
+| repository  | format |    key    |         species         |    date    | time  |         user_name          | country |           locality           | latitude | longitude |                                    file_url                                     | file_extension |
+|:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:--------------------------:|:-------:|:----------------------------:|:--------:|:---------:|:-------------------------------------------------------------------------------:|:--------------:|
+| iNaturalist | image  | 17899854  | Heliconia sarapiquensis | 2005-09-22 | 19:40 | Gonzalo Mucientes Sandoval |   NA    |     10.46196,-84.737482      | 10.46196 | -84.73748 |  <https://inaturalist-open-data.s3.amazonaws.com/photos/27338069/original.jpg>  |      jpeg      |
+| iNaturalist | image  | 24247964  | Heliconia sarapiquensis | 2019-03-13 | 12:46 |        Lena Struwe         |   NA    | 10.1745970958,-83.9147372247 | 10.17460 | -83.91474 | <https://inaturalist-open-data.s3.amazonaws.com/photos/37493584/original.jpeg>  |      jpeg      |
+| iNaturalist | image  | 29151576  | Heliconia sarapiquensis | 2016-10-16 | 08:58 |        Pete Woodall        |   NA    |       10.1736,-83.9134       | 10.17360 | -83.91340 | <https://inaturalist-open-data.s3.amazonaws.com/photos/45484602/original.jpeg>  |      jpeg      |
+| iNaturalist | image  | 106019484 | Heliconia sarapiquensis | 2018-03-12 | 15:36 |       Angela_husfeld       |   NA    | 10.6860833455,-84.1806695099 | 10.68608 | -84.18067 | <https://inaturalist-open-data.s3.amazonaws.com/photos/178017971/original.jpeg> |      jpeg      |
 
 2.  Harpy eagles (*Harpia harpyja*) audio recordings from Wikiaves:
 
@@ -403,12 +403,12 @@ c_eisentrauti <- query_inaturalist(species = "Chorthippus eisentrauti")
 head(c_eisentrauti, 4)
 ```
 
-| repository  | format |    key    |         species         |    date    | time  |       user_name       | country |          locality          | latitude | longitude |                            file_url                            | file_extension |
-|:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:---------------------:|:-------:|:--------------------------:|:--------:|:---------:|:--------------------------------------------------------------:|:--------------:|
-| iNaturalist | sound  | 326470869 | Chorthippus eisentrauti | 2025-11-13 | 14:26 | Eliot Stein-Deffarges |   NA    |  44.0506903802,7.64412147  | 44.05069 | 7.644121  | <https://static.inaturalist.org/sounds/1693720.wav?1763129563> |      wav       |
-| iNaturalist | sound  | 326470844 | Chorthippus eisentrauti | 2025-11-13 | 13:30 | Eliot Stein-Deffarges |   NA    | 44.0489666389,7.6286233333 | 44.04897 | 7.628623  | <https://static.inaturalist.org/sounds/1693713.wav?1763128937> |      wav       |
-| iNaturalist | sound  | 326470823 | Chorthippus eisentrauti | 2025-11-13 | 12:37 | Eliot Stein-Deffarges |   NA    | 44.0468833056,7.6305133333 | 44.04688 | 7.630513  | <https://static.inaturalist.org/sounds/1693708.wav?1763127622> |      wav       |
-| iNaturalist | sound  | 319153344 | Chorthippus eisentrauti | 2025-09-23 | 11:05 | Eliot Stein-Deffarges |   NA    |   44.0312216667,7.510275   | 44.03122 | 7.510275  | <https://static.inaturalist.org/sounds/1659586.wav?1759761352> |      wav       |
+| repository  | format |    key    |         species         |    date    | time  |       user_name       | country |          locality           | latitude | longitude |                            file_url                            | file_extension |
+|:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:---------------------:|:-------:|:---------------------------:|:--------:|:---------:|:--------------------------------------------------------------:|:--------------:|
+| iNaturalist | sound  | 136900763 | Chorthippus eisentrauti | 2022-09-04 | 13:06 |       Rupicapra       |   NA    | 46.1835563072,9.2841203425  | 46.18356 | 9.284120  | <https://static.inaturalist.org/sounds/542605.wav?1664449606>  |      wav       |
+| iNaturalist | sound  | 201772913 | Chorthippus eisentrauti | 2023-09-07 | 11:42 |       Louis Ton       |   NA    | 44.0998466528,7.6342757925  | 44.09985 | 7.634276  | <https://static.inaturalist.org/sounds/922836.m4a?1709981365>  |      m4a       |
+| iNaturalist | sound  | 293744385 | Chorthippus eisentrauti | 2025-06-28 | 16:30 |       Vieluigi        |   NA    | 47.8352564157,16.0569467023 | 47.83526 | 16.056947 | <https://static.inaturalist.org/sounds/1547029.wav?1751207478> |      wav       |
+| iNaturalist | sound  | 318151985 | Chorthippus eisentrauti | 2025-08-29 | 12:54 | Eliot Stein-Deffarges |   NA    |   43.947875,7.5523733333    | 43.94788 | 7.552373  | <https://static.inaturalist.org/sounds/1655305.wav?1759391936> |      wav       |
 
 ``` r
 # exclude new observations (simulate old data)
@@ -637,7 +637,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpfFP9Jo/amanita_zambiana 
+     /tmp/RtmpyD6TKv/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -716,7 +716,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpfFP9Jo/diodon_holocanthus 
+     /tmp/RtmpyD6TKv/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -810,11 +810,11 @@ Click to see
     [33] ggplot2_4.0.1          globals_0.18.0         scales_1.4.0           MASS_7.3-65           
     [37] cli_3.6.5              crayon_1.5.3           rmarkdown_2.30         ragg_1.5.0            
     [41] generics_0.1.4         rstudioapi_0.17.1      RecordLinkage_0.4-12.5 future.apply_1.20.1   
-    [45] pbapply_1.7-4          DBI_1.2.3              cachem_1.1.0           proxy_0.4-27          
+    [45] pbapply_1.7-4          DBI_1.2.3              cachem_1.1.0           proxy_0.4-28          
     [49] stringr_1.6.0          splines_4.5.2          parallel_4.5.2         vctrs_0.6.5           
     [53] Matrix_1.7-4           jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0        
     [57] systemfonts_1.3.1      jpeg_0.1-11            crosstalk_1.2.2        evd_2.3-7.1           
-    [61] jquerylib_0.1.4        glue_1.8.0             parallelly_1.45.1      pkgdown_2.2.0         
+    [61] jquerylib_0.1.4        glue_1.8.0             parallelly_1.46.0      pkgdown_2.2.0         
     [65] codetools_0.2-20       lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6          
     [69] tibble_3.3.0           pillar_1.11.1          rappdirs_0.3.3         htmltools_0.5.9       
     [73] ipred_0.9-15           lava_1.8.2             R6_2.6.1               ff_4.5.2              
