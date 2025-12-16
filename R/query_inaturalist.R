@@ -45,10 +45,7 @@ query_inaturalist <- function(species = getOption("species"),
                               raw_data = getOption("raw_data", FALSE)) {
 
   arguments <- as.list(base::match.call())[-1]
-
-  for (i in names(arguments)) {
-    arguments[[i]] <- get(i)
-  }
+  for (i in names(arguments)) arguments[[i]] <- get(i)
 
   check_results <- .check_arguments(args = arguments)
   checkmate::reportAssertions(check_results)
@@ -56,24 +53,22 @@ query_inaturalist <- function(species = getOption("species"),
   format <- rlang::arg_match(format)
   inat_format <- switch(format, sound = "sounds", image = "photos")
 
-  # Connection check
   if (!.checkconnection(verb = verbose, service = "inat")) {
     return(invisible(NULL))
   }
 
   base_url <- paste0(
-    "https://api.inaturalist.org/v1/observations?per_page=200&",
+    "https://api.inaturalist.org/v1/observations?",
+    "per_page=200&",
     "taxon_name=", gsub(" ", "%20", species), "&",
     inat_format, "=true&",
     "identified=", identified, "&",
-    "verifiable=", verifiable, "&",
-    "order=asc&order_by=id"
+    "verifiable=", verifiable
   )
 
   first_query <- try(jsonlite::fromJSON(base_url), silent = TRUE)
 
-  # let user know error when downloading metadata
-  if (.is_error(first_query)) {
+  if (.is_error(first_query) || is.null(first_query$total_results)) {
     if (verbose) {
       .message(text = "Metadata could not be downloaded", as = "failure")
     }
@@ -89,11 +84,7 @@ query_inaturalist <- function(species = getOption("species"),
     return(invisible(NULL))
   }
 
-  if (verbose) {
-    .message(n = total_results, as = "success")
-  }
-
-  offsets <- seq(0, max(0, total_results - 1), by = 200)
+  pages <- seq_len(ceiling(total_results / 200))
 
   if (Sys.info()[1] == "Windows" && cores > 1) {
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
@@ -102,22 +93,18 @@ query_inaturalist <- function(species = getOption("species"),
   }
 
   query_output_list <- .pbapply_sw(
-    offsets,
+    pages,
     cl = cl,
     pbar = pb,
-    function(offset) {
+    function(page) {
 
       query_output <- try(
-        jsonlite::fromJSON(paste0(base_url, "&offset=", offset)),
+        jsonlite::fromJSON(paste0(base_url, "&page=", page)),
         silent = TRUE
       )
 
-      if (is.null(query_output$results)) {
+      if (.is_error(query_output) || is.null(query_output$results)) {
         return(NULL)
-      }
-
-      if (.is_error(query_output)) {
-        return(query_output)
       }
 
       query_output$results <- lapply(
@@ -138,13 +125,11 @@ query_inaturalist <- function(species = getOption("species"),
           X_df <- data.frame(t(unlist(x)))
           X_df <- cbind(X_df, media_df)
 
-          return(X_df)
+          X_df
         }
       )
 
-      output_df <- .merge_data_frames(query_output$results)
-      output_df$offset <- offset
-      return(output_df)
+      .merge_data_frames(query_output$results)
     }
   )
 
@@ -155,7 +140,6 @@ query_inaturalist <- function(species = getOption("species"),
     return(invisible(NULL))
   }
 
-  # combine into a single data frame
   query_output_df <- .merge_data_frames(query_output_list)
 
   if ("id" %in% names(query_output_df)) {
@@ -175,9 +159,9 @@ query_inaturalist <- function(species = getOption("species"),
     names(query_output_df)[first_id_index] <- "key"
   }
 
+  query_output_df$key <- as.character(query_output_df$key)
   query_output_df$species <- species
 
-  # add format
   query_output_df$file_extension <- sub(
     ".*\\.",
     "",
@@ -185,10 +169,8 @@ query_inaturalist <- function(species = getOption("species"),
         query_output_df[, grep("url", names(query_output_df), value = TRUE)])
   )
 
-  # fix column names
   query_output_df$country <- NA
 
-  # fix recordist name
   query_output_df$date <- substr(
     x = query_output_df$time_observed_at,
     start = 1,
@@ -216,7 +198,6 @@ query_inaturalist <- function(species = getOption("species"),
     FUN.VALUE = character(1)
   )
 
-  # format output data frame column names
   query_output_df <- .format_query_output(
     X = query_output_df,
     call = base::match.call(),
@@ -232,6 +213,5 @@ query_inaturalist <- function(species = getOption("species"),
 
   query_output_df <- query_output_df[!is.na(query_output_df$file_url), ]
 
-  # file_path <- file.path(tempdir(), paste0(species, ".rds"))
-  return(query_output_df)
+  query_output_df
 }
