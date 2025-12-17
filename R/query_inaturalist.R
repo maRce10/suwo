@@ -84,6 +84,10 @@ query_inaturalist <- function(species = getOption("species"),
     return(invisible(NULL))
   }
 
+  if (verbose) {
+    .message(n = total_results, as = "success")
+  }
+
   pages <- seq_len(ceiling(total_results / 200))
 
   if (Sys.info()[1] == "Windows" && cores > 1) {
@@ -113,10 +117,11 @@ query_inaturalist <- function(species = getOption("species"),
 
           x <- as.data.frame(query_output$results[u, ])
 
-          media_df <- if (format == "sound")
+          media_df <- if (format == "sound"){
             do.call(rbind, x$sounds)
-          else
+            } else {
             do.call(rbind, x$photos)
+              }
 
           media_df <- media_df[!vapply(media_df, is.list, logical(1))]
           media_df <- data.frame(media_df)
@@ -125,7 +130,12 @@ query_inaturalist <- function(species = getOption("species"),
           X_df <- data.frame(t(unlist(x)))
           X_df <- cbind(X_df, media_df)
 
-          X_df
+          # modify URL so it refers to original file
+          if (format == "image") {
+            X_df$url <-  gsub("square", "original", X_df$url)
+          }
+
+          return(X_df)
         }
       )
 
@@ -141,10 +151,6 @@ query_inaturalist <- function(species = getOption("species"),
   }
 
   query_output_df <- .merge_data_frames(query_output_list)
-
-  if ("id" %in% names(query_output_df)) {
-    query_output_df <- query_output_df[!duplicated(query_output_df$id), ]
-  }
 
   split_location <- do.call(
     rbind,

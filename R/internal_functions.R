@@ -7,11 +7,11 @@
 
 
 .pbapply_sw <- function(X,
-                            FUN,
-                            cl = 1,
-                            pbar = TRUE,
-                            ...) {
-  # conver parallel 1 to null
+                        FUN,
+                        cl = 1,
+                        pbar = TRUE,
+                        ...) {
+  # convert parallel 1 to null
   if (!inherits(cl, "cluster")) {
     if (cl == 1)
       cl <- NULL
@@ -24,6 +24,7 @@
   if (!length(X)) {
     return(lapply(X, FUN, ...))
   }
+
   if (!is.null(cl)) {
     if (.Platform$OS.type == "windows") {
       if (!inherits(cl, "cluster")) {
@@ -57,6 +58,59 @@
     }
   } else {
     if (inherits(cl, "cluster")) {
+      # On Windows, automatically export internal functions from the package
+      if (.Platform$OS.type == "windows") {
+        # Get the environment of FUN to determine which package it belongs to
+        fun_env <- environment(FUN)
+
+        # Check if FUN is from a package namespace (not global env)
+        if (isNamespace(fun_env)) {
+          pkg_name <- environmentName(fun_env)
+
+          # Check if it's the suwo package (or any package you specify)
+          if (pkg_name == "suwo") {
+            # Get the namespace environment
+            ns <- asNamespace(pkg_name)
+
+            # Find all functions starting with . in the package namespace
+            all_objects <- ls(envir = ns, all.names = TRUE)
+            internal_funs <- grep("^\\.", all_objects, value = TRUE)
+
+            # Filter to only include functions (not other objects)
+            funs_to_export <- character()
+            for (fun_name in internal_funs) {
+              obj <- get(fun_name, envir = ns)
+              if (is.function(obj)) {
+                funs_to_export <- c(funs_to_export, fun_name)
+              }
+            }
+
+            # Export internal functions to the cluster
+            if (length(funs_to_export) > 0) {
+              tryCatch({
+                message("Exporting ", length(funs_to_export),
+                        " internal functions from package '", pkg_name,
+                        "' to cluster")
+                parallel::clusterExport(cl,
+                                        varlist = funs_to_export,
+                                        envir = ns)
+              }, error = function(e) {
+                warning(
+                  "Could not export all internal functions from package '",
+                        pkg_name, "': ", e$message)
+              })
+            }
+
+            # Also ensure the package is loaded on workers
+            parallel::clusterEvalQ(cl, {
+              if (!requireNamespace(pkg_name, quietly = TRUE)) {
+                library(pkg_name, character.only = TRUE)
+              }
+            })
+          }
+        }
+      }
+
       PAR_FUN <- parallel::parLapply
       if (pbar) {
         return(PAR_FUN(cl, X, FUN, ...))

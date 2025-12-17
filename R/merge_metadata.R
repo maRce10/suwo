@@ -45,6 +45,16 @@ merge_metadata <- function(..., check_columns = TRUE) {
   dots <- list(...)
   dot_names <- names(dots)
 
+  ## Drop NULL inputs
+  is_null <- vapply(dots, is.null, logical(1))
+
+  if (all(is_null)) {
+    stop("All inputs are NULL. Nothing to merge.", call. = FALSE)
+  }
+
+  dots <- dots[!is_null]
+  dot_names <- dot_names[!is_null]
+
   # Detect if user passed a single list of data frames
   if (length(dots) == 1 && is.list(dots[[1]]) && !is.data.frame(dots[[1]])) {
     metadata_list <- dots[[1]]

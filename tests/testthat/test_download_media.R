@@ -90,7 +90,6 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
 
   skip_if(is.null(df1))
 
-
   df1 <- df1[df1$key %in%  c("5063794756", "5077057045"), ]
   sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
 

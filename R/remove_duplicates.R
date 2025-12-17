@@ -148,5 +148,13 @@ remove_duplicates <-
     # combine with no duplicates
     dedup_metadata <- rbind(dedups, no_dups)
 
+    if (verbose){
+      .message(
+        "{n} duplicate{?s} removed",
+        n =  nrow(metadata) - nrow(dedup_metadata),
+        as = "message"
+      )
+    }
+
     return(dedup_metadata)
   }

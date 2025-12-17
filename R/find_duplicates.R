@@ -175,5 +175,23 @@ find_duplicates <- function(metadata, sort = TRUE,
   # remove original order column
   metadata$..original_order <- NULL
 
+  if (verbose){
+    if (all(is.na(metadata$duplicate_group))) {
+      .message(
+        "No duplicates were found",
+        as = "success", suffix = "\n"
+      )
+    } else {
+
+
+      .message(
+        "{n} potential duplicate{?s} found",
+        n =  sum(!is.na(metadata$duplicate_group)) -
+          length(na.omit(unique(metadata$duplicate_group))),
+        as = "message"
+      )
+    }
+  }
+
   return(metadata)
 }

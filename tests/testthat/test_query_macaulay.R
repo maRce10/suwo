@@ -67,7 +67,7 @@ test_that("non-existing taxon", {
 
 })
 
-test_that("non-existing taxon", {
+test_that("using taxon_code", {
   skip_if_not(interactive())
   skip_on_cran()
   skip_if_offline()
