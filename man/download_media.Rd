@@ -27,7 +27,8 @@ option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -42,9 +43,10 @@ the same name will be overwritten. Default is FALSE.}
 \item{folder_by}{Character string with the name of a character or factor
 column in the metadata data frame. If supplied the function will use the
 unique values in that column to create subfolders within \code{"path"} and
-the files will be downloaded into the corresponding folder. By default no
-subfolders are created and all files are saved in the path provided. Missing
-values (NAs) are saved in a folder called
+the files will be downloaded into the corresponding folder. It can be used
+for instance to save files in subfolders by country or recordist.
+By default no  subfolders are created and all files are saved in the path
+provided. Missing values (NAs) are saved in a folder called
 \code{paste0("unknown_", folder_by)}. Special characters that are not
 allowed in folder names will be modified or removed. If any of the folder
 names already exist in \code{"path"}, they will be used as is.}
@@ -59,19 +61,16 @@ file (either "saved", "overwritten", "already there (not downloaded)",
 or "failed").
 }
 \description{
-\code{download_media} downloads recordings and metadata from
-\href{https://www.xeno-canto.org/}{Xeno-Canto},
-\href{https://www.wikiaves.com.br/}{wikiaves} or
-\href{https://www.gbif.org/}{gbif}.
+\code{download_media} downloads media files from online repositories.
 }
 \details{
 This function will take the output data frame of any of the
-"query_x()" functions and download the associated media files. The
+"query_reponame()" functions and download the associated media files. The
 function will download all files into a single directory
 (argument \code{"path"}). File downloading process can be interrupted and
-resume later as long as the working directory is the same. By default only
-the missing files will be downloaded when resuming. Users only need to rerun
-the same function call. Can also be used on a updated query output
+resume later as long as the working directory is the same. Users only need
+to rerun the same function call. By default only the missing files will be
+downloaded when resuming. Can also be used on a updated query output
 (see \code{\link{update_metadata}}) to add the new media files to the
 existing media pool.
 }

@@ -1,6 +1,6 @@
-#' Merge metadata data frames
+#' Remove duplicated media records
 #'
-#' \code{remove_duplicates} merges metadata data frames from suwo queries.
+#' \code{remove_duplicates} removes duplicated media records.
 #' @inheritParams template_params
 #' @param metadata data frame obtained from possible duplicates  with the
 #' function \code{\link{find_duplicates}}. The data frame must have the column
@@ -68,8 +68,9 @@ remove_duplicates <-
                              "GBIF",
                              "iNaturalist",
                              "Macaulay Library",
-                             "Wikiaves",
-                             "Observation")) {
+                             "WikiAves",
+                             "Observation"),
+           verbose = getOption("verbose", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 

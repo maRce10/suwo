@@ -154,7 +154,7 @@ Obtain metadata:
 
 1. Queries regarding a species are submitted through one of the available 
 query functions (`query_repo_name()`) that connect to five different online 
-repositories (Xeno-Canto, Inaturalist, GBIF, Macaulay Library and Wikiaves). The output of these queries is a data frame containing metadata 
+repositories (Xeno-Canto, Inaturalist, GBIF, Macaulay Library and WikiAves). The output of these queries is a data frame containing metadata 
 associated with the media files (e.g., species name, date, location, etc, see below). 
 
 Curate metadata: 
@@ -192,6 +192,8 @@ metadata_list <-  vignette_metadata <- suwo:::vignette_metadata
 
 Repository <- vapply(metadata_list, function(x)
   x[1, "repository"], character(1))
+
+Repository[Repository == "Wikiaves"] <- "WikiAves"
 
 names(metadata_list) <- tolower(Repository)
 
@@ -361,7 +363,7 @@ head(h_sarapiquensis, 4)
 
 </br>
 
-2.  Harpy eagles (_Harpia harpyja_) audio recordings from Wikiaves:
+2.  Harpy eagles (_Harpia harpyja_) audio recordings from WikiAves:
 
 ```{r, eval = FALSE}
 

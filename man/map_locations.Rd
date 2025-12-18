@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_locations.R
 \name{map_locations}
 \alias{map_locations}
-\title{Maps of instances of observations by species}
+\title{Maps of media records}
 \usage{
 map_locations(
   metadata,
@@ -27,12 +27,12 @@ Default is \code{FALSE}.}
 An interacrive map with the locations of the observations.
 }
 \description{
-\code{map_locations} creates maps to visualize the geographic spread of suwo
-  recordings.
+\code{map_locations} creates maps to visualize the geographic spread of
+media records.
 }
 \details{
 This function creates maps for visualizing the geographic
-spread of observations. Note that only recordings with geographic
+spread of observations. Note that only observations with geographic
 coordinates are displayed.
 }
 \examples{
@@ -46,11 +46,6 @@ e_hochs <- query_gbif(species = "Entoloma hochstetteri", format = "image")
 map_locations(e_hochs)
 }
 
-}
-\references{
-Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to
-streamline analysis of animal acoustic signals. Methods in Ecology and
-Evolution, 8(2), 184-191.
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr}) and Grace

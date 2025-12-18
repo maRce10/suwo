@@ -1,10 +1,12 @@
-#' Access 'inaturalist' recordings and metadata
+#' Access 'iNaturalist' media file metadata
 #'
 #' \code{query_inaturalist} searches for metadata from
-#' \href{https://www.inaturalist.org/}{inaturalist}.
+#' \href{https://www.inaturalist.org/}{iNaturalist}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
-#' Currently 'image' and 'sound' are available.
+#' Currently 'image' and 'sound' are available. Can be set globally for
+#' the current R session via the "format" option
+#' (e.g. \code{options(format = "sound")}). Required.
 #' @param identified Logical argument to define if search results are
 #' categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are
@@ -19,10 +21,10 @@
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' open-access
-#' online repository \href{https://www.inaturalist.org/}{inaturalist}.
+#' online repository \href{https://www.inaturalist.org/}{iNaturalist}.
 #' iNaturalist is a free, crowdsourced online platform for nature enthusiasts
 #' to document and identify plants, animals, fungi, and other organisms in
-#' the wild. Note that Inaturaist observations do not include a 'country'
+#' the wild. Note that Inaturalist observations do not include a 'country'
 #' field.
 #' @examples
 #' # search Bleeding Tooth mushroom images
@@ -35,14 +37,14 @@
 #'
 
 query_inaturalist <- function(species = getOption("species"),
-                              cores = getOption("mc.cores", 1),
-                              pb = getOption("pb", TRUE),
-                              verbose = getOption("verbose", TRUE),
-                              format = c("sound", "image"),
-                              identified = FALSE,
-                              verifiable = FALSE,
-                              all_data = getOption("all_data", FALSE),
-                              raw_data = getOption("raw_data", FALSE)) {
+                            cores = getOption("mc.cores", 1),
+                            pb = getOption("pb", TRUE),
+                            verbose = getOption("verbose", TRUE),
+                            format = getOption("format", c("sound", "image")),
+                            identified = FALSE,
+                            verifiable = FALSE,
+                            all_data = getOption("all_data", FALSE),
+                            raw_data = getOption("raw_data", FALSE)) {
 
   arguments <- as.list(base::match.call())[-1]
   for (i in names(arguments)) arguments[[i]] <- get(i)

@@ -6,7 +6,9 @@
 #' @param taxon_code Optional character string with the Macaulay Library taxon
 #' code (see vignette for more details). If provided, 'species' is ignored.
 #' @param format Character vector with the media format to query for. Options
-#' are 'sound', 'image' of 'video'. Required.
+#' are 'sound', 'image' of 'video'. Can be set globally for the current R
+#' session via the "format" option (e.g. \code{options(format = "sound")}).
+#' Required.
 #' @param path Directory path where the .csv file will be saved. By default it
 #' is saved into the current working directory (\code{"."}).
 #' @param files Optional character vector with the name(s) of the .csv file(s)
@@ -53,9 +55,9 @@
 #' \href{https://www.macaulaylibrary.org/}{Macaulay Library's search page} and
 #'  checking the URL of the species page. For instance, the URL when searching
 #'  for jaguar (Panthera onca) is
-#'  'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765' so the
-#'  taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata fields
-#'   (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#'  'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765'
+#'  so the taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata
+#'  fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
 #'   obtained from the repository is returned (without any formatting).
 #' Here are some instructions for using this function properly:
 #' \itemize{
@@ -125,7 +127,7 @@
 query_macaulay <-
   function(species = getOption("species"),
            taxon_code = NULL,
-           format = c("sound", "image", "video"),
+           format = getOption("format", c("sound", "image", "video")),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
            raw_data = getOption("raw_data", FALSE),

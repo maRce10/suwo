@@ -42,7 +42,7 @@
 #' @importFrom utils packageVersion
 #' @importFrom viridis viridis
 #' @importFrom rlang arg_match
-#' @importFrom stats setNames complete.cases
+#' @importFrom stats setNames complete.cases na.omit
 #' @importFrom utils download.file read.csv write.csv
 #' @importFrom methods is
 #' @importFrom cli cli_alert_info cli_alert_danger cli_alert_warning

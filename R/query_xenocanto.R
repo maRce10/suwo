@@ -1,4 +1,4 @@
-#' Access 'Xeno-Canto' recordings and metadata
+#' Access 'Xeno-Canto' recording metadata
 #'
 #' \code{query_xenocanto} searches for metadata from
 #' \href{https://www.xeno-canto.org/}{Xeno-Canto}.

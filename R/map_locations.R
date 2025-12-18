@@ -1,7 +1,7 @@
-#' Maps of instances of observations by species
+#' Maps of media records
 #'
-#' \code{map_locations} creates maps to visualize the geographic spread of suwo
-#'   recordings.
+#' \code{map_locations} creates maps to visualize the geographic spread of
+#' media records.
 #' @inheritParams template_params
 #' @param cluster Logical to control if icons are clustered by locality.
 #' Default is \code{FALSE}.
@@ -12,7 +12,7 @@
 #' @export
 #' @name map_locations
 #' @details This function creates maps for visualizing the geographic
-#' spread of observations. Note that only recordings with geographic
+#' spread of observations. Note that only observations with geographic
 #' coordinates are displayed.
 #' @examples
 #' # search in xeno-canto
@@ -24,11 +24,6 @@
 #' # create map
 #' map_locations(e_hochs)
 #' }
-#'
-#' @references
-#' Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to
-#' streamline analysis of animal acoustic signals. Methods in Ecology and
-#' Evolution, 8(2), 184-191.
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace
 #' Smith Vidaurre

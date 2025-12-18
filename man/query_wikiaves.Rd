@@ -2,11 +2,11 @@
 % Please edit documentation in R/query_wikiaves.R
 \name{query_wikiaves}
 \alias{query_wikiaves}
-\title{Access 'Wikiaves' recordings and metadata}
+\title{Access 'WikiAves' media file metadata}
 \usage{
 query_wikiaves(
   species = getOption("species"),
-  format = c("sound", "image"),
+  format = getOption("format", c("sound", "image")),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -21,7 +21,9 @@ R session via the "term" option
 (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
 \item{format}{Character vector with the media format to query for.
-Options are 'sound' or 'image'. Required.}
+Options are 'sound' or 'image'. Can be set globally for
+the current R session via the "format" option
+(e.g. \code{options(format = "sound")}). Required.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -36,7 +38,8 @@ option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 
 \item{all_data}{Logical argument that determines if all data available
 from database is shown in the results of search. Default is \code{FALSE}.
@@ -44,11 +47,11 @@ Can be set globally for the current R session via the "all_data"
 option ( \code{options(all_data = TRUE)}).}
 
 \item{raw_data}{Logical argument that determines if the raw data from the
-API is returned (e.g. without any manipulation). Default is \code{FALSE}.
-Can be set globally for the current R session via the "raw_data"
-option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data}
-is set to \code{TRUE} internally. Useful for developers, or if users
-suspect that some data is mishandled during processing
+repository is returned (e.g. without any manipulation).
+Default is \code{FALSE}. Can be set globally for the current R session
+via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}
+\code{all_data} is set to \code{TRUE} internally. Useful for developers,
+or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
@@ -61,11 +64,11 @@ obtained from the repository is returned (without any formatting).
 }
 \description{
 \code{query_wikiaves} searches for metadata from
-\href{https://www.wikiaves.com.br/}{wikiaves}.
+\href{https://www.wikiaves.com.br/}{WikiAves}.
 }
 \details{
 This function queries for avian digital media in the open-access
-online repository \href{https://www.wikiaves.com.br/}{wikiaves} and returns
+online repository \href{https://www.wikiaves.com.br/}{WikiAves} and returns
 its metadata. WikiAves is a Brazilian online platform and citizen science
 project that serves as the largest community for birdwatchers in Brazil.
 It functions as a collaborative, interactive encyclopedia of Brazilian

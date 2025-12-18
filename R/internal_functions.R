@@ -495,7 +495,7 @@
     X$time[X$time == "?"] <- NA
   }
 
-  if (X$repository[1] == "Wikiaves") {
+  if (X$repository[1] == "WikiAves") {
     X$time <- NA
   }
 
@@ -591,7 +591,7 @@
       split = "(",
       fixed = TRUE
     )[[1]][1],
-    query_wikiaves = "Wikiaves",
+    query_wikiaves = "WikiAves",
     query_xenocanto = "Xeno-Canto",
     query_gbif = "GBIF",
     query_inaturalist = "iNaturalist",

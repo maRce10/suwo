@@ -2,15 +2,16 @@
 % Please edit documentation in R/remove_duplicates.R
 \name{remove_duplicates}
 \alias{remove_duplicates}
-\title{Merge metadata data frames}
+\title{Remove duplicated media records}
 \usage{
 remove_duplicates(
   metadata,
   same_repo = FALSE,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves",
-    "Observation")
+  repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "WikiAves",
+    "Observation"),
+  verbose = getOption("verbose", TRUE)
 )
 }
 \arguments{
@@ -44,13 +45,18 @@ are found. Default is \code{c("Xeno-Canto", "GBIF", "iNaturalist",
 "Macaulay Library", "Wikiaves", "Observation")}, which gives priority to
 repositories in which media downloading is more
 straightforward (Xeno-Canto and GBIF).}
+
+\item{verbose}{Logical argument that determines if text is shown in
+console. Default is \code{TRUE}. Can be set globally for the current R
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 }
 \value{
 A single data frame with a subset of the 'metadata' with those
 observations that were determined not to be duplicates.
 }
 \description{
-\code{remove_duplicates} merges metadata data frames from suwo queries.
+\code{remove_duplicates} removes duplicated media records.
 }
 \details{
 This function removes duplicate observations identified with the

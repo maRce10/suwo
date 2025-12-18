@@ -7,7 +7,7 @@
 query_macaulay(
   species = getOption("species"),
   taxon_code = NULL,
-  format = c("sound", "image", "video"),
+  format = getOption("format", c("sound", "image", "video")),
   verbose = getOption("verbose", TRUE),
   all_data = getOption("all_data", FALSE),
   raw_data = getOption("raw_data", FALSE),
@@ -27,11 +27,14 @@ R session via the "term" option
 code (see vignette for more details). If provided, 'species' is ignored.}
 
 \item{format}{Character vector with the media format to query for. Options
-are 'sound', 'image' of 'video'. Required.}
+are 'sound', 'image' of 'video'. Can be set globally for the current R
+session via the "format" option (e.g. \code{options(format = "sound")}).
+Required.}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 
 \item{all_data}{Logical argument that determines if all data available
 from database is shown in the results of search. Default is \code{FALSE}.
@@ -39,11 +42,11 @@ Can be set globally for the current R session via the "all_data"
 option ( \code{options(all_data = TRUE)}).}
 
 \item{raw_data}{Logical argument that determines if the raw data from the
-API is returned (e.g. without any manipulation). Default is \code{FALSE}.
-Can be set globally for the current R session via the "raw_data"
-option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data}
-is set to \code{TRUE} internally. Useful for developers, or if users
-suspect that some data is mishandled during processing
+repository is returned (e.g. without any manipulation).
+Default is \code{FALSE}. Can be set globally for the current R session
+via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}
+\code{all_data} is set to \code{TRUE} internally. Useful for developers,
+or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
@@ -103,9 +106,9 @@ can be found by running a search at the
 \href{https://www.macaulaylibrary.org/}{Macaulay Library's search page} and
  checking the URL of the species page. For instance, the URL when searching
  for jaguar (Panthera onca) is
- 'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765' so the
- taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata fields
-  (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+ 'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765'
+ so the taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata
+ fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
   obtained from the repository is returned (without any formatting).
 Here are some instructions for using this function properly:
 \itemize{

@@ -46,7 +46,7 @@ test_that("test verbose FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- capture_output(query_wikiaves(species = 'a3', format =  "sound",
+  df1 <- testthat::capture_output(query_wikiaves(species = 'a3', format =  "sound",
                                        verbose = FALSE, pb = FALSE))
 
   skip_if(is.null(df1))

@@ -149,7 +149,7 @@ update_metadata <-
       )
 
     }
-    if (metadata$repository[1] == "Wikiaves") {
+    if (metadata$repository[1] == "WikiAves") {
       query_output_new <- query_wikiaves(
         species = query_species,
         format = query_format,

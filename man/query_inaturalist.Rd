@@ -2,14 +2,14 @@
 % Please edit documentation in R/query_inaturalist.R
 \name{query_inaturalist}
 \alias{query_inaturalist}
-\title{Access 'inaturalist' recordings and metadata}
+\title{Access 'iNaturalist' media file metadata}
 \usage{
 query_inaturalist(
   species = getOption("species"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  format = c("sound", "image"),
+  format = getOption("format", c("sound", "image")),
   identified = FALSE,
   verifiable = FALSE,
   all_data = getOption("all_data", FALSE),
@@ -35,10 +35,13 @@ option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 
 \item{format}{Character vector with the media format to query for.
-Currently 'image' and 'sound' are available.}
+Currently 'image' and 'sound' are available. Can be set globally for
+the current R session via the "format" option
+(e.g. \code{options(format = "sound")}). Required.}
 
 \item{identified}{Logical argument to define if search results are
 categorized as identified by inaturalist.}
@@ -50,11 +53,11 @@ categorized as verifiable by inaturalist.}
 from database is shown in the results of search. Default is \code{TRUE}.}
 
 \item{raw_data}{Logical argument that determines if the raw data from the
-API is returned (e.g. without any manipulation). Default is \code{FALSE}.
-Can be set globally for the current R session via the "raw_data"
-option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data}
-is set to \code{TRUE} internally. Useful for developers, or if users
-suspect that some data is mishandled during processing
+repository is returned (e.g. without any manipulation).
+Default is \code{FALSE}. Can be set globally for the current R session
+via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}
+\code{all_data} is set to \code{TRUE} internally. Useful for developers,
+or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
@@ -67,15 +70,15 @@ obtained from the repository is returned (without any formatting).
 }
 \description{
 \code{query_inaturalist} searches for metadata from
-\href{https://www.inaturalist.org/}{inaturalist}.
+\href{https://www.inaturalist.org/}{iNaturalist}.
 }
 \details{
 This function queries for species observation info in the
 open-access
-online repository \href{https://www.inaturalist.org/}{inaturalist}.
+online repository \href{https://www.inaturalist.org/}{iNaturalist}.
 iNaturalist is a free, crowdsourced online platform for nature enthusiasts
 to document and identify plants, animals, fungi, and other organisms in
-the wild. Note that Inaturaist observations do not include a 'country'
+the wild. Note that Inaturalist observations do not include a 'country'
 field.
 }
 \examples{

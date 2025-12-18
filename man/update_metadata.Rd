@@ -35,7 +35,8 @@ option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 
 \item{api_key}{Character string referring to the key assigned by
 Xeno-Canto as authorization for searches. Get yours at

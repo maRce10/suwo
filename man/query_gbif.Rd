@@ -2,11 +2,11 @@
 % Please edit documentation in R/query_gbif.R
 \name{query_gbif}
 \alias{query_gbif}
-\title{Access 'gbif' recordings and metadata}
+\title{Access 'gbif' media file metadata}
 \usage{
 query_gbif(
   species = getOption("species"),
-  format = c("sound", "image", "video", "interactive resource"),
+  format = getOption("format", c("sound", "image", "video", "interactive resource")),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -22,7 +22,9 @@ R session via the "term" option
 (e.g. \code{options(term = "Hypsiboas rufitelus")}).}
 
 \item{format}{Character vector with the media format to query for.
-Options are 'sound', 'image', 'video' and 'interactive resource'. Required.}
+Options are 'sound', 'image', 'video' and 'interactive resource'.
+Can be set globally for the current R session via the "format"
+option (e.g. \code{options(format = "sound")}). Required.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -37,7 +39,8 @@ option ( \code{options(pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option ( \code{options(verbose = TRUE)}).}
+session via the "verbose" option
+( \code{options(verbose = TRUE)}).}
 
 \item{dataset}{The name of a specific dataset in which to focus the query
 (by default it searchs across all available datasets).
@@ -51,11 +54,11 @@ Can be set globally for the current R session via the "all_data"
 option ( \code{options(all_data = TRUE)}).}
 
 \item{raw_data}{Logical argument that determines if the raw data from the
-API is returned (e.g. without any manipulation). Default is \code{FALSE}.
-Can be set globally for the current R session via the "raw_data"
-option ( \code{options(raw_data = TRUE)}). If \code{TRUE}  \code{all_data}
-is set to \code{TRUE} internally. Useful for developers, or if users
-suspect that some data is mishandled during processing
+repository is returned (e.g. without any manipulation).
+Default is \code{FALSE}. Can be set globally for the current R session
+via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}
+\code{all_data} is set to \code{TRUE} internally. Useful for developers,
+or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
@@ -73,7 +76,7 @@ obtained from the repository is returned (without any formatting).
 \details{
 This function queries for species observation info in the
 open-access
-online repository \href{https://www.gbif.org/}{gbif}.
+online repository \href{https://www.gbif.org/}{GBIF}.
 GBIF (the Global Biodiversity Information Facility) is an international
 network and data infrastructure funded by the world's governments and
 aimed at providing open access to data about all types of life on Earth.
@@ -89,7 +92,7 @@ of records returned by other suwo functions
 GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
 }
 \seealso{
-\code{\link{query_gbif}}
+\code{\link{query_inaturalist}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

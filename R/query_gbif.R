@@ -1,10 +1,12 @@
-#' Access 'gbif' recordings and metadata
+#' Access 'gbif' media file metadata
 #'
 #' \code{query_gbif} searches for metadata from
 #' \href{https://www.gbif.org/}{gbif}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
-#' Options are 'sound', 'image', 'video' and 'interactive resource'. Required.
+#' Options are 'sound', 'image', 'video' and 'interactive resource'.
+#' Can be set globally for the current R session via the "format"
+#' option (e.g. \code{options(format = "sound")}). Required.
 #' @param dataset The name of a specific dataset in which to focus the query
 #' (by default it searchs across all available datasets).
 #' Users can check available dataset names by downloading this csv file
@@ -18,14 +20,14 @@
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' open-access
-#' online repository \href{https://www.gbif.org/}{gbif}.
+#' online repository \href{https://www.gbif.org/}{GBIF}.
 #' GBIF (the Global Biodiversity Information Facility) is an international
 #' network and data infrastructure funded by the world's governments and
 #' aimed at providing open access to data about all types of life on Earth.
 #' Note that some of the records returned by this function could be duplicates
 #' of records returned by other suwo functions
 #' (e.g., \code{\link{query_inaturalist}}).
-#' @seealso \code{\link{query_gbif}}
+#' @seealso \code{\link{query_inaturalist}}
 #' @examples
 #' # search dink frog sound files
 # d_diastema <- query_gbif(species = "Diasporus diastema", format = "sound")
@@ -36,8 +38,8 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-
-  function(species = getOption("species"),
-           format = c("sound", "image", "video", "interactive resource"),
+  function(species = getOption("species"), format =
+    getOption("format", c("sound", "image", "video", "interactive resource")),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),

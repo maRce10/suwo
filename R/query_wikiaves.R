@@ -1,10 +1,12 @@
-#' Access 'Wikiaves' recordings and metadata
+#' Access 'WikiAves' media file metadata
 #'
 #' \code{query_wikiaves} searches for metadata from
-#' \href{https://www.wikiaves.com.br/}{wikiaves}.
+#' \href{https://www.wikiaves.com.br/}{WikiAves}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
-#' Options are 'sound' or 'image'. Required.
+#' Options are 'sound' or 'image'. Can be set globally for
+#' the current R session via the "format" option
+#' (e.g. \code{options(format = "sound")}). Required.
 #' @export
 #' @name query_wikiaves
 #' @return The function returns a data frame with the metadata of the media
@@ -12,7 +14,7 @@
 #' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for avian digital media in the open-access
-#' online repository \href{https://www.wikiaves.com.br/}{wikiaves} and returns
+#' online repository \href{https://www.wikiaves.com.br/}{WikiAves} and returns
 #' its metadata. WikiAves is a Brazilian online platform and citizen science
 #' project that serves as the largest community for birdwatchers in Brazil.
 #' It functions as a collaborative, interactive encyclopedia of Brazilian
@@ -33,7 +35,7 @@
 
 query_wikiaves <-
   function(species = getOption("species"),
-           format = c("sound", "image"),
+           format = getOption("format", c("sound", "image")),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),
@@ -96,9 +98,6 @@ query_wikiaves <-
       }
       return(invisible(NULL))
     }
-
-    # make it a data frame
-    # get_ids <- as.data.frame(t(vapply(get_ids, unlist, character(8))))
 
     get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
       request_obj <- httr2::request(
@@ -199,7 +198,7 @@ query_wikiaves <-
       if (.is_error(query_output)) {
         Sys.sleep(1)
 
-        query_output <- try(jsonlite::fromJSON(jsonlite::fromJSON(
+        query_output <- try(jsonlite::fromJSON(
           paste0(
             "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
             wiki_format,
@@ -211,7 +210,6 @@ query_wikiaves <-
             id_by_page_df$page[i]
           )
         ), silent = TRUE)
-      )
       }
 
       # if error then just return the error
