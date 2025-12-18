@@ -1,14 +1,14 @@
-# Access 'Wikiaves' recordings and metadata
+# Access 'WikiAves' media file metadata
 
 `query_wikiaves` searches for metadata from
-[wikiaves](https://www.wikiaves.com.br/).
+[WikiAves](https://www.wikiaves.com.br/).
 
 ## Usage
 
 ``` r
 query_wikiaves(
   species = getOption("species"),
-  format = c("sound", "image"),
+  format = getOption("format", c("sound", "image")),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -29,7 +29,8 @@ query_wikiaves(
 - format:
 
   Character vector with the media format to query for. Options are
-  'sound' or 'image'. Required.
+  'sound' or 'image'. Can be set globally for the current R session via
+  the "format" option (e.g. `options(format = "sound")`). Required.
 
 - cores:
 
@@ -62,9 +63,9 @@ query_wikiaves(
 
 - raw_data:
 
-  Logical argument that determines if the raw data from the API is
-  returned (e.g. without any manipulation). Default is `FALSE`. Can be
-  set globally for the current R session via the "raw_data" option (
+  Logical argument that determines if the raw data from the repository
+  is returned (e.g. without any manipulation). Default is `FALSE`. Can
+  be set globally for the current R session via the "raw_data" option (
   `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
   internally. Useful for developers, or if users suspect that some data
   is mishandled during processing (i.e. date information is lost). Note
@@ -81,7 +82,7 @@ from the repository is returned (without any formatting).
 ## Details
 
 This function queries for avian digital media in the open-access online
-repository [wikiaves](https://www.wikiaves.com.br/) and returns its
+repository [WikiAves](https://www.wikiaves.com.br/) and returns its
 metadata. WikiAves is a Brazilian online platform and citizen science
 project that serves as the largest community for birdwatchers in Brazil.
 It functions as a collaborative, interactive encyclopedia of Brazilian

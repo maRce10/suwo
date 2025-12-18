@@ -67,7 +67,8 @@ R session via the "term" option
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical argument that determines if text is shown in
 console. Default is <code>TRUE</code>. Can be set globally for the current R
-session via the "verbose" option ( <code>options(verbose = TRUE)</code>).</p></dd>
+session via the "verbose" option
+( <code>options(verbose = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
@@ -79,11 +80,11 @@ option ( <code>options(all_data = TRUE)</code>).</p></dd>
 
 <dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
 <dd><p>Logical argument that determines if the raw data from the
-API is returned (e.g. without any manipulation). Default is <code>FALSE</code>.
-Can be set globally for the current R session via the "raw_data"
-option ( <code>options(raw_data = TRUE)</code>). If <code>TRUE</code>  <code>all_data</code>
-is set to <code>TRUE</code> internally. Useful for developers, or if users
-suspect that some data is mishandled during processing
+repository is returned (e.g. without any manipulation).
+Default is <code>FALSE</code>. Can be set globally for the current R session
+via the "raw_data" option ( <code>options(raw_data = TRUE)</code>). If <code>TRUE</code>
+<code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers,
+or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when <code>raw_data = TRUE</code> is not standardized, so most suwo functions
 for downstream steps will not work on them.</p></dd>

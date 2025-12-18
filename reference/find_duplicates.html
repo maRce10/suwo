@@ -45,7 +45,8 @@ metadata from several repositories.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_duplicates</span><span class="op">(</span></span>
 <span>  <span class="va">metadata</span>,</span>
 <span>  sort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  criteria <span class="op">=</span> <span class="st">"country &gt; 0.8 &amp; locality &gt; 0.5 &amp; user_name &gt; 0.8 &amp; time == 1 &amp; date == 1"</span></span>
+<span>  criteria <span class="op">=</span> <span class="st">"country &gt; 0.8 &amp; locality &gt; 0.5 &amp; user_name &gt; 0.8 &amp; time == 1 &amp; date == 1"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,8 +65,9 @@ frame must have the following columns: `user_name`, `locality`, `repository`,
 
 <dt id="arg-sort">sort<a class="anchor" aria-label="anchor" href="#arg-sort"></a></dt>
 <dd><p>Logical argument indicating if the output data frame should be
-sorted by the `duplicate_group` column. This will group all potential
-duplicates together in the output data frame. Default is `TRUE`.</p></dd>
+sorted by the `duplicate_group` column added by this function. This will
+group all potential duplicates together in the output data frame.
+Default is `TRUE`.</p></dd>
 
 
 <dt id="arg-criteria">criteria<a class="anchor" aria-label="anchor" href="#arg-criteria"></a></dt>
@@ -80,31 +82,39 @@ user_name similarity greater than 0.8, and exact matches for time and date
 in most cases. Users can modify this string to adjust the sensitivity of the
 duplicate detection based on their specific needs.</p></dd>
 
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Logical argument that determines if text is shown in
+console. Default is <code>TRUE</code>. Can be set globally for the current R
+session via the "verbose" option
+( <code>options(verbose = TRUE)</code>).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A single data frame with the data from all input data frames
-combined and with an additional column named `duplicate_group` indicating
-potential duplicates with a common index. Entries without potential
-duplicates are labeled as `NA` in this new column.</p>
+    <p>A data frame with the input data frame and an additional column
+named `duplicate_group` indicating potential duplicates with a common index.
+Entries without potential duplicates are labeled as `NA` in this new column.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function compares the information in the entries of a
-combined metadata data frame and labels those possible duplicates with
+combined metadata data frame (typically the output of
+<code><a href="merge_metadata.html">merge_metadata</a></code>) and labels those possible duplicates with
 a common index in a new column named `duplicate_group`. The comparison is
 based on the similarity of the following fields: `user_name`, `locality`,
 `time` and `country`. Only rows with no missing data for those fields will
 be considered. The function uses the `RecordLinkage` package to perform the
 a fuzzy matching comparison and identify potential duplicates based on
-predefined similarity thresholds. The function only spots duplicates from
-different repositories and assumes those duplicates should have the same
-`format` and `date`. This function is useful for curating the data obtained
-by merging data from multiple sources, as the same observation might be
-recorded in different repositories. This is a common issue in citizen
-science repositories, where users might upload the same observation to
-different platforms. This can also occur as some repositories automatically
-share data with other repositories, particularly with GBIF.</p>
+predefined similarity thresholds (see argument 'criteria'). The function
+only spots duplicates from different repositories and assumes those
+duplicates should have the same `format` and `date`. This function is
+useful for curating the data obtained by merging data from multiple sources,
+as the same observation might be recorded in different repositories.
+This is a common issue in citizen science repositories, where users might
+upload the same observation to different platforms. This can also occur as
+some repositories automatically share data with other repositories,
+particularly with GBIF.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

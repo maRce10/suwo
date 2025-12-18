@@ -1,4 +1,4 @@
-# Access 'gbif' recordings and metadata
+# Access 'gbif' media file metadata
 
 `query_gbif` searches for metadata from [gbif](https://www.gbif.org/).
 
@@ -7,7 +7,7 @@
 ``` r
 query_gbif(
   species = getOption("species"),
-  format = c("sound", "image", "video", "interactive resource"),
+  format = getOption("format", c("sound", "image", "video", "interactive resource")),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
@@ -29,7 +29,9 @@ query_gbif(
 - format:
 
   Character vector with the media format to query for. Options are
-  'sound', 'image', 'video' and 'interactive resource'. Required.
+  'sound', 'image', 'video' and 'interactive resource'. Can be set
+  globally for the current R session via the "format" option (e.g.
+  `options(format = "sound")`). Required.
 
 - cores:
 
@@ -70,9 +72,9 @@ query_gbif(
 
 - raw_data:
 
-  Logical argument that determines if the raw data from the API is
-  returned (e.g. without any manipulation). Default is `FALSE`. Can be
-  set globally for the current R session via the "raw_data" option (
+  Logical argument that determines if the raw data from the repository
+  is returned (e.g. without any manipulation). Default is `FALSE`. Can
+  be set globally for the current R session via the "raw_data" option (
   `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
   internally. Useful for developers, or if users suspect that some data
   is mishandled during processing (i.e. date information is lost). Note
@@ -89,7 +91,7 @@ from the repository is returned (without any formatting).
 ## Details
 
 This function queries for species observation info in the open-access
-online repository [gbif](https://www.gbif.org/). GBIF (the Global
+online repository [GBIF](https://www.gbif.org/). GBIF (the Global
 Biodiversity Information Facility) is an international network and data
 infrastructure funded by the world's governments and aimed at providing
 open access to data about all types of life on Earth. Note that some of
@@ -103,7 +105,7 @@ GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
 
 ## See also
 
-`query_gbif`
+[`query_inaturalist`](https://marce10.github.io/suwo/reference/query_inaturalist.md)
 
 ## Author
 

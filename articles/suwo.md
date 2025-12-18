@@ -53,7 +53,7 @@ Obtain metadata:
 1.  Queries regarding a species are submitted through one of the
     available query functions (`query_repo_name()`) that connect to five
     different online repositories (Xeno-Canto, Inaturalist, GBIF,
-    Macaulay Library and Wikiaves). The output of these queries is a
+    Macaulay Library and WikiAves). The output of these queries is a
     data frame containing metadata associated with the media files
     (e.g., species name, date, location, etc, see below).
 
@@ -91,13 +91,13 @@ metadata they retrieve:
 library(suwo)
 ```
 
-| Function                                                                             | Repository       | URL link                                                             | File types                                | Requires api key | Taxonomic level                           | Geographic coverage | Taxonomic coverage                                        | Other features                                        |
-|:-------------------------------------------------------------------------------------|:-----------------|:---------------------------------------------------------------------|:------------------------------------------|:-----------------|:------------------------------------------|:--------------------|:----------------------------------------------------------|:------------------------------------------------------|
-| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | sound, image, video, interactive resource | No               | Species                                   | Global              | All life                                                  | Specify query by data base                            |
-| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | sound, image                              | No               | Species                                   | Global              | All life                                                  |                                                       |
-| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | sound, image, video                       | No               | Species                                   | Global              | Mostly birds but also other vertebrates and invertebrates | Interactive                                           |
-| [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | Wikiaves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | sound, image                              | No               | Species                                   | Brazil              | Birds                                                     |                                                       |
-| [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                     | Yes              | Species, subspecies, genus, family, group | Global              | Birds, frogs, non-marine mammals and grasshoppers         | Specify query by taxonomy, geographic range and dates |
+| Function                                                                             | Repository       | URL link                                                             | File types                                                              | Requires api key | Taxonomic level                           | Geographic coverage | Taxonomic coverage                                        | Other features                                        |
+|:-------------------------------------------------------------------------------------|:-----------------|:---------------------------------------------------------------------|:------------------------------------------------------------------------|:-----------------|:------------------------------------------|:--------------------|:----------------------------------------------------------|:------------------------------------------------------|
+| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | getOption, format, c(“sound”, “image”, “video”, “interactive resource”) | No               | Species                                   | Global              | All life                                                  | Specify query by data base                            |
+| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | getOption, format, c(“sound”, “image”)                                  | No               | Species                                   | Global              | All life                                                  |                                                       |
+| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | getOption, format, c(“sound”, “image”, “video”)                         | No               | Species                                   | Global              | Mostly birds but also other vertebrates and invertebrates | Interactive                                           |
+| [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | WikiAves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | getOption, format, c(“sound”, “image”)                                  | No               | Species                                   | Brazil              | Birds                                                     |                                                       |
+| [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                                                   | Yes              | Species, subspecies, genus, family, group | Global              | Birds, frogs, non-marine mammals and grasshoppers         | Specify query by taxonomy, geographic range and dates |
 
 Table 1: Summary of query functions and the associated repositories.
 
@@ -119,11 +119,11 @@ head(h_sarapiquensis, 4)
 | repository  | format |    key    |         species         |    date    | time  |        user_name        | country |          locality           | latitude | longitude |                                    file_url                                     | file_extension |
 |:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:-----------------------:|:-------:|:---------------------------:|:--------:|:---------:|:-------------------------------------------------------------------------------:|:--------------:|
 | iNaturalist | image  | 330280680 | Heliconia sarapiquensis | 2025-12-08 | 13:47 | Carlos g Velazco-Macias |   NA    |  10.159645,-83.9378766667   | 10.15964 | -83.93788 | <https://inaturalist-open-data.s3.amazonaws.com/photos/598874322/original.jpg>  |      jpeg      |
+| iNaturalist | image  | 330280680 | Heliconia sarapiquensis | 2025-12-08 | 13:47 | Carlos g Velazco-Macias |   NA    |  10.159645,-83.9378766667   | 10.15964 | -83.93788 | <https://inaturalist-open-data.s3.amazonaws.com/photos/598874346/original.jpg>  |      jpeg      |
+| iNaturalist | image  | 330280680 | Heliconia sarapiquensis | 2025-12-08 | 13:47 | Carlos g Velazco-Macias |   NA    |  10.159645,-83.9378766667   | 10.15964 | -83.93788 | <https://inaturalist-open-data.s3.amazonaws.com/photos/598874381/original.jpg>  |      jpeg      |
 | iNaturalist | image  | 263417773 | Heliconia sarapiquensis | 2025-02-28 | 14:23 |    Original Madness     |   NA    | 10.163116739,-83.9389050007 | 10.16312 | -83.93891 | <https://inaturalist-open-data.s3.amazonaws.com/photos/473219810/original.jpeg> |      jpeg      |
-| iNaturalist | image  | 263417128 | Heliconia sarapiquensis | 2025-02-28 | 14:18 |    Original Madness     |   NA    | 10.163116739,-83.9389050007 | 10.16312 | -83.93891 | <https://inaturalist-open-data.s3.amazonaws.com/photos/473218501/original.jpeg> |      jpeg      |
-| iNaturalist | image  | 263415801 | Heliconia sarapiquensis | 2025-02-28 | 14:11 |    Original Madness     |   NA    | 10.163116739,-83.9389050007 | 10.16312 | -83.93891 | <https://inaturalist-open-data.s3.amazonaws.com/photos/473216124/original.jpeg> |      jpeg      |
 
-2.  Harpy eagles (*Harpia harpyja*) audio recordings from Wikiaves:
+2.  Harpy eagles (*Harpia harpyja*) audio recordings from WikiAves:
 
 ``` r
 h_harpyja <- query_wikiaves(species = "Harpia harpyja", format = "sound")
@@ -637,7 +637,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmppB9ms2/amanita_zambiana 
+     /tmp/RtmpSk7Umx/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -716,7 +716,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmppB9ms2/diodon_holocanthus 
+     /tmp/RtmpSk7Umx/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -821,4 +821,4 @@ Click to see
     [77] httr2_1.2.2            textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7        
     [81] backports_1.5.0        memoise_2.0.1          bslib_0.9.0            class_7.3-23          
     [85] Rcpp_1.1.0             svglite_2.2.2          gridExtra_2.3          prodlim_2025.04.28    
-    [89] checkmate_2.3.3        xfun_0.54              pkgconfig_2.0.3        fs_1.6.6              
+    [89] checkmate_2.3.3        xfun_0.55              pkgconfig_2.0.3        fs_1.6.6              

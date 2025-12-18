@@ -1,4 +1,4 @@
-# Access 'Xeno-Canto' recordings and metadata
+# Access 'Xeno-Canto' recording metadata
 
 `query_xenocanto` searches for metadata from
 [Xeno-Canto](https://www.xeno-canto.org/).
@@ -70,9 +70,9 @@ query_xenocanto(
 
 - raw_data:
 
-  Logical argument that determines if the raw data from the API is
-  returned (e.g. without any manipulation). Default is `FALSE`. Can be
-  set globally for the current R session via the "raw_data" option (
+  Logical argument that determines if the raw data from the repository
+  is returned (e.g. without any manipulation). Default is `FALSE`. Can
+  be set globally for the current R session via the "raw_data" option (
   `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
   internally. Useful for developers, or if users suspect that some data
   is mishandled during processing (i.e. date information is lost). Note

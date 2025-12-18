@@ -9,7 +9,7 @@
 query_macaulay(
   species = getOption("species"),
   taxon_code = NULL,
-  format = c("sound", "image", "video"),
+  format = getOption("format", c("sound", "image", "video")),
   verbose = getOption("verbose", TRUE),
   all_data = getOption("all_data", FALSE),
   raw_data = getOption("raw_data", FALSE),
@@ -37,7 +37,9 @@ query_macaulay(
 - format:
 
   Character vector with the media format to query for. Options are
-  'sound', 'image' of 'video'. Required.
+  'sound', 'image' of 'video'. Can be set globally for the current R
+  session via the "format" option (e.g. `options(format = "sound")`).
+  Required.
 
 - verbose:
 
@@ -54,9 +56,9 @@ query_macaulay(
 
 - raw_data:
 
-  Logical argument that determines if the raw data from the API is
-  returned (e.g. without any manipulation). Default is `FALSE`. Can be
-  set globally for the current R session via the "raw_data" option (
+  Logical argument that determines if the raw data from the repository
+  is returned (e.g. without any manipulation). Default is `FALSE`. Can
+  be set globally for the current R session via the "raw_data" option (
   `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
   internally. Useful for developers, or if users suspect that some data
   is mishandled during processing (i.e. date information is lost). Note

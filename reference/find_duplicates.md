@@ -9,7 +9,8 @@ metadata from several repositories.
 find_duplicates(
   metadata,
   sort = TRUE,
-  criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1"
+  criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1",
+  verbose = getOption("verbose", TRUE)
 )
 ```
 
@@ -28,8 +29,9 @@ find_duplicates(
 - sort:
 
   Logical argument indicating if the output data frame should be sorted
-  by the \`duplicate_group\` column. This will group all potential
-  duplicates together in the output data frame. Default is \`TRUE\`.
+  by the \`duplicate_group\` column added by this function. This will
+  group all potential duplicates together in the output data frame.
+  Default is \`TRUE\`.
 
 - criteria:
 
@@ -44,23 +46,31 @@ find_duplicates(
   this string to adjust the sensitivity of the duplicate detection based
   on their specific needs.
 
+- verbose:
+
+  Logical argument that determines if text is shown in console. Default
+  is `TRUE`. Can be set globally for the current R session via the
+  "verbose" option ( `options(verbose = TRUE)`).
+
 ## Value
 
-A single data frame with the data from all input data frames combined
-and with an additional column named \`duplicate_group\` indicating
-potential duplicates with a common index. Entries without potential
-duplicates are labeled as \`NA\` in this new column.
+A data frame with the input data frame and an additional column named
+\`duplicate_group\` indicating potential duplicates with a common index.
+Entries without potential duplicates are labeled as \`NA\` in this new
+column.
 
 ## Details
 
 This function compares the information in the entries of a combined
-metadata data frame and labels those possible duplicates with a common
-index in a new column named \`duplicate_group\`. The comparison is based
-on the similarity of the following fields: \`user_name\`, \`locality\`,
-\`time\` and \`country\`. Only rows with no missing data for those
-fields will be considered. The function uses the \`RecordLinkage\`
-package to perform the a fuzzy matching comparison and identify
-potential duplicates based on predefined similarity thresholds. The
+metadata data frame (typically the output of
+[`merge_metadata`](https://marce10.github.io/suwo/reference/merge_metadata.md))
+and labels those possible duplicates with a common index in a new column
+named \`duplicate_group\`. The comparison is based on the similarity of
+the following fields: \`user_name\`, \`locality\`, \`time\` and
+\`country\`. Only rows with no missing data for those fields will be
+considered. The function uses the \`RecordLinkage\` package to perform
+the a fuzzy matching comparison and identify potential duplicates based
+on predefined similarity thresholds (see argument 'criteria'). The
 function only spots duplicates from different repositories and assumes
 those duplicates should have the same \`format\` and \`date\`. This
 function is useful for curating the data obtained by merging data from

@@ -1,6 +1,6 @@
-# Merge metadata data frames
+# Remove duplicated media records
 
-`remove_duplicates` merges metadata data frames from suwo queries.
+`remove_duplicates` removes duplicated media records.
 
 ## Usage
 
@@ -10,8 +10,9 @@ remove_duplicates(
   same_repo = FALSE,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves",
-    "Observation")
+  repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "WikiAves",
+    "Observation"),
+  verbose = getOption("verbose", TRUE)
 )
 ```
 
@@ -59,6 +60,12 @@ remove_duplicates(
   `c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "Wikiaves", "Observation")`,
   which gives priority to repositories in which media downloading is
   more straightforward (Xeno-Canto and GBIF).
+
+- verbose:
+
+  Logical argument that determines if text is shown in console. Default
+  is `TRUE`. Can be set globally for the current R session via the
+  "verbose" option ( `options(verbose = TRUE)`).
 
 ## Value
 

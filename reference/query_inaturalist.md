@@ -1,7 +1,7 @@
-# Access 'inaturalist' recordings and metadata
+# Access 'iNaturalist' media file metadata
 
 `query_inaturalist` searches for metadata from
-[inaturalist](https://www.inaturalist.org/).
+[iNaturalist](https://www.inaturalist.org/).
 
 ## Usage
 
@@ -11,7 +11,7 @@ query_inaturalist(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  format = c("sound", "image"),
+  format = getOption("format", c("sound", "image")),
   identified = FALSE,
   verifiable = FALSE,
   all_data = getOption("all_data", FALSE),
@@ -53,7 +53,9 @@ query_inaturalist(
 - format:
 
   Character vector with the media format to query for. Currently 'image'
-  and 'sound' are available.
+  and 'sound' are available. Can be set globally for the current R
+  session via the "format" option (e.g. `options(format = "sound")`).
+  Required.
 
 - identified:
 
@@ -72,9 +74,9 @@ query_inaturalist(
 
 - raw_data:
 
-  Logical argument that determines if the raw data from the API is
-  returned (e.g. without any manipulation). Default is `FALSE`. Can be
-  set globally for the current R session via the "raw_data" option (
+  Logical argument that determines if the raw data from the repository
+  is returned (e.g. without any manipulation). Default is `FALSE`. Can
+  be set globally for the current R session via the "raw_data" option (
   `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
   internally. Useful for developers, or if users suspect that some data
   is mishandled during processing (i.e. date information is lost). Note
@@ -91,10 +93,10 @@ from the repository is returned (without any formatting).
 ## Details
 
 This function queries for species observation info in the open-access
-online repository [inaturalist](https://www.inaturalist.org/).
+online repository [iNaturalist](https://www.inaturalist.org/).
 iNaturalist is a free, crowdsourced online platform for nature
 enthusiasts to document and identify plants, animals, fungi, and other
-organisms in the wild. Note that Inaturaist observations do not include
+organisms in the wild. Note that Inaturalist observations do not include
 a 'country' field.
 
 ## References
