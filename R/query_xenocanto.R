@@ -93,7 +93,7 @@ query_xenocanto <-
     query_str <- utils::URLencode(query_str, reserved = TRUE)
 
     if (verbose) {
-      .message("Obtaining metadata:\n", as = "success")
+      .message("Obtaining metadata:", as = "message")
     }
 
     # --- API request ---
@@ -109,14 +109,16 @@ query_xenocanto <-
     # let user know error when downloading metadata
     if (.is_error(query)) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded", as = "failure")
+        .message(text = "Metadata could not be dowloaded",
+                 as = "failure", suffix =  "\n")
       }
       return(invisible(NULL))
     }
 
     if (as.numeric(query$numRecordings) == 0) {
       if (verbose)
-        .message(text = "No matching records found", as = "failure")
+        .message(text = "No matching records found",
+                 as = "failure", suffix =  "\n")
       return(invisible(NULL))
     }
 
@@ -129,7 +131,7 @@ query_xenocanto <-
 
     query_output_list <- .pbapply_sw(
       pbar = pb,
-      X = seq_len(query$numPages),
+      X = seq_len(ceiling(as.numeric(query$numRecordings)/ 100)),
       cl = cl,
       FUN = function(y) {
         query_output <- try(jsonlite::fromJSON(
@@ -176,7 +178,8 @@ query_xenocanto <-
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded", as = "failure")
+        .message(text = "Metadata could not be dowloaded",
+                 as = "failure", suffix =  "\n")
       }
       return(invisible(NULL))
     }
@@ -246,7 +249,7 @@ query_xenocanto <-
       if (verbose) {
         .message(
           paste0("{n} matching sound file{?s} found"),
-          as = "success",
+          as = "success", suffix =  "\n",
           n = nrow(query_output_df)
         )
       }
