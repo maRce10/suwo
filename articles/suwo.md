@@ -637,7 +637,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpSk7Umx/amanita_zambiana 
+     /tmp/RtmptYa3JK/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -716,7 +716,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpSk7Umx/diodon_holocanthus 
+     /tmp/RtmptYa3JK/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -796,7 +796,7 @@ Click to see
     [1] stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] kableExtra_1.4.0 suwo_0.1.0       knitr_1.50      
+    [1] kableExtra_1.4.0 suwo_0.1.0       knitr_1.51      
 
     loaded via a namespace (and not attached):
      [1] viridisLite_0.4.2      farver_2.1.2           blob_1.2.4             viridis_0.6.5         
@@ -806,7 +806,7 @@ Click to see
     [17] sass_0.4.10            tools_4.5.2            yaml_2.3.12            data.table_1.17.8     
     [21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.1            
     [25] RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20            grid_4.5.2            
-    [29] xtable_1.8-4           e1071_1.7-16           future_1.68.0          ada_2.0-5             
+    [29] xtable_1.8-4           e1071_1.7-17           future_1.68.0          ada_2.0-5             
     [33] ggplot2_4.0.1          globals_0.18.0         scales_1.4.0           MASS_7.3-65           
     [37] cli_3.6.5              crayon_1.5.3           rmarkdown_2.30         ragg_1.5.0            
     [41] generics_0.1.4         rstudioapi_0.17.1      RecordLinkage_0.4-12.5 future.apply_1.20.1   
