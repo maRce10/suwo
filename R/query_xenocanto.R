@@ -18,7 +18,12 @@
 #' @param api_key Character string refering to the key assigned by Xeno-Canto
 #' as authorization for searches. Get yours at
 #' \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
-#' Required.
+#' Required. Avoid setting your API key directly in the function call to
+#' prevent exposing it in your code. Instead, set it as an environment variable
+#' (e.g., in your .Renviron file using
+#' \code{Sys.setenv(xc_api_key = "your_key_here")}) named 'xc_api_key',
+#' so it can be accessed
+#' securely using \code{Sys.getenv("xc_api_key")}.
 #' @export
 #' @name query_xenocanto
 #' @return The function returns a data frame with the metadata of the media
@@ -62,7 +67,7 @@
 
 query_xenocanto <-
   function(species = getOption("suwo_species"),
-           api_key = getOption("xc_api_key"),
+           api_key = Sys.getenv("xc_api_key"),
            cores = getOption("mc.cores", 1),
            pb = getOption("suwo_pb", TRUE),
            verbose = getOption("suwo_verbose", TRUE),
@@ -118,7 +123,8 @@ query_xenocanto <-
     # let user know error when downloading metadata
     if (.is_error(query)) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded",
+        .message(text =
+                   "Metadata could not be dowloaded (is your API key valid?)",
                  as = "failure", suffix =  "\n")
       }
       return(invisible(NULL))
