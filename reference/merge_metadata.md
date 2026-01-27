@@ -51,7 +51,9 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 # get metadata from 2 repos
 wa <- query_wikiaves(species = "Glaucis dohrnii", format =  "sound")
+#> ✔ Obtaining metadata (36 matching records found) 🥇:
 gb <- query_gbif(species = "Glaucis dohrnii", format = "sound")
+#> ✔ Obtaining metadata (25 matching records found) 🎊:
 
 # run if queries didnt fail
  if (!is.null(wa) && !is.null(gb)) {

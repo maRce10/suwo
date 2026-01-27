@@ -91,13 +91,13 @@ metadata they retrieve:
 library(suwo)
 ```
 
-| Function                                                                             | Repository       | URL link                                                             | File types                                                              | Requires api key | Taxonomic level                           | Geographic coverage | Taxonomic coverage                                        | Other features                                        |
-|:-------------------------------------------------------------------------------------|:-----------------|:---------------------------------------------------------------------|:------------------------------------------------------------------------|:-----------------|:------------------------------------------|:--------------------|:----------------------------------------------------------|:------------------------------------------------------|
-| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | getOption, format, c(“image”, “sound”, “video”, “interactive resource”) | No               | Species                                   | Global              | All life                                                  | Specify query by data base                            |
-| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | getOption, format, c(“image”, “sound”)                                  | No               | Species                                   | Global              | All life                                                  |                                                       |
-| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | getOption, format, c(“image”, “sound”, “video”)                         | No               | Species                                   | Global              | Mostly birds but also other vertebrates and invertebrates | Interactive                                           |
-| [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | WikiAves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | getOption, format, c(“image”, “sound”)                                  | No               | Species                                   | Brazil              | Birds                                                     |                                                       |
-| [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                                                   | Yes              | Species, subspecies, genus, family, group | Global              | Birds, frogs, non-marine mammals and grasshoppers         | Specify query by taxonomy, geographic range and dates |
+| Function                                                                             | Repository       | URL link                                                             | File types                                | Requires api key | Taxonomic level                           | Geographic coverage | Taxonomic coverage                                        | Other features                                        |
+|:-------------------------------------------------------------------------------------|:-----------------|:---------------------------------------------------------------------|:------------------------------------------|:-----------------|:------------------------------------------|:--------------------|:----------------------------------------------------------|:------------------------------------------------------|
+| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | image, sound, video, interactive resource | No               | Species                                   | Global              | All life                                                  | Specify query by data base                            |
+| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | image, sound                              | No               | Species                                   | Global              | All life                                                  |                                                       |
+| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | image, sound, video                       | No               | Species                                   | Global              | Mostly birds but also other vertebrates and invertebrates | Interactive                                           |
+| [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | WikiAves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | image, sound                              | No               | Species                                   | Brazil              | Birds                                                     |                                                       |
+| [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                     | Yes              | Species, subspecies, genus, family, group | Global              | Birds, frogs, non-marine mammals and grasshoppers         | Specify query by taxonomy, geographic range and dates |
 
 Table 1: Summary of query functions and the associated repositories.
 
@@ -112,7 +112,11 @@ library(suwo)
 
 h_sarapiquensis <- query_inaturalist(species = "Heliconia sarapiquensis", 
                                      format = "image")
+```
 
+     [32m✔ [39m Obtaining metadata (29 matching records found) 🥇:
+
+``` r
 head(h_sarapiquensis, 4)
 ```
 
@@ -399,7 +403,11 @@ old query:
 ``` r
 # initial query
 c_eisentrauti <- query_inaturalist(species = "Chorthippus eisentrauti")
+```
 
+     [32m✔ [39m Obtaining metadata (113 matching records found) 🎊:
+
+``` r
 head(c_eisentrauti, 4)
 ```
 
@@ -418,7 +426,13 @@ old_c_eisentrauti <-
 
 # update "old" data
 upd_c_eisentrauti <- update_metadata(metadata = old_c_eisentrauti)
+```
 
+     [32m✔ [39m Obtaining metadata (113 matching records found) 🌈:
+
+     [32m✔ [39m 95 new entries found 🎊
+
+``` r
 # compare number of records
 nrow(old_c_eisentrauti) == nrow(upd_c_eisentrauti)
 ```
@@ -497,7 +511,11 @@ data frame from the previous section:
 ``` r
 # find duplicates
 dups_merged_metadata <- find_duplicates(merged_metadata)
+```
 
+     [36mℹ [39m 611 potential duplicates found 
+
+``` r
 # look first 6 columns
 head(dups_merged_metadata)
 ```
@@ -559,6 +577,8 @@ and a vector of row numbers indicating which records to remove:
 dedup_metadata <- remove_duplicates(dups_merged_metadata)
 ```
 
+     [36mℹ [39m 263 duplicates removed 
+
 The output is a data frame similar to the input but without the
 specified duplicate records:
 
@@ -603,7 +623,11 @@ zambiana*) (a mushroom) on GBIF:
 ``` r
 # query GBIF for Amanita zambiana images
 a_zam <- query_gbif(species = "Amanita zambiana", format = "image")
+```
 
+     [32m✔ [39m Obtaining metadata (7 matching records found) 🥇:
+
+``` r
 # create folder for images
 out_folder <- file.path(tempdir(), "amanita_zambiana")
 dir.create(out_folder)
@@ -612,7 +636,9 @@ dir.create(out_folder)
 azam_files <- download_media(metadata = a_zam, path = out_folder)
 ```
 
-     [32m✔ [39m All files were downloaded successfully 🥇
+    Downloading media files:
+
+     [32m✔ [39m All files were downloaded successfully 🎉
 
 The output of the function is a data frame similar to the input metadata
 but with two additional columns indicating the file name of the
@@ -639,7 +665,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp85BsM6/amanita_zambiana 
+     /tmp/Rtmph7hUIT/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -672,7 +698,7 @@ img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
     type = 'n',
     axes = FALSE
   )
-  rasterImage(img, 1, 1, 2, 2)
+  graphics::rasterImage(img, 1, 1, 2, 2)
   title(main = paste(
     azam_files$country[i],
     azam_files$date[i],
@@ -718,13 +744,15 @@ dhol_files <- download_media(metadata = d_holocanthus,
                              folder_by = "country")
 ```
 
+    Downloading media files:
+
      [32m✔ [39m All files were downloaded successfully 🎊
 
 ``` r
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp85BsM6/diodon_holocanthus 
+     /tmp/Rtmph7hUIT/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -764,7 +792,7 @@ img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
     type = 'n',
     axes = FALSE
   )
-  rasterImage(img, 1, 1, 2, 2)
+  graphics::rasterImage(img, 1, 1, 2, 2)
   title(main = paste(
     substr(dhol_files$country[i], start = 1, stop = 14),
     dhol_files$date[i],

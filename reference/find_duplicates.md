@@ -89,9 +89,11 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
+#> ✔ Obtaining metadata (735 matching records found) 🎊:
 #> ! 2 observations do not have a download link and were removed from the results (saved at `options('gbif_excluded_results')`). 
 inat <- query_inaturalist(species = "Turdus rufiventris",
   format = "sound")
+#> ✔ Obtaining metadata (550 matching records found) 🎊:
 
 # run if queries didnt fail
  if (!is.null(gb) && !is.null(inat)) {
@@ -101,4 +103,5 @@ merged_metadata <- merge_metadata(inat, gb)
 # find duplicates
 label_dup_metadata <- find_duplicates(metadata = merged_metadata)
 }
+#> ℹ 39 potential duplicates found 
 ```

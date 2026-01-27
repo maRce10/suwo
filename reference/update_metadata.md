@@ -100,6 +100,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 # query metadata
 a_gioiosa <- query_gbif(species = "Amanita gioiosa", format =  "image")
+#> ✔ Obtaining metadata (16 matching records found) 🎊:
 
 # run if query didnt fail
  if (!is.null(a_gioiosa)) {
@@ -112,4 +113,6 @@ up_a_gioiosa <- update_metadata(metadata = sub_a_gioiosa)
 # check number of rows is the same
 # nrow(up_a_gioiosa) == nrow(a_gioiosa)
 }
+#> ✔ Obtaining metadata (16 matching records found) 🌈:
+#> ✔ 3 new entries found 🥳
 ```

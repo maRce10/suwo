@@ -53,6 +53,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>) and Grace Smith Vidaurre
 ``` r
 # search in xeno-canto
 e_hochs <- query_gbif(species = "Entoloma hochstetteri", format = "image")
+#> ✔ Obtaining metadata (1939 matching records found) 🎉:
 
 # run if query didnt fail
  if (!is.null(e_hochs)) {

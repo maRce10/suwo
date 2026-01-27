@@ -104,6 +104,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
   a_zambiana <- query_inaturalist(species = "Amanita zambiana",
   format = "image")
+#> ✔ Obtaining metadata (10 matching records found) 🌈:
 
 # run if query didnt fail
  if (!is.null(a_zambiana)) {
@@ -111,5 +112,6 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
   phae_anth_downl <- download_media(metadata = a_zambiana[1:2, ],
   path = tempdir())
 }
-#> ✔ All files were downloaded successfully 🌈
+#> Downloading media files:
+#> ✔ All files were downloaded successfully 🎊
 ```
