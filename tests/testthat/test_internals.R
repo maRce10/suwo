@@ -16,7 +16,7 @@ test_that(".onLoad", {
 
   dts <- try(suwo:::.onLoad(), silent = TRUE)
 
-  expect_true(is(dts, "try-error"))
+  expect_true(base::inherits(dts, "try-error"))
 
 })
 

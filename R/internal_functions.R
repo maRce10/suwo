@@ -1106,5 +1106,5 @@
 
 # get if an object is an error from try()
 .is_error <- function(x){
-  is(x, "try-error")
+  base::inherits(x, "try-error")
 }
