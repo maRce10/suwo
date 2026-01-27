@@ -1013,31 +1013,6 @@
   return(check_collection)
 }
 
-.onLoad <- function(libname, pkgname) {
-  # Store original options to restore later
-  op <- options()
-
-  # Package-specific default options
-  op.yourpackage <- list(
-    mc.cores = 1,
-    pb = TRUE,
-    verbose = TRUE,
-    all_data = FALSE,
-    raw_data = FALSE
-  )
-
-  # Only set options that haven't been set by user
-  toset <- !(names(op.yourpackage) %in% names(op))
-  if (any(toset)) {
-    options(op.yourpackage[toset])
-  }
-
-  # Store original state for restoration
-  assign(".original_options", op, envir = parent.env(environment()))
-
-  invisible()
-}
-
 ## check internet
 # gracefully fail if internet resource is not available
 .checkconnection <- function(service = c("gbif",
