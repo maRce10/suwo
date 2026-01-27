@@ -30,7 +30,7 @@
 
 map_locations <- function(metadata,
                           cluster = FALSE,
-                          palette = viridis::viridis,
+                          palette = grDevices::hcl.colors(),
                           by = "species") {
 
   # make lat lon numeric and remove rows with no coords
