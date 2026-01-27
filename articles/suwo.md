@@ -612,6 +612,8 @@ dir.create(out_folder)
 azam_files <- download_media(metadata = a_zam, path = out_folder)
 ```
 
+     [32m✔ [39m All files were downloaded successfully 🥇
+
 The output of the function is a data frame similar to the input metadata
 but with two additional columns indicating the file name of the
 downloaded files (‘downloaded_file_name’) and the result of the download
@@ -637,12 +639,18 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp3gaEWv/amanita_zambiana 
+     /tmp/RtmppRoexH/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-3.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132689-1.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132689-2.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132691.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132696-1.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132696-2.jpeg 
+    ├──  Amanita_zambiana-GBIF5069132732.jpeg 
     └──  Amanita_zambiana-GBIF5104283819.jpeg 
 
 Note that the name of the downloaded files includes the species name, an
@@ -710,13 +718,13 @@ dhol_files <- download_media(metadata = d_holocanthus,
                              folder_by = "country")
 ```
 
-     [32m✔ [39m All files were downloaded successfully 🥇
+     [32m✔ [39m All files were downloaded successfully 🎊
 
 ``` r
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp3gaEWv/diodon_holocanthus 
+     /tmp/RtmppRoexH/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -799,26 +807,26 @@ Click to see
     [1] kableExtra_1.4.0 suwo_0.1.0       knitr_1.51      
 
     loaded via a namespace (and not attached):
-     [1] viridisLite_0.4.2      farver_2.1.2           blob_1.2.4             viridis_0.6.5         
+     [1] viridisLite_0.4.2      farver_2.1.2           blob_1.3.0             viridis_0.6.5         
      [5] S7_0.2.1               fastmap_1.2.0          leaflet_2.2.3          digest_0.6.39         
      [9] rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.5        survival_3.8-3        
     [13] RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2         rlang_1.1.7           
     [17] sass_0.4.10            tools_4.5.2            yaml_2.3.12            data.table_1.18.0     
-    [21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.1            
+    [21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.2            
     [25] RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20            grid_4.5.2            
-    [29] xtable_1.8-4           e1071_1.7-17           future_1.68.0          ada_2.0-5             
-    [33] ggplot2_4.0.1          globals_0.18.0         scales_1.4.0           MASS_7.3-65           
-    [37] cli_3.6.5              crayon_1.5.3           rmarkdown_2.30         ragg_1.5.0            
-    [41] generics_0.1.4         rstudioapi_0.17.1      RecordLinkage_0.4-12.5 future.apply_1.20.1   
-    [45] pbapply_1.7-4          DBI_1.2.3              cachem_1.1.0           proxy_0.4-29          
-    [49] stringr_1.6.0          splines_4.5.2          parallel_4.5.2         vctrs_0.6.5           
-    [53] Matrix_1.7-4           jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0        
-    [57] systemfonts_1.3.1      jpeg_0.1-11            crosstalk_1.2.2        evd_2.3-7.1           
-    [61] jquerylib_0.1.4        glue_1.8.0             parallelly_1.46.1      pkgdown_2.2.0         
-    [65] codetools_0.2-20       lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6          
-    [69] tibble_3.3.1           pillar_1.11.1          rappdirs_0.3.3         htmltools_0.5.9       
-    [73] ipred_0.9-15           lava_1.8.2             R6_2.6.1               ff_4.5.2              
-    [77] httr2_1.2.2            textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7        
-    [81] backports_1.5.0        memoise_2.0.1          bslib_0.9.0            class_7.3-23          
-    [85] Rcpp_1.1.1             svglite_2.2.2          gridExtra_2.3          prodlim_2025.04.28    
-    [89] checkmate_2.3.3        xfun_0.55              pkgconfig_2.0.3        fs_1.6.6              
+    [29] xtable_1.8-4           e1071_1.7-17           future_1.69.0          ggplot2_4.0.1         
+    [33] globals_0.18.0         scales_1.4.0           MASS_7.3-65            cli_3.6.5             
+    [37] crayon_1.5.3           rmarkdown_2.30         ragg_1.5.0             generics_0.1.4        
+    [41] rstudioapi_0.18.0      RecordLinkage_0.4-12.6 future.apply_1.20.1    pbapply_1.7-4         
+    [45] DBI_1.2.3              cachem_1.1.0           proxy_0.4-29           stringr_1.6.0         
+    [49] splines_4.5.2          parallel_4.5.2         vctrs_0.7.1            Matrix_1.7-4          
+    [53] jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0         systemfonts_1.3.1     
+    [57] jpeg_0.1-11            crosstalk_1.2.2        evd_2.3-7.1            jquerylib_0.1.4       
+    [61] glue_1.8.0             parallelly_1.46.1      pkgdown_2.2.0          codetools_0.2-20      
+    [65] lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6           tibble_3.3.1          
+    [69] pillar_1.11.1          rappdirs_0.3.4         htmltools_0.5.9        ipred_0.9-15          
+    [73] lava_1.8.2             R6_2.6.1               ff_4.5.2               httr2_1.2.2           
+    [77] textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7         backports_1.5.0       
+    [81] memoise_2.0.1          bslib_0.10.0           class_7.3-23           Rcpp_1.1.1            
+    [85] svglite_2.2.2          gridExtra_2.3          prodlim_2025.04.28     checkmate_2.3.3       
+    [89] xfun_0.56              pkgconfig_2.0.3        fs_1.6.6              
