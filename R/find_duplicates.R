@@ -65,7 +65,7 @@
 find_duplicates <- function(metadata, sort = TRUE,
    criteria =
   "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1",
-  verbose = getOption("verbose", TRUE)) {
+  verbose = getOption("suwo_verbose", TRUE)) {
   # check arguments
   arguments <- as.list(base::match.call())[-1]
 

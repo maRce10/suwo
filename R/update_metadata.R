@@ -54,8 +54,8 @@ update_metadata <-
   function(metadata,
            path = ".",
            cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE),
+           pb = getOption("suwo_pb", TRUE),
+           verbose = getOption("suwo_verbose", TRUE),
            api_key = NULL,
            dates = NULL) {
     # check arguments

@@ -5,8 +5,8 @@
 #' @inheritParams template_params
 #' @param species Character string with the scientific name of a species in
 #' the format: "Genus epithet". Required. Can be set globally for the current
-#' R session via the "term" option (e.g.
-#' \code{options(term = "Hypsiboas rufitelus")}). Alternatively, a character
+#' R session via the "suwo_species" option (e.g.
+#' \code{options(suwo_species = "Hypsiboas rufitelus")}). Alternatively, a character
 #' string containing additional tags that follows the Xeno-Canto advanced query
 #' syntax can be provided. Tags are of the form 'tag:searchterm'. For
 #' instance, \code{'type:"song"'} will search for recordings where the sound
@@ -61,13 +61,13 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_xenocanto <-
-  function(species = getOption("species"),
+  function(species = getOption("suwo_species"),
            api_key = getOption("xc_api_key"),
            cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE),
-           all_data = getOption("all_data", FALSE),
-           raw_data = getOption("raw_data", FALSE)) {
+           pb = getOption("suwo_pb", TRUE),
+           verbose = getOption("suwo_verbose", TRUE),
+           all_data = getOption("suwo_all_data",
+           raw_data = getOption("suwo_raw_data", FALSE)) {
     # Check for API key
     if (is.null(api_key) || !nzchar(api_key)) {
       .stop(

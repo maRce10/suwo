@@ -1091,7 +1091,7 @@
 
 # look up species taxon code for Macaulay queries
 .taxon_code_search <-
-  function(species = getOption("species"),
+  function(species = getOption("suwo_species"),
            ml_taxon_code = ml_taxon_code) {
     taxon_code <- ml_taxon_code$SPECIES_CODE[
       ml_taxon_code$SCI_NAME == species &

@@ -5,8 +5,8 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Currently 'image' and 'sound' are available. Can be set globally for
-#' the current R session via the "format" option
-#' (e.g. \code{options(format = "image")}). Required.
+#' the current R session via the "suwo_format" option
+#' (e.g. \code{options(suwo_format = "image")}). Required.
 #' @param identified Logical argument to define if search results are
 #' categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are
@@ -36,15 +36,15 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 
-query_inaturalist <- function(species = getOption("species"),
+query_inaturalist <- function(species = getOption("suwo_species"),
                             cores = getOption("mc.cores", 1),
-                            pb = getOption("pb", TRUE),
-                            verbose = getOption("verbose", TRUE),
-                             format = getOption("format", c("image", "sound")),
+                            pb = getOption("suwo_pb", TRUE),
+                            verbose = getOption("suwo_verbose", TRUE),
+                             format = getOption("suwo_format", c("image", "sound")),
                             identified = FALSE,
                             verifiable = FALSE,
-                            all_data = getOption("all_data", FALSE),
-                            raw_data = getOption("raw_data", FALSE)) {
+                            all_data = getOption("suwo_all_data",
+                            raw_data = getOption("suwo_raw_data", FALSE)) {
 
   arguments <- as.list(base::match.call())[-1]
   for (i in names(arguments)) arguments[[i]] <- get(i)

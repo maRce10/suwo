@@ -5,8 +5,8 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'image' or 'sound'. Can be set globally for
-#' the current R session via the "format" option
-#' (e.g. \code{options(format = "image")}). Required.
+#' the current R session via the "suwo_format" option
+#' (e.g. \code{options(suwo_format = "image")}). Required.
 #' @export
 #' @name query_wikiaves
 #' @return The function returns a data frame with the metadata of the media
@@ -34,13 +34,13 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_wikiaves <-
-  function(species = getOption("species"),
-            format = getOption("format", c("image", "sound")),
+  function(species = getOption("suwo_species"),
+            format = getOption("suwo_format", c("image", "sound")),
            cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE),
-           all_data = getOption("all_data", FALSE),
-           raw_data = getOption("raw_data", FALSE)) {
+           pb = getOption("suwo_pb", TRUE),
+           verbose = getOption("suwo_verbose", TRUE),
+           all_data = getOption("suwo_all_data",
+           raw_data = getOption("suwo_raw_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 

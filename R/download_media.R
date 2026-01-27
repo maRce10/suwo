@@ -51,8 +51,8 @@
 download_media <-
   function(metadata,
            path = ".",
-           pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE),
+           pb = getOption("suwo_pb", TRUE),
+           verbose = getOption("suwo_verbose", TRUE),
            cores = getOption("mc.cores", 1),
            overwrite = FALSE,
            folder_by = NULL) {

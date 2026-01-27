@@ -63,14 +63,14 @@ remove_duplicates <-
   function(metadata,
            same_repo = FALSE,
            cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
+           pb = getOption("suwo_pb", TRUE),
            repo_priority = c("Xeno-Canto",
                              "GBIF",
                              "iNaturalist",
                              "Macaulay Library",
                              "WikiAves",
                              "Observation"),
-           verbose = getOption("verbose", TRUE)) {
+           verbose = getOption("suwo_verbose", TRUE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 

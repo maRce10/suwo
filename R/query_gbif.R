@@ -5,8 +5,8 @@
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound', 'image', 'video' and 'interactive resource'.
-#' Can be set globally for the current R session via the "format"
-#' option (e.g. \code{options(format = "image")}). Required.
+#' Can be set globally for the current R session via the "suwo_format"
+#' option (e.g. \code{options(suwo_format = "image")}). Required.
 #' @param dataset The name of a specific dataset in which to focus the query
 #' (by default it searchs across all available datasets).
 #' Users can check available dataset names by downloading this csv file
@@ -38,14 +38,14 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-
-  function(species = getOption("species"), format =
-    getOption("format", c("image", "sound", "video", "interactive resource")),
+  function(species = getOption("suwo_species"), format =
+    getOption("suwo_format", c("image", "sound", "video", "interactive resource")),
            cores = getOption("mc.cores", 1),
-           pb = getOption("pb", TRUE),
-           verbose = getOption("verbose", TRUE),
+           pb = getOption("suwo_pb", TRUE),
+           verbose = getOption("suwo_verbose", TRUE),
            dataset = NULL,
-           all_data = getOption("all_data", FALSE),
-           raw_data = getOption("raw_data", FALSE)) {
+           all_data = getOption("suwo_all_data",
+           raw_data = getOption("suwo_raw_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]
 
