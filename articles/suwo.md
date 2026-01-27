@@ -93,10 +93,10 @@ library(suwo)
 
 | Function                                                                             | Repository       | URL link                                                             | File types                                                              | Requires api key | Taxonomic level                           | Geographic coverage | Taxonomic coverage                                        | Other features                                        |
 |:-------------------------------------------------------------------------------------|:-----------------|:---------------------------------------------------------------------|:------------------------------------------------------------------------|:-----------------|:------------------------------------------|:--------------------|:----------------------------------------------------------|:------------------------------------------------------|
-| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | getOption, format, c(“sound”, “image”, “video”, “interactive resource”) | No               | Species                                   | Global              | All life                                                  | Specify query by data base                            |
-| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | getOption, format, c(“sound”, “image”)                                  | No               | Species                                   | Global              | All life                                                  |                                                       |
-| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | getOption, format, c(“sound”, “image”, “video”)                         | No               | Species                                   | Global              | Mostly birds but also other vertebrates and invertebrates | Interactive                                           |
-| [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | WikiAves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | getOption, format, c(“sound”, “image”)                                  | No               | Species                                   | Brazil              | Birds                                                     |                                                       |
+| [query_gbif](https://marce10.github.io/suwo/reference/query_gbif.html)               | GBIF             | [https://www.gbif.org/](https://www.gbif.org/)                       | getOption, format, c(“image”, “sound”, “video”, “interactive resource”) | No               | Species                                   | Global              | All life                                                  | Specify query by data base                            |
+| [query_inaturalist](https://marce10.github.io/suwo/reference/query_inaturalist.html) | iNaturalist      | [https://www.inaturalist.org/](https://www.inaturalist.org/)         | getOption, format, c(“image”, “sound”)                                  | No               | Species                                   | Global              | All life                                                  |                                                       |
+| [query_macaulay](https://marce10.github.io/suwo/reference/query_macaulay.html)       | Macaulay Library | [https://www.macaulaylibrary.org/](https://www.macaulaylibrary.org/) | getOption, format, c(“image”, “sound”, “video”)                         | No               | Species                                   | Global              | Mostly birds but also other vertebrates and invertebrates | Interactive                                           |
+| [query_wikiaves](https://marce10.github.io/suwo/reference/query_wikiaves.html)       | WikiAves         | [https://www.wikiaves.com.br/](https://www.wikiaves.com.br/)         | getOption, format, c(“image”, “sound”)                                  | No               | Species                                   | Brazil              | Birds                                                     |                                                       |
 | [query_xenocanto](https://marce10.github.io/suwo/reference/query_xenocanto.html)     | Xeno-Canto       | [https://www.xeno-canto.org/](https://www.xeno-canto.org/)           | sound                                                                   | Yes              | Species, subspecies, genus, family, group | Global              | Birds, frogs, non-marine mammals and grasshoppers         | Specify query by taxonomy, geographic range and dates |
 
 Table 1: Summary of query functions and the associated repositories.
@@ -403,12 +403,12 @@ c_eisentrauti <- query_inaturalist(species = "Chorthippus eisentrauti")
 head(c_eisentrauti, 4)
 ```
 
-| repository  | format |    key    |         species         |    date    | time  |       user_name       | country |          locality          | latitude | longitude |                            file_url                            | file_extension |
-|:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:---------------------:|:-------:|:--------------------------:|:--------:|:---------:|:--------------------------------------------------------------:|:--------------:|
-| iNaturalist | sound  | 332517118 | Chorthippus eisentrauti | 2023-08-13 | 13:07 |      Parnassius       |   NA    |  44.963801903,6.577495847  | 44.96380 | 6.577496  | <https://static.inaturalist.org/sounds/1727075.mp3?1766966683> |      mp3       |
-| iNaturalist | sound  | 332517118 | Chorthippus eisentrauti | 2023-08-13 | 13:07 |      Parnassius       |   NA    |  44.963801903,6.577495847  | 44.96380 | 6.577496  | <https://static.inaturalist.org/sounds/1727074.mp3?1766966683> |      mp3       |
-| iNaturalist | sound  | 326470869 | Chorthippus eisentrauti | 2025-11-13 | 14:26 | Eliot Stein-Deffarges |   NA    |  44.0506903802,7.64412147  | 44.05069 | 7.644121  | <https://static.inaturalist.org/sounds/1693720.wav?1763129563> |      wav       |
-| iNaturalist | sound  | 326470844 | Chorthippus eisentrauti | 2025-11-13 | 13:30 | Eliot Stein-Deffarges |   NA    | 44.0489666389,7.6286233333 | 44.04897 | 7.628623  | <https://static.inaturalist.org/sounds/1693713.wav?1763128937> |      wav       |
+| repository  | format |    key    |         species         |    date    | time  |        user_name         | country |          locality          | latitude | longitude |                                    file_url                                    | file_extension |
+|:-----------:|:------:|:---------:|:-----------------------:|:----------:|:-----:|:------------------------:|:-------:|:--------------------------:|:--------:|:---------:|:------------------------------------------------------------------------------:|:--------------:|
+| iNaturalist | image  | 335245347 | Chorthippus eisentrauti | 2019-11-16 | 12:48 | Eliot Stein-Deffarges J. |   NA    | 43.967696755,7.6218244195  | 43.96770 | 7.621824  | <https://inaturalist-open-data.s3.amazonaws.com/photos/608983424/original.jpg> |      jpeg      |
+| iNaturalist | image  | 335245344 | Chorthippus eisentrauti | 2019-11-16 | 12:36 | Eliot Stein-Deffarges J. |   NA    | 43.967696755,7.6218244195  | 43.96770 | 7.621824  | <https://inaturalist-open-data.s3.amazonaws.com/photos/608982971/original.jpg> |      jpeg      |
+| iNaturalist | image  | 334597801 | Chorthippus eisentrauti | 2026-01-11 | 12:01 | Eliot Stein-Deffarges J. |   NA    | 44.0786166389,7.6128199722 | 44.07862 | 7.612820  | <https://inaturalist-open-data.s3.amazonaws.com/photos/607665238/original.jpg> |      jpeg      |
+| iNaturalist | image  | 332517118 | Chorthippus eisentrauti | 2023-08-13 | 13:07 |        Parnassius        |   NA    |  44.963801903,6.577495847  | 44.96380 | 6.577496  | <https://inaturalist-open-data.s3.amazonaws.com/photos/603468000/original.jpg> |      jpeg      |
 
 ``` r
 # exclude new observations (simulate old data)
@@ -639,7 +639,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmppRoexH/amanita_zambiana 
+     /tmp/Rtmp85BsM6/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -724,7 +724,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmppRoexH/diodon_holocanthus 
+     /tmp/Rtmp85BsM6/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 

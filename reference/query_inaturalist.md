@@ -11,7 +11,7 @@ query_inaturalist(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
-  format = getOption("format", c("sound", "image")),
+   format = getOption("format", c("image", "sound")),
   identified = FALSE,
   verifiable = FALSE,
   all_data = getOption("all_data", FALSE),

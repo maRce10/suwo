@@ -8,7 +8,7 @@
 ``` r
 query_wikiaves(
   species = getOption("species"),
-  format = getOption("format", c("sound", "image")),
+   format = getOption("format", c("image", "sound")),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   verbose = getOption("verbose", TRUE),
