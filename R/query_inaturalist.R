@@ -93,7 +93,7 @@ query_inaturalist <- function(species = getOption("species"),
   pages <- seq_len(ceiling(total_results / 200))
 
   if (Sys.info()[1] == "Windows" && cores > 1) {
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+    cl <- parallel::makePSOCKcluster(cores)
   } else {
     cl <- cores
   }

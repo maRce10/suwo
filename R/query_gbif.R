@@ -119,7 +119,7 @@ query_gbif <-
 
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+      cl <- parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }

@@ -495,7 +495,9 @@ codemetar::write_codemeta()
 
 # check with docker
 ```{r}
+
 sudo docker run --rm ghcr.io/ropensci-review-tools/pkgcheck bash -c "git clone https://github.com/maRce10/suwo.git /suwo && cd /suwo && Rscript -e 'devtools::install(); testthat::test_local()'"
+
 ```
 
 # additional checks
