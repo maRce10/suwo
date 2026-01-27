@@ -14,7 +14,7 @@ identifiers:
   value: https://github.com/maRce10/suwo
 abstract: Streamline searching/downloading of nature media files (e.g. audios, photos)
   from online repositories. The package offers functions for obtaining media metadata
-  from online repositories, downloading associated media files ad updating data sets
+  from online repositories, downloading associated media files and updating data sets
   with new records.
 authors:
 - family-names: Araya-Salas
@@ -62,7 +62,7 @@ references:
     given-names: Michel
     email: michellang@gmail.com
     orcid: https://orcid.org/0000-0001-9754-0393
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.checkmate
 - type: software
   title: cli
@@ -74,7 +74,7 @@ references:
   - family-names: Csárdi
     given-names: Gábor
     email: gabor@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.cli
 - type: software
   title: methods
@@ -85,7 +85,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
 - type: software
   title: pbapply
   abstract: 'pbapply: Adding Progress Bar to ''*apply'' Functions'
@@ -100,7 +100,7 @@ references:
   - family-names: Zawadzki
     given-names: Zygmunt
     email: zygmunt@zstat.pl
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.pbapply
 - type: software
   title: utils
@@ -111,19 +111,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
-- type: software
-  title: viridis
-  abstract: 'viridis: Colorblind-Friendly Color Maps for R'
-  notes: Imports
-  url: https://sjmgarnier.github.io/viridis/
-  repository: https://CRAN.R-project.org/package=viridis
-  authors:
-  - family-names: Garnier
-    given-names: Simon
-    email: garnier@njit.edu
-  year: '2025'
-  doi: 10.32614/CRAN.package.viridis
+  year: '2026'
 - type: software
   title: rlang
   abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
@@ -137,7 +125,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.rlang
 - type: software
   title: httr2
@@ -149,7 +137,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.httr2
 - type: software
   title: jsonlite
@@ -162,7 +150,7 @@ references:
     given-names: Jeroen
     email: jeroenooms@gmail.com
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.jsonlite
 - type: software
   title: kableExtra
@@ -175,7 +163,7 @@ references:
     given-names: Hao
     email: haozhu233@gmail.com
     orcid: https://orcid.org/0000-0002-3386-6076
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.kableExtra
 - type: software
   title: lubridate
@@ -191,7 +179,7 @@ references:
     given-names: Garrett
   - family-names: Wickham
     given-names: Hadley
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.lubridate
 - type: software
   title: tools
@@ -202,7 +190,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
 - type: software
   title: RecordLinkage
   abstract: 'RecordLinkage: Record Linkage Functions for Linking and Deduplicating
@@ -216,38 +204,8 @@ references:
   - family-names: Borg
     given-names: Andreas
     email: andreas.borg.public@posteo.de
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.RecordLinkage
-- type: software
-  title: jpeg
-  abstract: 'jpeg: Read and write JPEG images'
-  notes: Imports
-  url: https://www.rforge.net/jpeg/
-  repository: https://CRAN.R-project.org/package=jpeg
-  authors:
-  - family-names: Urbanek
-    given-names: Simon
-    email: Simon.Urbanek@r-project.org
-    orcid: https://orcid.org/0000-0003-2297-1732
-  year: '2025'
-  doi: 10.32614/CRAN.package.jpeg
-- type: software
-  title: fs
-  abstract: 'fs: Cross-Platform File System Operations Based on ''libuv'''
-  notes: Imports
-  url: https://fs.r-lib.org
-  repository: https://CRAN.R-project.org/package=fs
-  authors:
-  - family-names: Hester
-    given-names: Jim
-  - family-names: Wickham
-    given-names: Hadley
-    email: hadley@posit.co
-  - family-names: Csárdi
-    given-names: Gábor
-    email: csardi.gabor@gmail.com
-  year: '2025'
-  doi: 10.32614/CRAN.package.fs
 - type: software
   title: leaflet
   abstract: 'leaflet: Create Interactive Web Maps with the JavaScript ''Leaflet''
@@ -271,7 +229,7 @@ references:
     given-names: Garrick
     email: garrick@posit.co
     orcid: https://orcid.org/0000-0002-7111-0077
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.leaflet
 - type: software
   title: covr
@@ -283,7 +241,7 @@ references:
   - family-names: Hester
     given-names: Jim
     email: james.f.hester@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.covr
 - type: software
   title: testthat
@@ -295,7 +253,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.testthat
 - type: software
   title: knitr
@@ -308,7 +266,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.knitr
 - type: software
   title: rmarkdown
@@ -352,7 +310,7 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.rmarkdown
 - type: software
   title: graphics
@@ -363,7 +321,37 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
+- type: software
+  title: jpeg
+  abstract: 'jpeg: Read and write JPEG images'
+  notes: Suggests
+  url: https://www.rforge.net/jpeg/
+  repository: https://CRAN.R-project.org/package=jpeg
+  authors:
+  - family-names: Urbanek
+    given-names: Simon
+    email: Simon.Urbanek@r-project.org
+    orcid: https://orcid.org/0000-0003-2297-1732
+  year: '2026'
+  doi: 10.32614/CRAN.package.jpeg
+- type: software
+  title: fs
+  abstract: 'fs: Cross-Platform File System Operations Based on ''libuv'''
+  notes: Suggests
+  url: https://fs.r-lib.org
+  repository: https://CRAN.R-project.org/package=fs
+  authors:
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Csárdi
+    given-names: Gábor
+    email: csardi.gabor@gmail.com
+  year: '2026'
+  doi: 10.32614/CRAN.package.fs
 - type: software
   title: 'R: A Language and Environment for Statistical Computing'
   notes: Depends
@@ -373,6 +361,6 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
-  version: '>= 3.5'
+  year: '2026'
+  version: '>= 4.0.0'
 
