@@ -81,7 +81,7 @@ find_duplicates <- function(metadata, sort = TRUE,
   checkmate::reportAssertions(check_results)
 
   if (nrow(metadata) < 2) {
-    .stop("The input data frame should have at least two rows to compare.")
+    cli::cli_abort("The input data frame should have at least two rows to compare.")
   }
 
 

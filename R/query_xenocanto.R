@@ -84,7 +84,7 @@ query_xenocanto <-
 
     # Check for API key
     if (is.null(api_key) || !nzchar(api_key)) {
-      .stop(
+      cli::cli_abort(
         paste("An API key is required for Xeno-Canto API v3.",
               "Get yours at https://xeno-canto.org/account.")
       )

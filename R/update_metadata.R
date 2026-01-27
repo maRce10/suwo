@@ -74,14 +74,14 @@ update_metadata <-
 
 
     if (length(unique(metadata$repository)) > 1) {
-      .stop(
+      cli::cli_abort(
         "All observations must belong to the same repository. ",
         "Please provide a single repository query result to update_metadata()."
       )
     }
 
     if (length(unique(metadata$species)) > 1) {
-      .stop(
+      cli::cli_abort(
         "All observations must belong to the same species. ",
         "Please provide a single repository query result to update_metadata()."
       )
@@ -134,7 +134,7 @@ update_metadata <-
 
     if (metadata$repository[1] == "Xeno-Canto") {
       if (is.null(api_key)) {
-        .stop(
+        cli::cli_abort(
           paste("An API key is required for Xeno-Canto API v3.",
                 "Get yours at https://xeno-canto.org/account.")
         )

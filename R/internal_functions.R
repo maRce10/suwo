@@ -145,11 +145,6 @@
   rval
 }
 
-# stop function that doesn't print call
-.stop <- function(...) {
-  stop(..., call. = FALSE)
-}
-
 # add emojis to messages. based on praise_emoji from testthat
 .add_emoji <- function(mood) {
   if (!cli::is_utf8_output()) {
