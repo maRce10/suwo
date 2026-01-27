@@ -6,7 +6,7 @@
 #' @param format Character vector with the media format to query for.
 #' Currently 'image' and 'sound' are available. Can be set globally for
 #' the current R session via the "format" option
-#' (e.g. \code{options(format = "sound")}). Required.
+#' (e.g. \code{options(format = "image")}). Required.
 #' @param identified Logical argument to define if search results are
 #' categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are
@@ -40,7 +40,7 @@ query_inaturalist <- function(species = getOption("species"),
                             cores = getOption("mc.cores", 1),
                             pb = getOption("pb", TRUE),
                             verbose = getOption("verbose", TRUE),
-                            format = getOption("format", c("sound", "image")),
+                             format = getOption("format", c("image", "sound")),
                             identified = FALSE,
                             verifiable = FALSE,
                             all_data = getOption("all_data", FALSE),

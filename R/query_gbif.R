@@ -6,7 +6,7 @@
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound', 'image', 'video' and 'interactive resource'.
 #' Can be set globally for the current R session via the "format"
-#' option (e.g. \code{options(format = "sound")}). Required.
+#' option (e.g. \code{options(format = "image")}). Required.
 #' @param dataset The name of a specific dataset in which to focus the query
 #' (by default it searchs across all available datasets).
 #' Users can check available dataset names by downloading this csv file
@@ -39,7 +39,7 @@
 #'
 query_gbif <-
   function(species = getOption("species"), format =
-    getOption("format", c("sound", "image", "video", "interactive resource")),
+    getOption("format", c("image", "sound", "video", "interactive resource")),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),

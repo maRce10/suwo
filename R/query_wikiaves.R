@@ -4,9 +4,9 @@
 #' \href{https://www.wikiaves.com.br/}{WikiAves}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
-#' Options are 'sound' or 'image'. Can be set globally for
+#' Options are 'image' or 'sound'. Can be set globally for
 #' the current R session via the "format" option
-#' (e.g. \code{options(format = "sound")}). Required.
+#' (e.g. \code{options(format = "image")}). Required.
 #' @export
 #' @name query_wikiaves
 #' @return The function returns a data frame with the metadata of the media
@@ -35,7 +35,7 @@
 
 query_wikiaves <-
   function(species = getOption("species"),
-           format = getOption("format", c("sound", "image")),
+            format = getOption("format", c("image", "sound")),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            verbose = getOption("verbose", TRUE),

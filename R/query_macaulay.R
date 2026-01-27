@@ -7,7 +7,7 @@
 #' code (see vignette for more details). If provided, 'species' is ignored.
 #' @param format Character vector with the media format to query for. Options
 #' are 'sound', 'image' of 'video'. Can be set globally for the current R
-#' session via the "format" option (e.g. \code{options(format = "sound")}).
+#' session via the "format" option (e.g. \code{options(format = "image")}).
 #' Required.
 #' @param path Directory path where the .csv file will be saved. By default it
 #' is saved into the current working directory (\code{"."}).
@@ -127,7 +127,7 @@
 query_macaulay <-
   function(species = getOption("species"),
            taxon_code = NULL,
-           format = getOption("format", c("sound", "image", "video")),
+           format = getOption("format", c("image", "sound", "video")),
            verbose = getOption("verbose", TRUE),
            all_data = getOption("all_data", FALSE),
            raw_data = getOption("raw_data", FALSE),
