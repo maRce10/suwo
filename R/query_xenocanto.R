@@ -67,12 +67,12 @@
 
 query_xenocanto <-
   function(species = getOption("suwo_species"),
-           api_key = Sys.getenv("xc_api_key"),
            cores = getOption("mc.cores", 1),
            pb = getOption("suwo_pb", TRUE),
            verbose = getOption("suwo_verbose", TRUE),
            all_data = getOption("suwo_all_data", FALSE),
-           raw_data = getOption("suwo_raw_data", FALSE)) {
+           raw_data = getOption("suwo_raw_data", FALSE),
+           api_key = Sys.getenv("xc_api_key")) {
 
     # check arguments
     arguments <- as.list(base::match.call())[-1]

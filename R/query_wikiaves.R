@@ -35,7 +35,7 @@
 
 query_wikiaves <-
   function(species = getOption("suwo_species"),
-            format = getOption("suwo_format", c("image", "sound")),
+           format = getOption("suwo_format", c("image", "sound")),
            cores = getOption("mc.cores", 1),
            pb = getOption("suwo_pb", TRUE),
            verbose = getOption("suwo_verbose", TRUE),

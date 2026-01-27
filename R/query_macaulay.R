@@ -3,8 +3,6 @@
 #' \code{query_macaulay} searches for metadata from
 #' \href{https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
-#' @param taxon_code Optional character string with the Macaulay Library taxon
-#' code (see vignette for more details). If provided, 'species' is ignored.
 #' @param format Character vector with the media format to query for. Options
 #' are 'sound', 'image' of 'video'. Can be set globally for the current R
 #' session via the "suwo_format" option (e.g. \code{options(suwo_format = "image")}).
@@ -32,6 +30,8 @@
 #' package versions. However, if users need to update it they can download the
 #' new list version, read it in R as a data frame and provide it to the function
 #'  through this argument.
+#' @param taxon_code Optional character string with the Macaulay Library taxon
+#' code (see vignette for more details). If provided, 'species' is ignored.
 #' @export
 #' @name query_macaulay
 #' @return  This is an interactive function which opens a browser window to the
