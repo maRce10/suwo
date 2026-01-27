@@ -29,7 +29,6 @@ test_that("search Floractus heimi audio (no audios)", {
   skip_if_offline()
 
   df1 <- query_gbif(species = 'Floractus heimi', format =  "sound")
-  skip_if(is.null(df1))
 
   expect_true(is.null(df1))
 
@@ -66,8 +65,6 @@ test_that("no result", {
   skip_if_offline()
 
   df1 <- query_gbif(species = 'asdasdasd', format =  "image")
-
-  skip_if(is.null(df1))
 
   expect_true(is.null(df1))
 
