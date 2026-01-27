@@ -214,6 +214,11 @@ file_types <- vapply(Function, function(x)
 file_types <- gsub("c, ", "", file_types)
 file_types[Function == "query_xenocanto"] <- "sound"
 
+file_types <- gsub("getOption,|suwo_format, c", "", file_types)
+
+# remove c(, ) and " from file_types
+file_types <- gsub("\\(|\\)|\"", "", file_types)
+  
 urls <- c(
   gbif = "https://www.gbif.org/",
   inaturalist = "https://www.inaturalist.org/",
