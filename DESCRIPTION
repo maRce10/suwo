@@ -21,15 +21,15 @@ Imports:
     lubridate,
     tools,
     RecordLinkage,
-    jpeg,
-    fs,
     leaflet
 Suggests: 
     covr,
     testthat,
     knitr,
     rmarkdown,
-    graphics
+    graphics,
+    jpeg,
+    fs
 Depends:
     R (>= 4.0.0)
 Config/testthat/edition: 3
