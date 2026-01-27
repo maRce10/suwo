@@ -43,7 +43,7 @@ query_inaturalist <- function(species = getOption("suwo_species"),
                              format = getOption("suwo_format", c("image", "sound")),
                             identified = FALSE,
                             verifiable = FALSE,
-                            all_data = getOption("suwo_all_data",
+                            all_data = getOption("suwo_all_data", FALSE),
                             raw_data = getOption("suwo_raw_data", FALSE)) {
 
   arguments <- as.list(base::match.call())[-1]

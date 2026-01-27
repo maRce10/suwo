@@ -278,7 +278,7 @@
     (return("already there (not downloaded)"))
   }
 
-  dl_result <- try(download.file(
+  dl_result <- try(utils::download.file(
     url = as.character(metadata$file_url[x]),
     destfile = destfile,
     quiet = TRUE,
@@ -292,7 +292,7 @@
   # if failed try again after wating 0.5 seconds
   if (.is_error(dl_result)) {
     Sys.sleep(0.5)
-    dl_result <- try(download.file(
+    dl_result <- try(utils::download.file(
       url = as.character(metadata$file_url[x]),
       destfile = destfile,
       quiet = TRUE,
@@ -900,10 +900,16 @@
   if (!is.null(args$species)) {
     checkmate::assert_multi_class(
       x = args$species,
-      classes = c("character"),
+      classes = c("character", "factor"),
       add = check_collection,
       .var.name = "species"
     )
+
+    checkmate::assert_vector(
+      x = args$species,
+      add = check_collection,
+      len = 1,
+      .var.name = "species")
   }
 
   if (!is.null(args$format)) {

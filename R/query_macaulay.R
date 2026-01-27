@@ -99,7 +99,7 @@
 #' )
 #'
 #' # read list from url
-#' new_clements <- read.csv(clements_url)
+#' new_clements <- utils::read.csv(clements_url)
 #'
 #' # provide "updated" clements list to query_macaulay()
 #' tur_ili2 <- query_macaulay(species = "Turdus iliacus", format = "sound",
@@ -129,7 +129,7 @@ query_macaulay <-
            taxon_code = NULL,
            format = getOption("suwo_format", c("image", "sound", "video")),
            verbose = getOption("suwo_verbose", TRUE),
-           all_data = getOption("suwo_all_data",
+           all_data = getOption("suwo_all_data", FALSE),
            raw_data = getOption("suwo_raw_data", FALSE),
            path = ".",
            files = NULL,
@@ -239,7 +239,7 @@ query_macaulay <-
           }
 
           if (nrow(date_ranges_df) > 1) {
-            cli_bullets(c("*" = paste0(
+            cli::cli_bullets(c("*" = paste0(
               "Query ",
               i,
               " of ",
@@ -338,7 +338,7 @@ query_macaulay <-
 
     # Read the CSV file
     query_output_list <- lapply(new_csv_file_list, function(x)
-      read.csv(file.path(path, x), stringsAsFactors = FALSE))
+      utils::read.csv(file.path(path, x), stringsAsFactors = FALSE))
 
     # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)

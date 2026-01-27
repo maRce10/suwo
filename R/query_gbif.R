@@ -44,7 +44,7 @@ query_gbif <-
            pb = getOption("suwo_pb", TRUE),
            verbose = getOption("suwo_verbose", TRUE),
            dataset = NULL,
-           all_data = getOption("suwo_all_data",
+           all_data = getOption("suwo_all_data", FALSE),
            raw_data = getOption("suwo_raw_data", FALSE)) {
     # check arguments
     arguments <- as.list(base::match.call())[-1]

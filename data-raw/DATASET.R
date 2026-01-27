@@ -5,7 +5,7 @@
 # Taxon code for macaulay
 # downloaded from https://www.birds.cornell.edu/clementschecklist/introduction
 #/updateindex/october-2025/2025-citation-checklist-downloads/
-ml_taxon_code <- read.csv("./examples/eBird_taxonomy_v2025.csv",
+ml_taxon_code <- utils::read.csv("./examples/eBird_taxonomy_v2025.csv",
                           na.strings = "")
 
 

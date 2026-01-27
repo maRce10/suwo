@@ -737,7 +737,7 @@ img <- jpeg::readJPEG(file.path(out_folder, azam_files$downloaded_file_name[i]))
     type = 'n',
     axes = FALSE
   )
-  rasterImage(img, 1, 1, 2, 2)
+  graphics::rasterImage(img, 1, 1, 2, 2)
   title(main = paste(
     azam_files$country[i],
     azam_files$date[i],
@@ -824,7 +824,7 @@ img <- jpeg::readJPEG(file.path(out_folder, dhol_files$downloaded_file_name[i]))
     type = 'n',
     axes = FALSE
   )
-  rasterImage(img, 1, 1, 2, 2)
+  graphics::rasterImage(img, 1, 1, 2, 2)
   title(main = paste(
     substr(dhol_files$country[i], start = 1, stop = 14),
     dhol_files$date[i],

@@ -191,7 +191,7 @@ find_duplicates <- function(metadata, sort = TRUE,
       .message(
         "{n} potential duplicate{?s} found",
         n =  sum(!is.na(metadata$duplicate_group)) -
-          length(na.omit(unique(metadata$duplicate_group))),
+          length(stats::na.omit(unique(metadata$duplicate_group))),
         as = "message"
       )
     }

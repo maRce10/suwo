@@ -66,8 +66,17 @@ query_xenocanto <-
            cores = getOption("mc.cores", 1),
            pb = getOption("suwo_pb", TRUE),
            verbose = getOption("suwo_verbose", TRUE),
-           all_data = getOption("suwo_all_data",
+           all_data = getOption("suwo_all_data", FALSE),
            raw_data = getOption("suwo_raw_data", FALSE)) {
+
+    # check arguments
+    arguments <- as.list(base::match.call())[-1]
+
+    # add objects to argument names
+    for (i in names(arguments)) {
+      arguments[[i]] <- get(i)
+    }
+
     # Check for API key
     if (is.null(api_key) || !nzchar(api_key)) {
       .stop(
