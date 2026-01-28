@@ -20,8 +20,6 @@
 #'   \item Updating data sets with new records
 #'   }
 #'
-#' @importFrom viridis viridis
-#'
 #' @author Marcelo Araya-Salas, Jorge Elizondo-Calvo & Alejandro Rico-Guevara
 #'
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

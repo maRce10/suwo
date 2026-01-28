@@ -8,8 +8,8 @@ update_metadata(
   metadata,
   path = ".",
   cores = getOption("mc.cores", 1),
-  pb = getOption("pb", TRUE),
-  verbose = getOption("verbose", TRUE),
+  pb = getOption("suwo_pb", TRUE),
+  verbose = getOption("suwo_verbose", TRUE),
   api_key = NULL,
   dates = NULL
 )
@@ -30,13 +30,13 @@ some repositories might not support parallel queries from the same IP
 address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
-is \code{TRUE}. Can be set globally for the current R session via the "pb"
-option ( \code{options(pb = TRUE)}).}
+is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
+option ( \code{options(suwo_pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option
-( \code{options(verbose = TRUE)}).}
+session via the "suwo_verbose" option
+( \code{options(suwo_verbose = TRUE)}).}
 
 \item{api_key}{Character string referring to the key assigned by
 Xeno-Canto as authorization for searches. Get yours at

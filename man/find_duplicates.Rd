@@ -8,7 +8,7 @@ find_duplicates(
   metadata,
   sort = TRUE,
   criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1",
-  verbose = getOption("verbose", TRUE)
+  verbose = getOption("suwo_verbose", TRUE)
 )
 }
 \arguments{
@@ -37,8 +37,8 @@ duplicate detection based on their specific needs.}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option
-( \code{options(verbose = TRUE)}).}
+session via the "suwo_verbose" option
+( \code{options(suwo_verbose = TRUE)}).}
 }
 \value{
 A data frame with the input data frame and an additional column

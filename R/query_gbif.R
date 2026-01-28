@@ -94,7 +94,7 @@ query_gbif <-
     # let user know error when downloading metadata
     if (.is_error(base.srch.pth)) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded", as = "failure")
+        .message(text = "Metadata could not be downloaded", as = "failure")
       }
       return(invisible(NULL))
     }
@@ -171,7 +171,7 @@ query_gbif <-
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded", as = "failure")
+        .message(text = "Metadata could not be downloaded", as = "failure")
       }
       return(invisible(NULL))
     }

@@ -449,8 +449,8 @@ sim_annotation <- function(n = 10, n.sound.files = 1){
 ```{r check, eval = FALSE}
 
 #run document twice
-if (!nzchar(Sys.getenv("XENO_CANTO_API_KEY")))
-Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
+if (!nzchar(Sys.getenv("xc_api_key")))
+Sys.setenv(xc_api_key = getPass::getPass())
 
 devtools::document(".")
 
@@ -472,8 +472,8 @@ devtools::check(document = TRUE, run_dont_test = TRUE, vignettes = TRUE, manual 
 # devtools::install()
 
 ## set XC Key
-if (!nzchar(Sys.getenv("XENO_CANTO_API_KEY")))
-Sys.setenv(XENO_CANTO_API_KEY = getPass::getPass())
+if (!nzchar(Sys.getenv("xc_api_key")))
+Sys.setenv(xc_api_key = getPass::getPass())
 
   run.all()
   options(verbose = TRUE)

@@ -526,13 +526,14 @@ Users can check at the Macaulay Library website how many records are available f
 
 ### API key
 
-[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use [their API v3](https://xeno-canto.org/admin.php/explore/api). Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can use it in the [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) function by providing it as the `api_key` argument. Here is an example of a query for Spix's disc-winged bat (_Thyroptera tricolor_) audio recordings:
+[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use [their API v3](https://xeno-canto.org/admin.php/explore/api). Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can set it as a variable in your R environment using `Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")` and [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) will use it. Here is an example of a query for Spix's disc-winged bat (_Thyroptera tricolor_) audio recordings:
 
 ```{r, eval = FALSE}
+#  set your Xeno-Canto key as environmental variable
+Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")
 
-# replace "YOUR_XC_API_KEY" with your key
-t_tricolor <- query_xenocanto(species = "Thyroptera tricolor", 
-                              api_key = "YOUR_XC_API_KEY")
+# query Xeno-CAnto
+t_tricolor <- query_xenocanto(species = "Thyroptera tricolor")
 
 head(t_tricolor, 4)
 ```
@@ -550,10 +551,9 @@ subset(vignette_metadata$t_tricolor,
 
 ```{r, eval = FALSE}
 
-# replace "YOUR_XC_API_KEY" with your key
+# assuming you already set your API key as in previous code block
 a_hahneli <- query_xenocanto(
-  species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"', 
-  api_key = "YOUR_XC_API_KEY")
+  species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"')
 
 head(a_hahneli, 4)
 ```
@@ -597,8 +597,7 @@ The [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.h
 ```{r, eval = FALSE}
 
 truf_xc <- query_xenocanto(species = "Turdus rufiventris",
-                             format = "sound",
-                             api_key = "YOUR_XC_API_KEY")
+                             format = "sound")
 truf_gbf <- query_gbif(species = "Turdus rufiventris", format = "sound")
 truf_ml <- query_macaulay(species = "Turdus rufiventris",
                           format = "sound",
@@ -623,7 +622,7 @@ Note that in such a multi-repository query, all query functions use the same sea
 ```{r, eval = FALSE}
 
 options(species = "Turdus rufiventris", format = "sound")
-truf_xc <- query_xenocanto(api_key = "YOUR_XC_API_KEY")
+truf_xc <- query_xenocanto() # assuming you already set your API key
 truf_gbf <- query_gbif()
 truf_ml <- query_macaulay(path = tempdir())
 

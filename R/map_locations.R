@@ -5,7 +5,8 @@
 #' @inheritParams template_params
 #' @param cluster Logical to control if icons are clustered by locality.
 #' Default is \code{FALSE}.
-#' @param palette Color palette function used for location markers.
+#' @param palette Color palette function used for location markers. By default
+#' it uses the virdis palette (\code{grDevices::hcl.colors}).
 #' @param by Name of column to be used for coloring markers. Default is
 #' "species".
 #' @return An interacrive map with the locations of the observations.
@@ -30,7 +31,7 @@
 
 map_locations <- function(metadata,
                           cluster = FALSE,
-                          palette = grDevices::hcl.colors(),
+                          palette = grDevices::hcl.colors,
                           by = "species") {
 
   # make lat lon numeric and remove rows with no coords

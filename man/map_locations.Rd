@@ -7,7 +7,7 @@
 map_locations(
   metadata,
   cluster = FALSE,
-  palette = viridis::viridis,
+  palette = grDevices::hcl.colors,
   by = "species"
 )
 }
@@ -18,7 +18,8 @@ function (i.e. `query_reponame()`).}
 \item{cluster}{Logical to control if icons are clustered by locality.
 Default is \code{FALSE}.}
 
-\item{palette}{Color palette function used for location markers.}
+\item{palette}{Color palette function used for location markers. By default
+it uses the virdis palette (\code{grDevices::hcl.colors}).}
 
 \item{by}{Name of column to be used for coloring markers. Default is
 "species".}

@@ -34,10 +34,10 @@
   for(opt in package_options) {
     if(opt %in% names(original_op)) {
       # Restore original value
-      do.call(options, setNames(list(original_op[[opt]]), opt))
+      do.call(options, stats::setNames(list(original_op[[opt]]), opt))
     } else {
       # Option didn't exist before, so remove it
-      do.call(options, setNames(list(NULL), opt))
+      do.call(options, stats::setNames(list(NULL), opt))
     }
   }
 

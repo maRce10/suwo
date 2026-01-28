@@ -42,21 +42,20 @@
 #' @examples
 #' if (interactive()){
 #' # An API key is required. Get yours at https://xeno-canto.org/account.
-#' XC_API_KEY <- "YOUR_API_KEY_HERE"
+#' # run this in the console but dont save it in script
+#' Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")
 #'
 #' # Simple search for a species
-#' p_anth <- query_xenocanto(species = "Phaethornis anthophilus",
-#' api_key = XC_API_KEY)
+#' p_anth <- query_xenocanto(species = "Phaethornis anthophilus")
 #'
 #' # Search for same species and add specify country
 #' p_anth_cr <- query_xenocanto(
 #' species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
-#' raw_data = TRUE, api_key = XC_API_KEY)
+#' raw_data = TRUE)
 #'
 #' # Search for female songs of a species
 #' femsong <-  query_xenocanto(
-#' species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"',
-#' api_key = XC_API_KEY)
+#' species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"')
 #' }
 #'
 #' @references
@@ -124,7 +123,7 @@ query_xenocanto <-
     if (.is_error(query)) {
       if (verbose) {
         .message(text =
-                   "Metadata could not be dowloaded (is your API key valid?)",
+                   "Metadata could not be downloaded (is your API key valid?)",
                  as = "failure", suffix =  "\n")
       }
       return(invisible(NULL))
@@ -193,7 +192,7 @@ query_xenocanto <-
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded",
+        .message(text = "Metadata could not be downloaded",
                  as = "failure", suffix =  "\n")
       }
       return(invisible(NULL))

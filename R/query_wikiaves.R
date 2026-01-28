@@ -136,7 +136,7 @@ query_wikiaves <-
     if (any(vapply(get_ids$total_registers, function(x) x == -999,
                    FUN.VALUE = logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded", as = "failure")
+        .message(text = "Metadata could not be downloaded", as = "failure")
       }
       return(invisible(NULL))
     }
@@ -232,7 +232,7 @@ query_wikiaves <-
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be dowloaded", as = "failure")
+        .message(text = "Metadata could not be downloaded", as = "failure")
       }
       return(invisible(NULL))
     }

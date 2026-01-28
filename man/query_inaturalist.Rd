@@ -5,22 +5,27 @@
 \title{Access 'iNaturalist' media file metadata}
 \usage{
 query_inaturalist(
-  species = getOption("species"),
+  species = getOption("suwo_species"),
+  format = getOption("suwo_format", c("image", "sound")),
   cores = getOption("mc.cores", 1),
-  pb = getOption("pb", TRUE),
-  verbose = getOption("verbose", TRUE),
-   format = getOption("format", c("image", "sound")),
+  pb = getOption("suwo_pb", TRUE),
+  verbose = getOption("suwo_verbose", TRUE),
+  all_data = getOption("suwo_all_data", FALSE),
+  raw_data = getOption("suwo_raw_data", FALSE),
   identified = FALSE,
-  verifiable = FALSE,
-  all_data = getOption("all_data", FALSE),
-  raw_data = getOption("raw_data", FALSE)
+  verifiable = FALSE
 )
 }
 \arguments{
 \item{species}{Character string with the scientific name of a species in
 the format: "Genus epithet". Required. Can be set globally for the current
-R session via the "term" option
-(e.g. \code{options(term = "Hypsiboas rufitelus")}).}
+R session via the "suwo_species" option
+(e.g. \code{options(suwo_species = "Hypsiboas rufitelus")}).}
+
+\item{format}{Character vector with the media format to query for.
+Currently 'image' and 'sound' are available. Can be set globally for
+the current R session via the "suwo_format" option
+(e.g. \code{options(suwo_format = "image")}). Required.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -30,24 +35,13 @@ some repositories might not support parallel queries from the same IP
 address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
-is \code{TRUE}. Can be set globally for the current R session via the "pb"
-option ( \code{options(pb = TRUE)}).}
+is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
+option ( \code{options(suwo_pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option
-( \code{options(verbose = TRUE)}).}
-
-\item{format}{Character vector with the media format to query for.
-Currently 'image' and 'sound' are available. Can be set globally for
-the current R session via the "format" option
-(e.g. \code{options(format = "sound")}). Required.}
-
-\item{identified}{Logical argument to define if search results are
-categorized as identified by inaturalist.}
-
-\item{verifiable}{Logical argument to define if search results are
-categorized as verifiable by inaturalist.}
+session via the "suwo_verbose" option
+( \code{options(suwo_verbose = TRUE)}).}
 
 \item{all_data}{Logical argument that determines if all data available
 from database is shown in the results of search. Default is \code{TRUE}.}
@@ -55,12 +49,18 @@ from database is shown in the results of search. Default is \code{TRUE}.}
 \item{raw_data}{Logical argument that determines if the raw data from the
 repository is returned (e.g. without any manipulation).
 Default is \code{FALSE}. Can be set globally for the current R session
-via the "raw_data" option ( \code{options(raw_data = TRUE)}). If \code{TRUE}
+via the "suwo_raw_data" option ( \code{options(suwo_raw_data = TRUE)}). If \code{TRUE}
 \code{all_data} is set to \code{TRUE} internally. Useful for developers,
 or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
+
+\item{identified}{Logical argument to define if search results are
+categorized as identified by inaturalist.}
+
+\item{verifiable}{Logical argument to define if search results are
+categorized as verifiable by inaturalist.}
 }
 \value{
 The function returns a data frame with the metadata of the media

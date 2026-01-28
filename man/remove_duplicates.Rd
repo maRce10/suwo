@@ -8,10 +8,10 @@ remove_duplicates(
   metadata,
   same_repo = FALSE,
   cores = getOption("mc.cores", 1),
-  pb = getOption("pb", TRUE),
+  pb = getOption("suwo_pb", TRUE),
   repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "WikiAves",
     "Observation"),
-  verbose = getOption("verbose", TRUE)
+  verbose = getOption("suwo_verbose", TRUE)
 )
 }
 \arguments{
@@ -36,8 +36,8 @@ some repositories might not support parallel queries from the same IP
 address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
-is \code{TRUE}. Can be set globally for the current R session via the "pb"
-option ( \code{options(pb = TRUE)}).}
+is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
+option ( \code{options(suwo_pb = TRUE)}).}
 
 \item{repo_priority}{Character vector indicating the priority of
 repositories when selecting which observation to retain when duplicates
@@ -48,8 +48,8 @@ straightforward (Xeno-Canto and GBIF).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option
-( \code{options(verbose = TRUE)}).}
+session via the "suwo_verbose" option
+( \code{options(suwo_verbose = TRUE)}).}
 }
 \value{
 A single data frame with a subset of the 'metadata' with those

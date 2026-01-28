@@ -11,13 +11,11 @@ Encoding: UTF-8
 Imports:
     checkmate,
     cli,
-    methods,
     pbapply,
     utils,
     rlang,
     httr2,
     jsonlite,
-    kableExtra,
     lubridate,
     tools,
     RecordLinkage,
@@ -29,7 +27,8 @@ Suggests:
     rmarkdown,
     graphics,
     jpeg,
-    fs
+    fs,
+    kableExtra
 Depends:
     R (>= 4.0.0)
 Config/testthat/edition: 3

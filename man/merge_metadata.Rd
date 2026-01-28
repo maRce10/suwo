@@ -50,6 +50,7 @@ gb <- query_gbif(species = "Glaucis dohrnii", format = "sound")
 
  # combine metadata using a list of data frames
  mt_list <- list(wikiaves = wa, gbif = gb)
+ merged_mt <- merge_metadata(mt_list)
 }
 
 }

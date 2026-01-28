@@ -10,7 +10,7 @@ ml_taxon_code <- utils::read.csv("./examples/eBird_taxonomy_v2025.csv",
 
 
 xc_adf <-  query_xenocanto(all_data = FALSE,
-                           api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+                           api_key = Sys.getenv("xc_api_key"))
 gb_adf_s <- query_gbif(species = term,
                        format = "sound",
                        all_data = FALSE)
@@ -31,7 +31,7 @@ h_sarapiquensis <- head(query_inaturalist(species = "Heliconia sarapiquensis",
 h_harpyja <- head(query_wikiaves(species = "Harpia harpyja"), 4)
 a_hahneli <- query_xenocanto(
   species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"',
-                             api_key = Sys.getenv("XENO_CANTO_API_KEY"))
+                             api_key = Sys.getenv("xc_api_key"))
 p_lotor <- head(query_gbif(species = "Procyon lotor", format = "video"), 4)
 t_rufiventris <- head(query_macaulay(
   species = "Turdus rufiventris",
@@ -41,7 +41,7 @@ t_rufiventris <- head(query_macaulay(
 4)
 t_tricolor <- head(query_xenocanto(
   species = "Thyroptera tricolor",
-  api_key = Sys.getenv("XENO_CANTO_API_KEY")
+  api_key = Sys.getenv("xc_api_key")
 ),
 4)
 

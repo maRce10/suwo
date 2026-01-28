@@ -7,8 +7,8 @@
 download_media(
   metadata,
   path = ".",
-  pb = getOption("pb", TRUE),
-  verbose = getOption("verbose", TRUE),
+  pb = getOption("suwo_pb", TRUE),
+  verbose = getOption("suwo_verbose", TRUE),
   cores = getOption("mc.cores", 1),
   overwrite = FALSE,
   folder_by = NULL
@@ -22,13 +22,13 @@ function (i.e. `query_reponame()`).}
 By default files are saved into the current working directory (\code{"."}).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
-is \code{TRUE}. Can be set globally for the current R session via the "pb"
-option ( \code{options(pb = TRUE)}).}
+is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
+option ( \code{options(suwo_pb = TRUE)}).}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "verbose" option
-( \code{options(verbose = TRUE)}).}
+session via the "suwo_verbose" option
+( \code{options(suwo_verbose = TRUE)}).}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
