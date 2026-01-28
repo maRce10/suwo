@@ -43,8 +43,8 @@
 <span>  <span class="va">metadata</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dates <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -76,15 +76,15 @@ address as it might be identified as denial-of-service cyberattack.</p></dd>
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default
-is <code>TRUE</code>. Can be set globally for the current R session via the "pb"
-option ( <code>options(pb = TRUE)</code>).</p></dd>
+is <code>TRUE</code>. Can be set globally for the current R session via the "suwo_pb"
+option ( <code>options(suwo_pb = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical argument that determines if text is shown in
 console. Default is <code>TRUE</code>. Can be set globally for the current R
-session via the "verbose" option
-( <code>options(verbose = TRUE)</code>).</p></dd>
+session via the "suwo_verbose" option
+( <code>options(suwo_verbose = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>

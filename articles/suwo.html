@@ -64,7 +64,7 @@ repositories</h3>
 <a href="https://ecophysics.org/" class="external-link">Alejandro Rico-Guevara</a>
 </h4>
             
-            <h4 data-toc-skip class="date">2026-01-27</h4>
+            <h4 data-toc-skip class="date">2026-01-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/suwo/blob/main/vignettes/suwo.Rmd" class="external-link"><code>vignettes/suwo.Rmd</code></a></small>
       <div class="d-none name"><code>suwo.Rmd</code></div>
@@ -1472,14 +1472,17 @@ to the argument <code>path</code>.</p>
 <p><a href="https://www.xeno-canto.org/" class="external-link">Xeno-Canto</a> requires users
 to obtain a free API key to use <a href="https://xeno-canto.org/admin.php/explore/api" class="external-link">their API v3</a>.
 Users can get their API key by creating an account at <a href="https://xeno-canto.org/auth/register" class="external-link">Xeno-Canto’s registering
-page</a>. Once users have their API key, they can use it in the <a href="https://marce10.github.io/suwo/reference/query_xenocanto.html">query_xenocanto()</a>
-function by providing it as the <code>api_key</code> argument. Here is
-an example of a query for Spix’s disc-winged bat (<em>Thyroptera
-tricolor</em>) audio recordings:</p>
+page</a>. Once users have their API key, they can set it as a variable
+in your R environment using
+<code>Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")</code> and <a href="https://marce10.github.io/suwo/reference/query_xenocanto.html">query_xenocanto()</a>
+will use it. Here is an example of a query for Spix’s disc-winged bat
+(<em>Thyroptera tricolor</em>) audio recordings:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># replace "YOUR_XC_API_KEY" with your key</span></span>
-<span><span class="va">t_tricolor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Thyroptera tricolor"</span>, </span>
-<span>                              api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">#  set your Xeno-Canto key as environmental variable</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>xc_api_key <span class="op">=</span> <span class="st">"YOUR_API_KEY_HERE"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># query Xeno-CAnto</span></span>
+<span><span class="va">t_tricolor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Thyroptera tricolor"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">t_tricolor</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -1709,10 +1712,9 @@ recordings of pale-striped poison frog (<em>Ameerega hahneli</em>,
 ’sp:“Ameerega hahneli”) from French Guiana (cnt:“French Guiana”) and
 with the highest recording quality (q:“A”):</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># replace "YOUR_XC_API_KEY" with your key</span></span>
+<code class="sourceCode R"><span><span class="co"># assuming you already set your API key as in previous code block</span></span>
 <span><span class="va">a_hahneli</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span></span>
-<span>  species <span class="op">=</span> <span class="st">'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"'</span>, </span>
-<span>  api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
+<span>  species <span class="op">=</span> <span class="st">'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">a_hahneli</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -2148,8 +2150,7 @@ The function will return a data frame that includes a new column called
 frame:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>,</span>
-<span>                             format <span class="op">=</span> <span class="st">"sound"</span>,</span>
-<span>                             api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
+<span>                             format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
 <span><span class="va">truf_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
 <span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>,</span>
 <span>                          format <span class="op">=</span> <span class="st">"sound"</span>,</span>
@@ -2392,7 +2393,7 @@ options <code>species</code> and <code>format</code> so they do not need
 to specify them in each query function:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span>
-<span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="st">"YOUR_XC_API_KEY"</span><span class="op">)</span></span>
+<span><span class="va">truf_xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_xenocanto.html">query_xenocanto</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># assuming you already set your API key</span></span>
 <span><span class="va">truf_gbf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_gbif.html">query_gbif</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">truf_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/query_macaulay.html">query_macaulay</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -3661,7 +3662,7 @@ saved
 <p>… and check that the files were saved in the path supplied:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmp1V2CmK/amanita_zambiana 
+<pre><code> /tmp/RtmpnLR1CF/amanita_zambiana 
 ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
 ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
 ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -3733,7 +3734,7 @@ sub-directories by country (for simplicity only 6 of them):</p>
 <pre><code> [32m✔ [39m All files were downloaded successfully 🎊</code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">out_folder</span><span class="op">)</span></span></code></pre></div>
-<pre><code> /tmp/Rtmp1V2CmK/diodon_holocanthus 
+<pre><code> /tmp/RtmpnLR1CF/diodon_holocanthus 
 ├──  Cabo Verde 
 │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
 ├──  Cayman Islands 
@@ -3808,29 +3809,27 @@ other attached packages:
 [1] kableExtra_1.4.0 suwo_0.1.0       knitr_1.51      
 
 loaded via a namespace (and not attached):
- [1] viridisLite_0.4.2      farver_2.1.2           blob_1.3.0             viridis_0.6.5         
- [5] S7_0.2.1               fastmap_1.2.0          leaflet_2.2.3          digest_0.6.39         
- [9] rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.5        survival_3.8-3        
-[13] RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2         rlang_1.1.7           
-[17] sass_0.4.10            tools_4.5.2            yaml_2.3.12            data.table_1.18.0     
-[21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.2            
-[25] RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20            grid_4.5.2            
-[29] xtable_1.8-4           e1071_1.7-17           future_1.69.0          ggplot2_4.0.1         
-[33] globals_0.18.0         scales_1.4.0           MASS_7.3-65            cli_3.6.5             
-[37] crayon_1.5.3           rmarkdown_2.30         ragg_1.5.0             generics_0.1.4        
-[41] rstudioapi_0.18.0      RecordLinkage_0.4-12.6 future.apply_1.20.1    pbapply_1.7-4         
-[45] DBI_1.2.3              cachem_1.1.0           proxy_0.4-29           stringr_1.6.0         
-[49] splines_4.5.2          parallel_4.5.2         vctrs_0.7.1            Matrix_1.7-4          
-[53] jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0         systemfonts_1.3.1     
-[57] jpeg_0.1-11            crosstalk_1.2.2        evd_2.3-7.1            jquerylib_0.1.4       
-[61] glue_1.8.0             parallelly_1.46.1      pkgdown_2.2.0          codetools_0.2-20      
-[65] lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6           tibble_3.3.1          
-[69] pillar_1.11.1          rappdirs_0.3.4         htmltools_0.5.9        ipred_0.9-15          
-[73] lava_1.8.2             R6_2.6.1               ff_4.5.2               httr2_1.2.2           
-[77] textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7         backports_1.5.0       
-[81] memoise_2.0.1          bslib_0.10.0           class_7.3-23           Rcpp_1.1.1            
-[85] svglite_2.2.2          gridExtra_2.3          prodlim_2025.04.28     checkmate_2.3.3       
-[89] xfun_0.56              pkgconfig_2.0.3        fs_1.6.6              </code></pre>
+ [1] viridisLite_0.4.2      farver_2.1.2           blob_1.3.0             fastmap_1.2.0         
+ [5] digest_0.6.39          rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.5       
+ [9] survival_3.8-3         RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2        
+[13] rlang_1.1.7            sass_0.4.10            tools_4.5.2            yaml_2.3.12           
+[17] data.table_1.18.2.1    htmlwidgets_1.6.4      bit_4.6.0              curl_7.0.0            
+[21] xml2_1.5.2             RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20           
+[25] grid_4.5.2             xtable_1.8-4           e1071_1.7-17           future_1.69.0         
+[29] globals_0.18.0         scales_1.4.0           MASS_7.3-65            cli_3.6.5             
+[33] rmarkdown_2.30         crayon_1.5.3           ragg_1.5.0             generics_0.1.4        
+[37] rstudioapi_0.18.0      RecordLinkage_0.4-12.6 future.apply_1.20.1    DBI_1.2.3             
+[41] pbapply_1.7-4          cachem_1.1.0           proxy_0.4-29           stringr_1.6.0         
+[45] splines_4.5.2          parallel_4.5.2         vctrs_0.7.1            Matrix_1.7-4          
+[49] jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0         jpeg_0.1-11           
+[53] systemfonts_1.3.1      evd_2.3-7.1            jquerylib_0.1.4        glue_1.8.0            
+[57] parallelly_1.46.1      pkgdown_2.2.0          codetools_0.2-20       lubridate_1.9.4       
+[61] stringi_1.8.7          tibble_3.3.1           pillar_1.11.1          rappdirs_0.3.4        
+[65] htmltools_0.5.9        ipred_0.9-15           lava_1.8.2             R6_2.6.1              
+[69] ff_4.5.2               httr2_1.2.2            textshaping_1.0.4      evaluate_1.0.5        
+[73] lattice_0.22-7         backports_1.5.0        memoise_2.0.1          bslib_0.10.0          
+[77] class_7.3-23           Rcpp_1.1.1             svglite_2.2.2          prodlim_2025.04.28    
+[81] checkmate_2.3.3        xfun_0.56              fs_1.6.6               pkgconfig_2.0.3       </code></pre>
 </details>
 </div>
 </div>

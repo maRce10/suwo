@@ -7,13 +7,13 @@
 
 ``` r
 query_xenocanto(
-  species = getOption("species"),
-  api_key = getOption("xc_api_key"),
+  species = getOption("suwo_species"),
   cores = getOption("mc.cores", 1),
-  pb = getOption("pb", TRUE),
-  verbose = getOption("verbose", TRUE),
-  all_data = getOption("all_data", FALSE),
-  raw_data = getOption("raw_data", FALSE)
+  pb = getOption("suwo_pb", TRUE),
+  verbose = getOption("suwo_verbose", TRUE),
+  all_data = getOption("suwo_all_data", FALSE),
+  raw_data = getOption("suwo_raw_data", FALSE),
+  api_key = Sys.getenv("xc_api_key")
 )
 ```
 
@@ -23,21 +23,15 @@ query_xenocanto(
 
   Character string with the scientific name of a species in the format:
   "Genus epithet". Required. Can be set globally for the current R
-  session via the "term" option (e.g.
-  `options(term = "Hypsiboas rufitelus")`). Alternatively, a character
-  string containing additional tags that follows the Xeno-Canto advanced
-  query syntax can be provided. Tags are of the form 'tag:searchterm'.
-  For instance, `'type:"song"'` will search for recordings where the
-  sound type contains 'song'. Multiple tags can be provided (e.g.,
-  `'"cnt:"belize" type:"song"'`). See examples down below and check
-  [Xeno-Canto's search help](https://www.xeno-canto.org/help/search) for
-  a full description.
-
-- api_key:
-
-  Character string refering to the key assigned by Xeno-Canto as
-  authorization for searches. Get yours at
-  <https://xeno-canto.org/account>. Required.
+  session via the "suwo_species" option (e.g.
+  `options(suwo_species = "Hypsiboas rufitelus")`). Alternatively, a
+  character string containing additional tags that follows the
+  Xeno-Canto advanced query syntax can be provided. Tags are of the form
+  'tag:searchterm'. For instance, `'type:"song"'` will search for
+  recordings where the sound type contains 'song'. Multiple tags can be
+  provided (e.g., `'"cnt:"belize" type:"song"'`). See examples down
+  below and check [Xeno-Canto's search
+  help](https://www.xeno-canto.org/help/search) for a full description.
 
 - cores:
 
@@ -52,32 +46,44 @@ query_xenocanto(
 - pb:
 
   Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option ( `options(pb = TRUE)`).
+  `TRUE`. Can be set globally for the current R session via the
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
 
 - verbose:
 
   Logical argument that determines if text is shown in console. Default
   is `TRUE`. Can be set globally for the current R session via the
-  "verbose" option ( `options(verbose = TRUE)`).
+  "suwo_verbose" option ( `options(suwo_verbose = TRUE)`).
 
 - all_data:
 
   Logical argument that determines if all data available from database
   is shown in the results of search. Default is `FALSE`. Can be set
-  globally for the current R session via the "all_data" option (
-  `options(all_data = TRUE)`).
+  globally for the current R session via the "suwo_all_data" option (
+  `options(suwo_all_data = TRUE)`).
 
 - raw_data:
 
   Logical argument that determines if the raw data from the repository
   is returned (e.g. without any manipulation). Default is `FALSE`. Can
-  be set globally for the current R session via the "raw_data" option (
-  `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
-  internally. Useful for developers, or if users suspect that some data
-  is mishandled during processing (i.e. date information is lost). Note
-  that the metadata obtained when `raw_data = TRUE` is not standardized,
-  so most suwo functions for downstream steps will not work on them.
+  be set globally for the current R session via the "suwo_raw_data"
+  option ( `options(suwo_raw_data = TRUE)`). If `TRUE` `all_data` is set
+  to `TRUE` internally. Useful for developers, or if users suspect that
+  some data is mishandled during processing (i.e. date information is
+  lost). Note that the metadata obtained when `raw_data = TRUE` is not
+  standardized, so most suwo functions for downstream steps will not
+  work on them.
+
+- api_key:
+
+  Character string refering to the key assigned by Xeno-Canto as
+  authorization for searches. Get yours at
+  <https://xeno-canto.org/account>. Required. Avoid setting your API key
+  directly in the function call to prevent exposing it in your code.
+  Instead, set it as an environment variable (e.g., in your .Renviron
+  file using `Sys.setenv(xc_api_key = "your_key_here")`) named
+  'xc_api_key', so it can be accessed securely using
+  `Sys.getenv("xc_api_key")`.
 
 ## Value
 
@@ -115,20 +121,19 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 if (interactive()){
 # An API key is required. Get yours at https://xeno-canto.org/account.
-XC_API_KEY <- "YOUR_API_KEY_HERE"
+# run this in the console but dont save it in script
+Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")
 
 # Simple search for a species
-p_anth <- query_xenocanto(species = "Phaethornis anthophilus",
-api_key = XC_API_KEY)
+p_anth <- query_xenocanto(species = "Phaethornis anthophilus")
 
 # Search for same species and add specify country
 p_anth_cr <- query_xenocanto(
 species = 'sp:"Phaethornis anthophilus" cnt:"Panama"',
-raw_data = TRUE, api_key = XC_API_KEY)
+raw_data = TRUE)
 
 # Search for female songs of a species
 femsong <-  query_xenocanto(
-species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"',
-api_key = XC_API_KEY)
+species = 'sp:"Thryothorus ludovicianus" type:"song" type:"female"')
 }
 ```

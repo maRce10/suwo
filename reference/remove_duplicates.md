@@ -9,10 +9,10 @@ remove_duplicates(
   metadata,
   same_repo = FALSE,
   cores = getOption("mc.cores", 1),
-  pb = getOption("pb", TRUE),
+  pb = getOption("suwo_pb", TRUE),
   repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "WikiAves",
     "Observation"),
-  verbose = getOption("verbose", TRUE)
+  verbose = getOption("suwo_verbose", TRUE)
 )
 ```
 
@@ -49,8 +49,8 @@ remove_duplicates(
 - pb:
 
   Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option ( `options(pb = TRUE)`).
+  `TRUE`. Can be set globally for the current R session via the
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
 
 - repo_priority:
 
@@ -65,7 +65,7 @@ remove_duplicates(
 
   Logical argument that determines if text is shown in console. Default
   is `TRUE`. Can be set globally for the current R session via the
-  "verbose" option ( `options(verbose = TRUE)`).
+  "suwo_verbose" option ( `options(suwo_verbose = TRUE)`).
 
 ## Value
 

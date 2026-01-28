@@ -53,36 +53,36 @@ address as it might be identified as denial-of-service cyberattack.</p></dd>
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default
-is <code>TRUE</code>. Can be set globally for the current R session via the "pb"
-option ( <code>options(pb = TRUE)</code>).</p></dd>
+is <code>TRUE</code>. Can be set globally for the current R session via the "suwo_pb"
+option ( <code>options(suwo_pb = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
 <dd><p>Character string with the scientific name of a species in
 the format: "Genus epithet". Required. Can be set globally for the current
-R session via the "term" option
-(e.g. <code>options(term = "Hypsiboas rufitelus")</code>).</p></dd>
+R session via the "suwo_species" option
+(e.g. <code>options(suwo_species = "Hypsiboas rufitelus")</code>).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical argument that determines if text is shown in
 console. Default is <code>TRUE</code>. Can be set globally for the current R
-session via the "verbose" option
-( <code>options(verbose = TRUE)</code>).</p></dd>
+session via the "suwo_verbose" option
+( <code>options(suwo_verbose = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
 <dd><p>Logical argument that determines if all data available
 from database is shown in the results of search. Default is <code>FALSE</code>.
-Can be set globally for the current R session via the "all_data"
-option ( <code>options(all_data = TRUE)</code>).</p></dd>
+Can be set globally for the current R session via the "suwo_all_data"
+option ( <code>options(suwo_all_data = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
 <dd><p>Logical argument that determines if the raw data from the
 repository is returned (e.g. without any manipulation).
 Default is <code>FALSE</code>. Can be set globally for the current R session
-via the "raw_data" option ( <code>options(raw_data = TRUE)</code>). If <code>TRUE</code>
+via the "suwo_raw_data" option ( <code>options(suwo_raw_data = TRUE)</code>). If <code>TRUE</code>
 <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers,
 or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained

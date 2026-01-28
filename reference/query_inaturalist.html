@@ -43,15 +43,15 @@ iNaturalist."><meta property="og:image" content="https://marce10.github.io/suwo/
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_inaturalist</span><span class="op">(</span></span>
-<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"species"</span><span class="op">)</span>,</span>
+<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_species"</span><span class="op">)</span>,</span>
+<span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_format"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image"</span>, <span class="st">"sound"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>   format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"format"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image"</span>, <span class="st">"sound"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  identified <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verifiable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  verifiable <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -62,8 +62,15 @@ iNaturalist."><meta property="og:image" content="https://marce10.github.io/suwo/
 <dl><dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
 <dd><p>Character string with the scientific name of a species in
 the format: "Genus epithet". Required. Can be set globally for the current
-R session via the "term" option
-(e.g. <code>options(term = "Hypsiboas rufitelus")</code>).</p></dd>
+R session via the "suwo_species" option
+(e.g. <code>options(suwo_species = "Hypsiboas rufitelus")</code>).</p></dd>
+
+
+<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
+<dd><p>Character vector with the media format to query for.
+Currently 'image' and 'sound' are available. Can be set globally for
+the current R session via the "suwo_format" option
+(e.g. <code>options(suwo_format = "image")</code>). Required.</p></dd>
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
@@ -77,32 +84,15 @@ address as it might be identified as denial-of-service cyberattack.</p></dd>
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default
-is <code>TRUE</code>. Can be set globally for the current R session via the "pb"
-option ( <code>options(pb = TRUE)</code>).</p></dd>
+is <code>TRUE</code>. Can be set globally for the current R session via the "suwo_pb"
+option ( <code>options(suwo_pb = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical argument that determines if text is shown in
 console. Default is <code>TRUE</code>. Can be set globally for the current R
-session via the "verbose" option
-( <code>options(verbose = TRUE)</code>).</p></dd>
-
-
-<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
-<dd><p>Character vector with the media format to query for.
-Currently 'image' and 'sound' are available. Can be set globally for
-the current R session via the "format" option
-(e.g. <code>options(format = "sound")</code>). Required.</p></dd>
-
-
-<dt id="arg-identified">identified<a class="anchor" aria-label="anchor" href="#arg-identified"></a></dt>
-<dd><p>Logical argument to define if search results are
-categorized as identified by inaturalist.</p></dd>
-
-
-<dt id="arg-verifiable">verifiable<a class="anchor" aria-label="anchor" href="#arg-verifiable"></a></dt>
-<dd><p>Logical argument to define if search results are
-categorized as verifiable by inaturalist.</p></dd>
+session via the "suwo_verbose" option
+( <code>options(suwo_verbose = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
@@ -114,12 +104,22 @@ from database is shown in the results of search. Default is <code>TRUE</code>.</
 <dd><p>Logical argument that determines if the raw data from the
 repository is returned (e.g. without any manipulation).
 Default is <code>FALSE</code>. Can be set globally for the current R session
-via the "raw_data" option ( <code>options(raw_data = TRUE)</code>). If <code>TRUE</code>
+via the "suwo_raw_data" option ( <code>options(suwo_raw_data = TRUE)</code>). If <code>TRUE</code>
 <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers,
 or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
 when <code>raw_data = TRUE</code> is not standardized, so most suwo functions
 for downstream steps will not work on them.</p></dd>
+
+
+<dt id="arg-identified">identified<a class="anchor" aria-label="anchor" href="#arg-identified"></a></dt>
+<dd><p>Logical argument to define if search results are
+categorized as identified by inaturalist.</p></dd>
+
+
+<dt id="arg-verifiable">verifiable<a class="anchor" aria-label="anchor" href="#arg-verifiable"></a></dt>
+<dd><p>Logical argument to define if search results are
+categorized as verifiable by inaturalist.</p></dd>
 
 </dl></div>
     <div class="section level2">

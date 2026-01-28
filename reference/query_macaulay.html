@@ -43,12 +43,12 @@ macaulay."><meta property="og:image" content="https://marce10.github.io/suwo/log
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_macaulay</span><span class="op">(</span></span>
-<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"species"</span><span class="op">)</span>,</span>
+<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_species"</span><span class="op">)</span>,</span>
 <span>  taxon_code <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"format"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sound"</span>, <span class="st">"image"</span>, <span class="st">"video"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_format"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image"</span>, <span class="st">"sound"</span>, <span class="st">"video"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  raw_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_raw_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  files <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dates <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -63,8 +63,8 @@ macaulay."><meta property="og:image" content="https://marce10.github.io/suwo/log
 <dl><dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
 <dd><p>Character string with the scientific name of a species in
 the format: "Genus epithet". Required. Can be set globally for the current
-R session via the "term" option
-(e.g. <code>options(term = "Hypsiboas rufitelus")</code>).</p></dd>
+R session via the "suwo_species" option
+(e.g. <code>options(suwo_species = "Hypsiboas rufitelus")</code>).</p></dd>
 
 
 <dt id="arg-taxon-code">taxon_code<a class="anchor" aria-label="anchor" href="#arg-taxon-code"></a></dt>
@@ -75,29 +75,29 @@ code (see vignette for more details). If provided, 'species' is ignored.</p></dd
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>Character vector with the media format to query for. Options
 are 'sound', 'image' of 'video'. Can be set globally for the current R
-session via the "format" option (e.g. <code>options(format = "sound")</code>).
+session via the "suwo_format" option (e.g. <code>options(suwo_format = "image")</code>).
 Required.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical argument that determines if text is shown in
 console. Default is <code>TRUE</code>. Can be set globally for the current R
-session via the "verbose" option
-( <code>options(verbose = TRUE)</code>).</p></dd>
+session via the "suwo_verbose" option
+( <code>options(suwo_verbose = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-all-data">all_data<a class="anchor" aria-label="anchor" href="#arg-all-data"></a></dt>
 <dd><p>Logical argument that determines if all data available
 from database is shown in the results of search. Default is <code>FALSE</code>.
-Can be set globally for the current R session via the "all_data"
-option ( <code>options(all_data = TRUE)</code>).</p></dd>
+Can be set globally for the current R session via the "suwo_all_data"
+option ( <code>options(suwo_all_data = TRUE)</code>).</p></dd>
 
 
 <dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
 <dd><p>Logical argument that determines if the raw data from the
 repository is returned (e.g. without any manipulation).
 Default is <code>FALSE</code>. Can be set globally for the current R session
-via the "raw_data" option ( <code>options(raw_data = TRUE)</code>). If <code>TRUE</code>
+via the "suwo_raw_data" option ( <code>options(suwo_raw_data = TRUE)</code>). If <code>TRUE</code>
 <code>all_data</code> is set to <code>TRUE</code> internally. Useful for developers,
 or if users suspect that some data is mishandled during processing
 (i.e. date information is lost). Note that the metadata obtained
@@ -225,7 +225,7 @@ https://www.birds.cornell.edu/clementschecklist/download/</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># read list from url</span></span></span>
-<span class="r-in"><span><span class="va">new_clements</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">clements_url</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">new_clements</span> <span class="op">&lt;-</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">clements_url</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># provide "updated" clements list to query_macaulay()</span></span></span>
 <span class="r-in"><span><span class="va">tur_ili2</span> <span class="op">&lt;-</span> <span class="fu">query_macaulay</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus iliacus"</span>, format <span class="op">=</span> <span class="st">"sound"</span>,</span></span>

@@ -1,34 +1,26 @@
 # suwo: A package to streamline bioacoustic analysis
 
-suwo is intended to facilitate the search of biological observation data
-across multiple databases
+The suwo package aims to simplify the retrieval of nature media (mostly
+photos, audio files and videos) across multiple online biodiversity
+databases. The five major media repositories accessed by this package
+(GBIF, iNaturalist, Macaulay Library, WikiAves, and Xeno-Canto)
+collectively host more than 250 million media files. Such media are
+increasingly used in diverse fields, ranging from ecology and
+evolutionary biology (e.g., trait evolution) to wildlife monitoring and
+conservation (e.g., for training species detection models). The ability
+to access and download large amounts of media files and their associated
+metadata from a single interface thus provides a uniquely powerful
+resource for facilitating research and conservation efforts.
 
 ## Details
 
 The main features of the package are:
 
-- The use of loops to apply tasks through acoustic signals referenced in
-  a selection table
+- Obtaining media metadata from online repositories
 
-- The production of images in the working folder with spectrograms that
-  allow to organize data and verify acoustic analyzes
+- Downloading associated media files
 
-The package offers functions to:
-
-- Explore and download observational data from iNaturalist, GBIF,
-  Macaulay Library, Observation.org, Wikiaves and Xenocanto.
-
-- Download different types of data across multiple databases
-
-- Consolidate databases and annotation tables
-
-Most of the functions allow the parallelization of tasks, which
-distributes the tasks among several processors to improve computational
-efficiency. Tools to evaluate the performance of the analysis at each
-step are also available. In addition, warbleR satisfies the need for
-rigorous open source bioacoustic analysis, which facilitates
-opportunities for use in research and innovation of additional custom
-analyzes.
+- Updating data sets with new records
 
 License: GPL (\>= 2)
 

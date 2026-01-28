@@ -7,12 +7,12 @@
 
 ``` r
 query_macaulay(
-  species = getOption("species"),
+  species = getOption("suwo_species"),
   taxon_code = NULL,
-  format = getOption("format", c("sound", "image", "video")),
-  verbose = getOption("verbose", TRUE),
-  all_data = getOption("all_data", FALSE),
-  raw_data = getOption("raw_data", FALSE),
+  format = getOption("suwo_format", c("image", "sound", "video")),
+  verbose = getOption("suwo_verbose", TRUE),
+  all_data = getOption("suwo_all_data", FALSE),
+  raw_data = getOption("suwo_raw_data", FALSE),
   path = ".",
   files = NULL,
   dates = NULL,
@@ -26,8 +26,8 @@ query_macaulay(
 
   Character string with the scientific name of a species in the format:
   "Genus epithet". Required. Can be set globally for the current R
-  session via the "term" option (e.g.
-  `options(term = "Hypsiboas rufitelus")`).
+  session via the "suwo_species" option (e.g.
+  `options(suwo_species = "Hypsiboas rufitelus")`).
 
 - taxon_code:
 
@@ -38,32 +38,33 @@ query_macaulay(
 
   Character vector with the media format to query for. Options are
   'sound', 'image' of 'video'. Can be set globally for the current R
-  session via the "format" option (e.g. `options(format = "sound")`).
-  Required.
+  session via the "suwo_format" option (e.g.
+  `options(suwo_format = "image")`). Required.
 
 - verbose:
 
   Logical argument that determines if text is shown in console. Default
   is `TRUE`. Can be set globally for the current R session via the
-  "verbose" option ( `options(verbose = TRUE)`).
+  "suwo_verbose" option ( `options(suwo_verbose = TRUE)`).
 
 - all_data:
 
   Logical argument that determines if all data available from database
   is shown in the results of search. Default is `FALSE`. Can be set
-  globally for the current R session via the "all_data" option (
-  `options(all_data = TRUE)`).
+  globally for the current R session via the "suwo_all_data" option (
+  `options(suwo_all_data = TRUE)`).
 
 - raw_data:
 
   Logical argument that determines if the raw data from the repository
   is returned (e.g. without any manipulation). Default is `FALSE`. Can
-  be set globally for the current R session via the "raw_data" option (
-  `options(raw_data = TRUE)`). If `TRUE` `all_data` is set to `TRUE`
-  internally. Useful for developers, or if users suspect that some data
-  is mishandled during processing (i.e. date information is lost). Note
-  that the metadata obtained when `raw_data = TRUE` is not standardized,
-  so most suwo functions for downstream steps will not work on them.
+  be set globally for the current R session via the "suwo_raw_data"
+  option ( `options(suwo_raw_data = TRUE)`). If `TRUE` `all_data` is set
+  to `TRUE` internally. Useful for developers, or if users suspect that
+  some data is mishandled during processing (i.e. date information is
+  lost). Note that the metadata obtained when `raw_data = TRUE` is not
+  standardized, so most suwo functions for downstream steps will not
+  work on them.
 
 - path:
 
@@ -192,7 +193,7 @@ clements_url <- paste0(
 )
 
 # read list from url
-new_clements <- read.csv(clements_url)
+new_clements <- utils::read.csv(clements_url)
 
 # provide "updated" clements list to query_macaulay()
 tur_ili2 <- query_macaulay(species = "Turdus iliacus", format = "sound",

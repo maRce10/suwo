@@ -10,7 +10,7 @@ find_duplicates(
   metadata,
   sort = TRUE,
   criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1",
-  verbose = getOption("verbose", TRUE)
+  verbose = getOption("suwo_verbose", TRUE)
 )
 ```
 
@@ -50,7 +50,7 @@ find_duplicates(
 
   Logical argument that determines if text is shown in console. Default
   is `TRUE`. Can be set globally for the current R session via the
-  "verbose" option ( `options(verbose = TRUE)`).
+  "suwo_verbose" option ( `options(suwo_verbose = TRUE)`).
 
 ## Value
 

@@ -334,16 +334,18 @@ free API key to use [their API
 v3](https://xeno-canto.org/admin.php/explore/api). Users can get their
 API key by creating an account at [Xeno-Canto’s registering
 page](https://xeno-canto.org/auth/register). Once users have their API
-key, they can use it in the
+key, they can set it as a variable in your R environment using
+`Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")` and
 [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html)
-function by providing it as the `api_key` argument. Here is an example
-of a query for Spix’s disc-winged bat (*Thyroptera tricolor*) audio
-recordings:
+will use it. Here is an example of a query for Spix’s disc-winged bat
+(*Thyroptera tricolor*) audio recordings:
 
 ``` r
-# replace "YOUR_XC_API_KEY" with your key
-t_tricolor <- query_xenocanto(species = "Thyroptera tricolor", 
-                              api_key = "YOUR_XC_API_KEY")
+#  set your Xeno-Canto key as environmental variable
+Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")
+
+# query Xeno-CAnto
+t_tricolor <- query_xenocanto(species = "Thyroptera tricolor")
 
 head(t_tricolor, 4)
 ```
@@ -369,10 +371,9 @@ an example of a query for audio recordings of pale-striped poison frog
 (cnt:“French Guiana”) and with the highest recording quality (q:“A”):
 
 ``` r
-# replace "YOUR_XC_API_KEY" with your key
+# assuming you already set your API key as in previous code block
 a_hahneli <- query_xenocanto(
-  species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"', 
-  api_key = "YOUR_XC_API_KEY")
+  species = 'sp:"Ameerega hahneli" cnt:"French Guiana" q:"A"')
 
 head(a_hahneli, 4)
 ```
@@ -453,8 +454,7 @@ function will return a data frame that includes a new column called
 
 ``` r
 truf_xc <- query_xenocanto(species = "Turdus rufiventris",
-                             format = "sound",
-                             api_key = "YOUR_XC_API_KEY")
+                             format = "sound")
 truf_gbf <- query_gbif(species = "Turdus rufiventris", format = "sound")
 truf_ml <- query_macaulay(species = "Turdus rufiventris",
                           format = "sound",
@@ -481,7 +481,7 @@ function:
 
 ``` r
 options(species = "Turdus rufiventris", format = "sound")
-truf_xc <- query_xenocanto(api_key = "YOUR_XC_API_KEY")
+truf_xc <- query_xenocanto() # assuming you already set your API key
 truf_gbf <- query_gbif()
 truf_ml <- query_macaulay(path = tempdir())
 
@@ -665,7 +665,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp1V2CmK/amanita_zambiana 
+     /tmp/RtmpnLR1CF/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -752,7 +752,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/Rtmp1V2CmK/diodon_holocanthus 
+     /tmp/RtmpnLR1CF/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -835,26 +835,24 @@ Click to see
     [1] kableExtra_1.4.0 suwo_0.1.0       knitr_1.51      
 
     loaded via a namespace (and not attached):
-     [1] viridisLite_0.4.2      farver_2.1.2           blob_1.3.0             viridis_0.6.5         
-     [5] S7_0.2.1               fastmap_1.2.0          leaflet_2.2.3          digest_0.6.39         
-     [9] rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.5        survival_3.8-3        
-    [13] RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2         rlang_1.1.7           
-    [17] sass_0.4.10            tools_4.5.2            yaml_2.3.12            data.table_1.18.0     
-    [21] htmlwidgets_1.6.4      curl_7.0.0             bit_4.6.0              xml2_1.5.2            
-    [25] RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20            grid_4.5.2            
-    [29] xtable_1.8-4           e1071_1.7-17           future_1.69.0          ggplot2_4.0.1         
-    [33] globals_0.18.0         scales_1.4.0           MASS_7.3-65            cli_3.6.5             
-    [37] crayon_1.5.3           rmarkdown_2.30         ragg_1.5.0             generics_0.1.4        
-    [41] rstudioapi_0.18.0      RecordLinkage_0.4-12.6 future.apply_1.20.1    pbapply_1.7-4         
-    [45] DBI_1.2.3              cachem_1.1.0           proxy_0.4-29           stringr_1.6.0         
-    [49] splines_4.5.2          parallel_4.5.2         vctrs_0.7.1            Matrix_1.7-4          
-    [53] jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0         systemfonts_1.3.1     
-    [57] jpeg_0.1-11            crosstalk_1.2.2        evd_2.3-7.1            jquerylib_0.1.4       
-    [61] glue_1.8.0             parallelly_1.46.1      pkgdown_2.2.0          codetools_0.2-20      
-    [65] lubridate_1.9.4        stringi_1.8.7          gtable_0.3.6           tibble_3.3.1          
-    [69] pillar_1.11.1          rappdirs_0.3.4         htmltools_0.5.9        ipred_0.9-15          
-    [73] lava_1.8.2             R6_2.6.1               ff_4.5.2               httr2_1.2.2           
-    [77] textshaping_1.0.4      evaluate_1.0.5         lattice_0.22-7         backports_1.5.0       
-    [81] memoise_2.0.1          bslib_0.10.0           class_7.3-23           Rcpp_1.1.1            
-    [85] svglite_2.2.2          gridExtra_2.3          prodlim_2025.04.28     checkmate_2.3.3       
-    [89] xfun_0.56              pkgconfig_2.0.3        fs_1.6.6              
+     [1] viridisLite_0.4.2      farver_2.1.2           blob_1.3.0             fastmap_1.2.0         
+     [5] digest_0.6.39          rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.5       
+     [9] survival_3.8-3         RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2        
+    [13] rlang_1.1.7            sass_0.4.10            tools_4.5.2            yaml_2.3.12           
+    [17] data.table_1.18.2.1    htmlwidgets_1.6.4      bit_4.6.0              curl_7.0.0            
+    [21] xml2_1.5.2             RColorBrewer_1.1-3     desc_1.4.3             nnet_7.3-20           
+    [25] grid_4.5.2             xtable_1.8-4           e1071_1.7-17           future_1.69.0         
+    [29] globals_0.18.0         scales_1.4.0           MASS_7.3-65            cli_3.6.5             
+    [33] rmarkdown_2.30         crayon_1.5.3           ragg_1.5.0             generics_0.1.4        
+    [37] rstudioapi_0.18.0      RecordLinkage_0.4-12.6 future.apply_1.20.1    DBI_1.2.3             
+    [41] pbapply_1.7-4          cachem_1.1.0           proxy_0.4-29           stringr_1.6.0         
+    [45] splines_4.5.2          parallel_4.5.2         vctrs_0.7.1            Matrix_1.7-4          
+    [49] jsonlite_2.0.0         bit64_4.6.0-1          listenv_0.10.0         jpeg_0.1-11           
+    [53] systemfonts_1.3.1      evd_2.3-7.1            jquerylib_0.1.4        glue_1.8.0            
+    [57] parallelly_1.46.1      pkgdown_2.2.0          codetools_0.2-20       lubridate_1.9.4       
+    [61] stringi_1.8.7          tibble_3.3.1           pillar_1.11.1          rappdirs_0.3.4        
+    [65] htmltools_0.5.9        ipred_0.9-15           lava_1.8.2             R6_2.6.1              
+    [69] ff_4.5.2               httr2_1.2.2            textshaping_1.0.4      evaluate_1.0.5        
+    [73] lattice_0.22-7         backports_1.5.0        memoise_2.0.1          bslib_0.10.0          
+    [77] class_7.3-23           Rcpp_1.1.1             svglite_2.2.2          prodlim_2025.04.28    
+    [81] checkmate_2.3.3        xfun_0.56              fs_1.6.6               pkgconfig_2.0.3       
