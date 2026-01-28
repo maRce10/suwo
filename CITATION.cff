@@ -77,16 +77,6 @@ references:
   year: '2026'
   doi: 10.32614/CRAN.package.cli
 - type: software
-  title: methods
-  abstract: 'R: A Language and Environment for Statistical Computing'
-  notes: Imports
-  authors:
-  - name: R Core Team
-  institution:
-    name: R Foundation for Statistical Computing
-    address: Vienna, Austria
-  year: '2026'
-- type: software
   title: pbapply
   abstract: 'pbapply: Adding Progress Bar to ''*apply'' Functions'
   notes: Imports
@@ -152,19 +142,6 @@ references:
     orcid: https://orcid.org/0000-0002-4035-0289
   year: '2026'
   doi: 10.32614/CRAN.package.jsonlite
-- type: software
-  title: kableExtra
-  abstract: 'kableExtra: Construct Complex Table with ''kable'' and Pipe Syntax'
-  notes: Imports
-  url: http://haozhu233.github.io/kableExtra/
-  repository: https://CRAN.R-project.org/package=kableExtra
-  authors:
-  - family-names: Zhu
-    given-names: Hao
-    email: haozhu233@gmail.com
-    orcid: https://orcid.org/0000-0002-3386-6076
-  year: '2026'
-  doi: 10.32614/CRAN.package.kableExtra
 - type: software
   title: lubridate
   abstract: 'lubridate: Make Dealing with Dates a Little Easier'
@@ -352,6 +329,19 @@ references:
     email: csardi.gabor@gmail.com
   year: '2026'
   doi: 10.32614/CRAN.package.fs
+- type: software
+  title: kableExtra
+  abstract: 'kableExtra: Construct Complex Table with ''kable'' and Pipe Syntax'
+  notes: Suggests
+  url: http://haozhu233.github.io/kableExtra/
+  repository: https://CRAN.R-project.org/package=kableExtra
+  authors:
+  - family-names: Zhu
+    given-names: Hao
+    email: haozhu233@gmail.com
+    orcid: https://orcid.org/0000-0002-3386-6076
+  year: '2026'
+  doi: 10.32614/CRAN.package.kableExtra
 - type: software
   title: 'R: A Language and Environment for Statistical Computing'
   notes: Depends
