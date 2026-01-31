@@ -86,7 +86,7 @@ follows a basic sequence. The following diagram illustrates this
 workflow and the main functions involved:
 
 <center>
-<img src="./vignettes/workflow_diagram.png" alt="suwo workflow diagram" width="100%">
+<img src="./vignettes/workflow_diagram.png" alt="Flowchart of the suwo workflow for obtaining nature media files. Step 1, “Get metadata,” includes multiple boxes representing queries to different repositories, such as query_wikiaves() and query_xenocanto(), plus additional possible query_() calls. Arrows from all these queries converge into Step 2, “Combine metadata,” using merge_metadata(). The process then moves to Step 3, “Remove duplicates,” using find_duplicates() and remove_duplicates(). Next is Step 4, “Download media files,” using download_media(). Finally, Step 5, “Update metadata,” using update_metadata(), loops back toward the earlier steps, indicating that metadata can be updated after downloading and re-enter the workflow." width="100%">
 </center>
 
 Take a look at the [package
