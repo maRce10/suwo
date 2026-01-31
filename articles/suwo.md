@@ -665,7 +665,7 @@ head(azam_files, 4)
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpnLR1CF/amanita_zambiana 
+     /tmp/RtmpuYyxug/amanita_zambiana 
     ├──  Amanita_zambiana-GBIF3759537817-1.jpeg 
     ├──  Amanita_zambiana-GBIF3759537817-2.jpeg 
     ├──  Amanita_zambiana-GBIF4430877067-1.jpeg 
@@ -752,7 +752,7 @@ dhol_files <- download_media(metadata = d_holocanthus,
 fs::dir_tree(path = out_folder)
 ```
 
-     /tmp/RtmpnLR1CF/diodon_holocanthus 
+     /tmp/RtmpuYyxug/diodon_holocanthus 
     ├──  Cabo Verde 
     │   └──  Diodon_holocanthus-GBIF3985886532.jpeg 
     ├──  Cayman Islands 
@@ -836,7 +836,7 @@ Click to see
 
     loaded via a namespace (and not attached):
      [1] viridisLite_0.4.2      farver_2.1.2           blob_1.3.0             fastmap_1.2.0         
-     [5] digest_0.6.39          rpart_4.1.24           timechange_0.3.0       lifecycle_1.0.5       
+     [5] digest_0.6.39          rpart_4.1.24           timechange_0.4.0       lifecycle_1.0.5       
      [9] survival_3.8-3         RSQLite_2.4.5          magrittr_2.0.4         compiler_4.5.2        
     [13] rlang_1.1.7            sass_0.4.10            tools_4.5.2            yaml_2.3.12           
     [17] data.table_1.18.2.1    htmlwidgets_1.6.4      bit_4.6.0              curl_7.0.0            
