@@ -70,14 +70,16 @@ overview of the workflow and the core querying functions.
 
 The [suwo](https://marce10.github.io/suwo/) package is designed
 exclusively for non-commercial, scientific purposes, including research,
-education, and conservation. **Any commercial use of the data or media
-retrieved through this package is strictly prohibited** unless explicit,
-separate permission is granted directly from the original source
-platforms and rights holders. Users are obligated to comply with the
-specific terms of service and data use policies of each source database,
-which often mandate attribution and similarly restrict commercial
-application. The package developers assume no liability for misuse of
-the retrieved data or violations of third-party terms of service.
+education, and conservation. **Commercial use of data or media retrieved
+through this package is the user’s responsibility and is allowed only
+when the applicable license of the source database explicitly permits
+such use, or when explicit, separate permission has been obtained
+directly from the original source platforms or rights holders** Users
+must comply with the specific terms of service and data-use policies of
+each source database, which may require attribution and may further
+restrict commercial application. The package developers assume no
+liability for misuse of the retrieved data or for violations of
+third-party terms of service.
 
 ## Citation
 
