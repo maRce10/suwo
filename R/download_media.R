@@ -57,15 +57,15 @@ download_media <-
            overwrite = FALSE,
            folder_by = NULL) {
     # check arguments
-    arguments <- as.list(base::match.call())[-1]
+    arguments <- as.list(base::match.call())
 
     # add objects to argument names
-    for (i in names(arguments)) {
+   for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
     # check each arguments
-    check_results <- .check_arguments(args = arguments)
+    check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
     checkmate::reportAssertions(check_results)

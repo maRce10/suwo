@@ -889,7 +889,11 @@
 
 
 ## function to check arguments
-.check_arguments <- function(args) {
+.check_arguments <- function(fun, args) {
+
+  # make function name a character
+  fun <- as.character(fun)[1]
+
   # create object to store check results
   check_collection <- checkmate::makeAssertCollection()
 
@@ -994,12 +998,21 @@
       .var.name = "metadata"
     )
 
+    must_columns <- .format_query_output(only_basic_columns = TRUE)
+
+    print(fun)
+    if (fun == "remove_duplicates") {
+      must_columns <- c(must_columns, "duplicated_group")
+    }
+
     checkmate::assertNames(
       x = names(args$metadata),
-      must.include = .format_query_output(only_basic_columns = TRUE),
+      must.include = must_columns,
       add = check_collection,
       .var.name = "column names in metadata"
     )
+
+
 
     if (!is.null(args$folder_by)) {
       checkmate::assert_multi_class(

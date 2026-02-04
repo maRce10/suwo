@@ -46,10 +46,10 @@ query_inaturalist <- function(species = getOption("suwo_species"),
                       identified = FALSE,
                       verifiable = FALSE) {
 
-  arguments <- as.list(base::match.call())[-1]
-  for (i in names(arguments)) arguments[[i]] <- get(i)
+  arguments <- as.list(base::match.call())
+ for (i in names(arguments)[-1]) arguments[[i]] <- get(i)
 
-  check_results <- .check_arguments(args = arguments)
+  check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
   checkmate::reportAssertions(check_results)
 
   format <- rlang::arg_match(format)

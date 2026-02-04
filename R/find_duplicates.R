@@ -67,15 +67,15 @@ find_duplicates <- function(metadata, sort = TRUE,
   "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1",
   verbose = getOption("suwo_verbose", TRUE)) {
   # check arguments
-  arguments <- as.list(base::match.call())[-1]
+  arguments <- as.list(base::match.call())
 
   # add objects to argument names
-  for (i in names(arguments)) {
+ for (i in names(arguments)[-1]) {
     arguments[[i]] <- get(i)
   }
 
   # check each arguments
-  check_results <- .check_arguments(args = arguments)
+  check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
 
   # report errors
   checkmate::reportAssertions(check_results)

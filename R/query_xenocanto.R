@@ -74,10 +74,10 @@ query_xenocanto <-
            api_key = Sys.getenv("xc_api_key")) {
 
     # check arguments
-    arguments <- as.list(base::match.call())[-1]
+    arguments <- as.list(base::match.call())
 
     # add objects to argument names
-    for (i in names(arguments)) {
+   for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
