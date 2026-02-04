@@ -537,20 +537,27 @@
   non_basic_colms <- setdiff(names(X), basic_colums)
   X <- X[, c(basic_colums, non_basic_colms)]
 
-  # remove rows with NAs in URL
-  if (anyNA(X$file_url)) {
-    option_df_name <- tolower(paste0(X$repository[1], "_excluded_results"))
+  if (!all_data) {
+    # remove columns that are not basic
+    X <- X[, basic_colums]
+  }
 
-    # save at options
-    options(stats::setNames(list(X[is.na(X$file_url), ]), option_df_name))
+    # remove rows with NAs in URL
+  if (anyNA(X$file_url)) {
+
+    # get observations without URL
+    excluded_results <- X[is.na(X$file_url), ]
+
+    # save as an attribute
+    attributes(X)$excluded_results <- excluded_results
 
     # let users know some observations were excluded
     cat(.message(
       text = paste0(
         "{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere}",
-        " removed from the results (saved at `options('",
-        option_df_name,
-        "')`).\n"
+        " removed from the results (inlcuded as an attribute called",
+        " 'excluded_results')",
+        ".\n"
       ),
       as = "warning",
       n  = sum(is.na(X$file_url))
@@ -558,11 +565,6 @@
 
     # remove those observations
     X <- X[!is.na(X$file_url), ]
-  }
-
-  if (!all_data) {
-    # remove columns that are not basic
-    X <- X[, basic_colums]
   }
 
   # drop additional levels
