@@ -86,7 +86,7 @@ field.
 
 }
 \references{
-iNaturalist. Available from https://www.inaturalist.org. Accessed [date]
+iNaturalist. Available from https://www.inaturalist.org. Accessed \link{date}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

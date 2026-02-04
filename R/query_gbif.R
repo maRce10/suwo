@@ -1,12 +1,12 @@
 #' Access 'gbif' media file metadata
 #'
-#' \code{query_gbif} searches for metadata from
+#' `query_gbif` searches for metadata from
 #' \href{https://www.gbif.org/}{gbif}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound', 'image', 'video' and 'interactive resource'.
 #' Can be set globally for the current R session via the "suwo_format"
-#' option (e.g. \code{options(suwo_format = "image")}). Required.
+#' option (e.g. `options(suwo_format = "image")`). Required.
 #' @param dataset The name of a specific dataset in which to focus the query
 #' (by default it searchs across all available datasets).
 #' Users can check available dataset names by downloading this csv file
@@ -15,8 +15,8 @@
 #' @export
 #' @name query_gbif
 #' @return The function returns a data frame with the metadata of the media
-#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
-#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' files matching the search criteria. If `all_data = TRUE`, all metadata
+#' fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' open-access
@@ -26,8 +26,8 @@
 #' aimed at providing open access to data about all types of life on Earth.
 #' Note that some of the records returned by this function could be duplicates
 #' of records returned by other suwo functions
-#' (e.g., \code{\link{query_inaturalist}}).
-#' @seealso \code{\link{query_inaturalist}}
+#' (e.g., [query_inaturalist()]).
+#' @seealso [query_inaturalist()]
 #' @examples
 #' # search dink frog sound files
 # d_diastema <- query_gbif(species = "Diasporus diastema", format = "sound")

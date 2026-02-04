@@ -41,7 +41,7 @@ when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
 
 \item{metadata}{data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).}
+function (i.e. \code{query_reponame()}).}
 }
 \description{
 template_params

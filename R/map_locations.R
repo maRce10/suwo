@@ -1,12 +1,12 @@
 #' Maps of media records
 #'
-#' \code{map_locations} creates maps to visualize the geographic spread of
+#' `map_locations` creates maps to visualize the geographic spread of
 #' media records.
 #' @inheritParams template_params
 #' @param cluster Logical to control if icons are clustered by locality.
-#' Default is \code{FALSE}.
+#' Default is `FALSE`.
 #' @param palette Color palette function used for location markers. By default
-#' it uses the virdis palette (\code{grDevices::hcl.colors}).
+#' it uses the virdis palette (`grDevices::hcl.colors`).
 #' @param by Name of column to be used for coloring markers. Default is
 #' "species".
 #' @return An interacrive map with the locations of the observations.

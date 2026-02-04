@@ -76,14 +76,14 @@ contains the data from the October-2025 eBird taxonomy
 If new versions of the list become available it will be updated in new
 package versions. However, if users need to update it they can download the
 new list version, read it in R as a data frame and provide it to the function
- through this argument.}
+through this argument.}
 }
 \value{
 This is an interactive function which opens a browser window to the
 Macaulay Library's search page, where the user must download a .csv file
 with the metadata. The function then reads the .csv file and returns a data
 frame with the metadata. The function can also import previously downloaded
-metadata (in csv format) with the argument `files`.
+metadata (in csv format) with the argument \code{files}.
 }
 \description{
 \code{query_macaulay} searches for metadata from
@@ -101,28 +101,28 @@ hosts more than 77 million images, 3 million sound recordings, and
 eBird, the world’s largest biodiversity dataset.
 For bird species the species name must be valid according to the Macaulay
 Library taxonomy (which follows the Clements checklist). For non-bird
-species users must use the argument `taxon_code`. The species taxon code
+species users must use the argument \code{taxon_code}. The species taxon code
 can be found by running a search at the
 \href{https://www.macaulaylibrary.org/}{Macaulay Library's search page} and
- checking the URL of the species page. For instance, the URL when searching
- for jaguar (Panthera onca) is
- 'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765'
- so the taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata
- fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
-  obtained from the repository is returned (without any formatting).
+checking the URL of the species page. For instance, the URL when searching
+for jaguar (Panthera onca) is
+'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765'
+so the taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata
+fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+obtained from the repository is returned (without any formatting).
 Here are some instructions for using this function properly:
 \itemize{
-   \item Valid bird species names can be checked at
-   \code{suwo:::ml_taxon_code$SCI_NAME}.
-   \item Users must save the save the .csv file manually
-   \item If the file is saved overwriting a pre-existing file
-   (i.e. same file name) the function will not detect it
-   \item A maximum of 10000 records per query can be returned,
-   but this can be bypassed by using the \code{dates} argument to split
-   the search into smaller date ranges
-   \item Users must log in to the Macaulay Library/eBird account in order
-   to access large batches of observations
-   }
+\item Valid bird species names can be checked at
+\code{suwo:::ml_taxon_code$SCI_NAME}.
+\item Users must save the save the .csv file manually
+\item If the file is saved overwriting a pre-existing file
+(i.e. same file name) the function will not detect it
+\item A maximum of 10000 records per query can be returned,
+but this can be bypassed by using the \code{dates} argument to split
+the search into smaller date ranges
+\item Users must log in to the Macaulay Library/eBird account in order
+to access large batches of observations
+}
 }
 \examples{
 if (interactive()){

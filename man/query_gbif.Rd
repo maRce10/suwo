@@ -45,8 +45,8 @@ session via the "suwo_verbose" option
 \item{dataset}{The name of a specific dataset in which to focus the query
 (by default it searchs across all available datasets).
 Users can check available dataset names by downloading this csv file
- \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}.
- See \url{https://www.gbif.org/dataset/search?q=} for more details.}
+\url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}.
+See \url{https://www.gbif.org/dataset/search?q=} for more details.}
 
 \item{all_data}{Logical argument that determines if all data available
 from database is shown in the results of search. Default is \code{FALSE}.
@@ -82,7 +82,7 @@ network and data infrastructure funded by the world's governments and
 aimed at providing open access to data about all types of life on Earth.
 Note that some of the records returned by this function could be duplicates
 of records returned by other suwo functions
-(e.g., \code{\link{query_inaturalist}}).
+(e.g., \code{\link[=query_inaturalist]{query_inaturalist()}}).
 }
 \examples{
 # search dink frog sound files
@@ -92,7 +92,7 @@ of records returned by other suwo functions
 GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
 }
 \seealso{
-\code{\link{query_inaturalist}}
+\code{\link[=query_inaturalist]{query_inaturalist()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

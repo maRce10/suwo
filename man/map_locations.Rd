@@ -13,7 +13,7 @@ map_locations(
 }
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).}
+function (i.e. \code{query_reponame()}).}
 
 \item{cluster}{Logical to control if icons are clustered by locality.
 Default is \code{FALSE}.}

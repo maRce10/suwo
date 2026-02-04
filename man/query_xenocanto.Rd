@@ -24,9 +24,9 @@ syntax can be provided. Tags are of the form 'tag:searchterm'. For
 instance, \code{'type:"song"'} will search for recordings where the sound
 type contains 'song'. Multiple tags can be provided
 (e.g., \code{'"cnt:"belize" type:"song"'}).
- See examples down below and check
- \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help}
- for a full description.}
+See examples down below and check
+\href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help}
+for a full description.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -82,11 +82,11 @@ obtained from the repository is returned (without any formatting).
 \details{
 This function queries metadata for animal sound recordings in
 the open-access
- online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}.
- \href{https://www.xeno-canto.org/}{Xeno-Canto} hosts sound recordings of
- birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
- constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
- advanced query syntax (see examples).
+online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}.
+\href{https://www.xeno-canto.org/}{Xeno-Canto} hosts sound recordings of
+birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
+constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
+advanced query syntax (see examples).
 }
 \examples{
 if (interactive()){
@@ -113,8 +113,8 @@ Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way
 to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
 }
 \seealso{
-\code{\link{query_gbif}}, \code{\link{query_wikiaves}},
-\code{\link{query_inaturalist}}
+\code{\link[=query_gbif]{query_gbif()}}, \code{\link[=query_wikiaves]{query_wikiaves()}},
+\code{\link[=query_inaturalist]{query_inaturalist()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -1,14 +1,14 @@
 #' Searches for media files in the Macaulay Library
 #'
-#' \code{query_macaulay} searches for metadata from
+#' `query_macaulay` searches for metadata from
 #' \href{https://www.macaulaylibrary.org/}{macaulay}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options
 #' are 'sound', 'image' of 'video'. Can be set globally for the current R
-#' session via the "suwo_format" option (e.g. \code{options(suwo_format = "image")}).
+#' session via the "suwo_format" option (e.g. `options(suwo_format = "image")`).
 #' Required.
 #' @param path Directory path where the .csv file will be saved. By default it
-#' is saved into the current working directory (\code{"."}).
+#' is saved into the current working directory (`"."`).
 #' @param files Optional character vector with the name(s) of the .csv file(s)
 #' to read. If provided, the function will import the data from the .csv files
 #' instead of opening the Macaulay Library search page in a browser ('species'
@@ -18,11 +18,11 @@
 #' (between consecutive date values) and combine the results. Useful for
 #' queries that return large number of results (i.e. > 10000 results limit).
 #' For example, to search for the species between 2010 to 2020 and between 2021
-#' to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain decimals
+#' to 2025 use `dates = c(2010, 2020, 2025)`. If years contain decimals
 #' searches will be split by months within years as well.
 #' @param taxon_code_info Data frame containing the taxon code information.
 #' By default the function will use the internal data frame
-#' \code{"ml_taxon_code"} included as example data in the package. This object
+#' `"ml_taxon_code"` included as example data in the package. This object
 #' contains the data from the October-2025 eBird taxonomy
 #' (downloaded from
 #' \url{https://www.birds.cornell.edu/clementschecklist}).
@@ -56,22 +56,21 @@
 #'  checking the URL of the species page. For instance, the URL when searching
 #'  for jaguar (Panthera onca) is
 #'  'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765'
-#'  so the taxon code is "t-11032765". If \code{all_data = TRUE}, all metadata
-#'  fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#'  so the taxon code is "t-11032765". If `all_data = TRUE`, all metadata
+#'  fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #'   obtained from the repository is returned (without any formatting).
 #' Here are some instructions for using this function properly:
-#' \itemize{
-#'    \item Valid bird species names can be checked at
-#'    \code{suwo:::ml_taxon_code$SCI_NAME}.
-#'    \item Users must save the save the .csv file manually
-#'    \item If the file is saved overwriting a pre-existing file
+#'  - Valid bird species names can be checked at
+#'    `suwo:::ml_taxon_code$SCI_NAME`.
+#'  - Users must save the save the .csv file manually
+#'  - If the file is saved overwriting a pre-existing file
 #'    (i.e. same file name) the function will not detect it
-#'    \item A maximum of 10000 records per query can be returned,
-#'    but this can be bypassed by using the \code{dates} argument to split
+#'  - A maximum of 10000 records per query can be returned,
+#'    but this can be bypassed by using the `dates` argument to split
 #'    the search into smaller date ranges
-#'    \item Users must log in to the Macaulay Library/eBird account in order
+#'  - Users must log in to the Macaulay Library/eBird account in order
 #'    to access large batches of observations
-#'    }
+#'
 #' @examples
 #' if (interactive()){
 #' # query sounds

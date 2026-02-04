@@ -1000,7 +1000,6 @@
 
     must_columns <- .format_query_output(only_basic_columns = TRUE)
 
-    print(fun)
     if (fun == "remove_duplicates") {
       must_columns <- c(must_columns, "duplicated_group")
     }

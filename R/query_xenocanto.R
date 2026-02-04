@@ -1,17 +1,17 @@
 #' Access 'Xeno-Canto' recording metadata
 #'
-#' \code{query_xenocanto} searches for metadata from
+#' `query_xenocanto` searches for metadata from
 #' \href{https://www.xeno-canto.org/}{Xeno-Canto}.
 #' @inheritParams template_params
 #' @param species Character string with the scientific name of a species in
 #' the format: "Genus epithet". Required. Can be set globally for the current
 #' R session via the "suwo_species" option (e.g.
-#' \code{options(suwo_species = "Hypsiboas rufitelus")}). Alternatively, a character
+#' `options(suwo_species = "Hypsiboas rufitelus")`). Alternatively, a character
 #' string containing additional tags that follows the Xeno-Canto advanced query
 #' syntax can be provided. Tags are of the form 'tag:searchterm'. For
-#' instance, \code{'type:"song"'} will search for recordings where the sound
+#' instance, `'type:"song"'` will search for recordings where the sound
 #' type contains 'song'. Multiple tags can be provided
-#' (e.g., \code{'"cnt:"belize" type:"song"'}).
+#' (e.g., `'"cnt:"belize" type:"song"'`).
 #'  See examples down below and check
 #'  \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help}
 #'  for a full description.
@@ -21,14 +21,14 @@
 #' Required. Avoid setting your API key directly in the function call to
 #' prevent exposing it in your code. Instead, set it as an environment variable
 #' (e.g., in your .Renviron file using
-#' \code{Sys.setenv(xc_api_key = "your_key_here")}) named 'xc_api_key',
+#' `Sys.setenv(xc_api_key = "your_key_here")`) named 'xc_api_key',
 #' so it can be accessed
-#' securely using \code{Sys.getenv("xc_api_key")}.
+#' securely using `Sys.getenv("xc_api_key")`.
 #' @export
 #' @name query_xenocanto
 #' @return The function returns a data frame with the metadata of the media
-#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
-#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' files matching the search criteria. If `all_data = TRUE`, all metadata
+#' fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries metadata for animal sound recordings in
 #' the open-access
@@ -37,8 +37,8 @@
 #'  birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
 #'  constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
 #'  advanced query syntax (see examples).
-#' @seealso \code{\link{query_gbif}}, \code{\link{query_wikiaves}},
-#' \code{\link{query_inaturalist}}
+#' @seealso [query_gbif()], [query_wikiaves()],
+#' [query_inaturalist()]
 #' @examples
 #' if (interactive()){
 #' # An API key is required. Get yours at https://xeno-canto.org/account.

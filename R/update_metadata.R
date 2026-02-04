@@ -1,22 +1,22 @@
 #' Update metadata
 #'
-#' \code{update_metadata} update metadata from previous queries.
+#' `update_metadata` update metadata from previous queries.
 #' @inheritParams template_params
 #' @param path Directory path where the .csv file will be saved. Only
-#' applicable for \code{\link{query_macaulay}} query results. By default it
-#' is saved into the current working directory (\code{"."}).
+#' applicable for [query_macaulay()] query results. By default it
+#' is saved into the current working directory (`"."`).
 #' @param api_key Character string referring to the key assigned by
 #' Xeno-Canto as authorization for searches. Get yours at
 #' \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only
-#' needed if the input metadata comes from \code{\link{query_xenocanto}}.
+#' needed if the input metadata comes from [query_xenocanto()].
 #' @param dates Optional numeric vector with years to split the search. If
 #' provided, the function will perform separate queries for each date range
 #' (between consecutive date values) and combine the results. Useful for
 #' queries that return large number of results (i.e. > 10000 results limit).
 #' For example, to search for the species between 2010 to 2020 and between
-#' 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain
+#' 2021 to 2025 use `dates = c(2010, 2020, 2025)`. If years contain
 #' decimals searches will be split by months within years as well. Only
-#' needed if the input metadata comes from \code{\link{query_macaulay}}.
+#' needed if the input metadata comes from [query_macaulay()].
 #' @export
 #' @name update_metadata
 #' @return returns a data frame similar to the input 'metadata' with new

@@ -1,6 +1,6 @@
 #' Merge metadata data frames
 #'
-#' \code{merge_metadata} merges metadata data frames from suwo queries.
+#' `merge_metadata` merges metadata data frames from suwo queries.
 #' @param ... two or more data frames (each one as a separate entry) referring
 #' to the metadata obtained from suwo query functions (`query_x()`).
 #' Alternatively, a single list of data frames can be provided. The name

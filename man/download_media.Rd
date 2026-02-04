@@ -16,7 +16,7 @@ download_media(
 }
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).}
+function (i.e. \code{query_reponame()}).}
 
 \item{path}{Directory path where the output media files will be saved.
 By default files are saved into the current working directory (\code{"."}).}
@@ -71,7 +71,7 @@ function will download all files into a single directory
 resume later as long as the working directory is the same. Users only need
 to rerun the same function call. By default only the missing files will be
 downloaded when resuming. Can also be used on a updated query output
-(see \code{\link{update_metadata}}) to add the new media files to the
+(see \code{\link[=update_metadata]{update_metadata()}}) to add the new media files to the
 existing media pool.
 }
 \examples{
@@ -87,7 +87,7 @@ existing media pool.
 
 }
 \seealso{
-\code{\link{query_gbif}}, \code{\link{query_macaulay}}
+\code{\link[=query_gbif]{query_gbif()}}, \code{\link[=query_macaulay]{query_macaulay()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

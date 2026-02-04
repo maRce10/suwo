@@ -1,14 +1,14 @@
 #' Access 'iNaturalist' media file metadata
 #'
-#' \code{query_inaturalist} searches for metadata from
+#' `query_inaturalist` searches for metadata from
 #' \href{https://www.inaturalist.org/}{iNaturalist}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Currently 'image' and 'sound' are available. Can be set globally for
 #' the current R session via the "suwo_format" option
-#' (e.g. \code{options(suwo_format = "image")}). Required.
+#' (e.g. `options(suwo_format = "image")`). Required.
 #' @param all_data Logical argument that determines if all data available
-#' from database is shown in the results of search. Default is \code{TRUE}.
+#' from database is shown in the results of search. Default is `TRUE`.
 #' @param identified Logical argument to define if search results are
 #' categorized as identified by inaturalist.
 #' @param verifiable Logical argument to define if search results are
@@ -16,8 +16,8 @@
 #' @export
 #' @name query_inaturalist
 #' @return The function returns a data frame with the metadata of the media
-#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
-#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' files matching the search criteria. If `all_data = TRUE`, all metadata
+#' fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' open-access

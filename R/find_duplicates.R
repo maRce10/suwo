@@ -1,6 +1,6 @@
 #' Find duplicated entries in metadata
 #'
-#' \code{find_duplicates} detect possible duplicated entries from merged
+#' `find_duplicates` detect possible duplicated entries from merged
 #' metadata from several repositories.
 #' @inheritParams template_params
 #' @param metadata data frame obtained from combining the output metadata of
@@ -30,7 +30,7 @@
 #' @name find_duplicates
 #' @details This function compares the information in the entries of a
 #' combined metadata data frame (typically the output of
-#' \code{\link{merge_metadata}}) and labels those possible duplicates with
+#' [merge_metadata()]) and labels those possible duplicates with
 #' a common index in a new column named `duplicate_group`. The comparison is
 #' based on the similarity of the following fields: `user_name`, `locality`,
 #' `time` and `country`. Only rows with no missing data for those fields will

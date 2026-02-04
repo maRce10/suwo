@@ -1,17 +1,17 @@
 #' Access 'WikiAves' media file metadata
 #'
-#' \code{query_wikiaves} searches for metadata from
+#' `query_wikiaves` searches for metadata from
 #' \href{https://www.wikiaves.com.br/}{WikiAves}.
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'image' or 'sound'. Can be set globally for
 #' the current R session via the "suwo_format" option
-#' (e.g. \code{options(suwo_format = "image")}). Required.
+#' (e.g. `options(suwo_format = "image")`). Required.
 #' @export
 #' @name query_wikiaves
 #' @return The function returns a data frame with the metadata of the media
-#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
-#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' files matching the search criteria. If `all_data = TRUE`, all metadata
+#' fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for avian digital media in the open-access
 #' online repository \href{https://www.wikiaves.com.br/}{WikiAves} and returns
