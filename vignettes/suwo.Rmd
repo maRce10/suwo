@@ -136,7 +136,7 @@ Obtaining nature media using [suwo](https://marce10.github.io/suwo/) follows a b
 sequence. The following diagram illustrates this workflow and the main functions
 involved:
 
-<center><img src="workflow_diagram.png" alt="suwo workflow diagram" width="100%"></center>
+<center><img src="workflow_diagram.png" alt="Flowchart of the suwo workflow for obtaining nature media files. Step 1, 'Get metadata', includes multiple boxes representing queries to different repositories, such as query_wikiaves() and query_xenocanto(), plus additional possible query_() calls. Arrows from all these queries converge into Step 2, 'Combine metadata', using merge_metadata(). The process then moves to Step 3, 'Remove duplicates', using find_duplicates() and remove_duplicates(). Next is Step 4, 'Download media files', using download_media(). Finally, Step 5, 'Update metadata', using update_metadata(), loops back toward the earlier steps, indicating that metadata can be updated after downloading and re-enter the workflow." width="100%"></center>
 
 </br>
 Here is a description of each step:
@@ -457,14 +457,14 @@ p_striigularis <- query_macaulay(species = "Phaethornis striigularis",
 
 Users must click on the "Export" button to save the .csv file with the metadata: 
 
-<center><img src="ml_browser.jpeg" alt="Macaulay library search site" width="100%"></center>
+<center><img src="ml_browser.jpeg" alt="Screen shot of the Macaulay library search site showing the first result of a query for Stripe-throated hermit videos" width="100%"></center>
 
 </br>
 
 
 Note that for bird species the species name must be valid according to the Macaulay Library taxonomy (which follows the Clements checklist). For non-bird species users must use the argument `taxon_code`. The species taxon code can be found by running a search at the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog) and checking the URL of the species page. For instance, the taxon code for jaguar (_Panthera onca_) is "t-11032765":
 
-<center><img src="ml_taxon_code.png" alt="Macaulay library taxon code" width="100%"></center>
+<center><img src="ml_taxon_code.png" alt="Screen shot of the Macaulay library search site showing the first result of a query for jaguar videos, highlighting the taxon code in the URL adress" width="100%"></center>
 
 Once you have the taxon code, you can run the query as follows:
 ```{r, eval = FALSE}
@@ -509,7 +509,7 @@ cal_cos <- query_macaulay(
 
 Users can check at the Macaulay Library website how many records are available for their species of interest (see image below) and then decide how to split the search by date ranges accordingly so each sub-query has less than 10000 records. 
 
-<center><img src="ml_num_recs.jpeg" alt="Checking number of records at Macaulay Library" width="100%"></center>
+<center><img src="ml_num_recs.jpeg" alt="Screen shot of the Macaulay library search site showing the first result of a query for Costa's hummingbird and highlighting how to check the number of records for that query" width="100%"></center>
 
 [query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) can also read metadata previously downloaded from [Macaulay Library website](https://www.macaulaylibrary.org/). To do this, users must provide 1) the name of the csv file(s) to the argument `files` and 2) the directory path were it was saved to the argument `path`.
 
