@@ -60,7 +60,17 @@ Obtaining nature media using [suwo](https://marce10.github.io/suwo/)
 follows a basic sequence. The following diagram illustrates this
 workflow and the main functions involved:
 
-![suwo workflow diagram](./articles/workflow_diagram.png)
+![Flowchart of the suwo workflow for obtaining nature media files. Step
+1, “Get metadata,” includes multiple boxes representing queries to
+different repositories, such as query_wikiaves() and query_xenocanto(),
+plus additional possible query\_() calls. Arrows from all these queries
+converge into Step 2, “Combine metadata,” using merge_metadata(). The
+process then moves to Step 3, “Remove duplicates,” using
+find_duplicates() and remove_duplicates(). Next is Step 4, “Download
+media files,” using download_media(). Finally, Step 5, “Update
+metadata,” using update_metadata(), loops back toward the earlier steps,
+indicating that metadata can be updated after downloading and re-enter
+the workflow.](./articles/workflow_diagram.png)
 
 Take a look at the [package
 vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
@@ -70,16 +80,14 @@ overview of the workflow and the core querying functions.
 
 The [suwo](https://marce10.github.io/suwo/) package is designed
 exclusively for non-commercial, scientific purposes, including research,
-education, and conservation. **Commercial use of data or media retrieved
-through this package is the user’s responsibility and is allowed only
-when the applicable license of the source database explicitly permits
-such use, or when explicit, separate permission has been obtained
-directly from the original source platforms or rights holders** Users
-must comply with the specific terms of service and data-use policies of
-each source database, which may require attribution and may further
-restrict commercial application. The package developers assume no
-liability for misuse of the retrieved data or for violations of
-third-party terms of service.
+education, and conservation. **Any commercial use of the data or media
+retrieved through this package is strictly prohibited** unless explicit,
+separate permission is granted directly from the original source
+platforms and rights holders. Users are obligated to comply with the
+specific terms of service and data use policies of each source database,
+which often mandate attribution and similarly restrict commercial
+application. The package developers assume no liability for misuse of
+the retrieved data or violations of third-party terms of service.
 
 ## Citation
 

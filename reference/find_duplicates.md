@@ -93,7 +93,7 @@ gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
 #> ! 2 observations do not have a download link and were removed from the results (saved at `options('gbif_excluded_results')`). 
 inat <- query_inaturalist(species = "Turdus rufiventris",
   format = "sound")
-#> ✔ Obtaining metadata (550 matching records found) 🎊:
+#> ✔ Obtaining metadata (551 matching records found) 🎊:
 
 # run if queries didnt fail
  if (!is.null(gb) && !is.null(inat)) {
