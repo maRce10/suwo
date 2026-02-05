@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2026--01--31-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2026--01--27-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 [![pkgcheck](https://github.com/maRce10/suwo/workflows/pkgcheck/badge.svg)](https://github.com/maRce10/suwo/actions?query=workflow%3Apkgcheck)  
@@ -97,16 +97,14 @@ overview of the workflow and the core querying functions.
 
 The [suwo](https://marce10.github.io/suwo/) package is designed
 exclusively for non-commercial, scientific purposes, including research,
-education, and conservation. **Commercial use of data or media retrieved
-through this package is the user’s responsibility and is allowed only
-when the applicable license of the source database explicitly permits
-such use, or when explicit, separate permission has been obtained
-directly from the original source platforms or rights holders** Users
-must comply with the specific terms of service and data-use policies of
-each source database, which may require attribution and may further
-restrict commercial application. The package developers assume no
-liability for misuse of the retrieved data or for violations of
-third-party terms of service.
+education, and conservation. **Any commercial use of the data or media
+retrieved through this package is strictly prohibited** unless explicit,
+separate permission is granted directly from the original source
+platforms and rights holders. Users are obligated to comply with the
+specific terms of service and data use policies of each source database,
+which often mandate attribution and similarly restrict commercial
+application. The package developers assume no liability for misuse of
+the retrieved data or violations of third-party terms of service.
 
 ## Citation
 
