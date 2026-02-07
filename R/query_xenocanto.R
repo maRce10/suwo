@@ -147,7 +147,12 @@ query_xenocanto <-
       pbar = pb,
       X = seq_len(ceiling(as.numeric(query$numRecordings)/ 100)),
       cl = cl,
-      FUN = function(y) {
+      FUN = function(x,
+          Y = seq_len(ceiling(as.numeric(query$numRecordings)/ 100))) {
+
+        # set index to get the right offset
+        y <- Y[x]
+
         query_output <- try(jsonlite::fromJSON(
           paste0(
             "https://www.xeno-canto.org/api/3/recordings?query=",

@@ -12,7 +12,6 @@ Roxygen: list(markdown = TRUE)
 Imports:
     checkmate,
     cli,
-    pbapply,
     utils,
     rlang,
     httr2,

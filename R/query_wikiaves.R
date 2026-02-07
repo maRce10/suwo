@@ -176,9 +176,16 @@ query_wikiaves <-
     }
 
     # loop over pages
-    query_output_list <- .pbapply_sw(seq_len(nrow(id_by_page_df)), cl = cl,
-                                         pbar = pb, function(i) {
-      Sys.sleep(0.5)
+    query_output_list <- .pbapply_sw(X = seq_len(nrow(id_by_page_df)),
+                                     cl = cl,
+                                     pbar = pb,
+                             function(x, Y = seq_len(nrow(id_by_page_df))) {
+
+     # set index to get the right offset
+     i <- Y[x]
+
+     # wait avoid overloading the server
+     Sys.sleep(0.5)
 
       query_output <-
         try(jsonlite::fromJSON(

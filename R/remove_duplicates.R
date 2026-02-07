@@ -105,8 +105,14 @@ remove_duplicates <-
     }
 
     # loop over unique duplicate groups
-    dedups_list <- .pbapply_sw(unique(dups$duplicate_group), cl = cl,
-                                   pbar = pb, function(x) {
+    dedups_list <- .pbapply_sw(X = unique(dups$duplicate_group),
+                               cl = cl,
+                               pbar = pb,
+                               function(i, Y = unique(dups$duplicate_group)) {
+
+      # set index to get the right offset
+      x <- Y[i]
+
       # subset of duplicates
       sub_dups <- dups[dups$duplicate_group == x, ]
 

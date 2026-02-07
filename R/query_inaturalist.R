@@ -99,10 +99,13 @@ query_inaturalist <- function(species = getOption("suwo_species"),
   }
 
   query_output_list <- .pbapply_sw(
-    pages,
+    X = pages,
     cl = cl,
     pbar = pb,
-    function(page) {
+    FUN = function(x, Y = pages) {
+
+      # set index to get the right page
+      page <- Y[x]
 
       query_output <- try(
         jsonlite::fromJSON(paste0(base_url, "&page=", page)),

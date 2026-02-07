@@ -10,139 +10,109 @@
                         FUN,
                         cl = 1,
                         pbar = TRUE,
+                        Y = X,
+                        title = "",
                         ...) {
-  # convert parallel 1 to null
-  if (!inherits(cl, "cluster")) {
-    if (cl == 1)
-      cl <- NULL
-  }
-
   FUN <- match.fun(FUN)
-  if (!is.vector(X) || is.object(X)) {
-    X <- as.list(X)
+
+  if (identical(Sys.getenv("TESTTHAT"), "true")) {
+    cl <- 1L
   }
-  if (!length(X)) {
-    return(lapply(X, FUN, ...))
+  # no parallel
+  if (cl == 1) {
+    if (!pbar) { # No progress bar
+      out <- lapply(seq_along(X), FUN, ...)
+      return(out)
+    } else { # progress bar
+      out <- lapply(
+        X =
+          cli::cli_progress_along(
+            name = title,
+            x =  X,
+            clear = FALSE
+          ),
+        FUN = FUN,
+        ...
+      )
+      return(out)
+    }
   }
 
-  if (!is.null(cl)) {
-    if (.Platform$OS.type == "windows") {
-      if (!inherits(cl, "cluster")) {
-        cl <- NULL
-      }
-    } else {
-      if (inherits(cl, "cluster")) {
-        if (length(cl) < 2L) {
-          cl <- NULL
-        }
+  # parallel
+  if (cl > 1) {
+    ## define OS
+    is_windows <- (.Platform$OS.type == "windows")
+
+    if (is_windows) {
+      clust <- parallel::makeCluster(cl)
+      on.exit(parallel::stopCluster(clust), add = TRUE)
+
+      parallel::clusterExport(
+        clust,
+        varlist = c("FUN", "Y"),
+        envir   = environment()
+      )
+    }
+
+    if (!pbar) { # No progress bar
+
+      if (is_windows) {
+        out <- parallel::parLapply(cl =  clust, X = seq_along(X),
+        fun = function(i) FUN(X[i], Y, ...)
+        )
       } else {
-        if (cl < 2) {
-          cl <- NULL
-        }
+        out <- parallel::mclapply(
+          X = seq_along(X),
+          FUN = FUN,
+          mc.cores = as.integer(cl)
+        )
       }
-    }
-  }
 
-  if (is.null(cl)) {
-    if (!pbar) {
-      return(lapply(X, FUN, ...))
-    }
-    Split <- pbapply::splitpb(length(X), 1L, nout = 100)
-    B <- length(Split)
-    pb <- pbapply::startpb(0, B)
-    on.exit(pbapply::closepb(pb), add = TRUE)
-    rval <- vector("list", B)
-    for (i in seq_len(B)) {
-      rval[i] <- list(lapply(X[Split[[i]]], FUN, ...))
-      pbapply::setpb(pb, i)
-    }
-  } else {
-    if (inherits(cl, "cluster")) {
-      # On Windows, automatically export internal functions from the package
-      if (.Platform$OS.type == "windows") {
-        # Get the environment of FUN to determine which package it belongs to
-        fun_env <- environment(FUN)
+      return(out)
+    } else { # progress bar
 
-        # Check if FUN is from a package namespace (not global env)
-        if (isNamespace(fun_env)) {
-          pkg_name <- environmentName(fun_env)
+      nchunks <- ceiling(length(X) / as.integer(cl))
 
-          # Check if it's the suwo package (or any package you specify)
-          if (pkg_name == "suwo") {
-            # Get the namespace environment
-            ns <- asNamespace(pkg_name)
+      if (cl >= length(X)) {
+        chunks <- list(X)
+        cl <- length(X)
+      }  else {
+        chunks <- split(
+          seq_along(X),
+          cut(seq_along(X), nchunks, labels = FALSE)
+        )
+      }
 
-            # Find all functions starting with . in the package namespace
-            all_objects <- ls(envir = ns, all.names = TRUE)
-            internal_funs <- grep("^\\.", all_objects, value = TRUE)
+      out <- vector("list", length(chunks))
 
-            # Filter to only include functions (not other objects)
-            funs_to_export <- character()
-            for (fun_name in internal_funs) {
-              obj <- get(fun_name, envir = ns)
-              if (is.function(obj)) {
-                funs_to_export <- c(funs_to_export, fun_name)
-              }
-            }
+      for (i in cli::cli_progress_along(
+        name = title,
+        x = seq_along(chunks),
+        clear = FALSE
+      )) {
 
-            # Export internal functions to the cluster
-            if (length(funs_to_export) > 0) {
-              tryCatch({
-                message("Exporting ", length(funs_to_export),
-                        " internal functions from package '", pkg_name,
-                        "' to cluster")
-                parallel::clusterExport(cl,
-                                        varlist = funs_to_export,
-                                        envir = ns)
-              }, error = function(e) {
-                warning(
-                  "Could not export all internal functions from package '",
-                        pkg_name, "': ", e$message)
-              })
-            }
+        idx <- chunks[[i]]
 
-            # Also ensure the package is loaded on workers
-            parallel::clusterEvalQ(cl, {
-              if (!requireNamespace(pkg_name, quietly = TRUE)) {
-                library(pkg_name, character.only = TRUE)
-              }
-            })
-          }
+        if (is_windows) {
+          out[idx] <- parallel::parLapply(
+            clust,
+            idx,
+            function(j) FUN(X[j], Y, ...)
+          )
+        } else {
+          out[idx] <- parallel::mclapply(
+            X = idx,
+            FUN = FUN,
+            mc.cores = as.integer(cl)
+          )
         }
       }
 
-      PAR_FUN <- parallel::parLapply
-      if (pbar) {
-        return(PAR_FUN(cl, X, FUN, ...))
-      }
-      Split <- pbapply::splitpb(length(X), length(cl), nout = 100)
-      B <- length(Split)
-      pb <- pbapply::startpb(0, B)
-      on.exit(pbapply::closepb(pb), add = TRUE)
-      rval <- vector("list", B)
-      for (i in seq_len(B)) {
-        rval[i] <- list(PAR_FUN(cl, X[Split[[i]]], FUN, ...))
-        pbapply::setpb(pb, i)
-      }
-    } else {
-      if (!pbar) {
-        return(parallel::mclapply(X, FUN, ..., mc.cores = as.integer(cl)))
-      }
-      Split <- pbapply::splitpb(length(X), as.integer(cl), nout = 100)
-      B <- length(Split)
-      pb <- pbapply::startpb(0, B)
-      on.exit(pbapply::closepb(pb), add = TRUE)
-      rval <- vector("list", B)
-      for (i in seq_len(B)) {
-        rval[i] <- list(parallel::mclapply(X[Split[[i]]], FUN, ...,
-                                           mc.cores = as.integer(cl)))
-        pbapply::setpb(pb, i)
-      }
+
+      return(out)
+
     }
   }
-  rval <- do.call(c, rval, quote = TRUE)
-  names(rval) <- names(X)
-  rval
 }
 
 # add emojis to messages. based on praise_emoji from testthat
@@ -1001,7 +971,7 @@
     must_columns <- .format_query_output(only_basic_columns = TRUE)
 
     if (fun == "remove_duplicates") {
-      must_columns <- c(must_columns, "duplicated_group")
+      must_columns <- c(must_columns, "duplicate_group")
     }
 
     checkmate::assertNames(

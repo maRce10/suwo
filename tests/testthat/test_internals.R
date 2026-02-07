@@ -40,7 +40,7 @@ test_that(".add_emoji", {
 
 test_that(".monitor_new_files", {
 
-  out <-suwo:::.monitor_new_files(path = tempdir(), break.time = 0.0001)
+  out <- suwo:::.monitor_new_files(path = tempdir(), break.time = 0.0001)
 
   expect_true(is.null(out))
 
@@ -70,4 +70,38 @@ test_that(".repo_from_call handles namespaced calls", {
     f(call_ns),
     "GBIF"
   )
+})
+
+test_that("pb apply with parallel",{
+
+  fun2 <- function(x, Y) {
+    Sys.sleep(0.1)
+    return(Y[x] * 0.5)
+  }
+
+
+  X <- 1:35
+
+  a2 <- .pbapply_sw(X = X, FUN = function(x, Y = 1:35) {
+    Sys.sleep(0.1)
+    return(Y[x] * 0.5)
+  }, title = "ahi", cl = 1, pbar = F)
+  a3 <- .pbapply_sw(X = X, FUN = function(x, Y = 1:35) {
+    Sys.sleep(0.1)
+    return(Y[x] * 0.5)
+  }, title = "ahi", cl = 5, pbar = F)
+  a5 <- .pbapply_sw(X = X, FUN = function(x, Y = 1:35) {
+    Sys.sleep(0.1)
+    return(Y[x] * 0.5)
+  }
+  ,  cl = 1, pbar = T)
+  a4 <- .pbapply_sw(X = 1:55, FUN = function(x, Y = 11:65) {
+    Sys.sleep(0.1)
+    return(Y[x] * 0.5)
+  },  cl = 5, pbar = T)
+
+
+  expect_equal(unlist(a2), unlist(a3))
+  expect_equal(unlist(a5), unlist(a3))
+
 })

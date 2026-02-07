@@ -117,15 +117,13 @@ query_gbif <-
       base.srch.pth$count / base.srch.pth$limit
     )) - 1) * 300
 
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
-    }
+    query_output_list <- .pbapply_sw(X = offsets, cl = cores,
+                                     pbar = pb,
+                                         FUN = function(x, Y = offsets) {
 
-    query_output_list <- .pbapply_sw(offsets, cl = cl, pbar = pb,
-                                         function(i) {
+      # set index to get the right offset
+      i <- Y[x]
+
       query_output <-
         try(jsonlite::fromJSON(paste0(srch_trm, "&offset=", i)),
                           silent = TRUE)

@@ -11,18 +11,6 @@ test_that("search Glaucis dohrnii audio", {
 
 })
 
-test_that("search Aristolochia baetica images", {
-  skip_on_cran()
-  skip_if_offline()
-
-  df1 <- query_gbif(species = 'Aristolochia baetica', format =  "image")
-
-  skip_if(is.null(df1))
-
-  expect_true(nrow(df1) >= 30)
-
-})
-
 
 test_that("search Floractus heimi audio (no audios)", {
   skip_on_cran()

@@ -23,7 +23,7 @@ test_that("error if missing colum", {
 
   expect_error(
     remove_duplicates(suwo:::merged_metadata),
-    regexp = "duplicated_group"
+    regexp = "duplicate_group"
   )
 
 })
