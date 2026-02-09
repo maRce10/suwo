@@ -38,19 +38,24 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 query_gbif <-
-  function(species = getOption("suwo_species"), format =
-    getOption("suwo_format", c("image", "sound", "video", "interactive resource")),
-           cores = getOption("mc.cores", 1),
-           pb = getOption("suwo_pb", TRUE),
-           verbose = getOption("suwo_verbose", TRUE),
-           dataset = NULL,
-           all_data = getOption("suwo_all_data", FALSE),
-           raw_data = getOption("suwo_raw_data", FALSE)) {
+  function(
+    species = getOption("suwo_species"),
+    format = getOption(
+      "suwo_format",
+      c("image", "sound", "video", "interactive resource")
+    ),
+    cores = getOption("mc.cores", 1),
+    pb = getOption("suwo_pb", TRUE),
+    verbose = getOption("suwo_verbose", TRUE),
+    dataset = NULL,
+    all_data = getOption("suwo_all_data", FALSE),
+    raw_data = getOption("suwo_raw_data", FALSE)
+  ) {
     # check arguments
     arguments <- as.list(base::match.call())
 
     # add objects to argument names
-   for (i in names(arguments)[-1]) {
+    for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
@@ -78,10 +83,11 @@ query_gbif <-
 
     srch_trm <- paste0(
       "https://api.gbif.org/v1/occurrence/search?limit=300&",
-      if (is.null(dataset))
+      if (is.null(dataset)) {
         ""
-      else
-        "datasetKey=",
+      } else {
+        "datasetKey="
+      },
       dataset,
       "&scientificName=",
       gsub(" ", "%20", species),
@@ -115,56 +121,63 @@ query_gbif <-
     # get total number of pages
     offsets <- (seq_len(ceiling(
       base.srch.pth$count / base.srch.pth$limit
-    )) - 1) * 300
+    )) -
+      1) *
+      300
 
-    query_output_list <- .pbapply_sw(X = offsets, cl = cores,
-                                     pbar = pb,
-                                         FUN = function(x, Y = offsets) {
+    query_output_list <- .pbapply_sw(
+      X = offsets,
+      cl = cores,
+      pbar = pb,
+      FUN = function(x, Y = offsets) {
+        # set index to get the right offset
+        i <- Y[x]
 
-      # set index to get the right offset
-      i <- Y[x]
+        query_output <-
+          try(
+            jsonlite::fromJSON(paste0(srch_trm, "&offset=", i)),
+            silent = TRUE
+          )
 
-      query_output <-
-        try(jsonlite::fromJSON(paste0(srch_trm, "&offset=", i)),
-                          silent = TRUE)
+        # if error then just return it and stop here
+        if (.is_error(query_output)) {
+          return(query_output)
+        }
 
-      # if error then just return it and stop here
-      if (.is_error(query_output)){
-        return(query_output)
+        # format as list of data frame
+        query_output$results <- lapply(
+          seq_len(nrow(query_output$results)),
+          function(u) {
+            x <- query_output$results[u, ]
+
+            media_df <- do.call(rbind, x$media)
+
+            # select format
+            media_df <- media_df[media_df$type == gbif_format, ]
+
+            # fix identifier column name
+            names(media_df)[names(media_df) == "identifier"] <- "URL"
+            names(media_df) <- paste0("media-", names(media_df))
+
+            # remove lists
+            x <- x[!vapply(x, is.list, logical(1))]
+
+            # make it data frame
+            X_df <- data.frame(t(unlist(x)))
+
+            # add media details
+            X_df <- cbind(X_df, media_df)
+
+            return(X_df)
+          }
+        )
+
+        output_df <- .merge_data_frames(query_output$results)
+        output_df$page <- i
+
+        return(output_df)
       }
-
-      # format as list of data frame
-      query_output$results <- lapply(seq_len(nrow(query_output$results)),
-                                     function(u) {
-        x <- query_output$results[u, ]
-
-        media_df <- do.call(rbind, x$media)
-
-        # select format
-        media_df <- media_df[media_df$type == gbif_format, ]
-
-        # fix identifier column name
-        names(media_df)[names(media_df) == "identifier"] <- "URL"
-        names(media_df) <- paste0("media-", names(media_df))
-
-        # remove lists
-        x <- x[!vapply(x, is.list, logical(1))]
-
-        # make it data frame
-        X_df <- data.frame(t(unlist(x)))
-
-        # add media details
-        X_df <- cbind(X_df, media_df)
-
-        return(X_df)
-      })
-
-      output_df <- .merge_data_frames(query_output$results)
-      output_df$page <- i
-
-      return(output_df)
-    })
-
+    )
 
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
@@ -178,13 +191,18 @@ query_gbif <-
     query_output_df <- .merge_data_frames(query_output_list)
 
     # stop here if nothing found
-    if (is.null(query_output_df))
+    if (is.null(query_output_df)) {
       return(query_output_df)
+    }
 
     # remove everything after the second parenthesis
-    query_output_df$species <- vapply(strsplit(query_output_df$species, " "),
-                                      function(x)
-      paste(x[1], x[2]), character(1))
+    query_output_df$species <- vapply(
+      strsplit(query_output_df$species, " "),
+      function(x) {
+        paste(x[1], x[2])
+      },
+      character(1)
+    )
 
     # remove duplicated info
     query_output_df$gbifid <- query_output_df$scientificName <- NULL

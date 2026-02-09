@@ -14,7 +14,7 @@
 
   # Only set options that haven't been set by user
   toset <- !(names(op.yourpackage) %in% names(op))
-  if(any(toset)) {
+  if (any(toset)) {
     options(op.yourpackage[toset])
   }
 
@@ -31,8 +31,8 @@
   # Restore only the options that were modified by our package
   package_options <- c("mc.cores", "pb", "verbose", "all_data", "raw_data")
 
-  for(opt in package_options) {
-    if(opt %in% names(original_op)) {
+  for (opt in package_options) {
+    if (opt %in% names(original_op)) {
       # Restore original value
       do.call(options, stats::setNames(list(original_op[[opt]]), opt))
     } else {
@@ -42,9 +42,11 @@
   }
 
   # Clean up
-  if(exists(".original_options", envir = parent.env(environment()))) {
-    try(rm(".original_options", envir = parent.env(environment())),
-        silent = TRUE)
+  if (exists(".original_options", envir = parent.env(environment()))) {
+    try(
+      rm(".original_options", envir = parent.env(environment())),
+      silent = TRUE
+    )
   }
 
   invisible()

@@ -51,18 +51,20 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 update_metadata <-
-  function(metadata,
-           path = ".",
-           cores = getOption("mc.cores", 1),
-           pb = getOption("suwo_pb", TRUE),
-           verbose = getOption("suwo_verbose", TRUE),
-           api_key = NULL,
-           dates = NULL) {
+  function(
+    metadata,
+    path = ".",
+    cores = getOption("mc.cores", 1),
+    pb = getOption("suwo_pb", TRUE),
+    verbose = getOption("suwo_verbose", TRUE),
+    api_key = NULL,
+    dates = NULL
+  ) {
     # check arguments
     arguments <- as.list(base::match.call())
 
     # add objects to argument names
-   for (i in names(arguments)[-1]) {
+    for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
@@ -71,7 +73,6 @@ update_metadata <-
 
     # report errors
     checkmate::reportAssertions(check_results)
-
 
     if (length(unique(metadata$repository)) > 1) {
       cli::cli_abort(
@@ -89,11 +90,14 @@ update_metadata <-
 
     #Set query species and format for new query search
     query_species <- metadata$species[1]
-    query_format <-  metadata$format[1]
+    query_format <- metadata$format[1]
     # if more than basic columns are present, assume user wants all columns
     all_data <-
-      length(setdiff(names(metadata),
-                     .format_query_output(only_basic_columns = TRUE))) > 0
+      length(setdiff(
+        names(metadata),
+        .format_query_output(only_basic_columns = TRUE)
+      )) >
+        0
 
     if (metadata$repository[1] == "GBIF") {
       query_output_new <- query_gbif(
@@ -104,7 +108,6 @@ update_metadata <-
         verbose = verbose,
         pb = pb
       )
-
     }
 
     if (metadata$repository[1] == "iNaturalist") {
@@ -116,11 +119,8 @@ update_metadata <-
         verbose = verbose,
         pb = pb
       )
-
     }
     if (metadata$repository[1] == "Macaulay Library") {
-
-
       query_output_new <- query_macaulay(
         species = query_species,
         format = query_format,
@@ -129,14 +129,15 @@ update_metadata <-
         dates = dates,
         verbose = verbose
       )
-
     }
 
     if (metadata$repository[1] == "Xeno-Canto") {
       if (is.null(api_key)) {
         cli::cli_abort(
-          paste("An API key is required for Xeno-Canto API v3.",
-                "Get yours at https://xeno-canto.org/account.")
+          paste(
+            "An API key is required for Xeno-Canto API v3.",
+            "Get yours at https://xeno-canto.org/account."
+          )
         )
       }
       query_output_new <- query_xenocanto(
@@ -147,7 +148,6 @@ update_metadata <-
         pb = pb,
         api_key = api_key
       )
-
     }
     if (metadata$repository[1] == "WikiAves") {
       query_output_new <- query_wikiaves(
@@ -163,22 +163,22 @@ update_metadata <-
     # stop gracefully if query returned NULL
     if (is.null(query_output_new)) {
       if (verbose) {
-        .message("No new entries found", "failure", suffix =  "\n")
+        .message("No new entries found", "failure", suffix = "\n")
       }
       return(invisible(NULL))
     }
 
     # Find duplicates
     query_output_new <- query_output_new[
-      !query_output_new$key %in% metadata$key, ]
+      !query_output_new$key %in% metadata$key,
+    ]
 
     if (nrow(query_output_new) == 0) {
       if (verbose) {
-        .message("No new entries found", "failure", suffix =  "\n")
+        .message("No new entries found", "failure", suffix = "\n")
       }
       return(metadata)
     }
-
 
     query_output_df <- merge_metadata(metadata, query_output_new)
 
@@ -186,15 +186,21 @@ update_metadata <-
     query_output_df$source <- NULL
 
     # tag new entries
-    query_output_df$new_entry <- ifelse(query_output_df$key %in% metadata$key,
-                                        FALSE, TRUE)
+    query_output_df$new_entry <- ifelse(
+      query_output_df$key %in% metadata$key,
+      FALSE,
+      TRUE
+    )
 
     sum_new <- sum(query_output_df$new_entry)
 
     if (verbose) {
       if (sum_new > 0) {
-        .message(text = paste("\n", sum_new, "new entries found"),
-                 "success", suffix = "\n")
+        .message(
+          text = paste("\n", sum_new, "new entries found"),
+          "success",
+          suffix = "\n"
+        )
       }
     }
 

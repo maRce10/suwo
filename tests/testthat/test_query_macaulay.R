@@ -1,8 +1,6 @@
-
 options(verbose = TRUE)
 
 test_that("search Glaucis dohrnii sound reading existing file", {
-
   tf <- tempfile()
 
   utils::write.csv(file = tf, x = suwo:::vignette_metadata$t_rufiventris[1:3, ])
@@ -10,7 +8,6 @@ test_that("search Glaucis dohrnii sound reading existing file", {
   df1 <- query_macaulay(path = tempdir(), files = basename(tf))
 
   expect_true(nrow(df1) == 3)
-
 })
 
 test_that("search Glaucis dohrnii sound", {
@@ -18,12 +15,13 @@ test_that("search Glaucis dohrnii sound", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_macaulay(species = 'Glaucis dohrnii',
-                        format =  "sound",
-                        path = tempdir())
+  df1 <- query_macaulay(
+    species = 'Glaucis dohrnii',
+    format = "sound",
+    path = tempdir()
+  )
 
   expect_true(nrow(df1) >= 12)
-
 })
 
 test_that("search Glaucis dohrnii images", {
@@ -31,12 +29,13 @@ test_that("search Glaucis dohrnii images", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_macaulay(species = 'Glaucis dohrnii',
-                        format =  "image",
-                        path = tempdir())
+  df1 <- query_macaulay(
+    species = 'Glaucis dohrnii',
+    format = "image",
+    path = tempdir()
+  )
 
   expect_true(nrow(df1) >= 10)
-
 })
 
 
@@ -53,18 +52,17 @@ test_that("paging by date", {
   )
 
   expect_true(nrow(df1) >= 15000)
-
 })
 
 
 test_that("non-existing taxon", {
-
-  df1 <- query_macaulay(species = "asdasdasd",
-    format =  "image",
-                        path = tempdir())
+  df1 <- query_macaulay(
+    species = "asdasdasd",
+    format = "image",
+    path = tempdir()
+  )
 
   expect_true(is.null(df1))
-
 })
 
 test_that("using taxon_code", {
@@ -72,13 +70,12 @@ test_that("using taxon_code", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_macaulay(taxon_code = "coshum",
-                        species = "asdasd",
-                        format =  "image",
-                        path = tempdir())
+  df1 <- query_macaulay(
+    taxon_code = "coshum",
+    species = "asdasd",
+    format = "image",
+    path = tempdir()
+  )
 
   expect_true(nrow(df1) == 10000)
-
 })
-
-

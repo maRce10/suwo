@@ -2,12 +2,11 @@ test_that("search Helicobacter pylori sound", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = "Helicobacter pylori", format =  "image")
+  df1 <- query_inaturalist(species = "Helicobacter pylori", format = "image")
 
   skip_if(is.null(df1))
 
   expect_true(nrow(df1) >= 1)
-
 })
 
 
@@ -15,35 +14,36 @@ test_that("search Spatula discors sound (no sounds)", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'Spatula discors', format =  "sound",
-                           identified = TRUE, verifiable = TRUE)
+  df1 <- query_inaturalist(
+    species = 'Spatula discors',
+    format = "sound",
+    identified = TRUE,
+    verifiable = TRUE
+  )
 
   skip_if(is.null(df1))
 
   expect_true(nrow(df1) >= 20)
-
 })
 
 test_that("search Glaucis dohrnii photos", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'Glaucis dohrnii', format =  "image")
+  df1 <- query_inaturalist(species = 'Glaucis dohrnii', format = "image")
 
   skip_if(is.null(df1))
 
-  expect_true(nrow(df1) >=  10)
-
+  expect_true(nrow(df1) >= 10)
 })
 
 test_that("no result", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'asdasdasd', format =  "image")
+  df1 <- query_inaturalist(species = 'asdasdasd', format = "image")
 
   expect_true(is.null(df1))
-
 })
 
 
@@ -51,13 +51,14 @@ test_that("search in parallel", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'bolitoglossa striatula',
-                           format =  "image",
-                           cores = 2)
+  df1 <- query_inaturalist(
+    species = 'bolitoglossa striatula',
+    format = "image",
+    cores = 2
+  )
   skip_if(is.null(df1))
 
-  expect_true(nrow(df1) >=  52)
-
+  expect_true(nrow(df1) >= 52)
 })
 
 
@@ -69,23 +70,24 @@ test_that("test verbose FALSE", {
 
   df1 <- capture_output(query_inaturalist(
     species = 'Glaucis dohrnii',
-    format =  "sound",
+    format = "sound",
     verbose = FALSE
   ))
 
   skip_if(is.null(df1))
 
   expect_true(df1 == "")
-
 })
 
 test_that("test all_data FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_inaturalist(species = 'bolitoglossa striatula',
-                           format =  "image",
-                           all_data = FALSE)
+  df1 <- query_inaturalist(
+    species = 'bolitoglossa striatula',
+    format = "image",
+    all_data = FALSE
+  )
 
   skip_if(is.null(df1))
 
@@ -97,5 +99,4 @@ test_that("test all_data FALSE", {
       all(query_col_names %in% expected_col_names),
     info = "Column names do not match the expected names"
   )
-
 })

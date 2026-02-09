@@ -34,18 +34,20 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_wikiaves <-
-  function(species = getOption("suwo_species"),
-           format = getOption("suwo_format", c("image", "sound")),
-           cores = getOption("mc.cores", 1),
-           pb = getOption("suwo_pb", TRUE),
-           verbose = getOption("suwo_verbose", TRUE),
-           all_data = getOption("suwo_all_data", FALSE),
-           raw_data = getOption("suwo_raw_data", FALSE)) {
+  function(
+    species = getOption("suwo_species"),
+    format = getOption("suwo_format", c("image", "sound")),
+    cores = getOption("mc.cores", 1),
+    pb = getOption("suwo_pb", TRUE),
+    verbose = getOption("suwo_verbose", TRUE),
+    all_data = getOption("suwo_all_data", FALSE),
+    raw_data = getOption("suwo_raw_data", FALSE)
+  ) {
     # check arguments
     arguments <- as.list(base::match.call())
 
     # add objects to argument names
-   for (i in names(arguments)[-1]) {
+    for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
@@ -72,8 +74,10 @@ query_wikiaves <-
         gsub(" ", "%20", species)
       )
     )
-    request_obj <- httr2::req_user_agent(request_obj,
-                                      "suwo (https://github.com/maRce10/suwo)")
+    request_obj <- httr2::req_user_agent(
+      request_obj,
+      "suwo (https://github.com/maRce10/suwo)"
+    )
     response <- httr2::req_perform(request_obj)
 
     # check if request succeeded
@@ -99,42 +103,53 @@ query_wikiaves <-
       return(invisible(NULL))
     }
 
-    get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
-      request_obj <- httr2::request(
-      paste0(
-          "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-          wiki_format,
-          "&t=s&s=",
-          get_ids$id[u],
-          "&o=mp&p=1"
+    get_ids$total_registers <- vapply(
+      seq_len(nrow(get_ids)),
+      function(u) {
+        request_obj <- httr2::request(
+          paste0(
+            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+            wiki_format,
+            "&t=s&s=",
+            get_ids$id[u],
+            "&o=mp&p=1"
+          )
         )
-      )
-      request_obj <-
-        httr2::req_user_agent(request_obj,
-              "suwo (https://github.com/maRce10/suwo)")
-      request_obj <- httr2::req_error(request_obj,
-                                      is_error = function(resp) FALSE)
+        request_obj <-
+          httr2::req_user_agent(
+            request_obj,
+            "suwo (https://github.com/maRce10/suwo)"
+          )
+        request_obj <- httr2::req_error(request_obj, is_error = function(resp) {
+          FALSE
+        })
 
-      response <- try(httr2::req_perform(request_obj), silent = TRUE)
+        response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
-      # if fail request return -9999
-      if (.is_error(response)) {
-        return(-999)
-      }
+        # if fail request return -9999
+        if (.is_error(response)) {
+          return(-999)
+        }
 
-      # check if request succeeded
-      if (httr2::resp_is_error(response)) {
-        return(-999)
-      }
+        # check if request succeeded
+        if (httr2::resp_is_error(response)) {
+          return(-999)
+        }
 
-      content <- httr2::resp_body_json(response)
-      as.numeric(content$registros$total)
-
-    }, numeric(1))
+        content <- httr2::resp_body_json(response)
+        as.numeric(content$registros$total)
+      },
+      numeric(1)
+    )
 
     # let user gracefully know error when downloading metadata
-    if (any(vapply(get_ids$total_registers, function(x) x == -999,
-                   FUN.VALUE = logical(1)))) {
+    if (
+      any(vapply(
+        get_ids$total_registers,
+        function(x) x == -999,
+        FUN.VALUE = logical(1)
+      ))
+    ) {
       if (verbose) {
         .message(text = "Metadata could not be downloaded", as = "failure")
       }
@@ -176,65 +191,76 @@ query_wikiaves <-
     }
 
     # loop over pages
-    query_output_list <- .pbapply_sw(X = seq_len(nrow(id_by_page_df)),
-                                     cl = cl,
-                                     pbar = pb,
-                             function(x, Y = seq_len(nrow(id_by_page_df))) {
+    query_output_list <- .pbapply_sw(
+      X = seq_len(nrow(id_by_page_df)),
+      cl = cl,
+      pbar = pb,
+      function(x, Y = seq_len(nrow(id_by_page_df))) {
+        # set index to get the right offset
+        i <- Y[x]
 
-     # set index to get the right offset
-     i <- Y[x]
+        # wait avoid overloading the server
+        Sys.sleep(0.5)
 
-     # wait avoid overloading the server
-     Sys.sleep(0.5)
-
-      query_output <-
-        try(jsonlite::fromJSON(
-          paste0(
-            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            wiki_format,
-            "&t=",
-            "s",
-            "&s=",
-            id_by_page_df$id[i],
-            "&o=mp&p=",
-            id_by_page_df$page[i]
+        query_output <-
+          try(
+            jsonlite::fromJSON(
+              paste0(
+                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+                wiki_format,
+                "&t=",
+                "s",
+                "&s=",
+                id_by_page_df$id[i],
+                "&o=mp&p=",
+                id_by_page_df$page[i]
+              )
+            ),
+            silent = TRUE
           )
-        ), silent = TRUE)
 
-      # retry if an error occurs waiting 1 s
-      if (.is_error(query_output)) {
-        Sys.sleep(1)
+        # retry if an error occurs waiting 1 s
+        if (.is_error(query_output)) {
+          Sys.sleep(1)
 
-        query_output <- try(jsonlite::fromJSON(
-          paste0(
-            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            wiki_format,
-            "&t=",
-            "s",
-            "&s=",
-            id_by_page_df$id[i],
-            "&o=mp&p=",
-            id_by_page_df$page[i]
+          query_output <- try(
+            jsonlite::fromJSON(
+              paste0(
+                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
+                wiki_format,
+                "&t=",
+                "s",
+                "&s=",
+                id_by_page_df$id[i],
+                "&o=mp&p=",
+                id_by_page_df$page[i]
+              )
+            ),
+            silent = TRUE
           )
-        ), silent = TRUE)
+        }
+
+        # if error then just return the error
+        if (.is_error(query_output)) {
+          return(query_output)
+        }
+
+        # make it a data frame
+        output_df <-
+          as.data.frame(do.call(
+            rbind,
+            lapply(
+              query_output$registros$itens,
+              unlist
+            )
+          ))
+
+        # fix link
+        output_df$link <- gsub("#", "", as.character(output_df$link))
+
+        return(output_df)
       }
-
-      # if error then just return the error
-      if (.is_error(query_output)){
-        return(query_output)
-      }
-
-      # make it a data frame
-      output_df <-
-        as.data.frame(do.call(rbind, lapply(
-          query_output$registros$itens, unlist
-        )))
-
-      # fix link
-      output_df$link <- gsub("#", "", as.character(output_df$link))
-
-      return(output_df)
-    })
+    )
 
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
@@ -309,5 +335,4 @@ query_wikiaves <-
     # # Save the object to the file
     # saveRDS(query_output_df, file = file_path)
     return(query_output_df)
-
   }

@@ -124,21 +124,23 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_macaulay <-
-  function(species = getOption("suwo_species"),
-           taxon_code = NULL,
-           format = getOption("suwo_format", c("image", "sound", "video")),
-           verbose = getOption("suwo_verbose", TRUE),
-           all_data = getOption("suwo_all_data", FALSE),
-           raw_data = getOption("suwo_raw_data", FALSE),
-           path = ".",
-           files = NULL,
-           dates = NULL,
-           taxon_code_info = ml_taxon_code) {
+  function(
+    species = getOption("suwo_species"),
+    taxon_code = NULL,
+    format = getOption("suwo_format", c("image", "sound", "video")),
+    verbose = getOption("suwo_verbose", TRUE),
+    all_data = getOption("suwo_all_data", FALSE),
+    raw_data = getOption("suwo_raw_data", FALSE),
+    path = ".",
+    files = NULL,
+    dates = NULL,
+    taxon_code_info = ml_taxon_code
+  ) {
     # check arguments
     arguments <- as.list(base::match.call())
 
     # add objects to argument names
-   for (i in names(arguments)[-1]) {
+    for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
@@ -151,49 +153,53 @@ query_macaulay <-
     # assign a value to format
     format <- rlang::arg_match(format)
 
-    ml_format <- switch(format,
-                        sound = "audio",
-                        image = "photo",
-                        `video` = "video")
+    ml_format <- switch(
+      format,
+      sound = "audio",
+      image = "photo",
+      `video` = "video"
+    )
 
     # get species ML taxon code
-     if (is.null(species) & is.null(files) & is.null(taxon_code)){
-       # either species or files must be supplied
-       .message(text =
-           paste("Either 'species', 'taxon_code' or 'files' must be supplied",
-                        species, sep = ""),
-                as = "failure")
-
-     }
+    if (is.null(species) & is.null(files) & is.null(taxon_code)) {
+      # either species or files must be supplied
+      .message(
+        text = paste(
+          "Either 'species', 'taxon_code' or 'files' must be supplied",
+          species,
+          sep = ""
+        ),
+        as = "failure"
+      )
+    }
 
     if (is.null(files)) {
-
       # set output message wording
       out_text <- "{n} matching record{?s} found"
       nfiles <- NULL
 
-      if (is.null(taxon_code)){
-        taxon_code <- .taxon_code_search(species,
-                                         ml_taxon_code = taxon_code_info)
-      } else
-        {
-          if (!is.null(species)) {
-            .message(
-              text =
-                paste(
-                  "'species' is ignored when 'taxon_code' is supplied."
-                ),
-              as = "warning"
-            )
-          }
-
+      if (is.null(taxon_code)) {
+        taxon_code <- .taxon_code_search(
+          species,
+          ml_taxon_code = taxon_code_info
+        )
+      } else {
+        if (!is.null(species)) {
+          .message(
+            text = paste(
+              "'species' is ignored when 'taxon_code' is supplied."
+            ),
+            as = "warning"
+          )
+        }
       }
 
       # function will stop here
       if (is.null(taxon_code)) {
-        .message(text =
-                   paste("No matching species found for ", species, sep = ""),
-                 as = "failure")
+        .message(
+          text = paste("No matching species found for ", species, sep = ""),
+          as = "failure"
+        )
 
         return(invisible(NULL))
       }
@@ -210,18 +216,24 @@ query_macaulay <-
         date_ranges_df <- data.frame(start_year = NA)
       }
 
-      new_csv_file_list <- vector(length = nrow(date_ranges_df),
-                                  mode = "character")
+      new_csv_file_list <- vector(
+        length = nrow(date_ranges_df),
+        mode = "character"
+      )
 
       for (i in seq_len(nrow(date_ranges_df))) {
         if (!is.null(dates)) {
           # extract date range to let users know while batching
-          date_range <- if (date_ranges_df$start_month[i] == 1 &&
-                            date_ranges_df$end_month[i] == 12) {
-            if (date_ranges_df$start_year[i] !=  date_ranges_df$end_year[i]) {
-              paste0(date_ranges_df$start_year[i],
-                     "-",
-                     date_ranges_df$end_year[i])
+          date_range <- if (
+            date_ranges_df$start_month[i] == 1 &&
+              date_ranges_df$end_month[i] == 12
+          ) {
+            if (date_ranges_df$start_year[i] != date_ranges_df$end_year[i]) {
+              paste0(
+                date_ranges_df$start_year[i],
+                "-",
+                date_ranges_df$end_year[i]
+              )
             } else {
               date_ranges_df$start_year[i]
             }
@@ -238,29 +250,36 @@ query_macaulay <-
           }
 
           if (nrow(date_ranges_df) > 1) {
-            cli::cli_bullets(c("*" = paste0(
-              "Query ",
-              i,
-              " of ",
-              nrow(date_ranges_df),
-              " (",
-              date_range,
-              "):"
-            )))
+            cli::cli_bullets(c(
+              "*" = paste0(
+                "Query ",
+                i,
+                " of ",
+                nrow(date_ranges_df),
+                " (",
+                date_range,
+                "):"
+              )
+            ))
           }
         }
         # let users know where to save the file
         cat(
-          paste("A browser will open the macaulay library website.",
-                "Save the .csv file ('export' button) to this directory:")
+          paste(
+            "A browser will open the macaulay library website.",
+            "Save the .csv file ('export' button) to this directory:"
+          )
         )
         cat(normalizePath(path), "/", sep = "")
- cat("   (R is monitoring for new .csv files. Press ESC to stop the function)")
+        cat(
+          " (R is monitoring for new CSV files. Press ESC to stop the function)"
+        )
 
         # pause 3 s so users can read message but only in the first query in
         # a batch
-        if (i == 1)
-          Sys.sleep(3)
+        if (i == 1) {
+          Sys.sleep(2.7)
+        }
 
         # construct the search URL
         search_url <- paste0(
@@ -280,8 +299,10 @@ query_macaulay <-
             date_ranges_df$end_year[i]
           )
 
-          if (date_ranges_df$start_month[i] != 1 ||
-              date_ranges_df$end_month[i] != 12) {
+          if (
+            date_ranges_df$start_month[i] != 1 ||
+              date_ranges_df$end_month[i] != 12
+          ) {
             search_url <- paste0(
               search_url,
               "&beginMonth=",
@@ -297,7 +318,7 @@ query_macaulay <-
 
         # monitor for new files
         new_csv_file_list[i] <-
-          .monitor_new_files(path  = path)
+          .monitor_new_files(path = path)
 
         # let users know the name of the csv file that was read
         cat("\nThe data will be read from the file:", suffix = " ")
@@ -305,25 +326,21 @@ query_macaulay <-
         cat(paste(new_csv_file_list[i], "\n"))
       }
     } else {
-
       # warning if species was also supplied
       if (!is.null(species)) {
         .message(
-          text =
-            paste(
-              "'species' is ignored when 'files' is supplied."
-            ),
+          text = paste(
+            "'species' is ignored when 'files' is supplied."
+          ),
           as = "warning"
         )
-
       }
       # warning if taxon_code was also supplied
       if (!is.null(taxon_code)) {
         .message(
-          text =
-            paste(
-              "'taxon_code' is ignored when 'files' is supplied."
-            ),
+          text = paste(
+            "'taxon_code' is ignored when 'files' is supplied."
+          ),
           as = "warning"
         )
       }
@@ -332,24 +349,27 @@ query_macaulay <-
       nfiles <- length(files)
       out_text <- "{n} matching record{?s} read from {nfiles} file{?s}"
       new_csv_file_list <- files
-
     }
 
     # Read the CSV file
-    query_output_list <- lapply(new_csv_file_list, function(x)
-      utils::read.csv(file.path(path, x), stringsAsFactors = FALSE))
+    query_output_list <- lapply(new_csv_file_list, function(x) {
+      utils::read.csv(file.path(path, x), stringsAsFactors = FALSE)
+    })
 
     # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)
 
-    query_output_df$file_url <- vapply(seq_len(nrow(query_output_df)),
-                                       function(x) {
-      paste0(
-        "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/",
-        query_output_df$ML.Catalog.Number[x],
-        "/"
-      )
-    }, FUN.VALUE = character(1))
+    query_output_df$file_url <- vapply(
+      seq_len(nrow(query_output_df)),
+      function(x) {
+        paste0(
+          "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/",
+          query_output_df$ML.Catalog.Number[x],
+          "/"
+        )
+      },
+      FUN.VALUE = character(1)
+    )
 
     # rename output columns
     query_output_df <- .format_query_output(
@@ -380,16 +400,14 @@ query_macaulay <-
       )
     }
 
-
     if (nrow(query_output_df) == 10000) {
       .message(
-        text =
-          paste(
-            "The query returned 10,000 records, which is the maximum allowed.",
-            "It is likely that more",
-            format,
-            "files that matched the query exists but were not retrieved."
-          ),
+        text = paste(
+          "The query returned 10,000 records, which is the maximum allowed.",
+          "It is likely that more",
+          format,
+          "files that matched the query exists but were not retrieved."
+        ),
         as = "warning"
       )
     }

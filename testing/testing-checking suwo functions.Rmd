@@ -566,6 +566,8 @@ pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
 # usethis::use_pkgdown()
 # usethis::use_github_pages()
 
+# set air github action
+# usethis::use_github_action(url = "https://github.com/posit-dev/setup-air/blob/main/examples/format-check.yaml")
 
 # installation of packages fo rOpenSci
 

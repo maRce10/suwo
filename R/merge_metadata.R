@@ -68,8 +68,10 @@ merge_metadata <- function(..., check_columns = TRUE) {
   # Validate all inputs are data frames
   for (i in seq_along(metadata_list)) {
     if (!is.data.frame(metadata_list[[i]])) {
-      stop("All inputs must be data frames or a list of data frames.",
-           call. = FALSE)
+      stop(
+        "All inputs must be data frames or a list of data frames.",
+        call. = FALSE
+      )
     }
   }
 
@@ -86,8 +88,11 @@ merge_metadata <- function(..., check_columns = TRUE) {
     } else {
       call <- match.call()
       args <- as.list(call)[-1]
-      df_names <- vapply(args, function(x) as.character(deparse(x)),
-                         character(1))
+      df_names <- vapply(
+        args,
+        function(x) as.character(deparse(x)),
+        character(1)
+      )
     }
   }
 
@@ -102,7 +107,6 @@ merge_metadata <- function(..., check_columns = TRUE) {
 
   ## check required columns
   if (check_columns) {
-
     basic_out <- .format_query_output(only_basic_columns = TRUE)
 
     # Robust extraction of required column names
@@ -114,14 +118,16 @@ merge_metadata <- function(..., check_columns = TRUE) {
       required_cols <- basic_out
     } else {
       stop(
-  "Could not determine required basic columns from .format_query_output().",
+      "Could not determine required basic columns from .format_query_output().",
         call. = FALSE
       )
     }
 
     if (length(required_cols) == 0) {
-      stop("No required basic columns were returned by .format_query_output().",
-           call. = FALSE)
+      stop(
+        "No required basic columns were returned by .format_query_output().",
+        call. = FALSE
+      )
     }
 
     # Validate each df
@@ -138,7 +144,6 @@ merge_metadata <- function(..., check_columns = TRUE) {
         )
       }
     }
-
   } # end required-column check
 
   ## Add source column

@@ -29,11 +29,12 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) and Grace
 #' Smith Vidaurre
 
-map_locations <- function(metadata,
-                          cluster = FALSE,
-                          palette = grDevices::hcl.colors,
-                          by = "species") {
-
+map_locations <- function(
+  metadata,
+  cluster = FALSE,
+  palette = grDevices::hcl.colors,
+  by = "species"
+) {
   # make lat lon numeric and remove rows with no coords
   metadata$latitude <- as.numeric(as.character(metadata$latitude))
   metadata$longitude <- as.numeric(as.character(metadata$longitude))
@@ -42,19 +43,22 @@ map_locations <- function(metadata,
   inx_with_coors <- !is.na(metadata$latitude) |
     !is.na(metadata$longitude)
 
-  if (all(!inx_with_coors)){
-    .message("Not a single observation (row) has geographic coordinates",
-             as = "failure")
+  if (all(!inx_with_coors)) {
+    .message(
+      "Not a single observation (row) has geographic coordinates",
+      as = "failure"
+    )
     return(invisible(NULL))
-}
+  }
   metadata <- metadata[inx_with_coors, , drop = FALSE]
 
   # make map
 
   # if only one species use subspecies for color marker
   # labels for hovering
-  if (length(unique((metadata$species))) == 1)
+  if (length(unique((metadata$species))) == 1) {
     metadata$labels <- metadata[, by, drop = TRUE]
+  }
 
   cols <- palette(n = length(unique(metadata$labels)))
 
@@ -98,7 +102,6 @@ map_locations <- function(metadata,
     )
   )
 
-
   # make base map
   leaf_map <- leaflet::leaflet(metadata)
 
@@ -109,10 +112,10 @@ map_locations <- function(metadata,
   if (cluster) {
     leaf_map <- leaflet::addAwesomeMarkers(
       map = leaf_map,
-      ~ longitude,
-      ~ latitude,
+      ~longitude,
+      ~latitude,
       icon = icons,
-      label = ~ labels,
+      label = ~labels,
       popup = content,
       data = metadata,
       clusterOptions = leaflet::markerClusterOptions(),
@@ -121,15 +124,14 @@ map_locations <- function(metadata,
   } else {
     leaf_map <- leaflet::addAwesomeMarkers(
       map = leaf_map,
-      ~ longitude,
-      ~ latitude,
+      ~longitude,
+      ~latitude,
       icon = icons,
-      label = ~ labels,
+      label = ~labels,
       popup = content,
       data = metadata
     )
   }
-
 
   # add minimap view at bottom right
   leaf_map <- leaflet::addMiniMap(leaf_map)
@@ -145,52 +147,54 @@ map_locations <- function(metadata,
   )
 
   if (cluster) {
-    leaf_map <- leaflet::addEasyButton(leaf_map, leaflet::easyButton(
-      states = list(
-        leaflet::easyButtonState(
-          stateName = "unfrozen-markers",
-          icon = "ion-toggle",
-          title = "Freeze Clusters",
-          onClick = leaflet::JS(
-            "
+    leaf_map <- leaflet::addEasyButton(
+      leaf_map,
+      leaflet::easyButton(
+        states = list(
+          leaflet::easyButtonState(
+            stateName = "unfrozen-markers",
+            icon = "ion-toggle",
+            title = "Freeze Clusters",
+            onClick = leaflet::JS(
+              "
           function(btn, map) {
             var clusterManager =
               map.layerManager.getLayer('cluster', 'rec.cluster');
             clusterManager.freezeAtZoom();
             btn.state('frozen-markers');
           }"
-          )
-        ),
-        leaflet::easyButtonState(
-          stateName = "frozen-markers",
-          icon = "ion-toggle-filled",
-          title = "UnFreeze Clusters",
-          onClick = leaflet::JS(
-            "
+            )
+          ),
+          leaflet::easyButtonState(
+            stateName = "frozen-markers",
+            icon = "ion-toggle-filled",
+            title = "UnFreeze Clusters",
+            onClick = leaflet::JS(
+              "
           function(btn, map) {
             var clusterManager =
               map.layerManager.getLayer('cluster', 'rec.cluster');
             clusterManager.unfreeze();
             btn.state('unfrozen-markers');
           }"
+            )
           )
         )
       )
-    ))
+    )
   }
 
-
   # let users know that some observations were not
-  if (any(!inx_with_coors)){
+  if (any(!inx_with_coors)) {
     .message(
       paste(
         "{n} observation{?s} d{?oes/o} not have geographic",
         "coordinates and w{?as/ere} ignored"
       ),
-      n =  sum(!inx_with_coors),
+      n = sum(!inx_with_coors),
       as = "warning"
-     )
-    }
+    )
+  }
 
   # plot map
   return(leaf_map)

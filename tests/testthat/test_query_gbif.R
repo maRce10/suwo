@@ -4,11 +4,10 @@ test_that("search Glaucis dohrnii audio", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "sound")
+  df1 <- query_gbif(species = 'Glaucis dohrnii', format = "sound")
   skip_if(is.null(df1))
 
   expect_true(nrow(df1) >= 20)
-
 })
 
 
@@ -16,46 +15,43 @@ test_that("search Floractus heimi audio (no audios)", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'Floractus heimi', format =  "sound")
+  df1 <- query_gbif(species = 'Floractus heimi', format = "sound")
 
   expect_true(is.null(df1))
-
 })
 
 test_that("search Glaucis dohrnii photos", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'Glaucis dohrnii', format =  "image")
+  df1 <- query_gbif(species = 'Glaucis dohrnii', format = "image")
   skip_if(is.null(df1))
 
-  expect_true(nrow(df1) >=  29)
-
+  expect_true(nrow(df1) >= 29)
 })
 
 test_that("search Glaucis dohrnii photos specific data set", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'Glaucis dohrnii',
-                    format =  "image",
-                    dataset = "b1047888-ae52-4179-9dd5-5448ea342a24")
+  df1 <- query_gbif(
+    species = 'Glaucis dohrnii',
+    format = "image",
+    dataset = "b1047888-ae52-4179-9dd5-5448ea342a24"
+  )
   skip_if(is.null(df1))
 
-  expect_true(nrow(df1) >=  22)
-
+  expect_true(nrow(df1) >= 22)
 })
-
 
 
 test_that("no result", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'asdasdasd', format =  "image")
+  df1 <- query_gbif(species = 'asdasdasd', format = "image")
 
   expect_true(is.null(df1))
-
 })
 
 
@@ -64,17 +60,20 @@ test_that("search Aristolochia baetica photos in parallel", {
   skip_if_offline()
 
   cores <- parallel::detectCores()
-  cores <- if (cores > 2)
+  cores <- if (cores > 2) {
     2
-  if (!is.numeric(cores))
+  }
+  if (!is.numeric(cores)) {
     cores <- 1
-  df1 <- query_gbif(species = 'Aristolochia baetica',
-                    format = "image",
-                    cores = cores)
+  }
+  df1 <- query_gbif(
+    species = 'Aristolochia baetica',
+    format = "image",
+    cores = cores
+  )
   skip_if(is.null(df1))
 
   expect_true(nrow(df1) >= 2003)
-
 })
 
 
@@ -85,7 +84,7 @@ test_that("test verbose FALSE", {
   msg <- capture.output(
     df1 <- query_gbif(
       species = 'Glaucis dohrnii',
-      format =  "image",
+      format = "image",
       verbose = FALSE,
       pb = FALSE
     )
@@ -93,16 +92,17 @@ test_that("test verbose FALSE", {
   skip_if(is.null(df1))
 
   expect_true(length(msg) == 0)
-
 })
 
 test_that("test all_data FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(species = 'Glaucis dohrnii',
-                    format =  "image",
-                    all_data = FALSE)
+  df1 <- query_gbif(
+    species = 'Glaucis dohrnii',
+    format = "image",
+    all_data = FALSE
+  )
 
   skip_if(is.null(df1))
 
@@ -114,5 +114,4 @@ test_that("test all_data FALSE", {
       all(query_col_names %in% expected_col_names),
     info = "Column names do not match the expected names"
   )
-
 })

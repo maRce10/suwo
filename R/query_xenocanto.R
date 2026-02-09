@@ -65,35 +65,41 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_xenocanto <-
-  function(species = getOption("suwo_species"),
-           cores = getOption("mc.cores", 1),
-           pb = getOption("suwo_pb", TRUE),
-           verbose = getOption("suwo_verbose", TRUE),
-           all_data = getOption("suwo_all_data", FALSE),
-           raw_data = getOption("suwo_raw_data", FALSE),
-           api_key = Sys.getenv("xc_api_key")) {
-
+  function(
+    species = getOption("suwo_species"),
+    cores = getOption("mc.cores", 1),
+    pb = getOption("suwo_pb", TRUE),
+    verbose = getOption("suwo_verbose", TRUE),
+    all_data = getOption("suwo_all_data", FALSE),
+    raw_data = getOption("suwo_raw_data", FALSE),
+    api_key = Sys.getenv("xc_api_key")
+  ) {
     # check arguments
     arguments <- as.list(base::match.call())
 
     # add objects to argument names
-   for (i in names(arguments)[-1]) {
+    for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
 
     # Check for API key
     if (is.null(api_key) || !nzchar(api_key)) {
       cli::cli_abort(
-        paste("An API key is required for Xeno-Canto API v3.",
-              "Get yours at https://xeno-canto.org/account.")
+        paste(
+          "An API key is required for Xeno-Canto API v3.",
+          "Get yours at https://xeno-canto.org/account."
+        )
       )
     }
 
     # --- build query from tags ---
     # Handle species names with spaces by wrapping them in quotes for the query
     if (!grepl(":", species)) {
-      species_name <- ifelse(grepl("\\s", species), paste0('"', species, '"'),
-                             species)
+      species_name <- ifelse(
+        grepl("\\s", species),
+        paste0('"', species, '"'),
+        species
+      )
 
       # Prepend the required 'sp:' tag to the species name
       query_str <- paste0("sp:", species_name)
@@ -110,29 +116,38 @@ query_xenocanto <-
     }
 
     # --- API request ---
-    query <- try(jsonlite::fromJSON(
-      paste0(
-        "https://www.xeno-canto.org/api/3/recordings?query=",
-        query_str,
-        "&key=",
-        api_key
-      )
-    ), silent = TRUE)
+    query <- try(
+      jsonlite::fromJSON(
+        paste0(
+          "https://www.xeno-canto.org/api/3/recordings?query=",
+          query_str,
+          "&key=",
+          api_key
+        )
+      ),
+      silent = TRUE
+    )
 
     # let user know error when downloading metadata
     if (.is_error(query)) {
       if (verbose) {
-        .message(text =
-                   "Metadata could not be downloaded (is your API key valid?)",
-                 as = "failure", suffix =  "\n")
+        .message(
+          text = "Metadata could not be downloaded (is your API key valid?)",
+          as = "failure",
+          suffix = "\n"
+        )
       }
       return(invisible(NULL))
     }
 
     if (as.numeric(query$numRecordings) == 0) {
-      if (verbose)
-        .message(text = "No matching records found",
-                 as = "failure", suffix =  "\n")
+      if (verbose) {
+        .message(
+          text = "No matching records found",
+          as = "failure",
+          suffix = "\n"
+        )
+      }
       return(invisible(NULL))
     }
 
@@ -145,27 +160,31 @@ query_xenocanto <-
 
     query_output_list <- .pbapply_sw(
       pbar = pb,
-      X = seq_len(ceiling(as.numeric(query$numRecordings)/ 100)),
+      X = seq_len(ceiling(as.numeric(query$numRecordings) / 100)),
       cl = cl,
-      FUN = function(x,
-          Y = seq_len(ceiling(as.numeric(query$numRecordings)/ 100))) {
-
+      FUN = function(
+        x,
+        Y = seq_len(ceiling(as.numeric(query$numRecordings) / 100))
+      ) {
         # set index to get the right offset
         y <- Y[x]
 
-        query_output <- try(jsonlite::fromJSON(
-          paste0(
-            "https://www.xeno-canto.org/api/3/recordings?query=",
-            query_str,
-            "&page=",
-            y,
-            "&key=",
-            api_key
-          )
-        ), silent = TRUE)
+        query_output <- try(
+          jsonlite::fromJSON(
+            paste0(
+              "https://www.xeno-canto.org/api/3/recordings?query=",
+              query_str,
+              "&page=",
+              y,
+              "&key=",
+              api_key
+            )
+          ),
+          silent = TRUE
+        )
 
         # if error then just return the error
-        if (.is_error(query_output)){
+        if (.is_error(query_output)) {
           return(query_output)
         }
 
@@ -176,7 +195,6 @@ query_xenocanto <-
             collapse = "-",
             FUN.VALUE = character(1)
           )
-
 
         sono_df <- as.data.frame(query_output$recordings$sono)
         names(sono_df) <-
@@ -197,15 +215,17 @@ query_xenocanto <-
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be downloaded",
-                 as = "failure", suffix =  "\n")
+        .message(
+          text = "Metadata could not be downloaded",
+          as = "failure",
+          suffix = "\n"
+        )
       }
       return(invisible(NULL))
     }
 
     # make all data frames have the same columns
     query_output_df <- .merge_data_frames(query_output_list)
-
 
     # format output
     if (as.numeric(query$numRecordings) > 0) {
@@ -220,9 +240,7 @@ query_xenocanto <-
         sub(".*\\.", "", query_output_df$`file-name`)
 
       query_output_df$file <-
-        paste0("https://xeno-canto.org/",
-               query_output_df$id,
-               "/download")
+        paste0("https://xeno-canto.org/", query_output_df$id, "/download")
 
       query_output_df$date <-
         gsub("-", "/", query_output_df$date)
@@ -268,7 +286,8 @@ query_xenocanto <-
       if (verbose) {
         .message(
           paste0("{n} matching sound file{?s} found"),
-          as = "success", suffix =  "\n",
+          as = "success",
+          suffix = "\n",
           n = nrow(query_output_df)
         )
       }

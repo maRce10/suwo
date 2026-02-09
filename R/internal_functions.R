@@ -5,14 +5,7 @@
 # that allows to define internally if progress bar would be used
 # (pbapply::pblapply uses pboptions to do this)
 
-
-.pbapply_sw <- function(X,
-                        FUN,
-                        cl = 1,
-                        pbar = TRUE,
-                        Y = X,
-                        title = "",
-                        ...) {
+.pbapply_sw <- function(X, FUN, cl = 1, pbar = TRUE, Y = X, title = "", ...) {
   FUN <- match.fun(FUN)
 
   if (identical(Sys.getenv("TESTTHAT"), "true")) {
@@ -20,17 +13,18 @@
   }
   # no parallel
   if (cl == 1) {
-    if (!pbar) { # No progress bar
+    if (!pbar) {
+      # No progress bar
       out <- lapply(seq_along(X), FUN, ...)
       return(out)
-    } else { # progress bar
+    } else {
+      # progress bar
       out <- lapply(
-        X =
-          cli::cli_progress_along(
-            name = title,
-            x =  X,
-            clear = FALSE
-          ),
+        X = cli::cli_progress_along(
+          name = title,
+          x = X,
+          clear = FALSE
+        ),
         FUN = FUN,
         ...
       )
@@ -50,15 +44,18 @@
       parallel::clusterExport(
         clust,
         varlist = c("FUN", "Y"),
-        envir   = environment()
+        envir = environment()
       )
     }
 
-    if (!pbar) { # No progress bar
+    if (!pbar) {
+      # No progress bar
 
       if (is_windows) {
-        out <- parallel::parLapply(cl =  clust, X = seq_along(X),
-        fun = function(i) FUN(X[i], Y, ...)
+        out <- parallel::parLapply(
+          cl = clust,
+          X = seq_along(X),
+          fun = function(i) FUN(X[i], Y, ...)
         )
       } else {
         out <- parallel::mclapply(
@@ -69,14 +66,15 @@
       }
 
       return(out)
-    } else { # progress bar
+    } else {
+      # progress bar
 
       nchunks <- ceiling(length(X) / as.integer(cl))
 
       if (cl >= length(X)) {
         chunks <- list(X)
         cl <- length(X)
-      }  else {
+      } else {
         chunks <- split(
           seq_along(X),
           cut(seq_along(X), nchunks, labels = FALSE)
@@ -90,7 +88,6 @@
         x = seq_along(chunks),
         clear = FALSE
       )) {
-
         idx <- chunks[[i]]
 
         if (is_windows) {
@@ -108,9 +105,7 @@
         }
       }
 
-
       return(out)
-
     }
   }
 }
@@ -162,14 +157,16 @@
   }
 }
 
-.message <- function(text =
-                  paste0("Obtaining metadata ({n} matching record{?s} found)"),
-                  as = c("success", "warning", "failure", "error", "message"),
-                     n = NULL,
-                     suffix = ":\n",
-                  nfiles = NULL) {
-  if (!is.null(n))
+.message <- function(
+  text = paste0("Obtaining metadata ({n} matching record{?s} found)"),
+  as = c("success", "warning", "failure", "error", "message"),
+  n = NULL,
+  suffix = ":\n",
+  nfiles = NULL
+) {
+  if (!is.null(n)) {
     text <- cli::pluralize(text)
+  }
 
   if (as == "success") {
     if (!cli::is_utf8_output()) {
@@ -243,21 +240,8 @@
     (return("already there (not downloaded)"))
   }
 
-  dl_result <- try(utils::download.file(
-    url = as.character(metadata$file_url[x]),
-    destfile = destfile,
-    quiet = TRUE,
-    mode = "wb",
-    method = "auto",
-    cacheOK = TRUE,
-    extra = getOption("download.file.extra")
-  ),
-  silent = TRUE)
-
-  # if failed try again after wating 0.5 seconds
-  if (.is_error(dl_result)) {
-    Sys.sleep(0.5)
-    dl_result <- try(utils::download.file(
+  dl_result <- try(
+    utils::download.file(
       url = as.character(metadata$file_url[x]),
       destfile = destfile,
       quiet = TRUE,
@@ -266,30 +250,49 @@
       cacheOK = TRUE,
       extra = getOption("download.file.extra")
     ),
-    silent = TRUE)
+    silent = TRUE
+  )
+
+  # if failed try again after wating 0.5 seconds
+  if (.is_error(dl_result)) {
+    Sys.sleep(0.5)
+    dl_result <- try(
+      utils::download.file(
+        url = as.character(metadata$file_url[x]),
+        destfile = destfile,
+        quiet = TRUE,
+        mode = "wb",
+        method = "auto",
+        cacheOK = TRUE,
+        extra = getOption("download.file.extra")
+      ),
+      silent = TRUE
+    )
   }
 
   # if still failed then return FALSE
   if (.is_error(dl_result)) {
     return("failed")
   } else {
-    if (exists)
+    if (exists) {
       (return("overwritten"))
-    else
+    } else {
       return("saved")
+    }
   }
 }
 
 # suppressing warnings from download.file
-.download <- function(...){
+.download <- function(...) {
   suppressWarnings(.download_basic(...))
 }
 
 # fix extension so it is homogeneous across functions
 .fix_extension <- function(x, url) {
   # if the strings contains "?" extract string before "?"
-  if (any(grepl("\\?", x)))
+  if (any(grepl("\\?", x))) {
     x <- gsub("\\?.*$", "", x)
+  }
 
   # if is NA then try to get from url
   if (any(is.na(x))) {
@@ -346,10 +349,7 @@
     if (length(nms) != length(common_names)) {
       for (o in common_names[!common_names %in% nms]) {
         e <-
-          data.frame(e,
-                     NA,
-                     stringsAsFactors = FALSE,
-                     check.names = FALSE)
+          data.frame(e, NA, stringsAsFactors = FALSE, check.names = FALSE)
         names(e)[ncol(e)] <- o
       }
     }
@@ -376,16 +376,19 @@
 }
 
 # format query output dataframe to standardize column names
-.format_query_output <- function(X,
-                                 column_names,
-                                 all_data,
-                                 format,
-                                 raw_data = FALSE,
-                                 call,
-                                 input_file = NA,
-                                 only_basic_columns = FALSE) {
-  if (raw_data)
+.format_query_output <- function(
+  X,
+  column_names,
+  all_data,
+  format,
+  raw_data = FALSE,
+  call,
+  input_file = NA,
+  only_basic_columns = FALSE
+) {
+  if (raw_data) {
     return(X)
+  }
 
   basic_colums <- c(
     "repository",
@@ -402,8 +405,9 @@
     "file_url",
     "file_extension"
   )
-  if (only_basic_columns)
+  if (only_basic_columns) {
     return(basic_colums)
+  }
 
   # if missing any basic column add it with NAs
   for (i in basic_colums) {
@@ -424,14 +428,10 @@
       names(X)[names(X) == names_df$old[i]] <- names_df$new[i]
     } else {
       # if expected (old) name does not exist add new column with NAs
-      X <- data.frame(X,
-                      NA,
-                      stringsAsFactors = FALSE,
-                      check.names = FALSE)
+      X <- data.frame(X, NA, stringsAsFactors = FALSE, check.names = FALSE)
       names(X)[ncol(X)] <- names_df$new[i]
     }
   }
-
 
   # replace "." with "_"
   names(X) <- gsub("\\.|\\-", "_", names(X))
@@ -439,11 +439,13 @@
   # replace "__" with "_"
   names(X) <- gsub("___", "_", names(X), fixed = TRUE)
 
-  if (is.null(X$latitude))
+  if (is.null(X$latitude)) {
     X$latitude <- NA
+  }
 
-  if (is.null(X$longitude))
+  if (is.null(X$longitude)) {
     X$longitude <- NA
+  }
 
   # convert lat long to numbers
   X$latitude <- as.numeric(X$latitude)
@@ -465,15 +467,11 @@
   }
 
   if (X$repository[1] == "GBIF") {
-    X$time <- substr(x = X$time,
-                     start = 1,
-                     stop = 5)
+    X$time <- substr(x = X$time, start = 1, stop = 5)
   }
 
   if (X$repository[1] == "iNaturalist") {
-    X$time <- substr(x = X$time,
-                     start = 12,
-                     stop = 16)
+    X$time <- substr(x = X$time, start = 12, stop = 16)
 
     # fix image size in URL
     X$file_url <- gsub("square", "original", X$file_url)
@@ -512,9 +510,8 @@
     X <- X[, basic_colums]
   }
 
-    # remove rows with NAs in URL
+  # remove rows with NAs in URL
   if (anyNA(X$file_url)) {
-
     # get observations without URL
     excluded_results <- X[is.na(X$file_url), ]
 
@@ -530,7 +527,7 @@
         ".\n"
       ),
       as = "warning",
-      n  = sum(is.na(X$file_url))
+      n = sum(is.na(X$file_url))
     ))
 
     # remove those observations
@@ -545,7 +542,6 @@
 
 # get repo name from call
 .repo_from_call <- function(x) {
-
   # get function symbol as string
   x <- as.character(x[[1]])
 
@@ -564,7 +560,6 @@
     query_inaturalist = "iNaturalist",
     query_macaulay = "Macaulay Library"
   )
-
 }
 
 ## function to split macaulay queries by year-month
@@ -597,17 +592,22 @@
     poss_month_year_df$year_decimal <-
       poss_month_year_df$year + (poss_month_year_df$month - 1) / 12
 
-
     date_list <- lapply(seq_along(x[-1]), function(y) {
       time_diff <- poss_month_year_df$year_decimal - x[y]
 
       start <- poss_month_year_df[
-        poss_month_year_df$year_decimal == poss_month_year_df$year_decimal[
-          time_diff >= 0][1], ]
+        poss_month_year_df$year_decimal ==
+          poss_month_year_df$year_decimal[
+            time_diff >= 0
+          ][1],
+      ]
       time_diff <- poss_month_year_df$year_decimal - x[y + 1]
       end <- poss_month_year_df[
-        poss_month_year_df$year_decimal == rev(poss_month_year_df$year_decimal[
-          time_diff < 0])[1], ]
+        poss_month_year_df$year_decimal ==
+          rev(poss_month_year_df$year_decimal[
+            time_diff < 0
+          ])[1],
+      ]
 
       out <- cbind(start[, 1:2], end[, 1:2])
 
@@ -620,19 +620,19 @@
     # expand rows that cross years
     dates_list <- lapply(seq_len(nrow(dates_df)), function(i) {
       Y <- dates_df[i, ]
-      if (Y$start_month > Y$end_month | Y$start_year < Y$end_year)
+      if (Y$start_month > Y$end_month | Y$start_year < Y$end_year) {
         Y <- data.frame(
           start_month = c(Y$start_month, 1),
           start_year = c(Y$start_year, Y$start_year + 1),
           end_month = c(12, Y$end_month),
           end_year = c(Y$start_year, Y$start_year + 1)
         )
+      }
 
       return(Y)
     })
 
     dates_df <- do.call(rbind, dates_list)
-
   } else {
     # remove years above current year
     unique_years <- unique_years[unique_years <= current_year]
@@ -650,7 +650,6 @@
 
 # monitor if a new file is added
 .monitor_new_files <- function(path, interval = 1, break.time = 60) {
-
   # initial list of csv files
   old_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
 
@@ -660,8 +659,9 @@
     Sys.sleep(interval)
 
     # time-out
-    if (as.numeric(difftime(Sys.time(), start_time, units = "secs")) >
-        break.time) {
+    if (
+      as.numeric(difftime(Sys.time(), start_time, units = "secs")) > break.time
+    ) {
       return(NULL)
     }
 
@@ -672,7 +672,6 @@
     added <- setdiff(new_files, old_files)
 
     if (length(added) > 0) {
-
       file_path <- file.path(path, added[1])
 
       # wait until file stops growing (important!)
@@ -701,64 +700,79 @@
 .clean_dates <- function(date_strings) {
   current_year <- as.numeric(format(Sys.Date(), "%Y"))
 
-  vapply(date_strings, function(date_str) {
-    if (is.na(date_str)) {
+  vapply(
+    date_strings,
+    function(date_str) {
+      if (is.na(date_str)) {
+        return(NA_character_)
+      }
+
+      # First check if it's valid YYYY-MM-DD format
+      if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
+        # Validate month and day ranges
+        parts <- strsplit(date_str, "-")[[1]]
+        year <- as.numeric(parts[1])
+        month <- as.numeric(parts[2])
+        day <- as.numeric(parts[3])
+
+        if (
+          month >= 1 &
+            month <= 12 &
+            day >= 1 &
+            day <= 31 &
+            year <= current_year
+        ) {
+          return(date_str) # Keep the full valid date
+        }
+      }
+
+      # If not valid YYYY-MM-DD, try to extract just the year
+      year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
+      if (length(year_match) > 0) {
+        year <- as.numeric(year_match[1])
+        #Return just the year if it's reasonable (between 1900 and current year)
+        if (year >= 1900 & year <= current_year) {
+          return(as.character(year))
+        }
+      }
+
+      # If we can't extract a reasonable year, return NA
       return(NA_character_)
-    }
-
-    # First check if it's valid YYYY-MM-DD format
-    if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
-      # Validate month and day ranges
-      parts <- strsplit(date_str, "-")[[1]]
-      year <- as.numeric(parts[1])
-      month <- as.numeric(parts[2])
-      day <- as.numeric(parts[3])
-
-      if (month >= 1 &
-          month <= 12 & day >= 1 & day <= 31 & year <= current_year) {
-        return(date_str)  # Keep the full valid date
-      }
-    }
-
-    # If not valid YYYY-MM-DD, try to extract just the year
-    year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
-    if (length(year_match) > 0) {
-      year <- as.numeric(year_match[1])
-      # Return just the year if it's reasonable (between 1900 and current year)
-      if (year >= 1900 & year <= current_year) {
-        return(as.character(year))
-      }
-    }
-
-    # If we can't extract a reasonable year, return NA
-    return(NA_character_)
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 }
 
 # homogenize dates
 .homogenize_dates <- function(date_strings) {
-  date_strings <- vapply(date_strings, function(date_str) {
-    # If input is NA, return NA
-    if (is.na(date_str)) {
-      return(NA_character_)
-    }
+  date_strings <- vapply(
+    date_strings,
+    function(date_str) {
+      # If input is NA, return NA
+      if (is.na(date_str)) {
+        return(NA_character_)
+      }
 
-    # Try to parse the date
-    parsed <- lubridate::parse_date_time(
-      date_str,
-      orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
-      truncated = 2,
-      quiet = TRUE
-    )
+      # Try to parse the date
+      parsed <- lubridate::parse_date_time(
+        date_str,
+        orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
+        truncated = 2,
+        quiet = TRUE
+      )
 
-    # If parsing succeeded, convert to Date format
-    if (!is.na(parsed)) {
-      as.character(as.Date(parsed))
-    } else {
-      # If parsing failed but input is not NA, return the input value
-      date_str
-    }
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+      # If parsing succeeded, convert to Date format
+      if (!is.na(parsed)) {
+        as.character(as.Date(parsed))
+      } else {
+        # If parsing failed but input is not NA, return the input value
+        date_str
+      }
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 
   # remove invalid dates
   date_strings <- .clean_dates(date_strings)
@@ -766,22 +780,27 @@
 
 # Function to check if a string is a valid time
 .is_valid_time <- function(time_str) {
-  if (is.na(time_str))
+  if (is.na(time_str)) {
     return(FALSE)
+  }
 
   # Remove spaces and convert to lowercase for easier matching
   clean_str <- tolower(trimws(time_str))
 
   # Check for invalid patterns first
-  if (grepl("^\\?|xx|morning|^[a-z]+$", clean_str) &&
-      !grepl("am|pm", clean_str)) {
+  if (
+    grepl("^\\?|xx|morning|^[a-z]+$", clean_str) &&
+      !grepl("am|pm", clean_str)
+  ) {
     return(FALSE)
   }
 
   # Check for various valid time patterns
   # HH:MM, H:MM, HH.MM, H.MM patterns with optional AM/PM
-  if (grepl("^\\d{1,2}[:.]\\d{2}\\s*(am|pm)?$", clean_str) ||
-      grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
+  if (
+    grepl("^\\d{1,2}[:.]\\d{2}\\s*(am|pm)?$", clean_str) ||
+      grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)
+  ) {
     return(TRUE)
   }
 
@@ -790,77 +809,81 @@
 
 # Function to convert time strings to standardized format
 .convert_times <- function(time_strings) {
-  vapply(time_strings, function(time_str) {
-    if (is.na(time_str) || !.is_valid_time(time_str)) {
-      return(NA_character_)
-    }
-
-    # Clean the string
-    clean_str <- tolower(trimws(time_str))
-
-    # Handle simple am/pm without time (like "6am")
-    if (grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
-      time_num <- as.numeric(sub("\\s*(am|pm)$", "", clean_str))
-      period <- ifelse(grepl("pm$", clean_str), "pm", "am")
-
-      # Convert to 24-hour format
-      if (period == "pm" && time_num < 12) {
-        hours <- time_num + 12
-      } else if (period == "am" && time_num == 12) {
-        hours <- 0
-      } else {
-        hours <- time_num
+  vapply(
+    time_strings,
+    function(time_str) {
+      if (is.na(time_str) || !.is_valid_time(time_str)) {
+        return(NA_character_)
       }
 
-      return(sprintf("%02d:00", hours))
-    }
+      # Clean the string
+      clean_str <- tolower(trimws(time_str))
 
-    # Handle times with AM/PM
-    if (grepl("am|pm", clean_str)) {
-      time_part <- sub("\\s*(am|pm)$", "", clean_str)
-      period <- ifelse(grepl("pm$", clean_str), "pm", "am")
+      # Handle simple am/pm without time (like "6am")
+      if (grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
+        time_num <- as.numeric(sub("\\s*(am|pm)$", "", clean_str))
+        period <- ifelse(grepl("pm$", clean_str), "pm", "am")
 
-      # Handle both colon and dot separators
-      if (grepl("[:.]", time_part)) {
-        parts <- strsplit(time_part, "[:.]")[[1]]
+        # Convert to 24-hour format
+        if (period == "pm" && time_num < 12) {
+          hours <- time_num + 12
+        } else if (period == "am" && time_num == 12) {
+          hours <- 0
+        } else {
+          hours <- time_num
+        }
+
+        return(sprintf("%02d:00", hours))
+      }
+
+      # Handle times with AM/PM
+      if (grepl("am|pm", clean_str)) {
+        time_part <- sub("\\s*(am|pm)$", "", clean_str)
+        period <- ifelse(grepl("pm$", clean_str), "pm", "am")
+
+        # Handle both colon and dot separators
+        if (grepl("[:.]", time_part)) {
+          parts <- strsplit(time_part, "[:.]")[[1]]
+        } else {
+          # If no separator, assume it's just hours
+          parts <- c(time_part, "00")
+        }
+
+        hours <- as.numeric(parts[1])
+        minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
+
+        # Convert to 24-hour format
+        if (period == "pm" && hours < 12) {
+          hours <- hours + 12
+        } else if (period == "am" && hours == 12) {
+          hours <- 0
+        }
+
+        return(sprintf("%02d:%02d", hours, minutes))
+      }
+
+      # Handle 24-hour times without AM/PM
+      if (grepl("[:.]", clean_str)) {
+        parts <- strsplit(clean_str, "[:.]")[[1]]
       } else {
         # If no separator, assume it's just hours
-        parts <- c(time_part, "00")
+        parts <- c(clean_str, "00")
       }
 
       hours <- as.numeric(parts[1])
       minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
 
-      # Convert to 24-hour format
-      if (period == "pm" && hours < 12) {
-        hours <- hours + 12
-      } else if (period == "am" && hours == 12) {
-        hours <- 0
-      }
-
-      return(sprintf("%02d:%02d", hours, minutes))
-    }
-
-    # Handle 24-hour times without AM/PM
-    if (grepl("[:.]", clean_str)) {
-      parts <- strsplit(clean_str, "[:.]")[[1]]
-    } else {
-      # If no separator, assume it's just hours
-      parts <- c(clean_str, "00")
-    }
-
-    hours <- as.numeric(parts[1])
-    minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
-
-    # Standardize to HH:MM format
-    sprintf("%02d:%02d", hours, minutes)
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+      # Standardize to HH:MM format
+      sprintf("%02d:%02d", hours, minutes)
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 }
 
 
 ## function to check arguments
 .check_arguments <- function(fun, args) {
-
   # make function name a character
   fun <- as.character(fun)[1]
 
@@ -880,7 +903,8 @@
       x = args$species,
       add = check_collection,
       len = 1,
-      .var.name = "species")
+      .var.name = "species"
+    )
   }
 
   if (!is.null(args$format)) {
@@ -981,8 +1005,6 @@
       .var.name = "column names in metadata"
     )
 
-
-
     if (!is.null(args$folder_by)) {
       checkmate::assert_multi_class(
         x = args$metadata[, args$folder_by],
@@ -993,94 +1015,101 @@
     }
   }
 
-
-
   return(check_collection)
 }
 
 ## check internet
 # gracefully fail if internet resource is not available
-.checkconnection <- function(service = c("gbif",
-                                         "inat",
-                                         "macaulay",
-                                         "wikiaves",
-                                         "xenocanto",
-                                         "observation"),
-                             verb = TRUE) {
-
+.checkconnection <- function(
+  service = c(
+    "gbif",
+    "inat",
+    "macaulay",
+    "wikiaves",
+    "xenocanto",
+    "observation"
+  ),
+  verb = TRUE
+) {
   # set user agent option globally
   options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
 
-    # check if internet is available
+  # check if internet is available
   if (!httr2::is_online()) {
     if (verb) {
-      .message("No internet connection available (check your connection!)",
-               as = "failure")
+      .message(
+        "No internet connection available (check your connection!)",
+        as = "failure"
+      )
     }
     return(FALSE)
   }
 
-  if (!is.null(service)){
+  if (!is.null(service)) {
+    service <- match.arg(service)
 
-  service <- match.arg(service)
+    urls <- list(
+      gbif = "https://api.gbif.org/",
+      inat = "https://www.inaturalist.org/",
+      macaulay = "https://www.macaulaylibrary.org/",
+      wikiaves = "https://www.wikiaves.com.br",
+      xenocanto = "https://www.xeno-canto.org",
+      observation = "https://observation.org"
+    )
 
-  urls <- list(
-    gbif     = "https://api.gbif.org/",
-    inat     = "https://www.inaturalist.org/",
-    macaulay = "https://www.macaulaylibrary.org/",
-    wikiaves = "https://www.wikiaves.com.br",
-    xenocanto = "https://www.xeno-canto.org",
-    observation = "https://observation.org"
-  )
+    messages <- list(
+      gbif = "GBIF API",
+      inat = "INaturalist",
+      macaulay = "macaulaylibrary.org",
+      wikiaves = "wikiaves.com.br",
+      xenocanto = "xeno-canto.org",
+      observation = "https://observation.org"
+    )
 
-  messages <- list(
-    gbif     = "GBIF API",
-    inat     = "INaturalist",
-    macaulay = "macaulaylibrary.org",
-    wikiaves = "wikiaves.com.br",
-    xenocanto = "xeno-canto.org",
-    observation = "https://observation.org"
-  )
+    url <- urls[[service]]
+    name <- messages[[service]]
 
-  url <- urls[[service]]
-  name <- messages[[service]]
+    # Attempt request
+    request_obj <- httr2::request(url)
+    request_obj <- httr2::req_user_agent(
+      request_obj,
+      "suwo (https://github.com/maRce10/suwo)"
+    )
+    # Disable auto-throwing
+    request_obj <- httr2::req_error(request_obj, is_error = function(resp) {
+      FALSE
+    })
 
-  # Attempt request
-  request_obj <- httr2::request(url)
-  request_obj <- httr2::req_user_agent(request_obj,
-                                       "suwo (https://github.com/maRce10/suwo)")
-  # Disable auto-throwing
-  request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)
+    response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
-  response <- try(httr2::req_perform(request_obj), silent = TRUE)
-
-  if (.is_error(response) ||
-      httr2::resp_is_error(response)) {
-    if (verb) {
-      .message(paste("No connection to", name),
-               as = "failure")
+    if (
+      .is_error(response) ||
+        httr2::resp_is_error(response)
+    ) {
+      if (verb) {
+        .message(paste("No connection to", name), as = "failure")
+      }
+      return(FALSE)
     }
-    return(FALSE)
-  }
 
-  content <- httr2::resp_body_string(response, encoding = "UTF-8")
-  if (grepl("Could not connect to the database", content)) {
-    if (verb) {
-      .message(paste(name, "website is apparently down"), as = "failure")
+    content <- httr2::resp_body_string(response, encoding = "UTF-8")
+    if (grepl("Could not connect to the database", content)) {
+      if (verb) {
+        .message(paste(name, "website is apparently down"), as = "failure")
+      }
+      return(FALSE)
     }
-    return(FALSE)
   }
-}
   return(TRUE)
 }
 
 # look up species taxon code for Macaulay queries
 .taxon_code_search <-
-  function(species = getOption("suwo_species"),
-           ml_taxon_code = ml_taxon_code) {
+  function(species = getOption("suwo_species"), ml_taxon_code = ml_taxon_code) {
     taxon_code <- ml_taxon_code$SPECIES_CODE[
       ml_taxon_code$SCI_NAME == species &
-      !is.na(ml_taxon_code$SCI_NAME)]
+        !is.na(ml_taxon_code$SCI_NAME)
+    ]
     if (length(taxon_code) > 0) {
       return(taxon_code[1])
     } else {
@@ -1089,6 +1118,6 @@
   }
 
 # get if an object is an error from try()
-.is_error <- function(x){
+.is_error <- function(x) {
   base::inherits(x, "try-error")
 }

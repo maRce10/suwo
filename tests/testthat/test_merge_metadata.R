@@ -1,8 +1,6 @@
 options(verbose = TRUE)
 
 test_that("merge query_wikiaves and xc", {
-
-
   wa <- suwo:::vignette_metadata$h_harpyja
   xc <- suwo:::vignette_metadata$a_hahneli
   merged_mt <- merge_metadata(wa, xc)
@@ -21,11 +19,10 @@ test_that("merge query_wikiaves and xc", {
   expect_true(all(unique(merged_mt2$source) %in% c("wa", "xc", "gbf")))
 
   # merge a list of data frames
-  merged_mt3 <- merge_metadata(list(wikiaves = wa,xenocanto = xc, gbif = gbf))
+  merged_mt3 <- merge_metadata(list(wikiaves = wa, xenocanto = xc, gbif = gbf))
 
   identical(merged_mt3, merged_mt2)
-
-  })
+})
 
 
 # Make simple example data frames with required cols
@@ -75,7 +72,7 @@ test_that("non-data-frame inputs throw an error", {
 })
 
 test_that("missing required columns cause an error", {
-  bad_df <- data.frame(x = 1)  # missing required cols
+  bad_df <- data.frame(x = 1) # missing required cols
 
   expect_error(
     merge_metadata(df1, bad_df),

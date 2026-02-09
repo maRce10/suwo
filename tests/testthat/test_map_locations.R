@@ -2,7 +2,6 @@ options(verbose = TRUE)
 
 
 test_that("map Helicobacter pylori", {
-
   df1 <- suwo:::vignette_metadata$t_rufiventris
 
   a <- map_locations(df1, cluster = TRUE)
@@ -11,5 +10,3 @@ test_that("map Helicobacter pylori", {
 
   expect_true(class(a)[2] == "htmlwidget")
 })
-
-
