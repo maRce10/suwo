@@ -285,7 +285,7 @@ query_xenocanto <-
 
       if (verbose) {
         .message(
-          paste0("{n} matching sound file{?s} found"),
+          "{n} matching sound file{?s} found",
           as = "success",
           suffix = "\n",
           n = nrow(query_output_df)

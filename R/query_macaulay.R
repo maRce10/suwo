@@ -329,9 +329,7 @@ query_macaulay <-
       # warning if species was also supplied
       if (!is.null(species)) {
         .message(
-          text = paste(
-            "'species' is ignored when 'files' is supplied."
-          ),
+          text = "'species' is ignored when 'files' is supplied.",
           as = "warning"
         )
       }

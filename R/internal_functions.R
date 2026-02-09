@@ -158,7 +158,7 @@
 }
 
 .message <- function(
-  text = paste0("Obtaining metadata ({n} matching record{?s} found)"),
+  text = "Obtaining metadata ({n} matching record{?s} found)",
   as = c("success", "warning", "failure", "error", "message"),
   n = NULL,
   suffix = ":\n",
