@@ -90,7 +90,12 @@ query_wikiaves <-
       return(invisible(NULL))
     }
 
-    get_ids <- jsonlite::fromJSON(httr2::resp_body_string(response))
+    get_ids <- httr2::resp_body_json(
+      response,
+      check_type = FALSE,
+      simplifyVector = TRUE,
+      simplifyDataFrame = TRUE
+    )
 
     if (length(get_ids) == 0) {
       if (verbose) {
