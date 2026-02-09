@@ -76,8 +76,6 @@ query_xenocanto <-
   ) {
     # check arguments
     arguments <- as.list(base::match.call())
-
-    # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
@@ -92,30 +90,25 @@ query_xenocanto <-
       )
     }
 
-    # --- build query from tags ---
-    # Handle species names with spaces by wrapping them in quotes for the query
+    # build query from tags
     if (!grepl(":", species)) {
       species_name <- ifelse(
         grepl("\\s", species),
         paste0('"', species, '"'),
         species
       )
-
-      # Prepend the required 'sp:' tag to the species name
       query_str <- paste0("sp:", species_name)
     } else {
-      # Collapse into a single query string
       query_str <- paste(species, collapse = " ")
     }
 
-    # URL encode (spaces -> %20, quotes -> %22, etc.)
     query_str <- utils::URLencode(query_str, reserved = TRUE)
 
     if (verbose) {
       .message("Obtaining metadata:", as = "message")
     }
 
-    # --- API request ---
+    # API request
     query <- try(
       jsonlite::fromJSON(
         paste0(
@@ -128,7 +121,6 @@ query_xenocanto <-
       silent = TRUE
     )
 
-    # let user know error when downloading metadata
     if (.is_error(query)) {
       if (verbose) {
         .message(
@@ -152,8 +144,7 @@ query_xenocanto <-
     }
 
     if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <-
-        parallel::makePSOCKcluster(cores)
+      cl <- parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }
@@ -166,7 +157,6 @@ query_xenocanto <-
         x,
         Y = seq_len(ceiling(as.numeric(query$numRecordings) / 100))
       ) {
-        # set index to get the right offset
         y <- Y[x]
 
         query_output <- try(
@@ -183,7 +173,6 @@ query_xenocanto <-
           silent = TRUE
         )
 
-        # if error then just return the error
         if (.is_error(query_output)) {
           return(query_output)
         }
@@ -197,23 +186,18 @@ query_xenocanto <-
           )
 
         sono_df <- as.data.frame(query_output$recordings$sono)
-        names(sono_df) <-
-          paste("sonogram", names(sono_df), sep = "_")
+        names(sono_df) <- paste("sonogram", names(sono_df), sep = "_")
 
         osci_df <- as.data.frame(query_output$recordings$osci)
-        names(osci_df) <-
-          paste("oscillogram", names(osci_df), sep = "_")
+        names(osci_df) <- paste("oscillogram", names(osci_df), sep = "_")
 
-        query_output$recordings$sono <-
-          query_output$recordings$osci <- NULL
-        query_output <-
-          cbind(query_output$recordings, sono_df, osci_df)
-        return(query_output)
+        query_output$recordings$sono <- query_output$recordings$osci <- NULL
+
+        cbind(query_output$recordings, sono_df, osci_df)
       }
     )
 
-    # let user know error when downloading metadata
-    if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
+    if (any(vapply(query_output_list, .is_error, logical(1)))) {
       if (verbose) {
         .message(
           text = "Metadata could not be downloaded",
@@ -224,18 +208,15 @@ query_xenocanto <-
       return(invisible(NULL))
     }
 
-    # make all data frames have the same columns
     query_output_df <- .merge_data_frames(query_output_list)
 
-    # format output
     if (as.numeric(query$numRecordings) > 0) {
       indx <- vapply(query_output_df, is.factor, logical(1))
-
-      query_output_df[indx] <-
-        lapply(query_output_df[indx], as.character)
+      query_output_df[indx] <- lapply(query_output_df[indx], as.character)
 
       query_output_df$species <-
         paste(query_output_df$gen, query_output_df$sp, sep = " ")
+
       query_output_df$file_extension <-
         sub(".*\\.", "", query_output_df$`file-name`)
 
@@ -283,6 +264,22 @@ query_xenocanto <-
         raw_data = raw_data
       )
 
+      # normalize user names
+      if ("user_name" %in% names(query_output_df)) {
+        query_output_df$user_name <- vapply(
+          query_output_df$user_name,
+          function(x) {
+            if (is.na(x)) {
+              return(NA_character_)
+            }
+            x <- gsub("^\\s*\\(c\\)\\s*", "", x, ignore.case = TRUE)
+            x <- gsub("^\\s*©\\s*", "", x)
+            trimws(strsplit(x, ",|\\(")[[1]][1])
+          },
+          FUN.VALUE = character(1)
+        )
+      }
+
       if (verbose) {
         .message(
           "{n} matching sound file{?s} found",
@@ -291,6 +288,7 @@ query_xenocanto <-
           n = nrow(query_output_df)
         )
       }
+
       return(droplevels(query_output_df))
     }
   }

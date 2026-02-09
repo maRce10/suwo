@@ -37,6 +37,7 @@
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
+
 query_gbif <-
   function(
     species = getOption("suwo_species"),
@@ -51,163 +52,152 @@ query_gbif <-
     all_data = getOption("suwo_all_data", FALSE),
     raw_data = getOption("suwo_raw_data", FALSE)
   ) {
-    # check arguments
+    ##  argument checking
     arguments <- as.list(base::match.call())
-
-    # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-
-    # check each arguments
     check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
-
-    # report errors
     checkmate::reportAssertions(check_results)
 
-    # Use the unified connection checker
+    ##  connection
     if (!.checkconnection(verb = verbose, service = "gbif")) {
       return(invisible(NULL))
     }
 
-    # assign a value to format
+    ##  format
     format <- rlang::arg_match(format)
 
     gbif_format <- switch(
       format,
       sound = "Sound",
-      `image` = "StillImage",
-      `video` = "MovingImage",
+      image = "StillImage",
+      video = "MovingImage",
       `interactive resource` = "InteractiveResource"
     )
 
-    srch_trm <- paste0(
-      "https://api.gbif.org/v1/occurrence/search?limit=300&",
-      if (is.null(dataset)) {
-        ""
-      } else {
-        "datasetKey="
-      },
-      dataset,
-      "&scientificName=",
-      gsub(" ", "%20", species),
-      "&media_type=",
-      gbif_format
+    ##  base request
+    base_request <-
+      httr2::request("https://api.gbif.org/v1/occurrence/search") |>
+      httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)") |>
+      httr2::req_url_query(
+        limit = 300,
+        scientificName = species,
+        media_type = gbif_format,
+        datasetKey = dataset
+      ) |>
+      httr2::req_error(is_error = function(resp) FALSE)
+
+    ##  first request (metadata)
+    response <- try(httr2::req_perform(base_request), silent = TRUE)
+
+    if (.is_error(response) || httr2::resp_is_error(response)) {
+      if (verbose) {
+        .message("Metadata could not be downloaded", as = "failure")
+      }
+      return(invisible(NULL))
+    }
+
+    base.srch.pth <- httr2::resp_body_json(
+      response,
+      simplifyVector = TRUE
     )
 
-    base.srch.pth <- try(jsonlite::fromJSON(srch_trm), silent = TRUE)
-
-    # let user know error when downloading metadata
-    if (.is_error(base.srch.pth)) {
-      if (verbose) {
-        .message(text = "Metadata could not be downloaded", as = "failure")
-      }
-      return(invisible(NULL))
-    }
-
-    # message if nothing found
     if (base.srch.pth$count == 0) {
       if (verbose) {
-        .message(text = "No matching records found", as = "failure")
+        .message("No matching records found", as = "failure")
       }
       return(invisible(NULL))
     }
 
-    # message number of results
     if (verbose) {
       .message(n = base.srch.pth$count, as = "success")
     }
 
-    # get total number of pages
-    offsets <- (seq_len(ceiling(
-      base.srch.pth$count / base.srch.pth$limit
-    )) -
+    ##  pagination
+    offsets <- (seq_len(
+      ceiling(base.srch.pth$count / base.srch.pth$limit)
+    ) -
       1) *
-      300
+      base.srch.pth$limit
 
+    ##  paged download
     query_output_list <- .pbapply_sw(
       X = offsets,
       cl = cores,
       pbar = pb,
       FUN = function(x, Y = offsets) {
-        # set index to get the right offset
         i <- Y[x]
 
-        query_output <-
-          try(
-            jsonlite::fromJSON(paste0(srch_trm, "&offset=", i)),
-            silent = TRUE
-          )
+        resp <- try(
+          httr2::req_perform(
+            httr2::req_url_query(base_request, offset = i)
+          ),
+          silent = TRUE
+        )
 
-        # if error then just return it and stop here
-        if (.is_error(query_output)) {
-          return(query_output)
+        if (.is_error(resp) || httr2::resp_is_error(resp)) {
+          return(resp)
         }
 
-        # format as list of data frame
+        query_output <- httr2::resp_body_json(
+          resp,
+          simplifyVector = TRUE
+        )
+
+        if (
+          is.null(query_output$results) ||
+            nrow(query_output$results) == 0
+        ) {
+          return(NULL)
+        }
+
         query_output$results <- lapply(
           seq_len(nrow(query_output$results)),
           function(u) {
             x <- query_output$results[u, ]
 
             media_df <- do.call(rbind, x$media)
-
-            # select format
             media_df <- media_df[media_df$type == gbif_format, ]
 
-            # fix identifier column name
             names(media_df)[names(media_df) == "identifier"] <- "URL"
             names(media_df) <- paste0("media-", names(media_df))
 
-            # remove lists
             x <- x[!vapply(x, is.list, logical(1))]
-
-            # make it data frame
             X_df <- data.frame(t(unlist(x)))
-
-            # add media details
-            X_df <- cbind(X_df, media_df)
-
-            return(X_df)
+            cbind(X_df, media_df)
           }
         )
 
         output_df <- .merge_data_frames(query_output$results)
         output_df$page <- i
-
-        return(output_df)
+        output_df
       }
     )
 
-    # let user know error when downloading metadata
-    if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
+    ##  error handling
+    if (any(vapply(query_output_list, .is_error, logical(1)))) {
       if (verbose) {
-        .message(text = "Metadata could not be downloaded", as = "failure")
+        .message("Metadata could not be downloaded", as = "failure")
       }
       return(invisible(NULL))
     }
 
-    # combine into a single data frame
     query_output_df <- .merge_data_frames(query_output_list)
 
-    # stop here if nothing found
     if (is.null(query_output_df)) {
       return(query_output_df)
     }
 
-    # remove everything after the second parenthesis
+    ##  post-processing
     query_output_df$species <- vapply(
       strsplit(query_output_df$species, " "),
-      function(x) {
-        paste(x[1], x[2])
-      },
+      function(x) paste(x[1], x[2]),
       character(1)
     )
 
-    # remove duplicated info
     query_output_df$gbifid <- query_output_df$scientificName <- NULL
 
-    # format output data frame column names
     query_output_df <- .format_query_output(
       X = query_output_df,
       call = base::match.call(),
@@ -236,5 +226,5 @@ query_gbif <-
       raw_data = raw_data
     )
 
-    return(query_output_df)
+    query_output_df
   }

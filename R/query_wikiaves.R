@@ -108,14 +108,16 @@ query_wikiaves <-
       seq_len(nrow(get_ids)),
       function(u) {
         request_obj <- httr2::request(
-          paste0(
-            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            wiki_format,
-            "&t=s&s=",
-            get_ids$id[u],
-            "&o=mp&p=1"
+          "https://www.wikiaves.com.br/getRegistrosJSON.php"
+        ) |>
+          httr2::req_url_query(
+            tm = wiki_format,
+            t = "s",
+            s = get_ids$id[u],
+            o = "mp",
+            p = 1
           )
-        )
+
         request_obj <-
           httr2::req_user_agent(
             request_obj,
@@ -203,48 +205,46 @@ query_wikiaves <-
         # wait avoid overloading the server
         Sys.sleep(0.5)
 
-        query_output <-
-          try(
-            jsonlite::fromJSON(
-              paste0(
-                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                wiki_format,
-                "&t=",
-                "s",
-                "&s=",
-                id_by_page_df$id[i],
-                "&o=mp&p=",
-                id_by_page_df$page[i]
-              )
-            ),
-            silent = TRUE
-          )
+        request_obj <-
+          httr2::request("https://www.wikiaves.com.br/getRegistrosJSON.php") |>
+          httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)") |>
+          httr2::req_url_query(
+            tm = wiki_format,
+            t = "s",
+            s = id_by_page_df$id[i],
+            o = "mp",
+            p = id_by_page_df$page[i]
+          ) |>
+          # do not auto-throw so we can retry manually
+          httr2::req_error(is_error = function(resp) FALSE)
 
-        # retry if an error occurs waiting 1 s
-        if (.is_error(query_output)) {
+        response <- httr2::req_perform(request_obj)
+
+        # retry once if request failed
+        if (httr2::resp_is_error(response)) {
           Sys.sleep(1)
 
-          query_output <- try(
-            jsonlite::fromJSON(
-              paste0(
-                "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-                wiki_format,
-                "&t=",
-                "s",
-                "&s=",
-                id_by_page_df$id[i],
-                "&o=mp&p=",
-                id_by_page_df$page[i]
-              )
+          response <- httr2::req_perform(request_obj)
+        }
+
+        # if still failing, stop here (no downstream code runs)
+        if (httr2::resp_is_error(response)) {
+          rlang::abort(
+            paste(
+              "WikiAves request failed:",
+              httr2::resp_status(response),
+              httr2::resp_status_desc(response)
             ),
-            silent = TRUE
+            class = "wikiaves_request_error"
           )
         }
 
-        # if error then just return the error
-        if (.is_error(query_output)) {
-          return(query_output)
-        }
+        # parse JSON only if request succeeded
+        query_output <-
+          httr2::resp_body_json(
+            response,
+            simplifyVector = TRUE
+          )
 
         # make it a data frame
         output_df <-
@@ -330,10 +330,6 @@ query_wikiaves <-
       format = format,
       raw_data = raw_data
     )
-    # Generate a file path by combining tempdir() with a file name
-    # file_path <- file.path(tempdir(), paste0(species, ".rds"))
-    #
-    # # Save the object to the file
-    # saveRDS(query_output_df, file = file_path)
+
     return(query_output_df)
   }
