@@ -69,15 +69,11 @@ query_wikiaves <-
 
     # initialize search with user agent
     request_obj <- httr2::request(
-      paste0(
-        "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
-        gsub(" ", "%20", species)
-      )
-    )
-    request_obj <- httr2::req_user_agent(
-      request_obj,
-      "suwo (https://github.com/maRce10/suwo)"
-    )
+      "https://www.wikiaves.com.br/getTaxonsJSON.php"
+    ) |>
+      httr2::req_url_query(term = species) |>
+      httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)")
+
     response <- httr2::req_perform(request_obj)
 
     # check if request succeeded

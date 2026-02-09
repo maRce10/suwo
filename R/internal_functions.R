@@ -161,7 +161,7 @@
   text = "Obtaining metadata ({n} matching record{?s} found)",
   as = c("success", "warning", "failure", "error", "message"),
   n = NULL,
-  suffix = ":\n",
+  suffix = "\n",
   nfiles = NULL
 ) {
   if (!is.null(n)) {
@@ -1070,17 +1070,13 @@
     name <- messages[[service]]
 
     # Attempt request
-    request_obj <- httr2::request(url)
-    request_obj <- httr2::req_user_agent(
-      request_obj,
-      "suwo (https://github.com/maRce10/suwo)"
+    response <- try(
+      httr2::request(url) |>
+        httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)") |>
+        httr2::req_error(is_error = function(resp) FALSE) |>
+        httr2::req_perform(),
+      silent = TRUE
     )
-    # Disable auto-throwing
-    request_obj <- httr2::req_error(request_obj, is_error = function(resp) {
-      FALSE
-    })
-
-    response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
     if (
       .is_error(response) ||
