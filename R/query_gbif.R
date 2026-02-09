@@ -53,11 +53,20 @@ query_gbif <-
     raw_data = getOption("suwo_raw_data", FALSE)
   ) {
     ##  argument checking
-    arguments <- as.list(base::match.call())
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "query_gbif",
+      args = list(
+        species = species,
+        format = format,
+        cores = cores,
+        pb = pb,
+        verbose = verbose,
+        dataset = dataset,
+        all_data = all_data,
+        raw_data = raw_data
+      )
+    )
+
     checkmate::reportAssertions(check_results)
 
     ##  connection

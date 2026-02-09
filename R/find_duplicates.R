@@ -75,16 +75,15 @@ find_duplicates <- function(
   ),
   verbose = getOption("suwo_verbose", TRUE)
 ) {
-  # check arguments
-  arguments <- as.list(base::match.call())
-
-  # add objects to argument names
-  for (i in names(arguments)[-1]) {
-    arguments[[i]] <- get(i)
-  }
-
-  # check each arguments
-  check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
+  ##  argument checking
+  check_results <- .check_arguments(
+    fun = "find_diplicates",
+    args = list(
+      metadata = metadata,
+      sort = sort,
+      verbose = verbose
+    )
+  )
 
   # report errors
   checkmate::reportAssertions(check_results)

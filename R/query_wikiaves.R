@@ -43,16 +43,19 @@ query_wikiaves <-
     all_data = getOption("suwo_all_data", FALSE),
     raw_data = getOption("suwo_raw_data", FALSE)
   ) {
-    # check arguments
-    arguments <- as.list(base::match.call())
-
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-
-    # check each arguments
-    check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
+    ##  argument checking
+    check_results <- .check_arguments(
+      fun = "query_wikiaves",
+      args = list(
+        species = species,
+        format = format,
+        cores = cores,
+        pb = pb,
+        verbose = verbose,
+        all_data = all_data,
+        raw_data = raw_data
+      )
+    )
 
     # report errors
     checkmate::reportAssertions(check_results)

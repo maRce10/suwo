@@ -81,16 +81,18 @@ remove_duplicates <-
     ),
     verbose = getOption("suwo_verbose", TRUE)
   ) {
-    # check arguments
-    arguments <- as.list(base::match.call())
-
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-
-    # check each arguments
-    check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
+    ##  argument checking
+    check_results <- .check_arguments(
+      fun = "remove_duplicates",
+      args = list(
+        metadata = metadata,
+        same_repo = same_repo,
+        cores = cores,
+        pb = pb,
+        repo_priority = repo_priority,
+        verbose = verbose
+      )
+    )
 
     # report errors
     checkmate::reportAssertions(check_results)

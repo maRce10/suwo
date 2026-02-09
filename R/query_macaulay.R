@@ -136,16 +136,22 @@ query_macaulay <-
     dates = NULL,
     taxon_code_info = ml_taxon_code
   ) {
-    # check arguments
-    arguments <- as.list(base::match.call())
-
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-
-    # check each arguments
-    check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
+    ##  argument checking
+    check_results <- .check_arguments(
+      fun = "query_macaulay",
+      args = list(
+        species = species,
+        taxon_code = taxon_code,
+        format = format,
+        verbose = verbose,
+        all_data = all_data,
+        raw_data = raw_data,
+        path = path,
+        files = files,
+        dates = dates,
+        taxon_code_info = taxon_code_info
+      )
+    )
 
     # report errors
     checkmate::reportAssertions(check_results)

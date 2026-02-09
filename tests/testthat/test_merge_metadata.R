@@ -27,7 +27,7 @@ test_that("merge query_wikiaves and xc", {
 
 # Make simple example data frames with required cols
 df1 <- suwo:::vignette_metadata$h_harpyja
-df2 <- suwo:::vignette_metadata$h_wagneriana
+df2 <- suwo:::vignette_metadata$a_hahneli
 
 
 test_that("merge_metadata works with multiple data frames", {
@@ -36,7 +36,7 @@ test_that("merge_metadata works with multiple data frames", {
   expect_s3_class(res, "data.frame")
   expect_true("source" %in% names(res))
   expect_equal(sort(unique(res$source)), c("df1", "df2"))
-  expect_equal(nrow(res), 8)
+  expect_equal(nrow(res), 7)
 })
 
 test_that("merge_metadata works with named data frames", {

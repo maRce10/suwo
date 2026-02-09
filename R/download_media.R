@@ -52,22 +52,25 @@ download_media <-
   function(
     metadata,
     path = ".",
+    cores = getOption("mc.cores", 1),
     pb = getOption("suwo_pb", TRUE),
     verbose = getOption("suwo_verbose", TRUE),
-    cores = getOption("mc.cores", 1),
     overwrite = FALSE,
     folder_by = NULL
   ) {
     # check arguments
-    arguments <- as.list(base::match.call())
-
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-
-    # check each arguments
-    check_results <- .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "download_media",
+      args = list(
+        metadata = metadata,
+        path = path,
+        cores = cores,
+        pb = pb,
+        verbose = verbose,
+        overwrite = overwrite,
+        folder_by = folder_by
+      )
+    )
 
     # report errors
     checkmate::reportAssertions(check_results)
