@@ -88,17 +88,28 @@ query_gbif <-
       `interactive resource` = "InteractiveResource"
     )
 
-    ##  base request
-    base_request <-
-      httr2::request("https://api.gbif.org/v1/occurrence/search") |>
-      httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)") |>
-      httr2::req_url_query(
-        limit = 300,
-        scientificName = species,
-        media_type = gbif_format,
-        datasetKey = dataset
-      ) |>
-      httr2::req_error(is_error = function(resp) FALSE)
+    ## base request
+    base_request <- httr2::request(
+      "https://api.gbif.org/v1/occurrence/search"
+    )
+
+    base_request <- httr2::req_user_agent(
+      base_request,
+      "suwo (https://github.com/maRce10/suwo)"
+    )
+
+    base_request <- httr2::req_url_query(
+      base_request,
+      limit = 300,
+      scientificName = species,
+      media_type = gbif_format,
+      datasetKey = dataset
+    )
+
+    base_request <- httr2::req_error(
+      base_request,
+      is_error = function(resp) FALSE
+    )
 
     ##  first request (metadata)
     response <- try(httr2::req_perform(base_request), silent = TRUE)

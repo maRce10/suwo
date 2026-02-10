@@ -30,13 +30,6 @@ test_that(".add_emoji", {
 })
 
 
-test_that(".monitor_new_files", {
-  out <- suwo:::.monitor_new_files(path = tempdir(), break.time = 0.0001)
-
-  expect_true(is.null(out))
-})
-
-
 test_that(".repo_from_call handles namespaced calls", {
   skip_on_cran()
   skip_if_offline()

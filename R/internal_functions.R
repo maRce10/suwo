@@ -1060,11 +1060,20 @@
     name <- messages[[service]]
 
     # Attempt request
+    req <- httr2::request(url)
+
+    req <- httr2::req_user_agent(
+      req,
+      "suwo (https://github.com/maRce10/suwo)"
+    )
+
+    req <- httr2::req_error(
+      req,
+      is_error = function(resp) FALSE
+    )
+
     response <- try(
-      httr2::request(url) |>
-        httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)") |>
-        httr2::req_error(is_error = function(resp) FALSE) |>
-        httr2::req_perform(),
+      httr2::req_perform(req),
       silent = TRUE
     )
 
