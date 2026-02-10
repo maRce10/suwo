@@ -1,7 +1,6 @@
 #' Access 'gbif' media file metadata
 #'
-#' `query_gbif` searches for metadata from
-#' \href{https://www.gbif.org/}{gbif}.
+#' `query_gbif` searches for metadata from [GBIF](https://www.gbif.org/).
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'sound', 'image', 'video' and 'interactive resource'.
@@ -20,7 +19,7 @@
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' open-access
-#' online repository \href{https://www.gbif.org/}{GBIF}.
+#' online repository [GBIF](https://www.gbif.org/).
 #' GBIF (the Global Biodiversity Information Facility) is an international
 #' network and data infrastructure funded by the world's governments and
 #' aimed at providing open access to data about all types of life on Earth.

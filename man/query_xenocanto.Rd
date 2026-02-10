@@ -62,7 +62,7 @@ for downstream steps will not work on them.}
 
 \item{api_key}{Character string refering to the key assigned by Xeno-Canto
 as authorization for searches. Get yours at
-\href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
+\url{https://xeno-canto.org/account}.
 Required. Avoid setting your API key directly in the function call to
 prevent exposing it in your code. Instead, set it as an environment variable
 (e.g., in your .Renviron file using

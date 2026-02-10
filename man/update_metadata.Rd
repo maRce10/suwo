@@ -41,7 +41,7 @@ session via the "suwo_verbose" option
 
 \item{api_key}{Character string referring to the key assigned by
 Xeno-Canto as authorization for searches. Get yours at
-\href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only
+\url{https://xeno-canto.org/account}. Only
 needed if the input metadata comes from \code{\link[=query_xenocanto]{query_xenocanto()}}.}
 
 \item{dates}{Optional numeric vector with years to split the search. If

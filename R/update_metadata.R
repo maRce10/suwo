@@ -7,7 +7,7 @@
 #' is saved into the current working directory (`"."`).
 #' @param api_key Character string referring to the key assigned by
 #' Xeno-Canto as authorization for searches. Get yours at
-#' \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only
+#' [https://xeno-canto.org/account](https://xeno-canto.org/account). Only
 #' needed if the input metadata comes from [query_xenocanto()].
 #' @param dates Optional numeric vector with years to split the search. If
 #' provided, the function will perform separate queries for each date range

@@ -1,7 +1,7 @@
 #' Access 'iNaturalist' media file metadata
 #'
 #' `query_inaturalist` searches for metadata from
-#' \href{https://www.inaturalist.org/}{iNaturalist}.
+#' [iNaturalist](https://www.inaturalist.org/).
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Currently 'image' and 'sound' are available. Can be set globally for
@@ -21,7 +21,7 @@
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for species observation info in the
 #' open-access
-#' online repository \href{https://www.inaturalist.org/}{iNaturalist}.
+#' online repository [iNaturalist](https://www.inaturalist.org/).
 #' iNaturalist is a free, crowdsourced online platform for nature enthusiasts
 #' to document and identify plants, animals, fungi, and other organisms in
 #' the wild. Note that Inaturalist observations do not include a 'country'
@@ -31,7 +31,8 @@
 # h_peckii <- query_inaturalist(species = 'Hydnellum peckii', format = "image")
 #'
 #' @references
-#' iNaturalist. Available from https://www.inaturalist.org. Accessed [date]
+#' iNaturalist. Available from https://www.inaturalist.org.
+#' (Accessed on 10-02-2026)
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
@@ -238,7 +239,6 @@ query_inaturalist <- function(
 
         # remove leading copyright markers
         x <- gsub("^\\s*\\(c\\)\\s*", "", x, ignore.case = TRUE)
-        x <- gsub("^\\s*©\\s*", "", x)
 
         # stop at comma or license parentheses
         x <- strsplit(x, ",|\\(")[[1]][1]

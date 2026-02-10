@@ -1,7 +1,7 @@
 #' Access 'Xeno-Canto' recording metadata
 #'
 #' `query_xenocanto` searches for metadata from
-#' \href{https://www.xeno-canto.org/}{Xeno-Canto}.
+#' [Xeno-Canto](https://www.xeno-canto.org/).
 #' @inheritParams template_params
 #' @param species Character string with the scientific name of a species in
 #' the format: "Genus epithet". Required. Can be set globally for the current
@@ -13,11 +13,11 @@
 #' type contains 'song'. Multiple tags can be provided
 #' (e.g., `'"cnt:"belize" type:"song"'`).
 #'  See examples down below and check
-#'  \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help}
+#'  [Xeno-Canto's search help](https://www.xeno-canto.org/help/search)
 #'  for a full description.
 #' @param api_key Character string refering to the key assigned by Xeno-Canto
 #' as authorization for searches. Get yours at
-#' \href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
+#' [https://xeno-canto.org/account](https://xeno-canto.org/account).
 #' Required. Avoid setting your API key directly in the function call to
 #' prevent exposing it in your code. Instead, set it as an environment variable
 #' (e.g., in your .Renviron file using
@@ -32,10 +32,10 @@
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries metadata for animal sound recordings in
 #' the open-access
-#'  online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}.
-#'  \href{https://www.xeno-canto.org/}{Xeno-Canto} hosts sound recordings of
+#'  online repository [Xeno-Canto](https://www.xeno-canto.org/).
+#'  [Xeno-Canto](https://www.xeno-canto.org/) hosts sound recordings of
 #'  birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
-#'  constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
+#'  constructed using the [Xeno-Canto](https://www.xeno-canto.org/)
 #'  advanced query syntax (see examples).
 #' @seealso [query_gbif()], [query_wikiaves()],
 #' [query_inaturalist()]
@@ -280,7 +280,6 @@ query_xenocanto <-
               return(NA_character_)
             }
             x <- gsub("^\\s*\\(c\\)\\s*", "", x, ignore.case = TRUE)
-            x <- gsub("^\\s*©\\s*", "", x)
             trimws(strsplit(x, ",|\\(")[[1]][1])
           },
           FUN.VALUE = character(1)

@@ -71,8 +71,7 @@ fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
 obtained from the repository is returned (without any formatting).
 }
 \description{
-\code{query_gbif} searches for metadata from
-\href{https://www.gbif.org/}{gbif}.
+\code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{GBIF}.
 }
 \details{
 This function queries for species observation info in the

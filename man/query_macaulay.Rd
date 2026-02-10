@@ -87,11 +87,11 @@ metadata (in csv format) with the argument \code{files}.
 }
 \description{
 \code{query_macaulay} searches for metadata from
-\href{https://www.macaulaylibrary.org/}{macaulay}.
+\href{https://www.macaulaylibrary.org/}{Macaulay library}.
 }
 \details{
 This function queries for species observation info in the
-\href{https://www.macaulaylibrary.org/}{Macaulay Library} online
+\href{https://www.macaulaylibrary.org/}{Macaulay library} online
 repository and returns the metadata of media files matching the query. The
 Macaulay Library is the world’s largest repository of digital media
 (audio, photo, and video) of wildlife (mostly birds but also other

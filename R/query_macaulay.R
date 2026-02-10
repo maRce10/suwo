@@ -1,7 +1,7 @@
 #' Searches for media files in the Macaulay Library
 #'
 #' `query_macaulay` searches for metadata from
-#' \href{https://www.macaulaylibrary.org/}{macaulay}.
+#' [Macaulay library](https://www.macaulaylibrary.org/).
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for. Options
 #' are 'sound', 'image' of 'video'. Can be set globally for the current R
@@ -40,7 +40,7 @@
 #' frame with the metadata. The function can also import previously downloaded
 #' metadata (in csv format) with the argument `files`.
 #' @details This function queries for species observation info in the
-#' \href{https://www.macaulaylibrary.org/}{Macaulay Library} online
+#' [Macaulay library](https://www.macaulaylibrary.org/) online
 #' repository and returns the metadata of media files matching the query. The
 #' Macaulay Library is the world’s largest repository of digital media
 #' (audio, photo, and video) of wildlife (mostly birds but also other
@@ -52,7 +52,7 @@
 #' Library taxonomy (which follows the Clements checklist). For non-bird
 #' species users must use the argument `taxon_code`. The species taxon code
 #' can be found by running a search at the
-#' \href{https://www.macaulaylibrary.org/}{Macaulay Library's search page} and
+#' [Macaulay Library's search page](https://www.macaulaylibrary.org/) and
 #'  checking the URL of the species page. For instance, the URL when searching
 #'  for jaguar (Panthera onca) is
 #'  'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765'

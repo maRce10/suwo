@@ -1,7 +1,7 @@
 #' Access 'WikiAves' media file metadata
 #'
 #' `query_wikiaves` searches for metadata from
-#' \href{https://www.wikiaves.com.br/}{WikiAves}.
+#' [WikiAves](https://www.wikiaves.com.br/).
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'image' or 'sound'. Can be set globally for
@@ -14,7 +14,7 @@
 #' fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for avian digital media in the open-access
-#' online repository \href{https://www.wikiaves.com.br/}{WikiAves} and returns
+#' online repository [WikiAves](https://www.wikiaves.com.br/) and returns
 #' its metadata. WikiAves is a Brazilian online platform and citizen science
 #' project that serves as the largest community for birdwatchers in Brazil.
 #' It functions as a collaborative, interactive encyclopedia of Brazilian
@@ -120,14 +120,16 @@ query_wikiaves <-
       function(u) {
         request_obj <- httr2::request(
           "https://www.wikiaves.com.br/getRegistrosJSON.php"
-        ) |>
-          httr2::req_url_query(
-            tm = wiki_format,
-            t = "s",
-            s = get_ids$id[u],
-            o = "mp",
-            p = 1
-          )
+        )
+
+        request_obj <- httr2::req_url_query(
+          request_obj,
+          tm = wiki_format,
+          t = "s",
+          s = get_ids$id[u],
+          o = "mp",
+          p = 1
+        )
 
         request_obj <-
           httr2::req_user_agent(
