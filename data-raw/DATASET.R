@@ -88,7 +88,8 @@ usethis::use_data(
   merged_metadata,
   testing_metadata,
   internal = TRUE,
-  overwrite = TRUE
+  overwrite = TRUE,
+  compress = "bzip"
 )
 
 

@@ -224,7 +224,10 @@ query_macaulay <-
       )
       cat(normalizePath(path), "/", sep = "")
       cat(
-        "\n(R is monitoring for new CSV files. Press ESC to stop the function)\n"
+        paste0(
+          "\n(R is monitoring for new CSV files.",
+          " Press ESC to stop the function)\n"
+        )
       )
 
       # Apply to all elements
