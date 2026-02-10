@@ -89,7 +89,7 @@ usethis::use_data(
   testing_metadata,
   internal = TRUE,
   overwrite = TRUE,
-  compress = "bzip"
+  compress = "gzip"
 )
 
 
