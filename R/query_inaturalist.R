@@ -65,7 +65,7 @@ query_inaturalist <- function(
 
   checkmate::reportAssertions(check_results)
 
-  format <- rlang::arg_match(format)
+  format <- rlang::arg_match(format, values = c("image", "sound"))
   inat_format <- if (format == "sound") "sounds" else "photos"
 
   if (!.checkconnection(verb = verbose, service = "inat")) {

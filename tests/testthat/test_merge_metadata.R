@@ -1,8 +1,8 @@
 options(verbose = TRUE)
 
 test_that("merge query_wikiaves and xc", {
-  wa <- suwo:::vignette_metadata$h_harpyja
-  xc <- suwo:::vignette_metadata$a_hahneli
+  wa <- suwo:::testing_metadata$h_harpyja
+  xc <- suwo:::testing_metadata$a_hahneli
   merged_mt <- merge_metadata(wa, xc)
 
   expect_true(nrow(merged_mt) == nrow(wa) + nrow(xc))
@@ -10,7 +10,7 @@ test_that("merge query_wikiaves and xc", {
   expect_true(all(unique(merged_mt$source) %in% c("wa", "xc")))
 
   # add a third source
-  gbf <- suwo:::vignette_metadata$p_lotor
+  gbf <- suwo:::testing_metadata$p_lotor
 
   merged_mt2 <- merge_metadata(wa, xc, gbf)
 
@@ -26,8 +26,8 @@ test_that("merge query_wikiaves and xc", {
 
 
 # Make simple example data frames with required cols
-df1 <- suwo:::vignette_metadata$h_harpyja
-df2 <- suwo:::vignette_metadata$a_hahneli
+df1 <- suwo:::testing_metadata$h_harpyja
+df2 <- suwo:::testing_metadata$a_hahneli
 
 
 test_that("merge_metadata works with multiple data frames", {

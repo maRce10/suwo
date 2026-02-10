@@ -2,7 +2,7 @@ options(verbose = TRUE)
 
 
 test_that("map Helicobacter pylori", {
-  df1 <- suwo:::vignette_metadata$t_rufiventris
+  df1 <- suwo:::testing_metadata$t_rufiventris
 
   a <- map_locations(df1, cluster = TRUE)
 

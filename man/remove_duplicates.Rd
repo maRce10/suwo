@@ -64,9 +64,9 @@ When compiling data from multiple repositories, duplicated media
 records are a common issue, particularly for sound recordings. These
 duplicates occur both through data sharing between repositories like
 Xeno-Canto and GBIF, and when users upload the same file to multiple
-platforms. In such cases those multiple observations seem to refer to the same
-media file and therefore, only one copy is needed. This function removes
-duplicate observations identified with the function
+platforms. In such cases those multiple observations seem to refer to the
+same media file and therefore, only one copy is needed. This function
+removes duplicate observations identified with the function
 \code{\link[=find_duplicates]{find_duplicates()}}. When duplicates are found, one observation
 from each group of duplicates is retained in the output data frame.
 However, if multiple observations from the same repository are

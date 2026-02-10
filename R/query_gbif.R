@@ -75,7 +75,10 @@ query_gbif <-
     }
 
     ##  format
-    format <- rlang::arg_match(format)
+    format <- rlang::arg_match(
+      format,
+      values = c("image", "sound", "video", "interactive resource")
+    )
 
     gbif_format <- switch(
       format,

@@ -446,7 +446,7 @@ test_that("overwrite and already there", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- suwo:::vignette_metadata$h_sarapiquensis[1:4, ]
+  df1 <- suwo:::testing_metadata$h_sarapiquensis[1:4, ]
 
   dir.create(file.path(tempdir(), "downloads"))
 

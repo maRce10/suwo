@@ -648,43 +648,34 @@
   return(dates_df)
 }
 
-# monitor if a new file is added
-.monitor_new_files <- function(path, interval = 1, break.time = 60) {
-  # initial list of csv files
-  old_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
+# monitor if a new file is added (with .csv extension) to a folder
+# and return the name of the new file
+.monitor_new_files <- function(path, interval = 1) {
+  stopifnot(dir.exists(path))
 
-  start_time <- Sys.time()
+  old_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
 
   repeat {
     Sys.sleep(interval)
 
-    # time-out
-    if (
-      as.numeric(difftime(Sys.time(), start_time, units = "secs")) > break.time
-    ) {
-      return(NULL)
-    }
-
-    # list current csv files
     new_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
-
-    # detect new ones
     added <- setdiff(new_files, old_files)
 
     if (length(added) > 0) {
       file_path <- file.path(path, added[1])
 
-      # wait until file stops growing (important!)
+      # wait until file exists and stops growing
       last_size <- -1
 
       repeat {
-        size <- file.info(file_path)$size
+        info <- file.info(file_path)
 
-        if (!is.na(size) && size == last_size) {
+        # file.info() may briefly return NA while file is being created
+        if (!is.na(info$size) && info$size == last_size) {
           break
         }
 
-        last_size <- size
+        last_size <- info$size
         Sys.sleep(0.5)
       }
 
@@ -692,7 +683,6 @@
     }
   }
 }
-
 
 # clean not valid date format (must be "YYYY-MM-DD"),
 # if possible extracts year from various formats, using current year

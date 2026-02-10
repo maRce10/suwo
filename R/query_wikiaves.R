@@ -66,7 +66,7 @@ query_wikiaves <-
     }
 
     # assign a value to format
-    format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format, values = c("image", "sound"))
 
     wiki_format <- switch(format, sound = "s", image = "f")
 

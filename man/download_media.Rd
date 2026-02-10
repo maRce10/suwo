@@ -7,9 +7,9 @@
 download_media(
   metadata,
   path = ".",
+  cores = getOption("mc.cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
-  cores = getOption("mc.cores", 1),
   overwrite = FALSE,
   folder_by = NULL
 )
@@ -21,6 +21,13 @@ function (i.e. \code{query_reponame()}).}
 \item{path}{Directory path where the output media files will be saved.
 By default files are saved into the current working directory (\code{"."}).}
 
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing
+is applied by specifying the number of cores to be used. Default is 1
+(i.e. no parallel computing). Can be set globally for the current R session
+via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that
+some repositories might not support parallel queries from the same IP
+address as it might be identified as denial-of-service cyberattack.}
+
 \item{pb}{Logical argument to control if progress bar is shown. Default
 is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
 option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
@@ -30,13 +37,6 @@ are found.}
 console. Default is \code{TRUE}. Can be set globally for the current R
 session via the "suwo_verbose" option
 ( \code{options(suwo_verbose = TRUE)}).}
-
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing
-is applied by specifying the number of cores to be used. Default is 1
-(i.e. no parallel computing). Can be set globally for the current R session
-via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that
-some repositories might not support parallel queries from the same IP
-address as it might be identified as denial-of-service cyberattack.}
 
 \item{overwrite}{Logical. If TRUE, existing files (in \code{"path"}) with
 the same name will be overwritten. Default is FALSE.}

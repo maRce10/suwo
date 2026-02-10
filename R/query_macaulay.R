@@ -157,7 +157,7 @@ query_macaulay <-
     checkmate::reportAssertions(check_results)
 
     # assign a value to format
-    format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format, values = c("image", "sound", "video"))
 
     ml_format <- switch(
       format,
@@ -215,6 +215,18 @@ query_macaulay <-
         return(invisible(NULL))
       }
 
+      # let users know where to save the file
+      cat(
+        paste(
+          "A browser will open the macaulay library website.",
+          "Save the .csv file ('export' button) to this directory: "
+        )
+      )
+      cat(normalizePath(path), "/", sep = "")
+      cat(
+        "\n(R is monitoring for new CSV files. Press ESC to stop the function)\n"
+      )
+
       # Apply to all elements
       if (!is.null(dates)) {
         date_ranges_df <- .date_ranges(x = dates)
@@ -269,17 +281,6 @@ query_macaulay <-
             ))
           }
         }
-        # let users know where to save the file
-        cat(
-          paste(
-            "A browser will open the macaulay library website.",
-            "Save the .csv file ('export' button) to this directory:"
-          )
-        )
-        cat(normalizePath(path), "/", sep = "")
-        cat(
-          " (R is monitoring for new CSV files. Press ESC to stop the function)"
-        )
 
         # pause 3 s so users can read message but only in the first query in
         # a batch
@@ -327,7 +328,7 @@ query_macaulay <-
           .monitor_new_files(path = path)
 
         # let users know the name of the csv file that was read
-        cat("\nThe data will be read from the file:", suffix = " ")
+        cat("File:", suffix = " ")
 
         cat(paste(new_csv_file_list[i], "\n"))
       }

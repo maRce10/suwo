@@ -30,7 +30,7 @@ Suggests:
     fs,
     kableExtra
 Depends:
-    R (>= 4.0.0)
+    R (>= 4.1.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
 Authors@R: 

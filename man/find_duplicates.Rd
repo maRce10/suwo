@@ -7,7 +7,8 @@
 find_duplicates(
   metadata,
   sort = TRUE,
-  criteria = "country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1",
+  criteria = paste("country > 0.8", "locality > 0.5", "user_name > 0.8", "time == 1",
+    "date == 1", sep = " & "),
   verbose = getOption("suwo_verbose", TRUE)
 )
 }

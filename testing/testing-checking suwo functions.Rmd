@@ -529,6 +529,14 @@ covr::file_coverage(
 
 ```
 
+# Prebuild vignette
+```{r}
+
+# Execute the code from the vignette
+knitr::knit("vignettes/suwo.Rmd.orig", output = "testing/suwo.Rmd")
+
+```
+
 
 # check and build package
 ```{r check and build package, eval = FALSE}
