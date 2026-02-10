@@ -218,18 +218,29 @@ query_wikiaves <-
         # wait avoid overloading the server
         Sys.sleep(0.5)
 
-        request_obj <-
-          httr2::request("https://www.wikiaves.com.br/getRegistrosJSON.php") |>
-          httr2::req_user_agent("suwo (https://github.com/maRce10/suwo)") |>
-          httr2::req_url_query(
-            tm = wiki_format,
-            t = "s",
-            s = id_by_page_df$id[i],
-            o = "mp",
-            p = id_by_page_df$page[i]
-          ) |>
-          # do not auto-throw so we can retry manually
-          httr2::req_error(is_error = function(resp) FALSE)
+        request_obj <- httr2::request(
+          "https://www.wikiaves.com.br/getRegistrosJSON.php"
+        )
+
+        request_obj <- httr2::req_user_agent(
+          request_obj,
+          "suwo (https://github.com/maRce10/suwo)"
+        )
+
+        request_obj <- httr2::req_url_query(
+          request_obj,
+          tm = wiki_format,
+          t = "s",
+          s = id_by_page_df$id[i],
+          o = "mp",
+          p = id_by_page_df$page[i]
+        )
+
+        # do not auto-throw so we can retry manually
+        request_obj <- httr2::req_error(
+          request_obj,
+          is_error = function(resp) FALSE
+        )
 
         response <- httr2::req_perform(request_obj)
 
