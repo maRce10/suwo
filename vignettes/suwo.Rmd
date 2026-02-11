@@ -75,26 +75,29 @@ involved:
 </br>
 Here is a description of each step:
 
-Obtain metadata:
+1. Get metadata:
 
-1. Queries regarding a species are submitted through one of the available
+* Queries regarding a species are submitted through one of the available
 query functions (`query_repo_name()`) that connect to five different online
 repositories (Xeno-Canto, Inaturalist, GBIF, Macaulay Library and WikiAves). The output of these queries is a data frame containing metadata
 associated with the media files (e.g., species name, date, location, etc, see below).
+* Users can update their datasets with new records using the [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function.
 
-Curate metadata:
+2. Curate metadata:
 
-1. If multiple repositories are queried, the resulting metadata data frames can
+* If multiple repositories are queried, the resulting metadata data frames can
 be merged into a single data frame using the
 [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html) function.
 
-1. Check for duplicate records in their datasets using the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and
+ * Check for duplicate records in their datasets using the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and
 geographic coordinates. User can double check the candidate duplicates and
 decide which records to keep, which can be done with [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html).
 
-1. Download the media files associated with the metadata using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function.
+3. Get media:
 
-1. Users can update their datasets with new records using the [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function.
+* Download the media files associated with the metadata using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function.
+
+
 
 
 # Obtaining metadata: the query functions
