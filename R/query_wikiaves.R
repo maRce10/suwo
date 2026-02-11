@@ -216,7 +216,8 @@ query_wikiaves <-
         i <- Y[x]
 
         # wait avoid overloading the server
-        Sys.sleep(0.5)
+        # **INTERVARLS < 1s BRAKE THE FUNCTION**
+        Sys.sleep(1)
 
         request_obj <- httr2::request(
           "https://www.wikiaves.com.br/getRegistrosJSON.php"
@@ -311,9 +312,12 @@ query_wikiaves <-
     query_output_df$por <- query_output_df$grande <-
       query_output_df$enviado <- NULL
 
-    # flip verified
+    # verified?
     query_output_df$is_questionada <-
-      !as.logical(query_output_df$is_questionada)
+      as.logical(query_output_df$is_questionada)
+
+    # make NAs observations with no link
+    query_output_df$link[grepl("^\\d+$", query_output_df$link)] <- NA
 
     # add file format
     query_output_df$file_extension <- sub(".*\\.", "", query_output_df$link)
