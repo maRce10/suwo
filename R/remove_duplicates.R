@@ -103,13 +103,6 @@ remove_duplicates <-
     # get data with duplicates
     dups <- metadata[!is.na(metadata$duplicate_group), ]
 
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
-    }
-
     # loop over unique duplicate groups
     dedups_list <- .pbapply_sw(
       X = unique(dups$duplicate_group),

@@ -115,12 +115,6 @@ query_inaturalist <- function(
 
   pages <- seq_len(ceiling(total_results / 200))
 
-  if (Sys.info()[1] == "Windows" && cores > 1) {
-    cl <- parallel::makePSOCKcluster(cores)
-  } else {
-    cl <- cores
-  }
-
   query_output_list <- .pbapply_sw(
     X = pages,
     cl = cl,

@@ -123,11 +123,6 @@ download_media <-
     if (verbose) {
       write(file = "", x = "Downloading media files:")
     }
-    if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
-    }
 
     metadata$download_status <-
       unlist(.pbapply_sw(

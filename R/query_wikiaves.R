@@ -199,13 +199,6 @@ query_wikiaves <-
       .message(n = get_ids$total_registers, as = "success")
     }
 
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
-    }
-
     # loop over pages
     query_output_list <- .pbapply_sw(
       X = seq_len(nrow(id_by_page_df)),

@@ -150,12 +150,6 @@ query_xenocanto <-
       return(invisible(NULL))
     }
 
-    if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
-    }
-
     query_output_list <- .pbapply_sw(
       pbar = pb,
       X = seq_len(ceiling(as.numeric(query$numRecordings) / 100)),
