@@ -44,7 +44,7 @@ query_gbif <-
       "suwo_format",
       c("image", "sound", "video", "interactive resource")
     ),
-    cores = getOption("mc.cores", 1),
+    cores = getOption("suwo_cores", 1),
     pb = getOption("suwo_pb", TRUE),
     verbose = getOption("suwo_verbose", TRUE),
     dataset = NULL,

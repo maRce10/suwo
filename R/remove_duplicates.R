@@ -69,7 +69,7 @@ remove_duplicates <-
   function(
     metadata,
     same_repo = FALSE,
-    cores = getOption("mc.cores", 1),
+    cores = getOption("suwo_cores", 1),
     pb = getOption("suwo_pb", TRUE),
     repo_priority = c(
       "Xeno-Canto",
