@@ -77,7 +77,7 @@ find_duplicates <- function(
 ) {
   ##  argument checking
   check_results <- .check_arguments(
-    fun = "find_diplicates",
+    fun = "find_duplicates",
     args = list(
       metadata = metadata,
       sort = sort,
