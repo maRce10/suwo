@@ -491,6 +491,8 @@ urlchecker::url_check()
 lintr::lint_package(linters = list(lintr::line_length_linter()))
 
 codemetar::write_codemeta()
+
+pkgdown::build_favicons(overwrite = TRUE)
 ```
 
 # check with docker
