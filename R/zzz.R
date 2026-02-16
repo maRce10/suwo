@@ -54,11 +54,24 @@
 
 
 # message when loading package
-.onAttach <-
-  function(libname, pkgname) {
-    packageStartupMessage("\nPlease cite 'suwo' as: \n")
-    packageStartupMessage(
-      "Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025.
-    suwo: access nature media repositories. R package version 0.1.0."
-    )
+.onAttach <- function(libname, pkgname) {
+  meta <- utils::packageDescription(pkgname)
+
+  year <- if ("Date" %in% names(meta)) {
+    sub("-.*", "", meta$Date)
+  } else {
+    format(Sys.Date(), "%Y")
   }
+
+  msg <- sprintf(
+    "\nPlease cite '%s' as:\n%s (%s). %s: %s. R package version %s.\n",
+    meta$Package,
+    meta$Author,
+    year,
+    meta$Package,
+    meta$Title,
+    meta$Version
+  )
+
+  packageStartupMessage(msg)
+}
