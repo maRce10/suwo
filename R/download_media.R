@@ -128,7 +128,7 @@ download_media <-
       unlist(.pbapply_sw(
         pbar = pb,
         X = seq_len(nrow(metadata)),
-        cl = cl,
+        cl = cores,
         FUN = function(x) {
           .download(metadata, x, path, overwrite, folder_by)
         }

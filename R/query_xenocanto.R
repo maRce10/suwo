@@ -153,7 +153,7 @@ query_xenocanto <-
     query_output_list <- .pbapply_sw(
       pbar = pb,
       X = seq_len(ceiling(as.numeric(query$numRecordings) / 100)),
-      cl = cl,
+      cl = cores,
       FUN = function(
         x,
         Y = seq_len(ceiling(as.numeric(query$numRecordings) / 100))

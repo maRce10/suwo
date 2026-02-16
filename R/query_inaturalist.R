@@ -117,7 +117,7 @@ query_inaturalist <- function(
 
   query_output_list <- .pbapply_sw(
     X = pages,
-    cl = cl,
+    cl = cores,
     pbar = pb,
     FUN = function(x, Y = pages) {
       page <- Y[x]

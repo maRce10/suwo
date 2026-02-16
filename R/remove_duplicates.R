@@ -106,7 +106,7 @@ remove_duplicates <-
     # loop over unique duplicate groups
     dedups_list <- .pbapply_sw(
       X = unique(dups$duplicate_group),
-      cl = cl,
+      cl = cores,
       pbar = pb,
       function(i, Y = unique(dups$duplicate_group)) {
         # set index to get the right offset

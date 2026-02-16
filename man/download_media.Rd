@@ -7,7 +7,7 @@
 download_media(
   metadata,
   path = ".",
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   overwrite = FALSE,
