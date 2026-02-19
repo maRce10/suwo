@@ -14,7 +14,7 @@ Imports:
     cli,
     utils,
     rlang,
-    httr2,
+    httr2 (>= 1.1.0),
     jsonlite,
     lubridate,
     tools,

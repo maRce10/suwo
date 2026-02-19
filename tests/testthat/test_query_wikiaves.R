@@ -14,6 +14,19 @@ test_that("search Glaucis dohrnii sound", {
   expect_true(nrow(df1) >= 30)
 })
 
+test_that("search Piranga flava sound", {
+  skip_on_cran()
+  skip_if_offline()
+
+  df1 <- try(
+    query_wikiaves(species = 'Piranga flava', format = "sound"),
+    silent = TRUE
+  )
+
+  skip_if(suwo:::.is_error(df1))
+
+  expect_true(nrow(df1) >= 30)
+})
 
 test_that("search Glaucis dohrnii photos", {
   skip_on_cran()

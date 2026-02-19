@@ -108,6 +108,14 @@ query_wikiaves <-
       simplifyDataFrame = TRUE
     )
 
+    # do exact matching for species name
+    if (length(get_ids) > 1){
+    get_ids <- get_ids[
+      trimws(tolower(get_ids$label)) ==
+        trimws(tolower(species)),
+    ]
+    }
+
     if (length(get_ids) == 0) {
       if (verbose) {
         .message("Search species not found", as = "failure")
@@ -196,7 +204,7 @@ query_wikiaves <-
     # search recs in wikiaves (results are returned in pages with 500
     # recordings each)
     if (verbose) {
-      .message(n = get_ids$total_registers, as = "success")
+      .message(n = get_ids$total_registers[1], as = "success")
     }
 
     # loop over pages
