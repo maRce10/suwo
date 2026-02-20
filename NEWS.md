@@ -14,6 +14,7 @@ suwo 0.2.0
 * Migrated roxygen documentation to **Markdown syntax**.
 * Reformatted the codebase using **air**, with a GitHub Actions workflow to enforce formatting.
 * Dropped unused or unnecessary dependencies (`methods`, `viridis`), updated minimum R version to ≥ 4.0.0, and moved vignette-only packages to `Suggests`.
+* Replaced mc.cores option with suwo_cores to allow users to set parallelization consistently across suwo functions within an R session.
 
 ### API keys & security
 
