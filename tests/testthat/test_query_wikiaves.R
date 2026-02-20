@@ -25,7 +25,7 @@ test_that("search Piranga flava sound", {
 
   skip_if(suwo:::.is_error(df1))
 
-  expect_true(nrow(df1) >= 30)
+  expect_true(nrow(df1) >= 140)
 })
 
 test_that("search Glaucis dohrnii photos", {
@@ -37,7 +37,9 @@ test_that("search Glaucis dohrnii photos", {
     silent = TRUE
   )
 
-  skip_if(suwo:::.is_error(df1))
+  skip_if(is.null(df1))
+
+    skip_if(suwo:::.is_error(df1))
 
   expect_true(nrow(df1) >= 420)
 })

@@ -55,23 +55,14 @@
 
 # message when loading package
 .onAttach <- function(libname, pkgname) {
-  meta <- utils::packageDescription(pkgname)
 
-  year <- if ("Date" %in% names(meta)) {
-    sub("-.*", "", meta$Date)
-  } else {
-    format(Sys.Date(), "%Y")
+  if (interactive()) {
+    cit <- format(utils::citation(pkgname)[1], style = "text")
+
+    packageStartupMessage(
+      "\nPlease cite '", pkgname, "' as:\n",
+      paste(cit, collapse = "\n"),
+      "\n"
+    )
   }
-
-  msg <- sprintf(
-    "\nPlease cite '%s' as:\n%s (%s). %s: %s. R package version %s.\n",
-    meta$Package,
-    meta$Author,
-    year,
-    meta$Package,
-    meta$Title,
-    meta$Version
-  )
-
-  packageStartupMessage(msg)
 }
