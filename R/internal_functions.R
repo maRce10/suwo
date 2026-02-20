@@ -1,9 +1,7 @@
 # internal helper suwo functions
 
-# internal suwo function, not to be called by users. It is a modified version
-# of pbapply::pblapply
-# that allows to define internally if progress bar would be used
-# (pbapply::pblapply uses pboptions to do this)
+# internal suwo function, not to be called by users
+# allows to define internally if progress bar would be used
 
 .pbapply_sw <- function(X, FUN, cl = 1, pbar = TRUE, Y = X, title = "", ...) {
   FUN <- match.fun(FUN)
@@ -30,6 +28,7 @@
       )
       return(out)
     }
+    cat("\n")  # Windows rendering reset
   }
 
   # parallel
@@ -104,7 +103,7 @@
           )
         }
       }
-
+      cat("\n")  # important for Windows rendering reset
       return(out)
     }
   }

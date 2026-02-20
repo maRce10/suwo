@@ -29,7 +29,12 @@
   original_op <- get(".original_options", envir = parent.env(environment()))
 
   # Restore only the options that were modified by our package
-  package_options <- c("suwo_cores", "suwo_pb", "suwo_verbose", "suwo_all_data", "suwo_raw_data")
+  package_options <-
+    c("suwo_cores",
+      "suwo_pb",
+      "suwo_verbose",
+      "suwo_all_data",
+      "suwo_raw_data")
 
   for (opt in package_options) {
     if (opt %in% names(original_op)) {
