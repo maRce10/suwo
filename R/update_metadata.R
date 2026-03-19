@@ -75,7 +75,7 @@ update_metadata <-
     )
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     if (length(unique(metadata$repository)) > 1) {
       cli::cli_abort(

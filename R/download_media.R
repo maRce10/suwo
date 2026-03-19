@@ -73,7 +73,7 @@ download_media <-
     )
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     # Use the unified connection checker
     if (!.checkconnection(verb = verbose, service = NULL)) {

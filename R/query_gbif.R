@@ -66,7 +66,7 @@ query_gbif <-
       )
     )
 
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     ##  connection
     if (!.checkconnection(verb = verbose, service = "gbif")) {

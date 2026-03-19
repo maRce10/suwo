@@ -58,7 +58,7 @@ query_wikiaves <-
     )
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     # Use the unified connection checker
     if (!.checkconnection(verb = verbose, service = "wikiaves")) {

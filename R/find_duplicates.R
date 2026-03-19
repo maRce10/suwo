@@ -86,7 +86,7 @@ find_duplicates <- function(
   )
 
   # report errors
-  checkmate::reportAssertions(check_results)
+  .report_assertions(check_results)
 
   if (nrow(metadata) < 2) {
     cli::cli_abort(

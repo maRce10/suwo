@@ -95,7 +95,7 @@ remove_duplicates <-
     )
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     # get data with no duplicates
     no_dups <- metadata[is.na(metadata$duplicate_group), ]

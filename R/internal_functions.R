@@ -28,7 +28,7 @@
       )
       return(out)
     }
-    cat("\n")  # Windows rendering reset
+    cat("\n") # Windows rendering reset
   }
 
   # parallel
@@ -103,7 +103,7 @@
           )
         }
       }
-      cat("\n")  # important for Windows rendering reset
+      cat("\n") # important for Windows rendering reset
       return(out)
     }
   }
@@ -924,6 +924,24 @@
     )
   }
 
+  if (!is.null(args$overwrite)) {
+    checkmate::assert_logical(
+      x = args$overwrite,
+      len = 1,
+      add = check_collection,
+      .var.name = "overwrite"
+    )
+  }
+
+  if (!is.null(args$verbose)) {
+    checkmate::assert_logical(
+      x = args$verbose,
+      len = 1,
+      add = check_collection,
+      .var.name = "verbose"
+    )
+  }
+
   if (!is.null(args$identified)) {
     checkmate::assert_logical(
       x = args$identified,
@@ -995,17 +1013,76 @@
     )
 
     if (!is.null(args$folder_by)) {
-      checkmate::assert_multi_class(
-        x = args$metadata[, args$folder_by],
-        classes = c("character", "factor"),
+      checkmate::assert_vector(
+        x = args$folder_by,
         add = check_collection,
+        any.missing = TRUE,
+        null.ok = TRUE,
+        len = 1,
         .var.name = "folder_by"
+      )
+
+      out <- try(
+        checkmate::assert_multi_class(
+          x = args$metadata[, args$folder_by, drop = TRUE],
+          classes = c("character", "factor"),
+          add = check_collection,
+          .var.name = "folder_by"
+        ),
+        silent = TRUE
+      )
+    }
+
+    if (fun == "download_media") {
+      # check if NAs in repository column
+      checkmate::assert_vector(
+        x = args$metadata$repository,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'repository' column in metadata"
+      )
+
+      checkmate::assert_vector(
+        x = args$metadata$species,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'species' column in metadata"
+      )
+
+      checkmate::assert_vector(
+        x = args$metadata$key,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'key' column in metadata"
+      )
+
+      checkmate::assert_vector(
+        x = args$metadata$file_extension,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'file_extension' column in metadata"
       )
     }
   }
 
   return(check_collection)
 }
+
+# custom reporting of errors
+.report_assertions <- function(collection) {
+  checkmate::assert_class(collection, "AssertCollection")
+  if (!collection$isEmpty()) {
+    msgs = collection$getMessages()
+
+    msgs <- gsub("^Variable", "", msgs)
+
+    context = "%i input arguments failed:"
+    err = c(sprintf(context, length(msgs)), strwrap(msgs, prefix = " * "))
+    stop(simpleError(paste0(err, collapse = "\n"), call = sys.call(1L)))
+  }
+  invisible(TRUE)
+}
+
 
 ## check internet
 # gracefully fail if internet resource is not available

@@ -1,20 +1,20 @@
 options(verbose = TRUE)
 
+df1 <- query_gbif(
+  species = 'Phaethornis anthophilus',
+  all_data = FALSE,
+  format = "image"
+)
+
 ## Xeno-Canto
 test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- query_gbif(
-    species = 'Phaethornis anthophilus',
-    all_data = FALSE,
-    format = "image"
-  )
-
   skip_if(is.null(df1))
 
-  df1 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
-  sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
+  df2 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
+  sxc1 <- df2[!duplicated(df2$key), ][1:2, ]
 
   a <- download_media(metadata = sxc1, path = tempdir())
 
@@ -36,21 +36,29 @@ test_that("Xenocanto Phaethornis anthophilus download all.data  = FALSE", {
   expect_true(all(a$downloaded_file_name %in% expected_files))
 })
 
+test_that("remove rows when NAs in repo", {
+  skip_on_cran()
+  skip_if_offline()
+  skip_if(is.null(df1))
+
+  df2 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
+  sxc1 <- df2[!duplicated(df2$key), ][1:2, ]
+
+  sxc1$key[1] <- sxc1$repository[1] <- sxc1$file_extension[1] <- NA
+
+  # test
+  expect_error(download_media(metadata = sxc1, path = tempdir(), pb = 2))
+})
+
+
 ## Xeno-Canto
 test_that("Xenocanto Phaethornis anthophilus download folder_by", {
   skip_on_cran()
   skip_if_offline()
-
-  df1 <- query_gbif(
-    species = 'Phaethornis anthophilus',
-    all_data = FALSE,
-    format = "image"
-  )
-
   skip_if(is.null(df1))
 
-  df1 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
-  sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
+  df2 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
+  sxc1 <- df2[!duplicated(df2$key), ][1:2, ]
 
   a <- download_media(metadata = sxc1, path = tempdir(), folder_by = "country")
 
@@ -74,17 +82,10 @@ test_that("Xenocanto Phaethornis anthophilus download folder_by", {
 test_that("Xenocanto Phaethornis anthophilus download all.data  = TRUE", {
   skip_on_cran()
   skip_if_offline()
-
-  df1 <- query_gbif(
-    species = 'Phaethornis anthophilus',
-    all_data = TRUE,
-    format = "image"
-  )
-
   skip_if(is.null(df1))
 
-  df1 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
-  sxc1 <- df1[!duplicated(df1$key), ][1:2, ]
+  df2 <- df1[df1$key %in% c("5063794756", "5077057045"), ]
+  sxc1 <- df2[!duplicated(df2$key), ][1:2, ]
 
   a <- download_media(metadata = sxc1, path = tempdir())
   skip_if(is.null(a))
@@ -446,12 +447,12 @@ test_that("overwrite and already there", {
   skip_on_cran()
   skip_if_offline()
 
-  df1 <- suwo:::testing_metadata$h_sarapiquensis[1:4, ]
+  df2 <- suwo:::testing_metadata$h_sarapiquensis[1:4, ]
 
   dir.create(file.path(tempdir(), "downloads"))
 
   a <- download_media(
-    metadata = df1,
+    metadata = df2,
     path = file.path(tempdir(), "downloads"),
     cores = 2,
     overwrite = T
@@ -467,16 +468,16 @@ test_that("overwrite and already there", {
   # remove files
   unlink(file.path(tempdir(), "downloads", fls[1:2]))
 
-  df1$file_url[4] <- "adasd"
-  a <- download_media(metadata = df1, path = file.path(tempdir(), "downloads"))
+  df2$file_url[4] <- "adasd"
+  a <- download_media(metadata = df2, path = file.path(tempdir(), "downloads"))
 
   skip_if(is.null(a))
 
   expect_length(unique(a$download_status), 3)
 
-  df1$file_url[4] <- "adasd"
+  df2$file_url[4] <- "adasd"
   a <- download_media(
-    metadata = df1,
+    metadata = df2,
     path = file.path(tempdir(), "downloads"),
     overwrite = TRUE
   )

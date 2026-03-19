@@ -154,7 +154,7 @@ query_macaulay <-
     )
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     # assign a value to format
     format <- rlang::arg_match(format, values = c("image", "sound", "video"))
