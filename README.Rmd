@@ -21,11 +21,6 @@ editor_options:
 [![R-CMD-check](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
   
-<!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
-
-<!-- <img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
-<!-- <a href="https://marce10.github.io/suwo/"><img src="man/figures/logo.png" align="right" height="139" alt="suwo website" /></a> -->
-
 The [suwo](https://marce10.github.io/suwo/) package aims to simplify the 
 retrieval of nature media (mostly photos, audio files and videos) across 
 multiple online biodiversity databases. The five major media repositories 
@@ -91,7 +86,7 @@ Take a look at the [package vignette](https://marce10.github.io/suwo/articles/su
 
 ## Intended use and responsible practices
 
-The [suwo](https://marce10.github.io/suwo/) package is designed exclusively for non-commercial, scientific purposes, including research, education, and conservation. **Commercial use of data or media retrieved through this package is the user’s responsibility and is allowed only when the applicable license of the source database explicitly permits such use, or when explicit, separate permission has been obtained directly from the original source platforms or rights holders** Users must comply with the specific terms of service and data-use policies of each source database, which may require attribution and may further restrict commercial application. The package developers assume no liability for misuse of the retrieved data or for violations of third-party terms of service.
+The [suwo](https://marce10.github.io/suwo/) package is designed exclusively for non-commercial, scientific purposes, including research, education, and conservation. **Commercial use of data or media retrieved through this package is the user’s responsibility and is allowed only when the applicable license of the source database explicitly permits such use, or when explicit, separate permission has been obtained directly from the original source platforms or rights holders**. Users must comply with the specific terms of service and data-use policies of each source database, which may require attribution and may further restrict commercial application. The package developers assume no liability for misuse of the retrieved data or for violations of third-party terms of service.
 
 ## Citation
 

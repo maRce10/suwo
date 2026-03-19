@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- [![minimal R version](https://img.shields.io/badge/R%3E%3D-Depends:-6666ff.svg)](https://cran.r-project.org/)  -->
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.2.0-orange.svg?style=flat-square)](commits/develop)  -->
-[![Last-changedate](https://img.shields.io/badge/last%20change-2026--02--16-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2026--03--19-yellowgreen.svg)](/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
 [![pkgcheck](https://github.com/maRce10/suwo/workflows/pkgcheck/badge.svg)](https://github.com/maRce10/suwo/actions?query=workflow%3Apkgcheck)  
@@ -20,10 +20,6 @@ coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
 [![R-CMD-check](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
-
-<!-- <img src="man/figures/suwo_sticker.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
-<!-- <img src="man/figures/logo.png" alt="suwo logo" align="right" width = "25%" height="25%"/> -->
-<!-- <a href="https://marce10.github.io/suwo/"><img src="man/figures/logo.png" align="right" height="139" alt="suwo website" /></a> -->
 
 The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
