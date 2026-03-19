@@ -92,11 +92,14 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
 #> ✔ Obtaining metadata (743 matching records found) 🌈
+#>  ■■■■■■■■■■■                       33% | ETA:  7s
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+#> 
 #> ! 2 observations do not have a download link and were removed from the results (inlcuded as an attribute called 'excluded_results'). 
 inat <- query_inaturalist(species = "Turdus rufiventris",
   format = "sound")
 #> ✔ Obtaining metadata (564 matching records found) 🎊
-#>  ■■■■■■■■■■■                       33% | ETA:  7s
+#>  ■■■■■■■■■■■                       33% | ETA:  9s
 #>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
 #> 
 

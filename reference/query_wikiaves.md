@@ -111,7 +111,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
     format = "image")
 #> ✔ Obtaining metadata (110 matching records found) 🎊
-#>  ■■■■■■■■■■■                       33% | ETA:  4s
+#>  ■■■■■■■■■■■■■■■■                  50% | ETA:  3s
 #>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
 #> 
 ```

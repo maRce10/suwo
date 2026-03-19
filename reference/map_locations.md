@@ -57,6 +57,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>) and Grace Smith Vidaurre
 e_hochs <- query_gbif(species = "Entoloma hochstetteri", format = "image")
 #> ✔ Obtaining metadata (2044 matching records found) 🥇
 #>  ■■■■■■■■■■                        29% | ETA:  7s
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  1s
 #>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
 #> 
 
