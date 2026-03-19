@@ -2,7 +2,7 @@
 # CITATION file created with {cffr} R package
 # See also: https://docs.ropensci.org/cffr/
 # --------------------------------------------
- 
+
 cff-version: 1.2.0
 message: 'To cite package "suwo" in publications use:'
 type: software
@@ -25,7 +25,7 @@ authors:
   given-names: Alejandro
   email: colibri@uw.edu
   orcid: https://orcid.org/0000-0003-4067-5312
-repository-code: https://github.com/maRce10/suwo/issues/
+repository-code: https://github.com/ropensci/suwo/issues/
 url: https://marce10.github.io/suwo/
 contact:
 - family-names: Araya-Salas

@@ -14,14 +14,14 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 <!-- [![packageversion](https://img.shields.io/badge/Package%20version-0.2.0-orange.svg?style=flat-square)](commits/develop)  -->
 [![Last-changedate](https://img.shields.io/badge/last%20change-2026--03--19-yellowgreen.svg)](/commits/main)
 [![Codecov test
-coverage](https://codecov.io/gh/maRce10/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/maRce10/suwo?branch=main)
-[![pkgcheck](https://github.com/maRce10/suwo/workflows/pkgcheck/badge.svg)](https://github.com/maRce10/suwo/actions?query=workflow%3Apkgcheck)  
+coverage](https://codecov.io/gh/ropensci/suwo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/suwo?branch=main)
+[![pkgcheck](https://github.com/ropensci/suwo/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/suwo/actions?query=workflow%3Apkgcheck)  
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/suwo)](https://cran.r-project.org/package=suwo) -->
 <!-- [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/suwo)](https://cranlogs.r-pkg.org/badges/grand-total/suwo) -->
-[![R-CMD-check](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/suwo/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ropensci/suwo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/suwo/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
+The [suwo](https://docs.ropensci.org/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
 multiple online biodiversity databases. The five major media
 repositories accessed by this package (GBIF, iNaturalist, Macaulay
@@ -69,7 +69,7 @@ To install the latest developmental version from
 
 ``` r
 # install remotes if you don't have it yet
-remotes::install_github("maRce10/suwo")
+remotes::install_github("ropensci/suwo")
 
 #load package
 library(suwo)
@@ -77,7 +77,7 @@ library(suwo)
 
 # Basic workflow for obtaining nature media files
 
-Obtaining nature media using [suwo](https://marce10.github.io/suwo/)
+Obtaining nature media using [suwo](https://docs.ropensci.org/suwo/)
 follows a basic sequence. The following diagram illustrates this
 workflow and the main functions involved:
 
@@ -86,12 +86,12 @@ workflow and the main functions involved:
 </center>
 
 Take a look at the [package
-vignette](https://marce10.github.io/suwo/articles/suwo.html) for an
+vignette](https://docs.ropensci.org/suwo/articles/suwo.html) for an
 overview of the workflow and the core querying functions.
 
 ## Intended use and responsible practices
 
-The [suwo](https://marce10.github.io/suwo/) package is designed
+The [suwo](https://docs.ropensci.org/suwo/) package is designed
 exclusively for non-commercial, scientific purposes, including research,
 education, and conservation. **Commercial use of data or media retrieved
 through this package is the user’s responsibility and is allowed only
@@ -106,7 +106,7 @@ third-party terms of service.
 
 ## Citation
 
-Please cite [suwo](https://marce10.github.io/suwo/) as follows:
+Please cite [suwo](https://docs.ropensci.org/suwo/) as follows:
 
     ## Araya-Salas M, Elizondo-Calvo J, Rico-Guevara A (2025). _suwo: access
     ## nature media repositories 0.1.0._.

@@ -30,13 +30,13 @@ params:
 
 ::: {.alert .alert-info}
 
-The [suwo](https://marce10.github.io/suwo/) package aims to simplify the
+The [suwo](https://docs.ropensci.org/suwo/) package aims to simplify the
 retrieval of nature media (mostly photos, audio files and videos) across
 multiple online biodiversity databases. This vignette provides an overview of
 the package’s core querying functions, the searching and downloading of media
 files, and the compilation of metadata from various sources. For detailed
 information on each function, please refer to the
-[function reference](https://maRce10.github.io/suwo/reference/index.html)
+[function reference](https://docs.ropensci.org/suwo/reference/index.html)
 or use the help files within R (e.g., `?query_gbif`).
 
 :::
@@ -58,7 +58,7 @@ Install the latest development version from GitHub:
 
 ``` r
 # install package
-remotes::install_github("maRce10/suwo")
+remotes::install_github("ropensci/suwo")
 
 #load packages
 library(suwo)
@@ -66,7 +66,7 @@ library(suwo)
 
 # Basic workflow for obtaining nature media files
 
-Obtaining nature media using [suwo](https://marce10.github.io/suwo/) follows a basic
+Obtaining nature media using [suwo](https://docs.ropensci.org/suwo/) follows a basic
 sequence. The following diagram illustrates this workflow and the main functions
 involved:
 
@@ -81,28 +81,28 @@ Here is a description of each step:
 query functions (`query_repo_name()`) that connect to five different online
 repositories (Xeno-Canto, Inaturalist, GBIF, Macaulay Library and WikiAves). The output of these queries is a data frame containing metadata
 associated with the media files (e.g., species name, date, location, etc, see below).
-* Users can update their datasets with new records using the [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function.
+* Users can update their datasets with new records using the [update_metadata()](https://docs.ropensci.org/suwo/reference/update_metadata.html) function.
 
 2. Curate metadata:
 
 * If multiple repositories are queried, the resulting metadata data frames can
 be merged into a single data frame using the
-[merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html) function.
+[merge_metadata()](https://docs.ropensci.org/suwo/reference/merge_metadata.html) function.
 
- * Check for duplicate records in their datasets using the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and
+ * Check for duplicate records in their datasets using the [find_duplicates()](https://docs.ropensci.org/suwo/reference/find_duplicates.html) function. Candidate duplicated entries are identified based on matching species name, country, date, user name, and
 geographic coordinates. User can double check the candidate duplicates and
-decide which records to keep, which can be done with [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html).
+decide which records to keep, which can be done with [remove_duplicates()](https://docs.ropensci.org/suwo/reference/remove_duplicates.html).
 
 3. Get media:
 
-* Download the media files associated with the metadata using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function.
+* Download the media files associated with the metadata using the [download_media()](https://docs.ropensci.org/suwo/reference/download_media.html) function.
 
 
 
 
 # Obtaining metadata: the query functions
 
-The following table summarizes the available [suwo](https://marce10.github.io/suwo/)
+The following table summarizes the available [suwo](https://docs.ropensci.org/suwo/)
 query functions and the types of metadata they retrieve:
 
 
@@ -128,7 +128,7 @@ library(suwo)
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_gbif.html" style="     " target="_blank">query_gbif</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_gbif.html" style="     " target="_blank">query_gbif</a> </td>
    <td style="text-align:left;"> GBIF </td>
    <td style="text-align:left;"> <a href="https://www.gbif.org/" style="     " target="_blank">https://www.gbif.org/</a> </td>
    <td style="text-align:left;"> image, sound, video, interactive resource </td>
@@ -139,7 +139,7 @@ library(suwo)
    <td style="text-align:left;"> Specify query by data base </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a> </td>
    <td style="text-align:left;"> iNaturalist </td>
    <td style="text-align:left;"> <a href="https://www.inaturalist.org/" style="     " target="_blank">https://www.inaturalist.org/</a> </td>
    <td style="text-align:left;"> image, sound </td>
@@ -150,7 +150,7 @@ library(suwo)
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_macaulay.html" style="     " target="_blank">query_macaulay</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_macaulay.html" style="     " target="_blank">query_macaulay</a> </td>
    <td style="text-align:left;"> Macaulay Library </td>
    <td style="text-align:left;"> <a href="https://www.macaulaylibrary.org/" style="     " target="_blank">https://www.macaulaylibrary.org/</a> </td>
    <td style="text-align:left;"> image, sound, video </td>
@@ -162,7 +162,7 @@ library(suwo)
    <td style="text-align:left;"> Interactive </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_wikiaves.html" style="     " target="_blank">query_wikiaves</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_wikiaves.html" style="     " target="_blank">query_wikiaves</a> </td>
    <td style="text-align:left;"> WikiAves </td>
    <td style="text-align:left;"> <a href="https://www.wikiaves.com.br/" style="     " target="_blank">https://www.wikiaves.com.br/</a> </td>
    <td style="text-align:left;"> image, sound </td>
@@ -173,7 +173,7 @@ library(suwo)
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_xenocanto.html" style="     " target="_blank">query_xenocanto</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_xenocanto.html" style="     " target="_blank">query_xenocanto</a> </td>
    <td style="text-align:left;"> Xeno-Canto </td>
    <td style="text-align:left;"> <a href="https://www.xeno-canto.org/" style="     " target="_blank">https://www.xeno-canto.org/</a> </td>
    <td style="text-align:left;"> sound </td>
@@ -340,23 +340,23 @@ Users can also download all available metadata by setting the argument `all_data
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_gbif.html" style="     " target="_blank">query_gbif</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_gbif.html" style="     " target="_blank">query_gbif</a> </td>
    <td style="text-align:left;"> datasetkey, publishingorgkey, installationkey, hostingorganizationkey, publishingcountry, protocol, lastcrawled, lastparsed, crawlid, basisofrecord, occurrencestatus, taxonkey, kingdom_code, phylum_code, class_code, order_code, family_key, genus_code, species_code, acceptedtaxonkey, scientificnameauthorship, acceptedscientificname, kingdom, phylum, order, family, genus, genericname, specific_epithet, taxonrank, taxonomicstatus, iucnredlistcategory, continent, year, month, day, startdayofyear, enddayofyear, lastinterpreted, license, organismquantity, organismquantitytype, issequenced, isincluster, datasetname, recordist, identifiedby, samplingprotocol, geodeticdatum, class, countrycode, gbifregion, publishedbygbifregion, recordnumber, identifier, habitat, institutionid, verbatimeventdate, dynamicproperties, verbatimcoordinatesystem, eventremarks, gbifid, collectioncode, occurrenceid, institutioncode, identificationqualifier, media_type, page, state_province, comments </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_inaturalist.html" style="     " target="_blank">query_inaturalist</a> </td>
    <td style="text-align:left;"> quality_grade, taxon_geoprivacy, uuid, cached_votes_total, identifications_most_agree, species_guess, identifications_most_disagree, positional_accuracy, comments_count, site_id, created_time_zone, license_code, observed_time_zone, public_positional_accuracy, oauth_application_id, created_at, description, time_zone_offset, observed_on, observed_on_string, updated_at, captive, faves_count, num_identification_agreements, identification_disagreements_count, map_scale, uri, community_taxon_id, owners_identification_from_vision, identifications_count, obscured, num_identification_disagreements, geoprivacy, spam, mappable, identifications_some_agree, place_guess, id, license_code_1, attribution, hidden </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_macaulay.html" style="     " target="_blank">query_macaulay</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_macaulay.html" style="     " target="_blank">query_macaulay</a> </td>
    <td style="text-align:left;"> common_name, background_species, caption, year, month, day, country_state_county, state_province, county, age_sex, behavior, playback, captive, collected, specimen_id, home_archive_catalog_number, recorder, microphone, accessory, partner_institution, ebird_checklist_id, unconfirmed, air_temp__c_, water_temp__c_, media_notes, observation_details, parent_species, species_code, taxon_category, taxonomic_sort, recordist_2, average_community_rating, number_of_ratings, asset_tags, original_image_height, original_image_width </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_wikiaves.html" style="     " target="_blank">query_wikiaves</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_wikiaves.html" style="     " target="_blank">query_wikiaves</a> </td>
    <td style="text-align:left;"> user_id, species_code, common_name, repository_id, verified, locality_id, number_of_comments, likes, visualizations, duration </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> <a href="https://marce10.github.io/suwo/reference/query_xenocanto.html" style="     " target="_blank">query_xenocanto</a> </td>
+   <td style="text-align:left;"> <a href="https://docs.ropensci.org/suwo/reference/query_xenocanto.html" style="     " target="_blank">query_xenocanto</a> </td>
    <td style="text-align:left;"> genus, specific_epithet, subspecies, taxonomic_group, english_name, altitude, vocalization_type, sex, stage, method, url, uploaded_file, license, quality, length, upload_date, other_species, comments, animal_seen, playback_used, temp, regnr, auto, recorder, microphone, sampling_rate, sonogram_small, sonogram_med, sonogram_large, sonogram_full, oscillogram_small, oscillogram_med, oscillogram_large, sonogram </td>
   </tr>
 </tbody>
@@ -366,17 +366,17 @@ Users can also download all available metadata by setting the argument `all_data
 
 **Obtaining raw data**
 
-By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://marce10.github.io/suwo/). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html), [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html), etc) will not work as the basic fields are not standardized.
+By default the package standardizes the information in the basic fields (detailed above) in order to facilitate the compilation of metadata from multiple repositories. However, in some cases this may result in loss of information. For instance, some repositories allow users to provide "morning" as a valid time value, which are converted into NAs by [suwo](https://docs.ropensci.org/suwo/). In such cases, users can retrieve the original data by setting the `raw_data = TRUE` in the query functions and/or global options (`options(raw_data = TRUE)`). Note that subsequent data manipulation functions (e.g., [merge_metadata()](https://docs.ropensci.org/suwo/reference/merge_metadata.html), [find_duplicates()](https://docs.ropensci.org/suwo/reference/find_duplicates.html), etc) will not work as the basic fields are not standardized.
 
 </div>
 
-The code above examplifies the most common use of query functions, which applies also to the function [query_gbif()](https://marce10.github.io/suwo/reference/query_gbif.html). The following sections provide more details on the two query functions that require special considerations: [query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) and [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html).
+The code above examplifies the most common use of query functions, which applies also to the function [query_gbif()](https://docs.ropensci.org/suwo/reference/query_gbif.html). The following sections provide more details on the two query functions that require special considerations: [query_macaulay()](https://docs.ropensci.org/suwo/reference/query_macaulay.html) and [query_xenocanto()](https://docs.ropensci.org/suwo/reference/query_xenocanto.html).
 
 ## query_macaulay()
 
 ### Interactive retrieval of metadata
 
-[query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) is the only interactive function.  This means that when users run a query the function opens a browser window to the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog), where the users must download a .csv file with the metadata. Here is a example of a query for strip-throated hermit (_Phaethornis striigularis_) videos:
+[query_macaulay()](https://docs.ropensci.org/suwo/reference/query_macaulay.html) is the only interactive function.  This means that when users run a query the function opens a browser window to the [Macaulay Library's search page](https://search.macaulaylibrary.org/catalog), where the users must download a .csv file with the metadata. Here is a example of a query for strip-throated hermit (_Phaethornis striigularis_) videos:
 
 
 ``` r
@@ -522,13 +522,13 @@ Users can check at the Macaulay Library website how many records are available f
 
 <center><img src="ml_num_recs.jpeg" alt="Screen shot of the Macaulay library search site showing the first result of a query for Costa's hummingbird and highlighting how to check the number of records for that query" width="100%"></center>
 
-[query_macaulay()](https://marce10.github.io/suwo/reference/query_macaulay.html) can also read metadata previously downloaded from [Macaulay Library website](https://www.macaulaylibrary.org/). To do this, users must provide 1) the name of the csv file(s) to the argument `files` and 2) the directory path were it was saved to the argument `path`.
+[query_macaulay()](https://docs.ropensci.org/suwo/reference/query_macaulay.html) can also read metadata previously downloaded from [Macaulay Library website](https://www.macaulaylibrary.org/). To do this, users must provide 1) the name of the csv file(s) to the argument `files` and 2) the directory path were it was saved to the argument `path`.
 
 ## query_xenocanto()
 
 ### API key
 
-[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use [their API v3](https://xeno-canto.org/admin.php/explore/api). Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can set it as a variable in your R environment using `Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")` and [query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) will use it. Here is an example of a query for Spix's disc-winged bat (_Thyroptera tricolor_) audio recordings:
+[Xeno-Canto](https://www.xeno-canto.org/) requires users to obtain a free API key to use [their API v3](https://xeno-canto.org/admin.php/explore/api). Users can get their API key by creating an account at [Xeno-Canto's registering page](https://xeno-canto.org/auth/register). Once users have their API key, they can set it as a variable in your R environment using `Sys.setenv(xc_api_key = "YOUR_API_KEY_HERE")` and [query_xenocanto()](https://docs.ropensci.org/suwo/reference/query_xenocanto.html) will use it. Here is an example of a query for Spix's disc-winged bat (_Thyroptera tricolor_) audio recordings:
 
 
 ``` r
@@ -600,7 +600,7 @@ head(t_tricolor, 4)
 
 ## Special queries
 
-[query_xenocanto()](https://marce10.github.io/suwo/reference/query_xenocanto.html) allows users to perform special queries by specifying additional query tags. Users can also search by country, taxonomy (taxonomic group, family, genus, subspecies), geography (country, location, geographic coordinates)  date, sound type (e.g. female song, calls) and recording properties (quality, length, sampling rate) ([see list of available tags here](https://xeno-canto.org/admin.php/explore/api#examples)). Here is an example of a query for audio recordings of pale-striped poison frog (_Ameerega hahneli_, 'sp:"Ameerega hahneli") from French Guiana (cnt:"French Guiana") and with the highest recording quality (q:"A"):
+[query_xenocanto()](https://docs.ropensci.org/suwo/reference/query_xenocanto.html) allows users to perform special queries by specifying additional query tags. Users can also search by country, taxonomy (taxonomic group, family, genus, subspecies), geography (country, location, geographic coordinates)  date, sound type (e.g. female song, calls) and recording properties (quality, length, sampling rate) ([see list of available tags here](https://xeno-canto.org/admin.php/explore/api#examples)). Here is an example of a query for audio recordings of pale-striped poison frog (_Ameerega hahneli_, 'sp:"Ameerega hahneli") from French Guiana (cnt:"French Guiana") and with the highest recording quality (q:"A"):
 
 
 ``` r
@@ -663,7 +663,7 @@ head(a_hahneli, 4)
 
 # Update metadata
 
-The [update_metadata()](https://marce10.github.io/suwo/reference/update_metadata.html) function allows users to update a previous query to add new information from the corresponding repository of the original search. This function takes as input a data frame previously obtained from any query function (i.e. `query_reponame()`) and returns a data frame similar to the input with new data appended.
+The [update_metadata()](https://docs.ropensci.org/suwo/reference/update_metadata.html) function allows users to update a previous query to add new information from the corresponding repository of the original search. This function takes as input a data frame previously obtained from any query function (i.e. `query_reponame()`) and returns a data frame similar to the input with new data appended.
 
 To show case the function, we first query metadata of Eisentraut's Bow-winged Grasshopper sounds from iNaturalist. Let's assume that the initial query was done a while ago and we want to update it to include any new records that might have been added since then. The following code removes all observations recorded after 2024-12-31 to simulate an old query:
 
@@ -725,7 +725,7 @@ nrow(c_eisentrauti) == nrow(upd_c_eisentrauti)
 
 # Combine metadata from multiple repositories
 
-The [merge_metadata()](https://marce10.github.io/suwo/reference/merge_metadata.html) function allows users to combine metadata data frames obtained from multiple query functions into a single data frame. The function will match the basic columns of all data frames. Data from additional columns (for instance when using `all_data = TRUE` in the query) will only be combined if the column names from different repositories match. The function will return a data frame that includes a new column called `source` indicating the name of the original metadata data frame:
+The [merge_metadata()](https://docs.ropensci.org/suwo/reference/merge_metadata.html) function allows users to combine metadata data frames obtained from multiple query functions into a single data frame. The function will match the basic columns of all data frames. Data from additional columns (for instance when using `all_data = TRUE` in the query) will only be combined if the column names from different repositories match. The function will return a data frame that includes a new column called `source` indicating the name of the original metadata data frame:
 
 
 ``` r
@@ -843,7 +843,7 @@ merged_metadata <- merge_metadata(truf_xc, truf_gbf, truf_ml)
 
 # Find and remove duplicated records
 
-When compiling data from multiple repositories, duplicated media records are a common issue, particularly for sound recordings. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://marce10.github.io/suwo/) provides the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function. Duplicates are identified based on matching species name, country, date, user name, and locality. The function uses a fuzzy matching approach to account for minor variations in the data (e.g., typos, different location formats, etc).The output is a data frame with the candidate duplicate records, allowing users to review and decide which records to keep.
+When compiling data from multiple repositories, duplicated media records are a common issue, particularly for sound recordings. These duplicates occur both through data sharing between repositories like Xeno-Canto and GBIF, and when users upload the same file to multiple platforms. To help users efficiently identify these duplicate records, [suwo](https://docs.ropensci.org/suwo/) provides the [find_duplicates()](https://docs.ropensci.org/suwo/reference/find_duplicates.html) function. Duplicates are identified based on matching species name, country, date, user name, and locality. The function uses a fuzzy matching approach to account for minor variations in the data (e.g., typos, different location formats, etc).The output is a data frame with the candidate duplicate records, allowing users to review and decide which records to keep.
 
 In this example we look for possible duplicates in the merged metadata data frame from the previous section:
 
@@ -913,7 +913,7 @@ head(dups_merged_metadata)
 
 
 
-Note that the [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) function adds a new column called "duplicate_group" to the output data frame. This column assigns a unique identifier to each group of potential duplicates, allowing users to easily identify and review them. For instance, in the example above, records from duplicated group 92 belong to the same user, were recorded on the same date and time and in the same country:
+Note that the [find_duplicates()](https://docs.ropensci.org/suwo/reference/find_duplicates.html) function adds a new column called "duplicate_group" to the output data frame. This column assigns a unique identifier to each group of potential duplicates, allowing users to easily identify and review them. For instance, in the example above, records from duplicated group 92 belong to the same user, were recorded on the same date and time and in the same country:
 
 
 ``` r
@@ -969,9 +969,9 @@ subset(dups_merged_metadata, duplicate_group == 92)
  [ reached 'max' / getOption("max.print") -- omitted 4 rows ]
 ```
 
-In this case all the observations seem to refer to the same media file. Therefore only one copy is needed. Also note that the locality is not exactly the same for these records, but the fuzzy matching approach used by [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html) was able to identify them as potential duplicates. By default, the criteria is set to `country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1` which means that two entries will be considered duplicates if they have a country similarity greater than 0.8, locality similarity greater than 0.5, user_name similarity greater than 0.8, and exact matches for time and date (similarities range from 0 to 1). These values have been found to work well in most cases. Nonetheless, users can adjust the sensitivity based on their specific needs using the argument `criteria`.
+In this case all the observations seem to refer to the same media file. Therefore only one copy is needed. Also note that the locality is not exactly the same for these records, but the fuzzy matching approach used by [find_duplicates()](https://docs.ropensci.org/suwo/reference/find_duplicates.html) was able to identify them as potential duplicates. By default, the criteria is set to `country > 0.8 & locality > 0.5 & user_name > 0.8 & time == 1 & date == 1` which means that two entries will be considered duplicates if they have a country similarity greater than 0.8, locality similarity greater than 0.5, user_name similarity greater than 0.8, and exact matches for time and date (similarities range from 0 to 1). These values have been found to work well in most cases. Nonetheless, users can adjust the sensitivity based on their specific needs using the argument `criteria`.
 
-Once users have reviewed the candidate duplicates, they can apply the [remove_duplicates()](https://marce10.github.io/suwo/reference/remove_duplicates.html) function to eliminate unwanted duplicates from their metadata data frames. This function takes as input a metadata output data frame from [find_duplicates()](https://marce10.github.io/suwo/reference/find_duplicates.html):
+Once users have reviewed the candidate duplicates, they can apply the [remove_duplicates()](https://docs.ropensci.org/suwo/reference/remove_duplicates.html) function to eliminate unwanted duplicates from their metadata data frames. This function takes as input a metadata output data frame from [find_duplicates()](https://docs.ropensci.org/suwo/reference/find_duplicates.html):
 
 
 ``` r
@@ -1044,7 +1044,7 @@ When duplicates are found, one observation from each group of duplicates is reta
 
 # Download media files
 
-The last step of the workflow is to download the media files associated with the metadata. This can be done using the [download_media()](https://marce10.github.io/suwo/reference/download_media.html) function, which takes as input a metadata data frame (obtained from any query function or any of the other metadata managing functions) and downloads the media files to a specified directory. For this example we will download images from a query on zambian slender Caesar (_Amanita zambiana_) (a mushroom) on GBIF:
+The last step of the workflow is to download the media files associated with the metadata. This can be done using the [download_media()](https://docs.ropensci.org/suwo/reference/download_media.html) function, which takes as input a metadata data frame (obtained from any query function or any of the other metadata managing functions) and downloads the media files to a specified directory. For this example we will download images from a query on zambian slender Caesar (_Amanita zambiana_) (a mushroom) on GBIF:
 
 
 ``` r

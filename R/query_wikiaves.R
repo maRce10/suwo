@@ -82,7 +82,7 @@ query_wikiaves <-
 
     request_obj <- httr2::req_user_agent(
       request_obj,
-      "suwo (https://github.com/maRce10/suwo)"
+      "suwo (https://github.com/ropensci/suwo)"
     )
 
     response <- httr2::req_perform(request_obj)
@@ -142,7 +142,7 @@ query_wikiaves <-
         request_obj <-
           httr2::req_user_agent(
             request_obj,
-            "suwo (https://github.com/maRce10/suwo)"
+            "suwo (https://github.com/ropensci/suwo)"
           )
         request_obj <- httr2::req_error(request_obj, is_error = function(resp) {
           FALSE
@@ -226,7 +226,7 @@ query_wikiaves <-
 
         request_obj <- httr2::req_user_agent(
           request_obj,
-          "suwo (https://github.com/maRce10/suwo)"
+          "suwo (https://github.com/ropensci/suwo)"
         )
 
         request_obj <- httr2::req_url_query(

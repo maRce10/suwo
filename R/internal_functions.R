@@ -1098,7 +1098,7 @@
   verb = TRUE
 ) {
   # set user agent option globally
-  options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
+  options(HTTPUserAgent = "suwo (https://github.com/ropensci/suwo)")
 
   # check if internet is available
   if (!httr2::is_online()) {
@@ -1140,7 +1140,7 @@
 
     req <- httr2::req_user_agent(
       req,
-      "suwo (https://github.com/maRce10/suwo)"
+      "suwo (https://github.com/ropensci/suwo)"
     )
 
     req <- httr2::req_error(

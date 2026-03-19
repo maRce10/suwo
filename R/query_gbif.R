@@ -94,7 +94,7 @@ query_gbif <-
 
     base_request <- httr2::req_user_agent(
       base_request,
-      "suwo (https://github.com/maRce10/suwo)"
+      "suwo (https://github.com/ropensci/suwo)"
     )
 
     base_request <- httr2::req_url_query(
