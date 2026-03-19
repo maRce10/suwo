@@ -6,7 +6,7 @@
 \usage{
 query_xenocanto(
   species = getOption("suwo_species"),
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   all_data = getOption("suwo_all_data", FALSE),
@@ -24,9 +24,9 @@ syntax can be provided. Tags are of the form 'tag:searchterm'. For
 instance, \code{'type:"song"'} will search for recordings where the sound
 type contains 'song'. Multiple tags can be provided
 (e.g., \code{'"cnt:"belize" type:"song"'}).
- See examples down below and check
- \href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help}
- for a full description.}
+See examples down below and check
+\href{https://www.xeno-canto.org/help/search}{Xeno-Canto's search help}
+for a full description.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -37,7 +37,8 @@ address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
 is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
-option ( \code{options(suwo_pb = TRUE)}).}
+option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
+are found.}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
@@ -61,7 +62,7 @@ for downstream steps will not work on them.}
 
 \item{api_key}{Character string refering to the key assigned by Xeno-Canto
 as authorization for searches. Get yours at
-\href{https://xeno-canto.org/account}{https://xeno-canto.org/account}.
+\url{https://xeno-canto.org/account}.
 Required. Avoid setting your API key directly in the function call to
 prevent exposing it in your code. Instead, set it as an environment variable
 (e.g., in your .Renviron file using
@@ -82,11 +83,11 @@ obtained from the repository is returned (without any formatting).
 \details{
 This function queries metadata for animal sound recordings in
 the open-access
- online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}.
- \href{https://www.xeno-canto.org/}{Xeno-Canto} hosts sound recordings of
- birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
- constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
- advanced query syntax (see examples).
+online repository \href{https://www.xeno-canto.org/}{Xeno-Canto}.
+\href{https://www.xeno-canto.org/}{Xeno-Canto} hosts sound recordings of
+birds, frogs, non-marine mammals and grasshoppers. Complex queries can be
+constructed using the \href{https://www.xeno-canto.org/}{Xeno-Canto}
+advanced query syntax (see examples).
 }
 \examples{
 if (interactive()){
@@ -113,8 +114,8 @@ Planqué, Bob, & Willem-Pier Vellinga. 2008. Xeno-canto: a 21st-century way
 to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
 }
 \seealso{
-\code{\link{query_gbif}}, \code{\link{query_wikiaves}},
-\code{\link{query_inaturalist}}
+\code{\link[=query_gbif]{query_gbif()}}, \code{\link[=query_wikiaves]{query_wikiaves()}},
+\code{\link[=query_inaturalist]{query_inaturalist()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -7,7 +7,7 @@
 update_metadata(
   metadata,
   path = ".",
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   api_key = NULL,
@@ -16,10 +16,10 @@ update_metadata(
 }
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).}
+function (i.e. \code{query_reponame()}).}
 
 \item{path}{Directory path where the .csv file will be saved. Only
-applicable for \code{\link{query_macaulay}} query results. By default it
+applicable for \code{\link[=query_macaulay]{query_macaulay()}} query results. By default it
 is saved into the current working directory (\code{"."}).}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
@@ -31,7 +31,8 @@ address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
 is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
-option ( \code{options(suwo_pb = TRUE)}).}
+option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
+are found.}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
@@ -40,8 +41,8 @@ session via the "suwo_verbose" option
 
 \item{api_key}{Character string referring to the key assigned by
 Xeno-Canto as authorization for searches. Get yours at
-\href{https://xeno-canto.org/account}{https://xeno-canto.org/account}. Only
-needed if the input metadata comes from \code{\link{query_xenocanto}}.}
+\url{https://xeno-canto.org/account}. Only
+needed if the input metadata comes from \code{\link[=query_xenocanto]{query_xenocanto()}}.}
 
 \item{dates}{Optional numeric vector with years to split the search. If
 provided, the function will perform separate queries for each date range
@@ -50,7 +51,7 @@ queries that return large number of results (i.e. > 10000 results limit).
 For example, to search for the species between 2010 to 2020 and between
 2021 to 2025 use \code{dates = c(2010, 2020, 2025)}. If years contain
 decimals searches will be split by months within years as well. Only
-needed if the input metadata comes from \code{\link{query_macaulay}}.}
+needed if the input metadata comes from \code{\link[=query_macaulay]{query_macaulay()}}.}
 }
 \value{
 returns a data frame similar to the input 'metadata' with new
@@ -62,10 +63,10 @@ data appended.
 \details{
 This function updates the metadata from a previous query to
 add entries found in the source repository. All observations must belong
-to the same repository. The function adds the column `new_entry` which
+to the same repository. The function adds the column \code{new_entry} which
 labels those entries that are new (i.e., not present in the input metadata).
 The input data frame must have been obtained from any of the query
-functions with the argument `raw_data = FALSE`. The function uses the same
+functions with the argument \code{raw_data = FALSE}. The function uses the same
 query species and format as in the original query. If no new entries are
 found, the function returns the original metadata and prints a message. If
 some old entries are not returned in the new query they are still retained.

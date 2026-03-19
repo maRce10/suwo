@@ -7,7 +7,7 @@
 query_gbif(
   species = getOption("suwo_species"),
   format = getOption("suwo_format", c("image", "sound", "video", "interactive resource")),
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   dataset = NULL,
@@ -35,7 +35,8 @@ address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
 is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
-option ( \code{options(suwo_pb = TRUE)}).}
+option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
+are found.}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
@@ -45,8 +46,8 @@ session via the "suwo_verbose" option
 \item{dataset}{The name of a specific dataset in which to focus the query
 (by default it searchs across all available datasets).
 Users can check available dataset names by downloading this csv file
- \url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}.
- See \url{https://www.gbif.org/dataset/search?q=} for more details.}
+\url{https://api.gbif.org/v1/dataset/search/export?format=CSV&}.
+See \url{https://www.gbif.org/dataset/search?q=} for more details.}
 
 \item{all_data}{Logical argument that determines if all data available
 from database is shown in the results of search. Default is \code{FALSE}.
@@ -70,8 +71,7 @@ fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
 obtained from the repository is returned (without any formatting).
 }
 \description{
-\code{query_gbif} searches for metadata from
-\href{https://www.gbif.org/}{gbif}.
+\code{query_gbif} searches for metadata from \href{https://www.gbif.org/}{GBIF}.
 }
 \details{
 This function queries for species observation info in the
@@ -82,7 +82,7 @@ network and data infrastructure funded by the world's governments and
 aimed at providing open access to data about all types of life on Earth.
 Note that some of the records returned by this function could be duplicates
 of records returned by other suwo functions
-(e.g., \code{\link{query_inaturalist}}).
+(e.g., \code{\link[=query_inaturalist]{query_inaturalist()}}).
 }
 \examples{
 # search dink frog sound files
@@ -92,7 +92,7 @@ of records returned by other suwo functions
 GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
 }
 \seealso{
-\code{\link{query_inaturalist}}
+\code{\link[=query_inaturalist]{query_inaturalist()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -1,20 +1,20 @@
 #' Access 'WikiAves' media file metadata
 #'
-#' \code{query_wikiaves} searches for metadata from
-#' \href{https://www.wikiaves.com.br/}{WikiAves}.
+#' `query_wikiaves` searches for metadata from
+#' [WikiAves](https://www.wikiaves.com.br/).
 #' @inheritParams template_params
 #' @param format Character vector with the media format to query for.
 #' Options are 'image' or 'sound'. Can be set globally for
 #' the current R session via the "suwo_format" option
-#' (e.g. \code{options(suwo_format = "image")}). Required.
+#' (e.g. `options(suwo_format = "image")`). Required.
 #' @export
 #' @name query_wikiaves
 #' @return The function returns a data frame with the metadata of the media
-#' files matching the search criteria. If \code{all_data = TRUE}, all metadata
-#' fields (columns) are returned. If \code{raw_data = TRUE}, the raw data as
+#' files matching the search criteria. If `all_data = TRUE`, all metadata
+#' fields (columns) are returned. If `raw_data = TRUE`, the raw data as
 #' obtained from the repository is returned (without any formatting).
 #' @details This function queries for avian digital media in the open-access
-#' online repository \href{https://www.wikiaves.com.br/}{WikiAves} and returns
+#' online repository [WikiAves](https://www.wikiaves.com.br/) and returns
 #' its metadata. WikiAves is a Brazilian online platform and citizen science
 #' project that serves as the largest community for birdwatchers in Brazil.
 #' It functions as a collaborative, interactive encyclopedia of Brazilian
@@ -34,26 +34,31 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 query_wikiaves <-
-  function(species = getOption("suwo_species"),
-           format = getOption("suwo_format", c("image", "sound")),
-           cores = getOption("mc.cores", 1),
-           pb = getOption("suwo_pb", TRUE),
-           verbose = getOption("suwo_verbose", TRUE),
-           all_data = getOption("suwo_all_data", FALSE),
-           raw_data = getOption("suwo_raw_data", FALSE)) {
-    # check arguments
-    arguments <- as.list(base::match.call())[-1]
-
-    # add objects to argument names
-    for (i in names(arguments)) {
-      arguments[[i]] <- get(i)
-    }
-
-    # check each arguments
-    check_results <- .check_arguments(args = arguments)
+  function(
+    species = getOption("suwo_species"),
+    format = getOption("suwo_format", c("image", "sound")),
+    cores = getOption("suwo_cores", 1),
+    pb = getOption("suwo_pb", TRUE),
+    verbose = getOption("suwo_verbose", TRUE),
+    all_data = getOption("suwo_all_data", FALSE),
+    raw_data = getOption("suwo_raw_data", FALSE)
+  ) {
+    ##  argument checking
+    check_results <- .check_arguments(
+      fun = "query_wikiaves",
+      args = list(
+        species = species,
+        format = format,
+        cores = cores,
+        pb = pb,
+        verbose = verbose,
+        all_data = all_data,
+        raw_data = raw_data
+      )
+    )
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    .report_assertions(check_results)
 
     # Use the unified connection checker
     if (!.checkconnection(verb = verbose, service = "wikiaves")) {
@@ -61,19 +66,25 @@ query_wikiaves <-
     }
 
     # assign a value to format
-    format <- rlang::arg_match(format)
+    format <- rlang::arg_match(format, values = c("image", "sound"))
 
     wiki_format <- switch(format, sound = "s", image = "f")
 
     # initialize search with user agent
     request_obj <- httr2::request(
-      paste0(
-        "https://www.wikiaves.com.br/getTaxonsJSON.php?term=",
-        gsub(" ", "%20", species)
-      )
+      "https://www.wikiaves.com.br/getTaxonsJSON.php"
     )
-    request_obj <- httr2::req_user_agent(request_obj,
-                                      "suwo (https://github.com/maRce10/suwo)")
+
+    request_obj <- httr2::req_url_query(
+      request_obj,
+      term = species
+    )
+
+    request_obj <- httr2::req_user_agent(
+      request_obj,
+      "suwo (https://github.com/maRce10/suwo)"
+    )
+
     response <- httr2::req_perform(request_obj)
 
     # check if request succeeded
@@ -90,7 +101,20 @@ query_wikiaves <-
       return(invisible(NULL))
     }
 
-    get_ids <- jsonlite::fromJSON(httr2::resp_body_string(response))
+    get_ids <- httr2::resp_body_json(
+      response,
+      check_type = FALSE,
+      simplifyVector = TRUE,
+      simplifyDataFrame = TRUE
+    )
+
+    # do exact matching for species name
+    if (length(get_ids) > 1){
+    get_ids <- get_ids[
+      trimws(tolower(get_ids$label)) ==
+        trimws(tolower(species)),
+    ]
+    }
 
     if (length(get_ids) == 0) {
       if (verbose) {
@@ -99,42 +123,57 @@ query_wikiaves <-
       return(invisible(NULL))
     }
 
-    get_ids$total_registers <- vapply(seq_len(nrow(get_ids)), function(u) {
-      request_obj <- httr2::request(
-      paste0(
-          "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-          wiki_format,
-          "&t=s&s=",
-          get_ids$id[u],
-          "&o=mp&p=1"
+    get_ids$total_registers <- vapply(
+      seq_len(nrow(get_ids)),
+      function(u) {
+        request_obj <- httr2::request(
+          "https://www.wikiaves.com.br/getRegistrosJSON.php"
         )
-      )
-      request_obj <-
-        httr2::req_user_agent(request_obj,
-              "suwo (https://github.com/maRce10/suwo)")
-      request_obj <- httr2::req_error(request_obj,
-                                      is_error = function(resp) FALSE)
 
-      response <- try(httr2::req_perform(request_obj), silent = TRUE)
+        request_obj <- httr2::req_url_query(
+          request_obj,
+          tm = wiki_format,
+          t = "s",
+          s = get_ids$id[u],
+          o = "mp",
+          p = 1
+        )
 
-      # if fail request return -9999
-      if (.is_error(response)) {
-        return(-999)
-      }
+        request_obj <-
+          httr2::req_user_agent(
+            request_obj,
+            "suwo (https://github.com/maRce10/suwo)"
+          )
+        request_obj <- httr2::req_error(request_obj, is_error = function(resp) {
+          FALSE
+        })
 
-      # check if request succeeded
-      if (httr2::resp_is_error(response)) {
-        return(-999)
-      }
+        response <- try(httr2::req_perform(request_obj), silent = TRUE)
 
-      content <- httr2::resp_body_json(response)
-      as.numeric(content$registros$total)
+        # if fail request return -9999
+        if (.is_error(response)) {
+          return(-999)
+        }
 
-    }, numeric(1))
+        # check if request succeeded
+        if (httr2::resp_is_error(response)) {
+          return(-999)
+        }
+
+        content <- httr2::resp_body_json(response)
+        as.numeric(content$registros$total)
+      },
+      numeric(1)
+    )
 
     # let user gracefully know error when downloading metadata
-    if (any(vapply(get_ids$total_registers, function(x) x == -999,
-                   FUN.VALUE = logical(1)))) {
+    if (
+      any(vapply(
+        get_ids$total_registers,
+        function(x) x == -999,
+        FUN.VALUE = logical(1)
+      ))
+    ) {
       if (verbose) {
         .message(text = "Metadata could not be downloaded", as = "failure")
       }
@@ -165,69 +204,90 @@ query_wikiaves <-
     # search recs in wikiaves (results are returned in pages with 500
     # recordings each)
     if (verbose) {
-      .message(n = get_ids$total_registers, as = "success")
-    }
-
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" && cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
+      .message(n = get_ids$total_registers[1], as = "success")
     }
 
     # loop over pages
-    query_output_list <- .pbapply_sw(seq_len(nrow(id_by_page_df)), cl = cl,
-                                         pbar = pb, function(i) {
-      Sys.sleep(0.5)
+    query_output_list <- .pbapply_sw(
+      X = seq_len(nrow(id_by_page_df)),
+      cl = cores,
+      pbar = pb,
+      function(x, Y = seq_len(nrow(id_by_page_df))) {
+        # set index to get the right offset
+        i <- Y[x]
 
-      query_output <-
-        try(jsonlite::fromJSON(
-          paste0(
-            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            wiki_format,
-            "&t=",
-            "s",
-            "&s=",
-            id_by_page_df$id[i],
-            "&o=mp&p=",
-            id_by_page_df$page[i]
-          )
-        ), silent = TRUE)
-
-      # retry if an error occurs waiting 1 s
-      if (.is_error(query_output)) {
+        # wait avoid overloading the server
+        # **INTERVARLS < 1s BRAKE THE FUNCTION**
         Sys.sleep(1)
 
-        query_output <- try(jsonlite::fromJSON(
-          paste0(
-            "https://www.wikiaves.com.br/getRegistrosJSON.php?tm=",
-            wiki_format,
-            "&t=",
-            "s",
-            "&s=",
-            id_by_page_df$id[i],
-            "&o=mp&p=",
-            id_by_page_df$page[i]
+        request_obj <- httr2::request(
+          "https://www.wikiaves.com.br/getRegistrosJSON.php"
+        )
+
+        request_obj <- httr2::req_user_agent(
+          request_obj,
+          "suwo (https://github.com/maRce10/suwo)"
+        )
+
+        request_obj <- httr2::req_url_query(
+          request_obj,
+          tm = wiki_format,
+          t = "s",
+          s = id_by_page_df$id[i],
+          o = "mp",
+          p = id_by_page_df$page[i]
+        )
+
+        # do not auto-throw so we can retry manually
+        request_obj <- httr2::req_error(
+          request_obj,
+          is_error = function(resp) FALSE
+        )
+
+        response <- httr2::req_perform(request_obj)
+
+        # retry once if request failed
+        if (httr2::resp_is_error(response)) {
+          Sys.sleep(1)
+
+          response <- httr2::req_perform(request_obj)
+        }
+
+        # if still failing, stop here (no downstream code runs)
+        if (httr2::resp_is_error(response)) {
+          rlang::abort(
+            paste(
+              "WikiAves request failed:",
+              httr2::resp_status(response),
+              httr2::resp_status_desc(response)
+            ),
+            class = "wikiaves_request_error"
           )
-        ), silent = TRUE)
+        }
+
+        # parse JSON only if request succeeded
+        query_output <-
+          httr2::resp_body_json(
+            response,
+            simplifyVector = TRUE
+          )
+
+        # make it a data frame
+        output_df <-
+          as.data.frame(do.call(
+            rbind,
+            lapply(
+              query_output$registros$itens,
+              unlist
+            )
+          ))
+
+        # fix link
+        output_df$link <- gsub("#", "", as.character(output_df$link))
+
+        return(output_df)
       }
-
-      # if error then just return the error
-      if (.is_error(query_output)){
-        return(query_output)
-      }
-
-      # make it a data frame
-      output_df <-
-        as.data.frame(do.call(rbind, lapply(
-          query_output$registros$itens, unlist
-        )))
-
-      # fix link
-      output_df$link <- gsub("#", "", as.character(output_df$link))
-
-      return(output_df)
-    })
+    )
 
     # let user know error when downloading metadata
     if (any(vapply(query_output_list, .is_error, FUN.VALUE = logical(1)))) {
@@ -253,9 +313,12 @@ query_wikiaves <-
     query_output_df$por <- query_output_df$grande <-
       query_output_df$enviado <- NULL
 
-    # flip verified
+    # verified?
     query_output_df$is_questionada <-
-      !as.logical(query_output_df$is_questionada)
+      as.logical(query_output_df$is_questionada)
+
+    # make NAs observations with no link
+    query_output_df$link[grepl("^\\d+$", query_output_df$link)] <- NA
 
     # add file format
     query_output_df$file_extension <- sub(".*\\.", "", query_output_df$link)
@@ -296,11 +359,6 @@ query_wikiaves <-
       format = format,
       raw_data = raw_data
     )
-    # Generate a file path by combining tempdir() with a file name
-    # file_path <- file.path(tempdir(), paste0(species, ".rds"))
-    #
-    # # Save the object to the file
-    # saveRDS(query_output_df, file = file_path)
-    return(query_output_df)
 
+    return(query_output_df)
   }

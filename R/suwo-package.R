@@ -13,12 +13,9 @@
 #'  resource for facilitating research and conservation efforts.
 #'
 #'  The main features of the package are:
-
-#'   \itemize{
-#'   \item Obtaining media metadata from online repositories
-#'   \item Downloading associated media files
-#'   \item Updating data sets with new records
-#'   }
+#' - Obtaining media metadata from online repositories
+#' - Downloading associated media files
+#' - Updating data sets with new records
 #'
 #' @author Marcelo Araya-Salas, Jorge Elizondo-Calvo & Alejandro Rico-Guevara
 #'

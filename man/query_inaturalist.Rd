@@ -7,7 +7,7 @@
 query_inaturalist(
   species = getOption("suwo_species"),
   format = getOption("suwo_format", c("image", "sound")),
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   all_data = getOption("suwo_all_data", FALSE),
@@ -36,7 +36,8 @@ address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
 is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
-option ( \code{options(suwo_pb = TRUE)}).}
+option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
+are found.}
 
 \item{verbose}{Logical argument that determines if text is shown in
 console. Default is \code{TRUE}. Can be set globally for the current R
@@ -86,7 +87,8 @@ field.
 
 }
 \references{
-iNaturalist. Available from https://www.inaturalist.org. Accessed [date]
+iNaturalist. Available from https://www.inaturalist.org.
+(Accessed on 10-02-2026)
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

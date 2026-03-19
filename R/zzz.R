@@ -5,16 +5,16 @@
 
   # Package-specific default options
   op.yourpackage <- list(
-    mc.cores = 1,
-    pb = TRUE,
-    verbose = TRUE,
-    all_data = FALSE,
-    raw_data = FALSE
+    suwo_cores = 1,
+    suwo_pb = TRUE,
+    suwo_verbose = TRUE,
+    suwo_all_data = FALSE,
+    suwo_raw_data = FALSE
   )
 
   # Only set options that haven't been set by user
   toset <- !(names(op.yourpackage) %in% names(op))
-  if(any(toset)) {
+  if (any(toset)) {
     options(op.yourpackage[toset])
   }
 
@@ -29,10 +29,15 @@
   original_op <- get(".original_options", envir = parent.env(environment()))
 
   # Restore only the options that were modified by our package
-  package_options <- c("mc.cores", "pb", "verbose", "all_data", "raw_data")
+  package_options <-
+    c("suwo_cores",
+      "suwo_pb",
+      "suwo_verbose",
+      "suwo_all_data",
+      "suwo_raw_data")
 
-  for(opt in package_options) {
-    if(opt %in% names(original_op)) {
+  for (opt in package_options) {
+    if (opt %in% names(original_op)) {
       # Restore original value
       do.call(options, stats::setNames(list(original_op[[opt]]), opt))
     } else {
@@ -42,9 +47,11 @@
   }
 
   # Clean up
-  if(exists(".original_options", envir = parent.env(environment()))) {
-    try(rm(".original_options", envir = parent.env(environment())),
-        silent = TRUE)
+  if (exists(".original_options", envir = parent.env(environment()))) {
+    try(
+      rm(".original_options", envir = parent.env(environment())),
+      silent = TRUE
+    )
   }
 
   invisible()
@@ -52,11 +59,15 @@
 
 
 # message when loading package
-.onAttach <-
-  function(libname, pkgname) {
-    packageStartupMessage("\nPlease cite 'suwo' as: \n")
+.onAttach <- function(libname, pkgname) {
+
+  if (interactive()) {
+    cit <- format(utils::citation(pkgname)[1], style = "text")
+
     packageStartupMessage(
-      "Araya-Salas, M., J. Elizondo-Calvo & A. Rico-Guevara. 2025.
-    suwo: access nature media repositories. R package version 0.1.0."
+      "\nPlease cite '", pkgname, "' as:\n",
+      paste(cit, collapse = "\n"),
+      "\n"
     )
   }
+}

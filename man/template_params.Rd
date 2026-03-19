@@ -13,7 +13,8 @@ address as it might be identified as denial-of-service cyberattack.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default
 is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
-option ( \code{options(suwo_pb = TRUE)}).}
+option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
+are found.}
 
 \item{species}{Character string with the scientific name of a species in
 the format: "Genus epithet". Required. Can be set globally for the current
@@ -41,7 +42,7 @@ when \code{raw_data = TRUE} is not standardized, so most suwo functions
 for downstream steps will not work on them.}
 
 \item{metadata}{data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).}
+function (i.e. \code{query_reponame()}).}
 }
 \description{
 template_params

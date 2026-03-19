@@ -10,8 +10,7 @@ on:
   workflow_dispatch:
   # Run on every push to main
   push:
-    branches:
-      - main
+    branches-ignore: [gh-pages]
 
 jobs:
   pkgcheck:

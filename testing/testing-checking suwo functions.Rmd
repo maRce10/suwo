@@ -491,6 +491,8 @@ urlchecker::url_check()
 lintr::lint_package(linters = list(lintr::line_length_linter()))
 
 codemetar::write_codemeta()
+
+pkgdown::build_favicons(overwrite = TRUE)
 ```
 
 # check with docker
@@ -526,6 +528,14 @@ covr::file_coverage(
     test_files = "./tests/testthat/test_query_macaulay.R")
 
 
+
+```
+
+# Prebuild vignette
+```{r}
+
+# Execute the code from the vignette
+knitr::knit("vignettes/suwo.Rmd.orig", output = "testing/suwo.Rmd")
 
 ```
 
@@ -566,6 +576,8 @@ pkgdown::build_site(lazy = TRUE, preview = TRUE, examples = FALSE)
 # usethis::use_pkgdown()
 # usethis::use_github_pages()
 
+# set air github action
+# usethis::use_github_action(url = "https://github.com/posit-dev/setup-air/blob/main/examples/format-check.yaml")
 
 # installation of packages fo rOpenSci
 

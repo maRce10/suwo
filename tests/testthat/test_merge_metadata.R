@@ -1,10 +1,8 @@
 options(verbose = TRUE)
 
 test_that("merge query_wikiaves and xc", {
-
-
-  wa <- suwo:::vignette_metadata$h_harpyja
-  xc <- suwo:::vignette_metadata$a_hahneli
+  wa <- suwo:::testing_metadata$h_harpyja
+  xc <- suwo:::testing_metadata$a_hahneli
   merged_mt <- merge_metadata(wa, xc)
 
   expect_true(nrow(merged_mt) == nrow(wa) + nrow(xc))
@@ -12,7 +10,7 @@ test_that("merge query_wikiaves and xc", {
   expect_true(all(unique(merged_mt$source) %in% c("wa", "xc")))
 
   # add a third source
-  gbf <- suwo:::vignette_metadata$p_lotor
+  gbf <- suwo:::testing_metadata$p_lotor
 
   merged_mt2 <- merge_metadata(wa, xc, gbf)
 
@@ -21,16 +19,15 @@ test_that("merge query_wikiaves and xc", {
   expect_true(all(unique(merged_mt2$source) %in% c("wa", "xc", "gbf")))
 
   # merge a list of data frames
-  merged_mt3 <- merge_metadata(list(wikiaves = wa,xenocanto = xc, gbif = gbf))
+  merged_mt3 <- merge_metadata(list(wikiaves = wa, xenocanto = xc, gbif = gbf))
 
   identical(merged_mt3, merged_mt2)
-
-  })
+})
 
 
 # Make simple example data frames with required cols
-df1 <- suwo:::vignette_metadata$h_harpyja
-df2 <- suwo:::vignette_metadata$h_wagneriana
+df1 <- suwo:::testing_metadata$h_harpyja
+df2 <- suwo:::testing_metadata$a_hahneli
 
 
 test_that("merge_metadata works with multiple data frames", {
@@ -39,7 +36,7 @@ test_that("merge_metadata works with multiple data frames", {
   expect_s3_class(res, "data.frame")
   expect_true("source" %in% names(res))
   expect_equal(sort(unique(res$source)), c("df1", "df2"))
-  expect_equal(nrow(res), 8)
+  expect_equal(nrow(res), 7)
 })
 
 test_that("merge_metadata works with named data frames", {
@@ -75,7 +72,7 @@ test_that("non-data-frame inputs throw an error", {
 })
 
 test_that("missing required columns cause an error", {
-  bad_df <- data.frame(x = 1)  # missing required cols
+  bad_df <- data.frame(x = 1) # missing required cols
 
   expect_error(
     merge_metadata(df1, bad_df),
