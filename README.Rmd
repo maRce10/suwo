@@ -91,7 +91,7 @@ Take a look at the [package vignette](https://marce10.github.io/suwo/articles/su
 
 ## Intended use and responsible practices
 
-The [suwo](https://marce10.github.io/suwo/) package is designed exclusively for non-commercial, scientific purposes, including research, education, and conservation. **Commercial use of data or media retrieved through this package is the user’s responsibility and is allowed only when the applicable license of the source database explicitly permits such use, or when explicit, separate permission has been obtained directly from the original source platforms or rights holders**. Users must comply with the specific terms of service and data-use policies of each source database, which may require attribution and may further restrict commercial application. The package developers assume no liability for misuse of the retrieved data or for violations of third-party terms of service.
+The [suwo](https://marce10.github.io/suwo/) package is designed exclusively for non-commercial, scientific purposes, including research, education, and conservation. **Commercial use of data or media retrieved through this package is the user’s responsibility and is allowed only when the applicable license of the source database explicitly permits such use, or when explicit, separate permission has been obtained directly from the original source platforms or rights holders** Users must comply with the specific terms of service and data-use policies of each source database, which may require attribution and may further restrict commercial application. The package developers assume no liability for misuse of the retrieved data or for violations of third-party terms of service.
 
 ## Citation
 
