@@ -30,8 +30,6 @@ Useful links:
 
 - <https://marce10.github.io/suwo/>
 
-- <https://github.com/maRce10/suwo>
-
 - Report bugs at <https://github.com/maRce10/suwo/issues/>
 
 ## Author

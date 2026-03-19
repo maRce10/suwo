@@ -9,7 +9,7 @@ metadata from several repositories."><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">suwo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,8 @@ metadata from several repositories.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_duplicates</span><span class="op">(</span></span>
 <span>  <span class="va">metadata</span>,</span>
 <span>  sort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  criteria <span class="op">=</span> <span class="st">"country &gt; 0.8 &amp; locality &gt; 0.5 &amp; user_name &gt; 0.8 &amp; time == 1 &amp; date == 1"</span>,</span>
+<span>  criteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"country &gt; 0.8"</span>, <span class="st">"locality &gt; 0.5"</span>, <span class="st">"user_name &gt; 0.8"</span>, <span class="st">"time == 1"</span>,</span>
+<span>    <span class="st">"date == 1"</span>, sep <span class="op">=</span> <span class="st">" &amp; "</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -56,18 +57,18 @@ metadata from several repositories.</p>
 
 <dl><dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
 <dd><p>data frame obtained from combining the output metadata of
-two or more suwo query function using the `merge_metadata()` function.
+two or more suwo query function using the <code><a href="merge_metadata.html">merge_metadata()</a></code> function.
 Data frames obtained from a single suwo query function can also be used
 but duplicates are not really expected within the same repository. The data
-frame must have the following columns: `user_name`, `locality`, `repository`,
- `country`, `format`, `time`, and `date`.</p></dd>
+frame must have the following columns: <code>user_name</code>, <code>locality</code>, <code>repository</code>,
+<code>country</code>, <code>format</code>, <code>time</code>, and <code>date</code>.</p></dd>
 
 
 <dt id="arg-sort">sort<a class="anchor" aria-label="anchor" href="#arg-sort"></a></dt>
 <dd><p>Logical argument indicating if the output data frame should be
-sorted by the `duplicate_group` column added by this function. This will
+sorted by the <code>duplicate_group</code> column added by this function. This will
 group all potential duplicates together in the output data frame.
-Default is `TRUE`.</p></dd>
+Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-criteria">criteria<a class="anchor" aria-label="anchor" href="#arg-criteria"></a></dt>
@@ -93,22 +94,22 @@ session via the "suwo_verbose" option
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with the input data frame and an additional column
-named `duplicate_group` indicating potential duplicates with a common index.
-Entries without potential duplicates are labeled as `NA` in this new column.</p>
+named <code>duplicate_group</code> indicating potential duplicates with a common index.
+Entries without potential duplicates are labeled as <code>NA</code> in this new column.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function compares the information in the entries of a
 combined metadata data frame (typically the output of
-<code><a href="merge_metadata.html">merge_metadata</a></code>) and labels those possible duplicates with
-a common index in a new column named `duplicate_group`. The comparison is
-based on the similarity of the following fields: `user_name`, `locality`,
-`time` and `country`. Only rows with no missing data for those fields will
-be considered. The function uses the `RecordLinkage` package to perform the
+<code><a href="merge_metadata.html">merge_metadata()</a></code>) and labels those possible duplicates with
+a common index in a new column named <code>duplicate_group</code>. The comparison is
+based on the similarity of the following fields: <code>user_name</code>, <code>locality</code>,
+<code>time</code> and <code>country</code>. Only rows with no missing data for those fields will
+be considered. The function uses the <code>RecordLinkage</code> package to perform the
 a fuzzy matching comparison and identify potential duplicates based on
 predefined similarity thresholds (see argument 'criteria'). The function
 only spots duplicates from different repositories and assumes those
-duplicates should have the same `format` and `date`. This function is
+duplicates should have the same <code>format</code> and <code>date</code>. This function is
 useful for curating the data obtained by merging data from multiple sources,
 as the same observation might be recorded in different repositories.
 This is a common issue in citizen science repositories, where users might
@@ -125,11 +126,14 @@ particularly with GBIF.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># get metadata from 2 repos</span></span></span>
 <span class="r-in"><span><span class="va">gb</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>, format <span class="op">=</span>  <span class="st">"sound"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (735 matching records found) 🎊:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> 2 observations do not have a download link and were removed from the results (saved at `options('gbif_excluded_results')`). </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (743 matching records found) 🌈</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> 2 observations do not have a download link and were removed from the results (inlcuded as an attribute called 'excluded_results'). </span>
 <span class="r-in"><span><span class="va">inat</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_inaturalist.html">query_inaturalist</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Turdus rufiventris"</span>,</span></span>
 <span class="r-in"><span>  format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (551 matching records found) 🎊:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (564 matching records found) 🎊</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■■■■■■■■■■■                     </span>  33% | ETA:  7s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run if queries didnt fail</span></span></span>
 <span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gb</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">inat</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>

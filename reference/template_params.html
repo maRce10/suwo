@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">suwo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,8 @@ address as it might be identified as denial-of-service cyberattack.</p></dd>
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default
 is <code>TRUE</code>. Can be set globally for the current R session via the "suwo_pb"
-option ( <code>options(suwo_pb = TRUE)</code>).</p></dd>
+option ( <code>options(suwo_pb = TRUE)</code>). Not shown if only a few observations
+are found.</p></dd>
 
 
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
@@ -92,7 +93,7 @@ for downstream steps will not work on them.</p></dd>
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
 <dd><p>data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).</p></dd>
+function (i.e. <code>query_reponame()</code>).</p></dd>
 
 </dl></div>
 

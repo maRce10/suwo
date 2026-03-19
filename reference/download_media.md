@@ -8,9 +8,9 @@
 download_media(
   metadata,
   path = ".",
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
-  cores = getOption("mc.cores", 1),
   overwrite = FALSE,
   folder_by = NULL
 )
@@ -21,24 +21,12 @@ download_media(
 - metadata:
 
   data frame previously obtained from any suwo query function (i.e.
-  \`query_reponame()\`).
+  `query_reponame()`).
 
 - path:
 
   Directory path where the output media files will be saved. By default
   files are saved into the current working directory (`"."`).
-
-- pb:
-
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the
-  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
-
-- verbose:
-
-  Logical argument that determines if text is shown in console. Default
-  is `TRUE`. Can be set globally for the current R session via the
-  "suwo_verbose" option ( `options(suwo_verbose = TRUE)`).
 
 - cores:
 
@@ -49,6 +37,19 @@ download_media(
   that some repositories might not support parallel queries from the
   same IP address as it might be identified as denial-of-service
   cyberattack.
+
+- pb:
+
+  Logical argument to control if progress bar is shown. Default is
+  `TRUE`. Can be set globally for the current R session via the
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`). Not shown if only a few
+  observations are found.
+
+- verbose:
+
+  Logical argument that determines if text is shown in console. Default
+  is `TRUE`. Can be set globally for the current R session via the
+  "suwo_verbose" option ( `options(suwo_verbose = TRUE)`).
 
 - overwrite:
 
@@ -87,13 +88,13 @@ as long as the working directory is the same. Users only need to rerun
 the same function call. By default only the missing files will be
 downloaded when resuming. Can also be used on a updated query output
 (see
-[`update_metadata`](https://marce10.github.io/suwo/reference/update_metadata.md))
+[`update_metadata()`](https://marce10.github.io/suwo/reference/update_metadata.md))
 to add the new media files to the existing media pool.
 
 ## See also
 
-[`query_gbif`](https://marce10.github.io/suwo/reference/query_gbif.md),
-[`query_macaulay`](https://marce10.github.io/suwo/reference/query_macaulay.md)
+[`query_gbif()`](https://marce10.github.io/suwo/reference/query_gbif.md),
+[`query_macaulay()`](https://marce10.github.io/suwo/reference/query_macaulay.md)
 
 ## Author
 
@@ -104,7 +105,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
   a_zambiana <- query_inaturalist(species = "Amanita zambiana",
   format = "image")
-#> ✔ Obtaining metadata (10 matching records found) 🌈:
+#> ✔ Obtaining metadata (10 matching records found) 🥇
 
 # run if query didnt fail
  if (!is.null(a_zambiana)) {

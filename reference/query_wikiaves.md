@@ -9,7 +9,7 @@
 query_wikiaves(
   species = getOption("suwo_species"),
   format = getOption("suwo_format", c("image", "sound")),
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   all_data = getOption("suwo_all_data", FALSE),
@@ -47,7 +47,8 @@ query_wikiaves(
 
   Logical argument to control if progress bar is shown. Default is
   `TRUE`. Can be set globally for the current R session via the
-  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`). Not shown if only a few
+  observations are found.
 
 - verbose:
 
@@ -109,5 +110,8 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 # search
 p_nattereri <- query_wikiaves(species = "Phaethornis nattereri",
     format = "image")
-#> ✔ Obtaining metadata (108 matching records found) 😸:
+#> ✔ Obtaining metadata (110 matching records found) 🎊
+#>  ■■■■■■■■■■■                       33% | ETA:  4s
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+#> 
 ```

@@ -8,7 +8,7 @@
 ``` r
 query_xenocanto(
   species = getOption("suwo_species"),
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   all_data = getOption("suwo_all_data", FALSE),
@@ -47,7 +47,8 @@ query_xenocanto(
 
   Logical argument to control if progress bar is shown. Default is
   `TRUE`. Can be set globally for the current R session via the
-  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`). Not shown if only a few
+  observations are found.
 
 - verbose:
 
@@ -108,9 +109,9 @@ way to appreciate Neotropical bird song. Neotrop. Birding 3: 17-23.
 
 ## See also
 
-[`query_gbif`](https://marce10.github.io/suwo/reference/query_gbif.md),
-[`query_wikiaves`](https://marce10.github.io/suwo/reference/query_wikiaves.md),
-[`query_inaturalist`](https://marce10.github.io/suwo/reference/query_inaturalist.md)
+[`query_gbif()`](https://marce10.github.io/suwo/reference/query_gbif.md),
+[`query_wikiaves()`](https://marce10.github.io/suwo/reference/query_wikiaves.md),
+[`query_inaturalist()`](https://marce10.github.io/suwo/reference/query_inaturalist.md)
 
 ## Author
 

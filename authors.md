@@ -16,12 +16,14 @@
 Source:
 [`inst/CITATION`](https://github.com/maRce10/suwo/blob/main/inst/CITATION)
 
-Araya-Salas M, J Elizondo-Calvo & A Rico-Guevara (2025), suwo: access
-nature media repositories. R package version 0.1.0.
+Araya-Salas M, Elizondo-Calvo J, Rico-Guevara A (2026). *suwo: Access
+Nature Media Repositories*. R package version 0.2.0,
+<https://marce10.github.io/suwo/>.
 
     @Manual{,
-      entry = {MISC},
-      title = {suwo: access nature media repositories 0.1.0.},
-      author = {M. Araya-Salas and Jorge Elizondo-Calvo and Alejandro Rico-Guevara},
-      year = {2025},
+      title = {suwo: Access Nature Media Repositories},
+      author = {Marcelo Araya-Salas and Jorge Elizondo-Calvo and Alejandro Rico-Guevara},
+      year = {2026},
+      note = {R package version 0.2.0},
+      url = {https://marce10.github.io/suwo/},
     }

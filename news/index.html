@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">suwo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,10 +33,58 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="suwo-020">suwo 0.2.0<a class="anchor" aria-label="anchor" href="#suwo-020"></a></h2>
+<div class="section level4">
+<h4 id="major-changes-0-2-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-2-0"></a></h4>
+<ul><li>Refactored all HTTP requests to rely more consistently on <strong>httr2</strong>, including:
+<ul><li>Use of <code>req_url_query()</code> instead of manual URL string concatenation.</li>
+<li>Use of <code>resp_body_json()</code> where applicable.</li>
+</ul></li>
+<li>Unified argument order across all <code>query_*()</code> functions for a more consistent user interface.</li>
+<li>Default media format changed from <code>"sound"</code> to <code>"image"</code> where applicable.</li>
+<li>Global options are now namespaced with <code>suwo_</code> to avoid conflicts (e.g. <code>suwo_verbose</code>, <code>suwo_format</code>).</li>
+<li>Improved pagination and request robustness for GBIF, WikiAves, Xeno-Canto, and iNaturalist queries.</li>
+<li>Progress reporting refactored to use <strong>cli</strong> instead of <strong>pbapply</strong>.</li>
+<li>Migrated roxygen documentation to <strong>Markdown syntax</strong>.</li>
+<li>Reformatted the codebase using <strong>air</strong>, with a GitHub Actions workflow to enforce formatting.</li>
+<li>Dropped unused or unnecessary dependencies (<code>methods</code>, <code>viridis</code>), updated minimum R version to ≥ 4.0.0, and moved vignette-only packages to <code>Suggests</code>.</li>
+<li>Replaced mc.cores option with suwo_cores to allow users to set parallelization consistently across suwo functions within an R session.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="api-keys--security-0-2-0">API keys &amp; security<a class="anchor" aria-label="anchor" href="#api-keys--security-0-2-0"></a></h4>
+<ul><li>Xeno-Canto API keys are now read exclusively from environment variables via <code>Sys.getenv("xc_api_key")</code>.</li>
+<li>Removed encouragement of API keys being passed directly in function calls or stored in options.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="validation--robustness-0-2-0">Validation &amp; robustness<a class="anchor" aria-label="anchor" href="#validation--robustness-0-2-0"></a></h4>
+<ul><li>Added stricter input validation:
+<ul><li>Enforced single-species queries where required.</li>
+<li>Improved error handling for incorrect inputs to <code><a href="../reference/remove_duplicates.html">remove_duplicates()</a></code>.</li>
+</ul></li>
+<li>Metadata records without associated media URLs are now stored as an attribute of the returned data frame instead of global options.</li>
+<li>Improved handling of duplicated media records and clarified their interpretation in documentation.</li>
+<li>Replaced usage of <code><a href="https://rdrr.io/r/methods/is.html" class="external-link">methods::is()</a></code> with <code><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits()</a></code>.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="documentation--usability-0-2-0">Documentation &amp; usability<a class="anchor" aria-label="anchor" href="#documentation--usability-0-2-0"></a></h4>
+<ul><li>Expanded vignette explanations, including clearer alt text for figures.</li>
+<li>Clarified licensing and responsibility for commercial use of retrieved data.</li>
+<li>Improved guidance for handling duplicated records.</li>
+<li>README rendering is now triggered only when <code>README.Rmd</code> changes.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="testing--maintenance-0-2-0">Testing &amp; maintenance<a class="anchor" aria-label="anchor" href="#testing--maintenance-0-2-0"></a></h4>
+<ul><li>Cleaned up test infrastructure and fixed Codecov integration.</li>
+<li>Removed duplicated <code>.onLoad()</code> definitions.</li>
+<li>Simplified internal code by removing unnecessary <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste()</a></code> calls and replacing <code>seq_len(length())</code> with <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along()</a></code>.</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="suwo-010">suwo 0.1.0<a class="anchor" aria-label="anchor" href="#suwo-010"></a></h2>
 <ul><li>First release</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

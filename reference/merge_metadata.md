@@ -13,23 +13,22 @@ merge_metadata(..., check_columns = TRUE)
 - ...:
 
   two or more data frames (each one as a separate entry) referring to
-  the metadata obtained from suwo query functions (\`query_x()\`).
+  the metadata obtained from suwo query functions (`query_x()`).
   Alternatively, a single list of data frames can be provided. The name
   provided for each data frame (either as individual data frames or in a
-  list) will be used as label in the \`source\` column in the output
-  data frame.
+  list) will be used as label in the `source` column in the output data
+  frame.
 
 - check_columns:
 
   Logical argument indicating if the function should check that all
-  input data frames have the required basic columns. Default is
-  \`TRUE\`.
+  input data frames have the required basic columns. Default is `TRUE`.
 
 ## Value
 
 A single data frame with the data from all input data frames combined
-and with an additional column named \`source\` indicating the original
-data frame from which each row originated. The column \`source\` will
+and with an additional column named `source` indicating the original
+data frame from which each row originated. The column `source` will
 contain the name provided for each data frame (either as individual data
 frames or in a list). If no names were provided, the object names will
 be used instead.
@@ -39,8 +38,10 @@ be used instead.
 This function combines metadata from multiple sources (e.g. WikiAves and
 xeno-canto) into a single data frame for easier analysis and comparison.
 Each input data frame must be obtained from one of the suwo query
-functions (e.g., \`query_wikiaves()\`, \`query_xenocanto()\`, etc.) with
-\`raw_data = FALSE\`.
+functions (e.g.,
+[`query_wikiaves()`](https://marce10.github.io/suwo/reference/query_wikiaves.md),
+[`query_xenocanto()`](https://marce10.github.io/suwo/reference/query_xenocanto.md),
+etc.) with `raw_data = FALSE`.
 
 ## Author
 
@@ -51,9 +52,9 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 # get metadata from 2 repos
 wa <- query_wikiaves(species = "Glaucis dohrnii", format =  "sound")
-#> ✔ Obtaining metadata (36 matching records found) 🥇:
+#> ✔ Obtaining metadata (36 matching records found) 🎉
 gb <- query_gbif(species = "Glaucis dohrnii", format = "sound")
-#> ✔ Obtaining metadata (25 matching records found) 🎊:
+#> ✔ Obtaining metadata (25 matching records found) 🎊
 
 # run if queries didnt fail
  if (!is.null(wa) && !is.null(gb)) {

@@ -8,7 +8,7 @@
 remove_duplicates(
   metadata,
   same_repo = FALSE,
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   repo_priority = c("Xeno-Canto", "GBIF", "iNaturalist", "Macaulay Library", "WikiAves",
     "Observation"),
@@ -21,9 +21,9 @@ remove_duplicates(
 - metadata:
 
   data frame obtained from possible duplicates with the function
-  [`find_duplicates`](https://marce10.github.io/suwo/reference/find_duplicates.md).
+  [`find_duplicates()`](https://marce10.github.io/suwo/reference/find_duplicates.md).
   The data frame must have the column 'duplicate_group' returned by
-  [`find_duplicates`](https://marce10.github.io/suwo/reference/find_duplicates.md).
+  [`find_duplicates()`](https://marce10.github.io/suwo/reference/find_duplicates.md).
 
 - same_repo:
 
@@ -50,7 +50,8 @@ remove_duplicates(
 
   Logical argument to control if progress bar is shown. Default is
   `TRUE`. Can be set globally for the current R session via the
-  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`). Not shown if only a few
+  observations are found.
 
 - repo_priority:
 
@@ -74,9 +75,14 @@ observations that were determined not to be duplicates.
 
 ## Details
 
-This function removes duplicate observations identified with the
-function
-[`find_duplicates`](https://marce10.github.io/suwo/reference/find_duplicates.md).
+When compiling data from multiple repositories, duplicated media records
+are a common issue, particularly for sound recordings. These duplicates
+occur both through data sharing between repositories like Xeno-Canto and
+GBIF, and when users upload the same file to multiple platforms. In such
+cases those multiple observations seem to refer to the same media file
+and therefore, only one copy is needed. This function removes duplicate
+observations identified with the function
+[`find_duplicates()`](https://marce10.github.io/suwo/reference/find_duplicates.md).
 When duplicates are found, one observation from each group of duplicates
 is retained in the output data frame. However, if multiple observations
 from the same repository are labeled as duplicates, by default
@@ -93,8 +99,8 @@ GBIF), but this can be modified with the argument 'repo_priority'.
 
 ## See also
 
-[`find_duplicates`](https://marce10.github.io/suwo/reference/find_duplicates.md),
-[`merge_metadata`](https://marce10.github.io/suwo/reference/merge_metadata.md)
+[`find_duplicates()`](https://marce10.github.io/suwo/reference/find_duplicates.md),
+[`merge_metadata()`](https://marce10.github.io/suwo/reference/merge_metadata.md)
 
 ## Author
 
@@ -105,8 +111,11 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
 ``` r
 # get metadata from 2 repos
 gb <- query_gbif(species = "Turdus rufiventris", format =  "sound")
-#> ✔ Obtaining metadata (735 matching records found) 🥳:
-#> ! 2 observations do not have a download link and were removed from the results (saved at `options('gbif_excluded_results')`). 
+#> ✔ Obtaining metadata (743 matching records found) 🎊
+#>  ■■■■■■■■■■■■■■■■■■■■■             67% | ETA:  1s
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+#> 
+#> ! 2 observations do not have a download link and were removed from the results (inlcuded as an attribute called 'excluded_results'). 
 
 if(interactive()){
 key <- "YOUR XENO CANTO API KEY"

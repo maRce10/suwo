@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">suwo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">update_metadata</span><span class="op">(</span></span>
 <span>  <span class="va">metadata</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
-<span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -56,12 +56,12 @@
 
 <dl><dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
 <dd><p>data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).</p></dd>
+function (i.e. <code>query_reponame()</code>).</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>Directory path where the .csv file will be saved. Only
-applicable for <code><a href="query_macaulay.html">query_macaulay</a></code> query results. By default it
+applicable for <code><a href="query_macaulay.html">query_macaulay()</a></code> query results. By default it
 is saved into the current working directory (<code>"."</code>).</p></dd>
 
 
@@ -77,7 +77,8 @@ address as it might be identified as denial-of-service cyberattack.</p></dd>
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default
 is <code>TRUE</code>. Can be set globally for the current R session via the "suwo_pb"
-option ( <code>options(suwo_pb = TRUE)</code>).</p></dd>
+option ( <code>options(suwo_pb = TRUE)</code>). Not shown if only a few observations
+are found.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -91,7 +92,7 @@ session via the "suwo_verbose" option
 <dd><p>Character string referring to the key assigned by
 Xeno-Canto as authorization for searches. Get yours at
 <a href="https://xeno-canto.org/account" class="external-link">https://xeno-canto.org/account</a>. Only
-needed if the input metadata comes from <code><a href="query_xenocanto.html">query_xenocanto</a></code>.</p></dd>
+needed if the input metadata comes from <code><a href="query_xenocanto.html">query_xenocanto()</a></code>.</p></dd>
 
 
 <dt id="arg-dates">dates<a class="anchor" aria-label="anchor" href="#arg-dates"></a></dt>
@@ -102,7 +103,7 @@ queries that return large number of results (i.e. &gt; 10000 results limit).
 For example, to search for the species between 2010 to 2020 and between
 2021 to 2025 use <code>dates = c(2010, 2020, 2025)</code>. If years contain
 decimals searches will be split by months within years as well. Only
-needed if the input metadata comes from <code><a href="query_macaulay.html">query_macaulay</a></code>.</p></dd>
+needed if the input metadata comes from <code><a href="query_macaulay.html">query_macaulay()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,10 +115,10 @@ data appended.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function updates the metadata from a previous query to
 add entries found in the source repository. All observations must belong
-to the same repository. The function adds the column `new_entry` which
+to the same repository. The function adds the column <code>new_entry</code> which
 labels those entries that are new (i.e., not present in the input metadata).
 The input data frame must have been obtained from any of the query
-functions with the argument `raw_data = FALSE`. The function uses the same
+functions with the argument <code>raw_data = FALSE</code>. The function uses the same
 query species and format as in the original query. If no new entries are
 found, the function returns the original metadata and prints a message. If
 some old entries are not returned in the new query they are still retained.
@@ -133,7 +134,7 @@ entries.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># query metadata</span></span></span>
 <span class="r-in"><span><span class="va">a_gioiosa</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Amanita gioiosa"</span>, format <span class="op">=</span>  <span class="st">"image"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (16 matching records found) 🎊:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (16 matching records found) 🌈</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run if query didnt fail</span></span></span>
 <span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">a_gioiosa</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -146,8 +147,8 @@ entries.</p>
 <span class="r-in"><span><span class="co"># check number of rows is the same</span></span></span>
 <span class="r-in"><span><span class="co"># nrow(up_a_gioiosa) == nrow(a_gioiosa)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (16 matching records found) 🌈:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 3 new entries found 🥳</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (16 matching records found) 🎉</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 3 new entries found 😀</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

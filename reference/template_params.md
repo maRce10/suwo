@@ -18,7 +18,8 @@ template_params
 
   Logical argument to control if progress bar is shown. Default is
   `TRUE`. Can be set globally for the current R session via the
-  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`). Not shown if only a few
+  observations are found.
 
 - species:
 
@@ -55,4 +56,4 @@ template_params
 - metadata:
 
   data frame previously obtained from any suwo query function (i.e.
-  \`query_reponame()\`).
+  `query_reponame()`).

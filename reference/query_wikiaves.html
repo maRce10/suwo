@@ -9,7 +9,7 @@ WikiAves."><meta property="og:image" content="https://marce10.github.io/suwo/log
 
     <a class="navbar-brand me-2" href="../index.html">suwo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ WikiAves."><meta property="og:image" content="https://marce10.github.io/suwo/log
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_wikiaves</span><span class="op">(</span></span>
 <span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_species"</span><span class="op">)</span>,</span>
 <span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_format"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image"</span>, <span class="st">"sound"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_verbose"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"suwo_all_data"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
@@ -83,7 +83,8 @@ address as it might be identified as denial-of-service cyberattack.</p></dd>
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default
 is <code>TRUE</code>. Can be set globally for the current R session via the "suwo_pb"
-option ( <code>options(suwo_pb = TRUE)</code>).</p></dd>
+option ( <code>options(suwo_pb = TRUE)</code>). Not shown if only a few observations
+are found.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -146,7 +147,10 @@ to study bird migration. Emu-Austral Ornithology 119.4: 364-373.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># search</span></span></span>
 <span class="r-in"><span><span class="va">p_nattereri</span> <span class="op">&lt;-</span> <span class="fu">query_wikiaves</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Phaethornis nattereri"</span>,</span></span>
 <span class="r-in"><span>    format <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (108 matching records found) 😸:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (110 matching records found) 🎊</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■■■■■■■■■■■                     </span>  33% | ETA:  4s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

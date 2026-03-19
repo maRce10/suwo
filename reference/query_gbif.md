@@ -1,6 +1,6 @@
 # Access 'gbif' media file metadata
 
-`query_gbif` searches for metadata from [gbif](https://www.gbif.org/).
+`query_gbif` searches for metadata from [GBIF](https://www.gbif.org/).
 
 ## Usage
 
@@ -8,7 +8,7 @@
 query_gbif(
   species = getOption("suwo_species"),
   format = getOption("suwo_format", c("image", "sound", "video", "interactive resource")),
-  cores = getOption("mc.cores", 1),
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
   dataset = NULL,
@@ -47,7 +47,8 @@ query_gbif(
 
   Logical argument to control if progress bar is shown. Default is
   `TRUE`. Can be set globally for the current R session via the
-  "suwo_pb" option ( `options(suwo_pb = TRUE)`).
+  "suwo_pb" option ( `options(suwo_pb = TRUE)`). Not shown if only a few
+  observations are found.
 
 - verbose:
 
@@ -98,7 +99,7 @@ infrastructure funded by the world's governments and aimed at providing
 open access to data about all types of life on Earth. Note that some of
 the records returned by this function could be duplicates of records
 returned by other suwo functions (e.g.,
-[`query_inaturalist`](https://marce10.github.io/suwo/reference/query_inaturalist.md)).
+[`query_inaturalist()`](https://marce10.github.io/suwo/reference/query_inaturalist.md)).
 
 ## References
 
@@ -106,7 +107,7 @@ GBIF.org (2024), GBIF Home Page. Available from: https://www.gbif.org/
 
 ## See also
 
-[`query_inaturalist`](https://marce10.github.io/suwo/reference/query_inaturalist.md)
+[`query_inaturalist()`](https://marce10.github.io/suwo/reference/query_inaturalist.md)
 
 ## Author
 

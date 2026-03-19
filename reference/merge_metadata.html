@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">suwo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,34 +48,34 @@
 
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>two or more data frames (each one as a separate entry) referring
-to the metadata obtained from suwo query functions (`query_x()`).
+to the metadata obtained from suwo query functions (<code>query_x()</code>).
 Alternatively, a single list of data frames can be provided. The name
 provided for each data frame (either as individual data frames or in a list)
-will be used as label in the `source` column in the output data frame.</p></dd>
+will be used as label in the <code>source</code> column in the output data frame.</p></dd>
 
 
 <dt id="arg-check-columns">check_columns<a class="anchor" aria-label="anchor" href="#arg-check-columns"></a></dt>
 <dd><p>Logical argument indicating if the function should
 check that all input data frames have the required basic columns.
-Default is `TRUE`.</p></dd>
+Default is <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A single data frame with the data from all input data frames
-combined and with an additional column named `source` indicating the
-original data frame from which each row originated. The column `source` will
- contain the name provided for each data frame (either as individual data
- frames or in a list). If no names were provided, the object names will
- be used instead.</p>
+combined and with an additional column named <code>source</code> indicating the
+original data frame from which each row originated. The column <code>source</code> will
+contain the name provided for each data frame (either as individual data
+frames or in a list). If no names were provided, the object names will
+be used instead.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function combines metadata from multiple sources
 (e.g. WikiAves and xeno-canto) into a single data frame for easier analysis
 and comparison. Each input data frame must be obtained from one of the
-suwo query functions (e.g., `query_wikiaves()`, `query_xenocanto()`, etc.)
-with `raw_data = FALSE`.</p>
+suwo query functions (e.g., <code><a href="query_wikiaves.html">query_wikiaves()</a></code>, <code><a href="query_xenocanto.html">query_xenocanto()</a></code>, etc.)
+with <code>raw_data = FALSE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -86,9 +86,9 @@ with `raw_data = FALSE`.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># get metadata from 2 repos</span></span></span>
 <span class="r-in"><span><span class="va">wa</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_wikiaves.html">query_wikiaves</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Glaucis dohrnii"</span>, format <span class="op">=</span>  <span class="st">"sound"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (36 matching records found) 🥇:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (36 matching records found) 🎉</span>
 <span class="r-in"><span><span class="va">gb</span> <span class="op">&lt;-</span> <span class="fu"><a href="query_gbif.html">query_gbif</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Glaucis dohrnii"</span>, format <span class="op">=</span> <span class="st">"sound"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (25 matching records found) 🎊:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Obtaining metadata (25 matching records found) 🎊</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run if queries didnt fail</span></span></span>
 <span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">wa</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gb</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>

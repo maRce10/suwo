@@ -1,7 +1,7 @@
 # Searches for media files in the Macaulay Library
 
-`query_macaulay` searches for metadata from
-[macaulay](https://www.macaulaylibrary.org/).
+`query_macaulay` searches for metadata from [Macaulay
+library](https://www.macaulaylibrary.org/).
 
 ## Usage
 
@@ -107,12 +107,12 @@ This is an interactive function which opens a browser window to the
 Macaulay Library's search page, where the user must download a .csv file
 with the metadata. The function then reads the .csv file and returns a
 data frame with the metadata. The function can also import previously
-downloaded metadata (in csv format) with the argument \`files\`.
+downloaded metadata (in csv format) with the argument `files`.
 
 ## Details
 
 This function queries for species observation info in the [Macaulay
-Library](https://www.macaulaylibrary.org/) online repository and returns
+library](https://www.macaulaylibrary.org/) online repository and returns
 the metadata of media files matching the query. The Macaulay Library is
 the world’s largest repository of digital media (audio, photo, and
 video) of wildlife (mostly birds but also other vertebrates and
@@ -122,11 +122,10 @@ than 80k contributors, and is integrated with eBird, the world’s largest
 biodiversity dataset. For bird species the species name must be valid
 according to the Macaulay Library taxonomy (which follows the Clements
 checklist). For non-bird species users must use the argument
-\`taxon_code\`. The species taxon code can be found by running a search
-at the [Macaulay Library's search
-page](https://www.macaulaylibrary.org/) and checking the URL of the
-species page. For instance, the URL when searching for jaguar (Panthera
-onca) is
+`taxon_code`. The species taxon code can be found by running a search at
+the [Macaulay Library's search page](https://www.macaulaylibrary.org/)
+and checking the URL of the species page. For instance, the URL when
+searching for jaguar (Panthera onca) is
 'https://search.macaulaylibrary.org/catalog?taxonCode=t-11032765' so the
 taxon code is "t-11032765". If `all_data = TRUE`, all metadata fields
 (columns) are returned. If `raw_data = TRUE`, the raw data as obtained
