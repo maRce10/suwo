@@ -1,148 +1,112 @@
 # internal helper suwo functions
 
-# internal suwo function, not to be called by users. It is a modified version
-# of pbapply::pblapply
-# that allows to define internally if progress bar would be used
-# (pbapply::pblapply uses pboptions to do this)
+# internal suwo function, not to be called by users
+# allows to define internally if progress bar would be used
 
-
-.pbapply_sw <- function(X,
-                        FUN,
-                        cl = 1,
-                        pbar = TRUE,
-                        ...) {
-  # convert parallel 1 to null
-  if (!inherits(cl, "cluster")) {
-    if (cl == 1)
-      cl <- NULL
-  }
-
+.pbapply_sw <- function(X, FUN, cl = 1, pbar = TRUE, Y = X, title = "", ...) {
   FUN <- match.fun(FUN)
-  if (!is.vector(X) || is.object(X)) {
-    X <- as.list(X)
-  }
-  if (!length(X)) {
-    return(lapply(X, FUN, ...))
-  }
 
-  if (!is.null(cl)) {
-    if (.Platform$OS.type == "windows") {
-      if (!inherits(cl, "cluster")) {
-        cl <- NULL
-      }
-    } else {
-      if (inherits(cl, "cluster")) {
-        if (length(cl) < 2L) {
-          cl <- NULL
-        }
-      } else {
-        if (cl < 2) {
-          cl <- NULL
-        }
-      }
-    }
+  if (identical(Sys.getenv("TESTTHAT"), "true")) {
+    cl <- 1L
   }
-
-  if (is.null(cl)) {
+  # no parallel
+  if (cl == 1) {
     if (!pbar) {
-      return(lapply(X, FUN, ...))
+      # No progress bar
+      out <- lapply(seq_along(X), FUN, ...)
+      return(out)
+    } else {
+      # progress bar
+      out <- lapply(
+        X = cli::cli_progress_along(
+          name = title,
+          x = X,
+          clear = FALSE
+        ),
+        FUN = FUN,
+        ...
+      )
+      return(out)
     }
-    Split <- pbapply::splitpb(length(X), 1L, nout = 100)
-    B <- length(Split)
-    pb <- pbapply::startpb(0, B)
-    on.exit(pbapply::closepb(pb), add = TRUE)
-    rval <- vector("list", B)
-    for (i in seq_len(B)) {
-      rval[i] <- list(lapply(X[Split[[i]]], FUN, ...))
-      pbapply::setpb(pb, i)
+    cat("\n") # Windows rendering reset
+  }
+
+  # parallel
+  if (cl > 1) {
+    ## define OS
+    is_windows <- (.Platform$OS.type == "windows")
+
+    if (is_windows) {
+      clust <- parallel::makeCluster(cl)
+      on.exit(parallel::stopCluster(clust), add = TRUE)
+
+      parallel::clusterExport(
+        clust,
+        varlist = c("FUN", "Y"),
+        envir = environment()
+      )
     }
-  } else {
-    if (inherits(cl, "cluster")) {
-      # On Windows, automatically export internal functions from the package
-      if (.Platform$OS.type == "windows") {
-        # Get the environment of FUN to determine which package it belongs to
-        fun_env <- environment(FUN)
 
-        # Check if FUN is from a package namespace (not global env)
-        if (isNamespace(fun_env)) {
-          pkg_name <- environmentName(fun_env)
+    if (!pbar) {
+      # No progress bar
 
-          # Check if it's the suwo package (or any package you specify)
-          if (pkg_name == "suwo") {
-            # Get the namespace environment
-            ns <- asNamespace(pkg_name)
+      if (is_windows) {
+        out <- parallel::parLapply(
+          cl = clust,
+          X = seq_along(X),
+          fun = function(i) FUN(X[i], Y, ...)
+        )
+      } else {
+        out <- parallel::mclapply(
+          X = seq_along(X),
+          FUN = FUN,
+          mc.cores = as.integer(cl)
+        )
+      }
 
-            # Find all functions starting with . in the package namespace
-            all_objects <- ls(envir = ns, all.names = TRUE)
-            internal_funs <- grep("^\\.", all_objects, value = TRUE)
+      return(out)
+    } else {
+      # progress bar
 
-            # Filter to only include functions (not other objects)
-            funs_to_export <- character()
-            for (fun_name in internal_funs) {
-              obj <- get(fun_name, envir = ns)
-              if (is.function(obj)) {
-                funs_to_export <- c(funs_to_export, fun_name)
-              }
-            }
+      nchunks <- ceiling(length(X) / as.integer(cl))
 
-            # Export internal functions to the cluster
-            if (length(funs_to_export) > 0) {
-              tryCatch({
-                message("Exporting ", length(funs_to_export),
-                        " internal functions from package '", pkg_name,
-                        "' to cluster")
-                parallel::clusterExport(cl,
-                                        varlist = funs_to_export,
-                                        envir = ns)
-              }, error = function(e) {
-                warning(
-                  "Could not export all internal functions from package '",
-                        pkg_name, "': ", e$message)
-              })
-            }
+      if (cl >= length(X)) {
+        chunks <- list(X)
+        cl <- length(X)
+      } else {
+        chunks <- split(
+          seq_along(X),
+          cut(seq_along(X), nchunks, labels = FALSE)
+        )
+      }
 
-            # Also ensure the package is loaded on workers
-            parallel::clusterEvalQ(cl, {
-              if (!requireNamespace(pkg_name, quietly = TRUE)) {
-                library(pkg_name, character.only = TRUE)
-              }
-            })
-          }
+      out <- vector("list", length(chunks))
+
+      for (i in cli::cli_progress_along(
+        name = title,
+        x = seq_along(chunks),
+        clear = FALSE
+      )) {
+        idx <- chunks[[i]]
+
+        if (is_windows) {
+          out[idx] <- parallel::parLapply(
+            clust,
+            idx,
+            function(j) FUN(X[j], Y, ...)
+          )
+        } else {
+          out[idx] <- parallel::mclapply(
+            X = idx,
+            FUN = FUN,
+            mc.cores = as.integer(cl)
+          )
         }
       }
-
-      PAR_FUN <- parallel::parLapply
-      if (pbar) {
-        return(PAR_FUN(cl, X, FUN, ...))
-      }
-      Split <- pbapply::splitpb(length(X), length(cl), nout = 100)
-      B <- length(Split)
-      pb <- pbapply::startpb(0, B)
-      on.exit(pbapply::closepb(pb), add = TRUE)
-      rval <- vector("list", B)
-      for (i in seq_len(B)) {
-        rval[i] <- list(PAR_FUN(cl, X[Split[[i]]], FUN, ...))
-        pbapply::setpb(pb, i)
-      }
-    } else {
-      if (!pbar) {
-        return(parallel::mclapply(X, FUN, ..., mc.cores = as.integer(cl)))
-      }
-      Split <- pbapply::splitpb(length(X), as.integer(cl), nout = 100)
-      B <- length(Split)
-      pb <- pbapply::startpb(0, B)
-      on.exit(pbapply::closepb(pb), add = TRUE)
-      rval <- vector("list", B)
-      for (i in seq_len(B)) {
-        rval[i] <- list(parallel::mclapply(X[Split[[i]]], FUN, ...,
-                                           mc.cores = as.integer(cl)))
-        pbapply::setpb(pb, i)
-      }
+      cat("\n") # important for Windows rendering reset
+      return(out)
     }
   }
-  rval <- do.call(c, rval, quote = TRUE)
-  names(rval) <- names(X)
-  rval
 }
 
 # add emojis to messages. based on praise_emoji from testthat
@@ -192,14 +156,16 @@
   }
 }
 
-.message <- function(text =
-                  paste0("Obtaining metadata ({n} matching record{?s} found)"),
-                  as = c("success", "warning", "failure", "error", "message"),
-                     n = NULL,
-                     suffix = ":\n",
-                  nfiles = NULL) {
-  if (!is.null(n))
+.message <- function(
+  text = "Obtaining metadata ({n} matching record{?s} found)",
+  as = c("success", "warning", "failure", "error", "message"),
+  n = NULL,
+  suffix = "\n",
+  nfiles = NULL
+) {
+  if (!is.null(n)) {
     text <- cli::pluralize(text)
+  }
 
   if (as == "success") {
     if (!cli::is_utf8_output()) {
@@ -273,21 +239,8 @@
     (return("already there (not downloaded)"))
   }
 
-  dl_result <- try(utils::download.file(
-    url = as.character(metadata$file_url[x]),
-    destfile = destfile,
-    quiet = TRUE,
-    mode = "wb",
-    method = "auto",
-    cacheOK = TRUE,
-    extra = getOption("download.file.extra")
-  ),
-  silent = TRUE)
-
-  # if failed try again after wating 0.5 seconds
-  if (.is_error(dl_result)) {
-    Sys.sleep(0.5)
-    dl_result <- try(utils::download.file(
+  dl_result <- try(
+    utils::download.file(
       url = as.character(metadata$file_url[x]),
       destfile = destfile,
       quiet = TRUE,
@@ -296,30 +249,49 @@
       cacheOK = TRUE,
       extra = getOption("download.file.extra")
     ),
-    silent = TRUE)
+    silent = TRUE
+  )
+
+  # if failed try again after wating 0.5 seconds
+  if (.is_error(dl_result)) {
+    Sys.sleep(0.5)
+    dl_result <- try(
+      utils::download.file(
+        url = as.character(metadata$file_url[x]),
+        destfile = destfile,
+        quiet = TRUE,
+        mode = "wb",
+        method = "auto",
+        cacheOK = TRUE,
+        extra = getOption("download.file.extra")
+      ),
+      silent = TRUE
+    )
   }
 
   # if still failed then return FALSE
   if (.is_error(dl_result)) {
     return("failed")
   } else {
-    if (exists)
+    if (exists) {
       (return("overwritten"))
-    else
+    } else {
       return("saved")
+    }
   }
 }
 
 # suppressing warnings from download.file
-.download <- function(...){
+.download <- function(...) {
   suppressWarnings(.download_basic(...))
 }
 
 # fix extension so it is homogeneous across functions
 .fix_extension <- function(x, url) {
   # if the strings contains "?" extract string before "?"
-  if (any(grepl("\\?", x)))
+  if (any(grepl("\\?", x))) {
     x <- gsub("\\?.*$", "", x)
+  }
 
   # if is NA then try to get from url
   if (any(is.na(x))) {
@@ -376,10 +348,7 @@
     if (length(nms) != length(common_names)) {
       for (o in common_names[!common_names %in% nms]) {
         e <-
-          data.frame(e,
-                     NA,
-                     stringsAsFactors = FALSE,
-                     check.names = FALSE)
+          data.frame(e, NA, stringsAsFactors = FALSE, check.names = FALSE)
         names(e)[ncol(e)] <- o
       }
     }
@@ -406,16 +375,19 @@
 }
 
 # format query output dataframe to standardize column names
-.format_query_output <- function(X,
-                                 column_names,
-                                 all_data,
-                                 format,
-                                 raw_data = FALSE,
-                                 call,
-                                 input_file = NA,
-                                 only_basic_columns = FALSE) {
-  if (raw_data)
+.format_query_output <- function(
+  X,
+  column_names,
+  all_data,
+  format,
+  raw_data = FALSE,
+  call,
+  input_file = NA,
+  only_basic_columns = FALSE
+) {
+  if (raw_data) {
     return(X)
+  }
 
   basic_colums <- c(
     "repository",
@@ -432,8 +404,9 @@
     "file_url",
     "file_extension"
   )
-  if (only_basic_columns)
+  if (only_basic_columns) {
     return(basic_colums)
+  }
 
   # if missing any basic column add it with NAs
   for (i in basic_colums) {
@@ -454,14 +427,10 @@
       names(X)[names(X) == names_df$old[i]] <- names_df$new[i]
     } else {
       # if expected (old) name does not exist add new column with NAs
-      X <- data.frame(X,
-                      NA,
-                      stringsAsFactors = FALSE,
-                      check.names = FALSE)
+      X <- data.frame(X, NA, stringsAsFactors = FALSE, check.names = FALSE)
       names(X)[ncol(X)] <- names_df$new[i]
     }
   }
-
 
   # replace "." with "_"
   names(X) <- gsub("\\.|\\-", "_", names(X))
@@ -469,11 +438,13 @@
   # replace "__" with "_"
   names(X) <- gsub("___", "_", names(X), fixed = TRUE)
 
-  if (is.null(X$latitude))
+  if (is.null(X$latitude)) {
     X$latitude <- NA
+  }
 
-  if (is.null(X$longitude))
+  if (is.null(X$longitude)) {
     X$longitude <- NA
+  }
 
   # convert lat long to numbers
   X$latitude <- as.numeric(X$latitude)
@@ -495,15 +466,11 @@
   }
 
   if (X$repository[1] == "GBIF") {
-    X$time <- substr(x = X$time,
-                     start = 1,
-                     stop = 5)
+    X$time <- substr(x = X$time, start = 1, stop = 5)
   }
 
   if (X$repository[1] == "iNaturalist") {
-    X$time <- substr(x = X$time,
-                     start = 12,
-                     stop = 16)
+    X$time <- substr(x = X$time, start = 12, stop = 16)
 
     # fix image size in URL
     X$file_url <- gsub("square", "original", X$file_url)
@@ -537,32 +504,33 @@
   non_basic_colms <- setdiff(names(X), basic_colums)
   X <- X[, c(basic_colums, non_basic_colms)]
 
+  if (!all_data) {
+    # remove columns that are not basic
+    X <- X[, basic_colums]
+  }
+
   # remove rows with NAs in URL
   if (anyNA(X$file_url)) {
-    option_df_name <- tolower(paste0(X$repository[1], "_excluded_results"))
+    # get observations without URL
+    excluded_results <- X[is.na(X$file_url), ]
 
-    # save at options
-    options(stats::setNames(list(X[is.na(X$file_url), ]), option_df_name))
+    # save as an attribute
+    attributes(X)$excluded_results <- excluded_results
 
     # let users know some observations were excluded
     cat(.message(
       text = paste0(
         "{n} observation{?s} d{?oes/o} not have a download link and w{?as/ere}",
-        " removed from the results (saved at `options('",
-        option_df_name,
-        "')`).\n"
+        " removed from the results (inlcuded as an attribute called",
+        " 'excluded_results')",
+        ".\n"
       ),
       as = "warning",
-      n  = sum(is.na(X$file_url))
+      n = sum(is.na(X$file_url))
     ))
 
     # remove those observations
     X <- X[!is.na(X$file_url), ]
-  }
-
-  if (!all_data) {
-    # remove columns that are not basic
-    X <- X[, basic_colums]
   }
 
   # drop additional levels
@@ -573,7 +541,6 @@
 
 # get repo name from call
 .repo_from_call <- function(x) {
-
   # get function symbol as string
   x <- as.character(x[[1]])
 
@@ -592,7 +559,6 @@
     query_inaturalist = "iNaturalist",
     query_macaulay = "Macaulay Library"
   )
-
 }
 
 ## function to split macaulay queries by year-month
@@ -625,17 +591,22 @@
     poss_month_year_df$year_decimal <-
       poss_month_year_df$year + (poss_month_year_df$month - 1) / 12
 
-
     date_list <- lapply(seq_along(x[-1]), function(y) {
       time_diff <- poss_month_year_df$year_decimal - x[y]
 
       start <- poss_month_year_df[
-        poss_month_year_df$year_decimal == poss_month_year_df$year_decimal[
-          time_diff >= 0][1], ]
+        poss_month_year_df$year_decimal ==
+          poss_month_year_df$year_decimal[
+            time_diff >= 0
+          ][1],
+      ]
       time_diff <- poss_month_year_df$year_decimal - x[y + 1]
       end <- poss_month_year_df[
-        poss_month_year_df$year_decimal == rev(poss_month_year_df$year_decimal[
-          time_diff < 0])[1], ]
+        poss_month_year_df$year_decimal ==
+          rev(poss_month_year_df$year_decimal[
+            time_diff < 0
+          ])[1],
+      ]
 
       out <- cbind(start[, 1:2], end[, 1:2])
 
@@ -648,19 +619,19 @@
     # expand rows that cross years
     dates_list <- lapply(seq_len(nrow(dates_df)), function(i) {
       Y <- dates_df[i, ]
-      if (Y$start_month > Y$end_month | Y$start_year < Y$end_year)
+      if (Y$start_month > Y$end_month | Y$start_year < Y$end_year) {
         Y <- data.frame(
           start_month = c(Y$start_month, 1),
           start_year = c(Y$start_year, Y$start_year + 1),
           end_month = c(12, Y$end_month),
           end_year = c(Y$start_year, Y$start_year + 1)
         )
+      }
 
       return(Y)
     })
 
     dates_df <- do.call(rbind, dates_list)
-
   } else {
     # remove years above current year
     unique_years <- unique_years[unique_years <= current_year]
@@ -676,44 +647,34 @@
   return(dates_df)
 }
 
-# monitor if a new file is added
-.monitor_new_files <- function(path, interval = 1, break.time = 60) {
+# monitor if a new file is added (with .csv extension) to a folder
+# and return the name of the new file
+.monitor_new_files <- function(path, interval = 1) {
+  stopifnot(dir.exists(path))
 
-  # initial list of csv files
   old_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
-
-  start_time <- Sys.time()
 
   repeat {
     Sys.sleep(interval)
 
-    # time-out
-    if (as.numeric(difftime(Sys.time(), start_time, units = "secs")) >
-        break.time) {
-      return(NULL)
-    }
-
-    # list current csv files
     new_files <- list.files(path, pattern = "\\.csv$", full.names = FALSE)
-
-    # detect new ones
     added <- setdiff(new_files, old_files)
 
     if (length(added) > 0) {
-
       file_path <- file.path(path, added[1])
 
-      # wait until file stops growing (important!)
+      # wait until file exists and stops growing
       last_size <- -1
 
       repeat {
-        size <- file.info(file_path)$size
+        info <- file.info(file_path)
 
-        if (!is.na(size) && size == last_size) {
+        # file.info() may briefly return NA while file is being created
+        if (!is.na(info$size) && info$size == last_size) {
           break
         }
 
-        last_size <- size
+        last_size <- info$size
         Sys.sleep(0.5)
       }
 
@@ -722,71 +683,85 @@
   }
 }
 
-
 # clean not valid date format (must be "YYYY-MM-DD"),
 # if possible extracts year from various formats, using current year
 # as upper bound
 .clean_dates <- function(date_strings) {
   current_year <- as.numeric(format(Sys.Date(), "%Y"))
 
-  vapply(date_strings, function(date_str) {
-    if (is.na(date_str)) {
+  vapply(
+    date_strings,
+    function(date_str) {
+      if (is.na(date_str)) {
+        return(NA_character_)
+      }
+
+      # First check if it's valid YYYY-MM-DD format
+      if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
+        # Validate month and day ranges
+        parts <- strsplit(date_str, "-")[[1]]
+        year <- as.numeric(parts[1])
+        month <- as.numeric(parts[2])
+        day <- as.numeric(parts[3])
+
+        if (
+          month >= 1 &
+            month <= 12 &
+            day >= 1 &
+            day <= 31 &
+            year <= current_year
+        ) {
+          return(date_str) # Keep the full valid date
+        }
+      }
+
+      # If not valid YYYY-MM-DD, try to extract just the year
+      year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
+      if (length(year_match) > 0) {
+        year <- as.numeric(year_match[1])
+        #Return just the year if it's reasonable (between 1900 and current year)
+        if (year >= 1900 & year <= current_year) {
+          return(as.character(year))
+        }
+      }
+
+      # If we can't extract a reasonable year, return NA
       return(NA_character_)
-    }
-
-    # First check if it's valid YYYY-MM-DD format
-    if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_str)) {
-      # Validate month and day ranges
-      parts <- strsplit(date_str, "-")[[1]]
-      year <- as.numeric(parts[1])
-      month <- as.numeric(parts[2])
-      day <- as.numeric(parts[3])
-
-      if (month >= 1 &
-          month <= 12 & day >= 1 & day <= 31 & year <= current_year) {
-        return(date_str)  # Keep the full valid date
-      }
-    }
-
-    # If not valid YYYY-MM-DD, try to extract just the year
-    year_match <- regmatches(date_str, regexpr("\\d{4}", date_str))
-    if (length(year_match) > 0) {
-      year <- as.numeric(year_match[1])
-      # Return just the year if it's reasonable (between 1900 and current year)
-      if (year >= 1900 & year <= current_year) {
-        return(as.character(year))
-      }
-    }
-
-    # If we can't extract a reasonable year, return NA
-    return(NA_character_)
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 }
 
 # homogenize dates
 .homogenize_dates <- function(date_strings) {
-  date_strings <- vapply(date_strings, function(date_str) {
-    # If input is NA, return NA
-    if (is.na(date_str)) {
-      return(NA_character_)
-    }
+  date_strings <- vapply(
+    date_strings,
+    function(date_str) {
+      # If input is NA, return NA
+      if (is.na(date_str)) {
+        return(NA_character_)
+      }
 
-    # Try to parse the date
-    parsed <- lubridate::parse_date_time(
-      date_str,
-      orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
-      truncated = 2,
-      quiet = TRUE
-    )
+      # Try to parse the date
+      parsed <- lubridate::parse_date_time(
+        date_str,
+        orders = c("dmy", "ymd", "ymd HMS", "ymd HM", "ymd"),
+        truncated = 2,
+        quiet = TRUE
+      )
 
-    # If parsing succeeded, convert to Date format
-    if (!is.na(parsed)) {
-      as.character(as.Date(parsed))
-    } else {
-      # If parsing failed but input is not NA, return the input value
-      date_str
-    }
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+      # If parsing succeeded, convert to Date format
+      if (!is.na(parsed)) {
+        as.character(as.Date(parsed))
+      } else {
+        # If parsing failed but input is not NA, return the input value
+        date_str
+      }
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 
   # remove invalid dates
   date_strings <- .clean_dates(date_strings)
@@ -794,22 +769,27 @@
 
 # Function to check if a string is a valid time
 .is_valid_time <- function(time_str) {
-  if (is.na(time_str))
+  if (is.na(time_str)) {
     return(FALSE)
+  }
 
   # Remove spaces and convert to lowercase for easier matching
   clean_str <- tolower(trimws(time_str))
 
   # Check for invalid patterns first
-  if (grepl("^\\?|xx|morning|^[a-z]+$", clean_str) &&
-      !grepl("am|pm", clean_str)) {
+  if (
+    grepl("^\\?|xx|morning|^[a-z]+$", clean_str) &&
+      !grepl("am|pm", clean_str)
+  ) {
     return(FALSE)
   }
 
   # Check for various valid time patterns
   # HH:MM, H:MM, HH.MM, H.MM patterns with optional AM/PM
-  if (grepl("^\\d{1,2}[:.]\\d{2}\\s*(am|pm)?$", clean_str) ||
-      grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
+  if (
+    grepl("^\\d{1,2}[:.]\\d{2}\\s*(am|pm)?$", clean_str) ||
+      grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)
+  ) {
     return(TRUE)
   }
 
@@ -818,76 +798,84 @@
 
 # Function to convert time strings to standardized format
 .convert_times <- function(time_strings) {
-  vapply(time_strings, function(time_str) {
-    if (is.na(time_str) || !.is_valid_time(time_str)) {
-      return(NA_character_)
-    }
-
-    # Clean the string
-    clean_str <- tolower(trimws(time_str))
-
-    # Handle simple am/pm without time (like "6am")
-    if (grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
-      time_num <- as.numeric(sub("\\s*(am|pm)$", "", clean_str))
-      period <- ifelse(grepl("pm$", clean_str), "pm", "am")
-
-      # Convert to 24-hour format
-      if (period == "pm" && time_num < 12) {
-        hours <- time_num + 12
-      } else if (period == "am" && time_num == 12) {
-        hours <- 0
-      } else {
-        hours <- time_num
+  vapply(
+    time_strings,
+    function(time_str) {
+      if (is.na(time_str) || !.is_valid_time(time_str)) {
+        return(NA_character_)
       }
 
-      return(sprintf("%02d:00", hours))
-    }
+      # Clean the string
+      clean_str <- tolower(trimws(time_str))
 
-    # Handle times with AM/PM
-    if (grepl("am|pm", clean_str)) {
-      time_part <- sub("\\s*(am|pm)$", "", clean_str)
-      period <- ifelse(grepl("pm$", clean_str), "pm", "am")
+      # Handle simple am/pm without time (like "6am")
+      if (grepl("^\\d{1,2}\\s*(am|pm)$", clean_str)) {
+        time_num <- as.numeric(sub("\\s*(am|pm)$", "", clean_str))
+        period <- ifelse(grepl("pm$", clean_str), "pm", "am")
 
-      # Handle both colon and dot separators
-      if (grepl("[:.]", time_part)) {
-        parts <- strsplit(time_part, "[:.]")[[1]]
+        # Convert to 24-hour format
+        if (period == "pm" && time_num < 12) {
+          hours <- time_num + 12
+        } else if (period == "am" && time_num == 12) {
+          hours <- 0
+        } else {
+          hours <- time_num
+        }
+
+        return(sprintf("%02d:00", hours))
+      }
+
+      # Handle times with AM/PM
+      if (grepl("am|pm", clean_str)) {
+        time_part <- sub("\\s*(am|pm)$", "", clean_str)
+        period <- ifelse(grepl("pm$", clean_str), "pm", "am")
+
+        # Handle both colon and dot separators
+        if (grepl("[:.]", time_part)) {
+          parts <- strsplit(time_part, "[:.]")[[1]]
+        } else {
+          # If no separator, assume it's just hours
+          parts <- c(time_part, "00")
+        }
+
+        hours <- as.numeric(parts[1])
+        minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
+
+        # Convert to 24-hour format
+        if (period == "pm" && hours < 12) {
+          hours <- hours + 12
+        } else if (period == "am" && hours == 12) {
+          hours <- 0
+        }
+
+        return(sprintf("%02d:%02d", hours, minutes))
+      }
+
+      # Handle 24-hour times without AM/PM
+      if (grepl("[:.]", clean_str)) {
+        parts <- strsplit(clean_str, "[:.]")[[1]]
       } else {
         # If no separator, assume it's just hours
-        parts <- c(time_part, "00")
+        parts <- c(clean_str, "00")
       }
 
       hours <- as.numeric(parts[1])
       minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
 
-      # Convert to 24-hour format
-      if (period == "pm" && hours < 12) {
-        hours <- hours + 12
-      } else if (period == "am" && hours == 12) {
-        hours <- 0
-      }
-
-      return(sprintf("%02d:%02d", hours, minutes))
-    }
-
-    # Handle 24-hour times without AM/PM
-    if (grepl("[:.]", clean_str)) {
-      parts <- strsplit(clean_str, "[:.]")[[1]]
-    } else {
-      # If no separator, assume it's just hours
-      parts <- c(clean_str, "00")
-    }
-
-    hours <- as.numeric(parts[1])
-    minutes <- ifelse(length(parts) > 1, as.numeric(parts[2]), 0)
-
-    # Standardize to HH:MM format
-    sprintf("%02d:%02d", hours, minutes)
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+      # Standardize to HH:MM format
+      sprintf("%02d:%02d", hours, minutes)
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 }
 
 
 ## function to check arguments
-.check_arguments <- function(args) {
+.check_arguments <- function(fun, args) {
+  # make function name a character
+  fun <- as.character(fun)[1]
+
   # create object to store check results
   check_collection <- checkmate::makeAssertCollection()
 
@@ -904,7 +892,8 @@
       x = args$species,
       add = check_collection,
       len = 1,
-      .var.name = "species")
+      .var.name = "species"
+    )
   }
 
   if (!is.null(args$format)) {
@@ -932,6 +921,24 @@
       len = 1,
       add = check_collection,
       .var.name = "pb"
+    )
+  }
+
+  if (!is.null(args$overwrite)) {
+    checkmate::assert_logical(
+      x = args$overwrite,
+      len = 1,
+      add = check_collection,
+      .var.name = "overwrite"
+    )
+  }
+
+  if (!is.null(args$verbose)) {
+    checkmate::assert_logical(
+      x = args$verbose,
+      len = 1,
+      add = check_collection,
+      .var.name = "verbose"
     )
   }
 
@@ -992,111 +999,188 @@
       .var.name = "metadata"
     )
 
+    must_columns <- .format_query_output(only_basic_columns = TRUE)
+
+    if (fun == "remove_duplicates") {
+      must_columns <- c(must_columns, "duplicate_group")
+    }
+
     checkmate::assertNames(
       x = names(args$metadata),
-      must.include = .format_query_output(only_basic_columns = TRUE),
+      must.include = must_columns,
       add = check_collection,
       .var.name = "column names in metadata"
     )
 
     if (!is.null(args$folder_by)) {
-      checkmate::assert_multi_class(
-        x = args$metadata[, args$folder_by],
-        classes = c("character", "factor"),
+      checkmate::assert_vector(
+        x = args$folder_by,
         add = check_collection,
+        any.missing = TRUE,
+        null.ok = TRUE,
+        len = 1,
         .var.name = "folder_by"
+      )
+
+      out <- try(
+        checkmate::assert_multi_class(
+          x = args$metadata[, args$folder_by, drop = TRUE],
+          classes = c("character", "factor"),
+          add = check_collection,
+          .var.name = "folder_by"
+        ),
+        silent = TRUE
+      )
+    }
+
+    if (fun == "download_media") {
+      # check if NAs in repository column
+      checkmate::assert_vector(
+        x = args$metadata$repository,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'repository' column in metadata"
+      )
+
+      checkmate::assert_vector(
+        x = args$metadata$species,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'species' column in metadata"
+      )
+
+      checkmate::assert_vector(
+        x = args$metadata$key,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'key' column in metadata"
+      )
+
+      checkmate::assert_vector(
+        x = args$metadata$file_extension,
+        add = check_collection,
+        any.missing = FALSE,
+        .var.name = "'file_extension' column in metadata"
       )
     }
   }
 
-
-
   return(check_collection)
 }
 
+# custom reporting of errors
+.report_assertions <- function(collection) {
+  checkmate::assert_class(collection, "AssertCollection")
+  if (!collection$isEmpty()) {
+    msgs = collection$getMessages()
+
+    msgs <- gsub("^Variable", "", msgs)
+
+    context = "%i input arguments failed:"
+    err = c(sprintf(context, length(msgs)), strwrap(msgs, prefix = " * "))
+    stop(simpleError(paste0(err, collapse = "\n"), call = sys.call(1L)))
+  }
+  invisible(TRUE)
+}
+
+
 ## check internet
 # gracefully fail if internet resource is not available
-.checkconnection <- function(service = c("gbif",
-                                         "inat",
-                                         "macaulay",
-                                         "wikiaves",
-                                         "xenocanto",
-                                         "observation"),
-                             verb = TRUE) {
-
+.checkconnection <- function(
+  service = c(
+    "gbif",
+    "inat",
+    "macaulay",
+    "wikiaves",
+    "xenocanto",
+    "observation"
+  ),
+  verb = TRUE
+) {
   # set user agent option globally
   options(HTTPUserAgent = "suwo (https://github.com/maRce10/suwo)")
 
-    # check if internet is available
+  # check if internet is available
   if (!httr2::is_online()) {
     if (verb) {
-      .message("No internet connection available (check your connection!)",
-               as = "failure")
+      .message(
+        "No internet connection available (check your connection!)",
+        as = "failure"
+      )
     }
     return(FALSE)
   }
 
-  if (!is.null(service)){
+  if (!is.null(service)) {
+    service <- match.arg(service)
 
-  service <- match.arg(service)
+    urls <- list(
+      gbif = "https://api.gbif.org/",
+      inat = "https://www.inaturalist.org/",
+      macaulay = "https://www.macaulaylibrary.org/",
+      wikiaves = "https://www.wikiaves.com.br",
+      xenocanto = "https://www.xeno-canto.org",
+      observation = "https://observation.org"
+    )
 
-  urls <- list(
-    gbif     = "https://api.gbif.org/",
-    inat     = "https://www.inaturalist.org/",
-    macaulay = "https://www.macaulaylibrary.org/",
-    wikiaves = "https://www.wikiaves.com.br",
-    xenocanto = "https://www.xeno-canto.org",
-    observation = "https://observation.org"
-  )
+    messages <- list(
+      gbif = "GBIF API",
+      inat = "INaturalist",
+      macaulay = "macaulaylibrary.org",
+      wikiaves = "wikiaves.com.br",
+      xenocanto = "xeno-canto.org",
+      observation = "https://observation.org"
+    )
 
-  messages <- list(
-    gbif     = "GBIF API",
-    inat     = "INaturalist",
-    macaulay = "macaulaylibrary.org",
-    wikiaves = "wikiaves.com.br",
-    xenocanto = "xeno-canto.org",
-    observation = "https://observation.org"
-  )
+    url <- urls[[service]]
+    name <- messages[[service]]
 
-  url <- urls[[service]]
-  name <- messages[[service]]
+    # Attempt request
+    req <- httr2::request(url)
 
-  # Attempt request
-  request_obj <- httr2::request(url)
-  request_obj <- httr2::req_user_agent(request_obj,
-                                       "suwo (https://github.com/maRce10/suwo)")
-  # Disable auto-throwing
-  request_obj <- httr2::req_error(request_obj, is_error = function(resp) FALSE)
+    req <- httr2::req_user_agent(
+      req,
+      "suwo (https://github.com/maRce10/suwo)"
+    )
 
-  response <- try(httr2::req_perform(request_obj), silent = TRUE)
+    req <- httr2::req_error(
+      req,
+      is_error = function(resp) FALSE
+    )
 
-  if (.is_error(response) ||
-      httr2::resp_is_error(response)) {
-    if (verb) {
-      .message(paste("No connection to", name),
-               as = "failure")
+    response <- try(
+      httr2::req_perform(req),
+      silent = TRUE
+    )
+
+    if (
+      .is_error(response) ||
+        httr2::resp_is_error(response)
+    ) {
+      if (verb) {
+        .message(paste("No connection to", name), as = "failure")
+      }
+      return(FALSE)
     }
-    return(FALSE)
-  }
 
-  content <- httr2::resp_body_string(response, encoding = "UTF-8")
-  if (grepl("Could not connect to the database", content)) {
-    if (verb) {
-      .message(paste(name, "website is apparently down"), as = "failure")
+    content <- httr2::resp_body_string(response, encoding = "UTF-8")
+    if (grepl("Could not connect to the database", content)) {
+      if (verb) {
+        .message(paste(name, "website is apparently down"), as = "failure")
+      }
+      return(FALSE)
     }
-    return(FALSE)
   }
-}
   return(TRUE)
 }
 
 # look up species taxon code for Macaulay queries
 .taxon_code_search <-
-  function(species = getOption("suwo_species"),
-           ml_taxon_code = ml_taxon_code) {
+  function(species = getOption("suwo_species"), ml_taxon_code = ml_taxon_code) {
     taxon_code <- ml_taxon_code$SPECIES_CODE[
       ml_taxon_code$SCI_NAME == species &
-      !is.na(ml_taxon_code$SCI_NAME)]
+        !is.na(ml_taxon_code$SCI_NAME)
+    ]
     if (length(taxon_code) > 0) {
       return(taxon_code[1])
     } else {
@@ -1105,6 +1189,6 @@
   }
 
 # get if an object is an error from try()
-.is_error <- function(x){
+.is_error <- function(x) {
   base::inherits(x, "try-error")
 }

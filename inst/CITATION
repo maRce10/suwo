@@ -1,10 +1,12 @@
-citHeader("Please cite 'suwo' as follows:")
+meta <- utils::packageDescription("suwo")
 
-bibentry(entry = "MISC",
-        bibtype = "Manual",
-        title = "suwo: access nature media repositories 0.1.0.",
-        author =  c(as.person("M. Araya-Salas"), as.person("Jorge Elizondo-Calvo"), as.person("Alejandro Rico-Guevara")),
-        year = "2025",
-        textVersion = "Araya-Salas M, J Elizondo-Calvo & A Rico-Guevara (2025), suwo: access nature media repositories. R package version 0.1.0."
+year <- if (!is.null(meta$Date)) sub("-.*", "", meta$Date) else format(Sys.Date(), "%Y")
+
+bibentry(
+  bibtype = "Manual",
+  title   = paste(meta$Package, meta$Title, sep = ": "),
+  author  = meta$Author,
+  year    = year,
+  note    = paste("R package version", meta$Version),
+  url     = meta$URL
 )
-

@@ -1,8 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches:
-    - main
+    branches-ignore: [gh-pages]
     paths:
       - README.Rmd
       - .github/workflows/readme.yml

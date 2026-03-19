@@ -2,7 +2,6 @@ options(verbose = TRUE)
 
 
 test_that("find from gbif ml and xc", {
-
   skip_on_cran()
   skip_if_offline()
 
@@ -14,4 +13,3 @@ test_that("find from gbif ml and xc", {
 
   expect_true(sum(is.na(label_dup_metadata$duplicate_group)) > 1221)
 })
-

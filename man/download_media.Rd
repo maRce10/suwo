@@ -7,28 +7,19 @@
 download_media(
   metadata,
   path = ".",
+  cores = getOption("suwo_cores", 1),
   pb = getOption("suwo_pb", TRUE),
   verbose = getOption("suwo_verbose", TRUE),
-  cores = getOption("mc.cores", 1),
   overwrite = FALSE,
   folder_by = NULL
 )
 }
 \arguments{
 \item{metadata}{data frame previously obtained from any suwo query
-function (i.e. `query_reponame()`).}
+function (i.e. \code{query_reponame()}).}
 
 \item{path}{Directory path where the output media files will be saved.
 By default files are saved into the current working directory (\code{"."}).}
-
-\item{pb}{Logical argument to control if progress bar is shown. Default
-is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
-option ( \code{options(suwo_pb = TRUE)}).}
-
-\item{verbose}{Logical argument that determines if text is shown in
-console. Default is \code{TRUE}. Can be set globally for the current R
-session via the "suwo_verbose" option
-( \code{options(suwo_verbose = TRUE)}).}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing
 is applied by specifying the number of cores to be used. Default is 1
@@ -36,6 +27,16 @@ is applied by specifying the number of cores to be used. Default is 1
 via the "mc.cores" option (e.g.  \code{options(mc.cores = 2)}). Note that
 some repositories might not support parallel queries from the same IP
 address as it might be identified as denial-of-service cyberattack.}
+
+\item{pb}{Logical argument to control if progress bar is shown. Default
+is \code{TRUE}. Can be set globally for the current R session via the "suwo_pb"
+option ( \code{options(suwo_pb = TRUE)}). Not shown if only a few observations
+are found.}
+
+\item{verbose}{Logical argument that determines if text is shown in
+console. Default is \code{TRUE}. Can be set globally for the current R
+session via the "suwo_verbose" option
+( \code{options(suwo_verbose = TRUE)}).}
 
 \item{overwrite}{Logical. If TRUE, existing files (in \code{"path"}) with
 the same name will be overwritten. Default is FALSE.}
@@ -71,7 +72,7 @@ function will download all files into a single directory
 resume later as long as the working directory is the same. Users only need
 to rerun the same function call. By default only the missing files will be
 downloaded when resuming. Can also be used on a updated query output
-(see \code{\link{update_metadata}}) to add the new media files to the
+(see \code{\link[=update_metadata]{update_metadata()}}) to add the new media files to the
 existing media pool.
 }
 \examples{
@@ -87,7 +88,7 @@ existing media pool.
 
 }
 \seealso{
-\code{\link{query_gbif}}, \code{\link{query_macaulay}}
+\code{\link[=query_gbif]{query_gbif()}}, \code{\link[=query_macaulay]{query_macaulay()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

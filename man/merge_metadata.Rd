@@ -8,22 +8,22 @@ merge_metadata(..., check_columns = TRUE)
 }
 \arguments{
 \item{...}{two or more data frames (each one as a separate entry) referring
-to the metadata obtained from suwo query functions (`query_x()`).
+to the metadata obtained from suwo query functions (\code{query_x()}).
 Alternatively, a single list of data frames can be provided. The name
 provided for each data frame (either as individual data frames or in a list)
-will be used as label in the `source` column in the output data frame.}
+will be used as label in the \code{source} column in the output data frame.}
 
 \item{check_columns}{Logical argument indicating if the function should
 check that all input data frames have the required basic columns.
-Default is `TRUE`.}
+Default is \code{TRUE}.}
 }
 \value{
 A single data frame with the data from all input data frames
-combined and with an additional column named `source` indicating the
-original data frame from which each row originated. The column `source` will
- contain the name provided for each data frame (either as individual data
- frames or in a list). If no names were provided, the object names will
- be used instead.
+combined and with an additional column named \code{source} indicating the
+original data frame from which each row originated. The column \code{source} will
+contain the name provided for each data frame (either as individual data
+frames or in a list). If no names were provided, the object names will
+be used instead.
 }
 \description{
 \code{merge_metadata} merges metadata data frames from suwo queries.
@@ -32,8 +32,8 @@ original data frame from which each row originated. The column `source` will
 This function combines metadata from multiple sources
 (e.g. WikiAves and xeno-canto) into a single data frame for easier analysis
 and comparison. Each input data frame must be obtained from one of the
-suwo query functions (e.g., `query_wikiaves()`, `query_xenocanto()`, etc.)
-with `raw_data = FALSE`.
+suwo query functions (e.g., \code{query_wikiaves()}, \code{query_xenocanto()}, etc.)
+with \code{raw_data = FALSE}.
 }
 \examples{
 # get metadata from 2 repos

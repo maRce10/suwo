@@ -8,10 +8,7 @@ message: 'To cite package "suwo" in publications use:'
 type: software
 license: GPL-2.0-or-later
 title: 'suwo: Access Nature Media Repositories'
-version: 0.1.0
-identifiers:
-- type: url
-  value: https://github.com/maRce10/suwo
+version: 0.2.0
 abstract: Streamline searching/downloading of nature media files (e.g. audios, photos)
   from online repositories. The package offers functions for obtaining media metadata
   from online repositories, downloading associated media files and updating data sets
@@ -28,21 +25,6 @@ authors:
   given-names: Alejandro
   email: colibri@uw.edu
   orcid: https://orcid.org/0000-0003-4067-5312
-preferred-citation:
-  type: manual
-  title: 'suwo: access nature media repositories 0.1.0.'
-  authors:
-  - family-names: Araya-Salas
-    given-names: M.
-  - family-names: Elizondo-Calvo
-    given-names: Jorge
-    orcid: https://orcid.org/0009-0004-5873-9585
-  - family-names: Rico-Guevara
-    given-names: Alejandro
-    email: colibri@uw.edu
-    orcid: https://orcid.org/0000-0003-4067-5312
-  entry: MISC
-  year: '2025'
 repository-code: https://github.com/maRce10/suwo/issues/
 url: https://marce10.github.io/suwo/
 contact:
@@ -76,22 +58,6 @@ references:
     email: gabor@posit.co
   year: '2026'
   doi: 10.32614/CRAN.package.cli
-- type: software
-  title: pbapply
-  abstract: 'pbapply: Adding Progress Bar to ''*apply'' Functions'
-  notes: Imports
-  url: https://peter.solymos.org/pbapply/
-  repository: https://CRAN.R-project.org/package=pbapply
-  authors:
-  - family-names: Solymos
-    given-names: Peter
-    email: psolymos@gmail.com
-    orcid: https://orcid.org/0000-0001-7337-1740
-  - family-names: Zawadzki
-    given-names: Zygmunt
-    email: zygmunt@zstat.pl
-  year: '2026'
-  doi: 10.32614/CRAN.package.pbapply
 - type: software
   title: utils
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -129,6 +95,7 @@ references:
     email: hadley@posit.co
   year: '2026'
   doi: 10.32614/CRAN.package.httr2
+  version: '>= 1.1.0'
 - type: software
   title: jsonlite
   abstract: 'jsonlite: A Simple and Robust JSON Parser and Generator for R'
@@ -323,10 +290,8 @@ references:
     given-names: Jim
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@posit.co
   - family-names: Csárdi
     given-names: Gábor
-    email: csardi.gabor@gmail.com
   year: '2026'
   doi: 10.32614/CRAN.package.fs
 - type: software

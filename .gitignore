@@ -10,3 +10,5 @@ ctags/
 *.gz
 *.gz
 *.gz
+.Rproj.user/shared/notebooks/paths
+.Rproj.user/shared/notebooks/paths
